@@ -1,12 +1,13 @@
 import * as Yup from 'yup';
+import * as React from 'react';
 import { useSnackbar } from 'notistack';
 import { useCallback } from 'react';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
-import { Box, Grid, Card, Stack, Typography } from '@mui/material';
-import { LoadingButton } from '@mui/lab';
+import { Box, Grid, Card, Stack, Typography, TextField } from '@mui/material';
+import { LoadingButton, DesktopDatePicker } from '@mui/lab';
 // hooks
 import useAuth from '../../../../hooks/useAuth';
 // utils
@@ -19,9 +20,10 @@ import { FormProvider, RHFSwitch, RHFSelect, RHFTextField, RHFUploadAvatar } fro
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral() {
+  
   const { enqueueSnackbar } = useSnackbar();
 
-  const { account } = useAuth();
+  const { account, updateinfo } = useAuth();
 
   const UpdateUserSchema = Yup.object().shape({
     displayName: Yup.string().required('Name is required'),
@@ -42,23 +44,27 @@ export default function AccountGeneral() {
   const name = `${account?.fname} ${account?.lname}`;
 
   const defaultValues = {
-    displayName: name || '',
-    phoneNumber: account?.phone || '',
+    fname: account?.fname || '',
+    lname: account?.lname || '',
+    phone: account?.phone || '',
     photoURL: account?.profilepic || '',
     email: account?.email || '',
     gender: genderview || '',
-    address: account?.address.street || '',
+    street: account?.address.street || '',
     district: account?.address.district || '',
     city: account?.address.city || '',
     ward: account?.address.ward || '',
-    about: account?.about || '',
-    isPublic: account?.isPublic || '',
   };
 
   const methods = useForm({
-    resolver: yupResolver(UpdateUserSchema),
     defaultValues,
   });
+
+  const [birth, setBirth] = React.useState(new Date(account?.birthday));
+
+  const handleChange = (newValue) => {
+    setBirth(newValue);
+  };
 
   const {
     setValue,
@@ -66,10 +72,20 @@ export default function AccountGeneral() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = async () => {
+  const onSubmit = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      enqueueSnackbar('Update success!');
+      let newgender;
+      if (data.gender === "Nam") {
+        newgender = 1;
+      }
+      if (data.gender === "Nữ") {
+        newgender = 2;
+      }
+      if (data.gender === "Không xác định") {
+        newgender = 3;
+      }
+      await updateinfo(data.fname, data.lname, data.email, birth, newgender, data.city, data.ward, data.district, data.street);
+      enqueueSnackbar('Cập nhật tài khoản thành công!');
     } catch (error) {
       console.error(error);
     }
@@ -118,7 +134,7 @@ export default function AccountGeneral() {
               }
             />
 
-            <RHFSwitch name="isPublic" labelPlacement="start" label="Thông tin cá nhân" sx={{ mt: 5 }} />
+            {/* <RHFSwitch name="isPublic" labelPlacement="start" label="Thông tin cá nhân" sx={{ mt: 5 }} /> */}
           </Card>
         </Grid>
 
@@ -132,11 +148,20 @@ export default function AccountGeneral() {
                 gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
               }}
             >
-              <RHFTextField name="displayName" label="Họ và Tên" />
-              <RHFTextField name="email" label="Địa chỉ email" />
+              <RHFTextField name="lname" label="Họ" />
+              <RHFTextField name="fname" label="Tên" />
+              <RHFTextField name="email" label="Địa chỉ email " disabled/>
+              <DesktopDatePicker
+                name="birthday"
+                label="Ngày sinh"
+                inputFormat="dd/MM/yyyy"
+                value={birth}
+                onChange={handleChange}
+                renderInput={(params) => <TextField {...params} />}
+              />
 
-              <RHFTextField name="phoneNumber" label="Số điện thoại" />
-              <RHFTextField name="address" label="Tên đường" />
+              <RHFTextField name="phone" label="Số điện thoại" disabled/>
+              <RHFTextField name="street" label="Tên đường" />
 
               <RHFSelect name="gender" label="Giới tính">
                 <option value="" />
@@ -154,9 +179,8 @@ export default function AccountGeneral() {
             </Box>
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-              <RHFTextField name="about" multiline rows={4} label="About" />
 
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+              <LoadingButton type="submit" variant="contained" loading={isSubmitting} >
                 Lưu thay đổi
               </LoadingButton>
             </Stack>

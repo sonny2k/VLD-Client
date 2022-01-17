@@ -9,7 +9,7 @@ import { setSession } from '../utils/jwt';
 const initialState = {
   isAuthenticated: false,
   isInitialized: false,
-  user: null,
+  account: null,
 };
 
 const handlers = {
@@ -23,6 +23,15 @@ const handlers = {
     };
   },
   LOGIN: (state, action) => {
+    const { account } = action.payload;
+
+    return {
+      ...state,
+      isAuthenticated: true,
+      account,
+    };
+  },
+  UPDATEINFO: (state, action) => {
     const { account } = action.payload;
 
     return {
@@ -45,11 +54,30 @@ const handlers = {
       account,
     };
   },
+  SENDCODE: (state, action) => {
+    const { sendstatus } = action.payload;
+
+    return {
+      ...state,
+      sendstatus,
+    };
+  },
   VERIFYCODE: (state, action) => {
+    const { message, fail } = action.payload;
+
+    return {
+      ...state,
+      message,
+      fail,
+    };
+  },
+  CHANGEPASS: (state, action) => {
     const { message } = action.payload;
 
     return {
       ...state,
+      isAuthenticated: false,
+      account: null,
       message,
     };
   },
@@ -66,6 +94,8 @@ const AuthContext = createContext({
   sendcode: () => Promise.resolve(),
   verifycode: () => Promise.resolve(),
   createuser: () => Promise.resolve(),
+  updateinfo: () => Promise.resolve(),
+  changepass: () => Promise.resolve(),
 });
 
 // ----------------------------------------------------------------------
@@ -134,6 +164,33 @@ function AuthProvider({ children }) {
     });
   };
 
+  const updateinfo = async (fname, lname, email, birthday, gender, city, district, ward, street) => {
+    const response = await axios.put('/api/user/account/info', {
+      fname, lname, email, birthday, gender, city, ward, district, street
+    });
+    const { account } = response.data;
+    dispatch({
+      type: 'UPDATEINFO',
+      payload: {
+        account,
+      },
+    });
+  };
+
+  const changepass = async (password, newpass) => {
+    const response = await axios.post('/api/user/changepassword', {
+      password, newpass
+    });
+    const { message } = response.data;
+    setSession(null);
+    dispatch({
+      type: 'CHANGEPASS',
+      payload: {
+        message,
+      },
+    });
+  };
+
   const register = async (profilepic, birthday, gender, email, phone, password, fname, lname, city, district, ward, street, role) => {
     const response = await axios.post('/api/user/auth/register', {
       profilepic, 
@@ -168,9 +225,18 @@ function AuthProvider({ children }) {
   };
 
   const sendcode = async (phone) => {
-    await axios.post('api/user/auth/sendcode', {
+    const response = await axios.post('api/user/auth/sendcode', {
       phone,
     });
+    const sendstatus = "sendfail";
+    if (!response.data) {
+      dispatch({
+        type: 'SENDCODE',
+        payload: {
+          sendstatus,
+        },
+      });
+    }
   }
 
   const verifycode = async (phone, code) => {
@@ -178,13 +244,22 @@ function AuthProvider({ children }) {
       phone,
       code,
     });
-    const { message } = response.data;
-    dispatch({
-      type: 'VERIFYCODE',
-      payload: {
-        message,
-      },
-    });
+    const message = response.data;
+    const fail = "pending"; 
+    if (!response.data) {
+      dispatch({
+        type: 'VERIFYCODE',
+        payload: {
+          fail,
+        },
+      });
+      dispatch({
+        type: 'VERIFYCODE',
+        payload: {
+          message,
+        },
+      });
+    }
   };
 
   const logout = async () => {
@@ -203,6 +278,8 @@ function AuthProvider({ children }) {
         sendcode,
         verifycode,
         createuser,
+        updateinfo,
+        changepass,
       }}
     >
       {children}
