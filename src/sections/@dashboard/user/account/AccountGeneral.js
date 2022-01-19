@@ -164,6 +164,7 @@ export default function AccountGeneral() {
               <RHFTextField name="lname" label="Họ" />
               <RHFTextField name="fname" label="Tên" />
               <RHFTextField name="email" label="Địa chỉ email"/>
+              <RHFTextField name="phone" label="Số điện thoại" disabled/>
               <DesktopDatePicker
                 name="birthday"
                 label="Ngày sinh"
@@ -173,10 +174,7 @@ export default function AccountGeneral() {
                 renderInput={(params) => <TextField {...params} />}
               />
 
-              <RHFTextField name="phone" label="Số điện thoại" disabled/>
-              <RHFTextField name="street" label="Địa chỉ" />
-
-              <RHFSelect name="gender" label="Giới tính">
+<             RHFSelect name="gender" label="Giới tính">
                 <option value="" />
                 {genders.map((option) => (
                   <option key={option.code} value={option.label}>
@@ -185,9 +183,12 @@ export default function AccountGeneral() {
                 ))}
               </RHFSelect>
 
-              <RHFTextField name="district" label="Quận/Huyện" />
+              <RHFTextField name="street" label="Địa chỉ" />
 
               <RHFTextField name="city" label="Tỉnh/Thành phố" />
+
+              <RHFTextField name="district" label="Quận/Huyện" />
+
               <RHFTextField name="ward" label="Phường/Xã" />
             </Box>
 

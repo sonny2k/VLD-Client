@@ -5,7 +5,8 @@ import 'yup-phone';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 // @mui
-import { Stack } from '@mui/material';
+
+import { Stack, Divider } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // hooks
 import useIsMountedRef from '../../../hooks/useIsMountedRef';
@@ -51,6 +52,17 @@ export default function ResetPasswordForm({ onSent, onGetPhone }) {
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
         <RHFTextField name="phone" label="Số điện thoại" />
+
+        <Stack 
+          direction={{ xs: 'column', sm: 'row' }} 
+          divider={<Divider orientation="vertical" flexItem />}
+          spacing={2}
+        >
+          <RHFTextField name="code" label="Mã xác minh" />
+          <LoadingButton fullWidth size="medium" variant="text" onClick={handleSubmit()}>
+            Gửi mã xác minh
+          </LoadingButton>
+        </Stack>
 
         <LoadingButton fullWidth size="large" type="submit" variant="contained" loading={isSubmitting}>
           Khôi phục mật khẩu
