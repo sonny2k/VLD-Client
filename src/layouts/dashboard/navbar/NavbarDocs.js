@@ -10,7 +10,7 @@ import { DocIllustration } from '../../../assets';
 // ----------------------------------------------------------------------
 
 export default function NavbarDocs() {
-  const { user } = useAuth();
+  const { account } = useAuth();
 
   return (
     <Stack
@@ -21,16 +21,16 @@ export default function NavbarDocs() {
 
       <div>
         <Typography gutterBottom variant="subtitle1">
-          Hi, {user?.displayName}
+          Xin chào, {account?.fname}
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          Need help?
-          <br /> Please check our docs
+          Cần trợ giúp?
+          <br /> Vui lòng xem qua hướng dẫn sử dụng
         </Typography>
       </div>
 
-      <Button href={PATH_DOCS} target="_blank" rel="noopener" variant="contained">
-        Documentation
+      <Button href={"/"} target="_blank" rel="noopener" variant="contained">
+        Tài liệu
       </Button>
     </Stack>
   );

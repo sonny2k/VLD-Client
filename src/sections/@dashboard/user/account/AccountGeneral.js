@@ -26,7 +26,9 @@ export default function AccountGeneral() {
   const { account, updateinfo } = useAuth();
 
   const UpdateUserSchema = Yup.object().shape({
-    displayName: Yup.string().required('Name is required'),
+    fname: Yup.string().required('Vui lòng điền tên chính xác'),
+    lname: Yup.string().matches(/^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/, 'Vui lòng điền họ chính xác'),
+    email: Yup.string().email('Vui lòng nhập đúng định dạng Email').max(255),
   });
 
   const gender = account.gender;
@@ -54,16 +56,27 @@ export default function AccountGeneral() {
     district: account?.address.district || '',
     city: account?.address.city || '',
     ward: account?.address.ward || '',
+    birthday: new Date(account?.birthday) || '',
   };
 
   const methods = useForm({
+    resolver: yupResolver(UpdateUserSchema),
     defaultValues,
   });
 
-  const [birth, setBirth] = React.useState(new Date(account?.birthday));
+  let birthcheck;
+  if (account?.birthday === null) {
+    birthcheck = null
+  }
+  
+  if (account?.birthday != null) {
+    birthcheck = new Date(account?.birthday)
+  }
 
-  const handleChange = (newValue) => {
-    setBirth(newValue);
+  const [birth, setBirth] = React.useState(birthcheck);
+
+  const handleChange = (newDate) => {
+    setBirth(newDate);
   };
 
   const {
@@ -128,8 +141,8 @@ export default function AccountGeneral() {
                     color: 'text.secondary',
                   }}
                 >
-                  Allowed *.jpeg, *.jpg, *.png, *.gif
-                  <br /> max size of {fData(3145728)}
+                  Chỉ cho phép *.jpeg, *.jpg, *.png, *.gif
+                  <br /> Dung lượng tối đa {fData(3145728)}
                 </Typography>
               }
             />
@@ -150,7 +163,7 @@ export default function AccountGeneral() {
             >
               <RHFTextField name="lname" label="Họ" />
               <RHFTextField name="fname" label="Tên" />
-              <RHFTextField name="email" label="Địa chỉ email " disabled/>
+              <RHFTextField name="email" label="Địa chỉ email"/>
               <DesktopDatePicker
                 name="birthday"
                 label="Ngày sinh"
@@ -161,7 +174,7 @@ export default function AccountGeneral() {
               />
 
               <RHFTextField name="phone" label="Số điện thoại" disabled/>
-              <RHFTextField name="street" label="Tên đường" />
+              <RHFTextField name="street" label="Địa chỉ" />
 
               <RHFSelect name="gender" label="Giới tính">
                 <option value="" />
@@ -174,12 +187,11 @@ export default function AccountGeneral() {
 
               <RHFTextField name="district" label="Quận/Huyện" />
 
-              <RHFTextField name="city" label="Thành phố" />
+              <RHFTextField name="city" label="Tỉnh/Thành phố" />
               <RHFTextField name="ward" label="Phường/Xã" />
             </Box>
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-
               <LoadingButton type="submit" variant="contained" loading={isSubmitting} >
                 Lưu thay đổi
               </LoadingButton>

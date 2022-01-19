@@ -72,11 +72,6 @@ const menuConfig = [
     icon: <Iconify icon={'emojione-monotone:newspaper'} {...ICON_SIZE} />,
     path: '/pages',
   },
-  {
-    title: 'Đăng ký',
-    icon: <Iconify icon={'emojione-monotone:fountain-pen'} {...ICON_SIZE} />,
-    path: PATH_AUTH.register,
-  },
 ];
 
 export default menuConfig;

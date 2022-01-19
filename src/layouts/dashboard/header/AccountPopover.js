@@ -18,15 +18,15 @@ import { IconButtonAnimate } from '../../../components/animate';
 
 const MENU_OPTIONS = [
   {
-    label: 'Home',
+    label: 'Trang chủ',
     linkTo: '/',
   },
   {
-    label: 'Profile',
+    label: 'Hồ sơ',
     linkTo: PATH_DASHBOARD.user.profile,
   },
   {
-    label: 'Settings',
+    label: 'Cài đặt tài khoản',
     linkTo: PATH_DASHBOARD.user.account,
   },
 ];
@@ -36,7 +36,9 @@ const MENU_OPTIONS = [
 export default function AccountPopover() {
   const navigate = useNavigate();
 
-  const { user, logout } = useAuth();
+  const { account, logout } = useAuth();
+
+  const name = `${account?.lname} ${account?.fname}`;
 
   const isMountedRef = useIsMountedRef();
 
@@ -87,7 +89,6 @@ export default function AccountPopover() {
       >
         <MyAvatar />
       </IconButtonAnimate>
-
       <MenuPopover
         open={Boolean(open)}
         anchorEl={open}
@@ -104,10 +105,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {user?.fname}
+            {name}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {user?.phone}
+            {account?.phone}
           </Typography>
         </Box>
 

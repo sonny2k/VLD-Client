@@ -1,4 +1,3 @@
-import { capitalCase } from 'change-case';
 import { useState } from 'react';
 // @mui
 import { Container, Tab, Box, Tabs } from '@mui/material';
@@ -37,7 +36,7 @@ export default function UserAccount() {
     },
     {
       value: 'Hồ sơ bệnh án',
-      icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
+      icon: <Iconify icon={'healthicons:medical-records-outline'} width={20} height={20} />,
       component: <AccountUser />,
     },
     // {
@@ -46,8 +45,8 @@ export default function UserAccount() {
     //   component: <AccountBilling cards={_userPayment} addressBook={_userAddressBook} invoices={_userInvoices} />,
     // },
     {
-      value: 'Thông báo',
-      icon: <Iconify icon={'eva:bell-fill'} width={20} height={20} />,
+      value: 'Toa thuốc của tôi',
+      icon: <Iconify icon={'fontisto:prescription'} width={20} height={20} />,
       component: <AccountNotifications />,
     },
     // {
@@ -66,7 +65,7 @@ export default function UserAccount() {
     <Page title="Người dùng: Cài đặt tài khoản">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="Account"
+          heading="Tài khoản"
           links={[
             { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
             { name: 'Người dùng', href: PATH_DASHBOARD.user.root },
@@ -82,7 +81,7 @@ export default function UserAccount() {
           onChange={(e, value) => setCurrentTab(value)}
         >
           {ACCOUNT_TABS.map((tab) => (
-            <Tab disableRipple key={tab.value} label={capitalCase(tab.value)} icon={tab.icon} value={tab.value} />
+            <Tab disableRipple key={tab.value} label={tab.value} icon={tab.icon} value={tab.value} />
           ))}
         </Tabs>
 
