@@ -77,7 +77,7 @@ export default function ShopProductSearch() {
         <InputStyle
           {...params}
           stretchStart={200}
-          placeholder="Search product..."
+          placeholder="Tìm theo tên..."
           onKeyUp={handleKeyUp}
           InputProps={{
             ...params.InputProps,

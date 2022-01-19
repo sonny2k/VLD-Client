@@ -105,17 +105,17 @@ export default function EcommerceShop() {
   };
 
   return (
-    <Page title="Ecommerce: Shop">
+    <Page title="Đặt lịch tư vấn: Danh sách bác sĩ">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="Shop"
+          heading="Danh sách bác sĩ"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
+            { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
             {
-              name: 'E-Commerce',
+              name: 'Đặt lịch tư vấn',
               href: PATH_DASHBOARD.eCommerce.root,
             },
-            { name: 'Shop' },
+            { name: 'Danh sách bác sĩ' },
           ]}
         />
 

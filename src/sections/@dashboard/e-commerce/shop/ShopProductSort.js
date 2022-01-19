@@ -11,23 +11,23 @@ import MenuPopover from '../../../../components/MenuPopover';
 // ----------------------------------------------------------------------
 
 const SORT_BY_OPTIONS = [
-  { value: 'featured', label: 'Featured' },
-  { value: 'newest', label: 'Newest' },
-  { value: 'priceDesc', label: 'Price: High-Low' },
-  { value: 'priceAsc', label: 'Price: Low-High' },
+  { value: 'Mắt', label: 'Mắt' },
+  { value: 'Thần Kinh', label: 'Thần Kinh' },
+  { value: 'Dạ dày', label: 'Dạ dày' },
+  { value: 'Tim mạch', label: 'Tim mạch' },
 ];
 
 function renderLabel(label) {
-  if (label === 'featured') {
-    return 'Featured';
+  if (label === 'Mắt') {
+    return 'Mắt';
   }
-  if (label === 'newest') {
-    return 'Newest';
+  if (label === 'Thần kinh') {
+    return 'Thần kinh';
   }
-  if (label === 'priceDesc') {
-    return 'Price: High-Low';
+  if (label === 'Dạ dày') {
+    return 'Dạ dày';
   }
-  return 'Price: Low-High';
+  return 'Tim mạch';
 }
 
 // ----------------------------------------------------------------------
@@ -60,7 +60,7 @@ export default function ShopProductSort() {
         onClick={(event) => handleOpen(event.currentTarget)}
         endIcon={<Iconify icon={open ? 'eva:chevron-up-fill' : 'eva:chevron-down-fill'} />}
       >
-        Sort By:&nbsp;
+        Theo chuyên khoa:&nbsp;
         <Typography component="span" variant="subtitle2" sx={{ color: 'text.secondary' }}>
           {renderLabel(sortBy)}
         </Typography>

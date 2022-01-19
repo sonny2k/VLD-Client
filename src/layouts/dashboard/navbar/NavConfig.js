@@ -48,7 +48,7 @@ const navConfig = [
         icon: ICONS.user,
         children: [
           // { title: 'profile', path: PATH_DASHBOARD.user.profile },
-          { title: 'Đặt lịch tư vấn', path: PATH_DASHBOARD.user.cards },
+          { title: 'Đặt lịch tư vấn', path: PATH_DASHBOARD.eCommerce.shop },
           { title: 'Danh sách chờ duyệt', path: PATH_DASHBOARD.user.list },
           // { title: 'create', path: PATH_DASHBOARD.user.newUser },
           // { title: 'edit', path: PATH_DASHBOARD.user.editById },
