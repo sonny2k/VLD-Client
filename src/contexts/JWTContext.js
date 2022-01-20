@@ -81,6 +81,15 @@ const handlers = {
       message,
     };
   },
+  RESETPASSWORD: (state, action) => {
+    const { account } = action.payload;
+
+    return {
+      ...state,
+      isAuthenticated: true,
+      account,
+    };
+  },
 };
 
 const reducer = (state, action) => (handlers[action.type] ? handlers[action.type](state, action) : state);
@@ -96,6 +105,7 @@ const AuthContext = createContext({
   createuser: () => Promise.resolve(),
   updateinfo: () => Promise.resolve(),
   changepass: () => Promise.resolve(),
+  resetpassword: () => Promise.resolve(),
 });
 
 // ----------------------------------------------------------------------
@@ -267,6 +277,22 @@ function AuthProvider({ children }) {
     dispatch({ type: 'LOGOUT' });
   };
 
+  const resetpassword = async ( phone, newpassword ) => {
+    const response = await axios.post('/api/user/auth/resetpassword', {
+      phone,
+      newpassword,
+    });
+    const {accessToken, account} = response.data;
+
+  window.localStorage.setItem('accessToken', accessToken);
+    dispatch({
+      type: 'RESETPASSWORD',
+      payload: {
+        account,
+      },
+    });
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -280,11 +306,12 @@ function AuthProvider({ children }) {
         createuser,
         updateinfo,
         changepass,
+        resetpassword,
       }}
     >
       {children}
     </AuthContext.Provider>
   );
-}
+  }
 
 export { AuthContext, AuthProvider };

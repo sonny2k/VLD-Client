@@ -19,6 +19,7 @@ import {
   AccountUser,
   AccountNotifications,
   AccountChangePassword,
+  CreateConsultation,
 } from '../../sections/@dashboard/user/account';
 
 // ----------------------------------------------------------------------
@@ -33,6 +34,11 @@ export default function UserAccount() {
       value: 'Chung',
       icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
       component: <AccountGeneral />,
+    },
+    {
+      value: 'Đặt Lịch Tư Vấn',
+      icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
+      component: <CreateConsultation />,
     },
     // {
     //   value: 'Hồ sơ bệnh án',
