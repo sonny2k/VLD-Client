@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import * as React from 'react';
+import Select from "react-select";
 import { useSnackbar } from 'notistack';
 import { useCallback } from 'react';
 // form
@@ -10,6 +11,7 @@ import { Box, Grid, Card, Stack, Typography, TextField } from '@mui/material';
 import { LoadingButton, DesktopDatePicker } from '@mui/lab';
 // hooks
 import useAuth from '../../../../hooks/useAuth';
+import useLocationForm from '../../../../hooks/useLocationForm'
 // utils
 import { fData } from '../../../../utils/formatNumber';
 // _mock
@@ -20,6 +22,17 @@ import { FormProvider, RHFSwitch, RHFSelect, RHFTextField, RHFUploadAvatar } fro
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral() {
+  
+  const { state, onCitySelect, onDistrictSelect, onWardSelect } = useLocationForm();
+  
+  const {
+    cityOptions,
+    districtOptions,
+    wardOptions,
+    selectedCity,
+    selectedDistrict,
+    selectedWard,
+  } = state;
   
   const { enqueueSnackbar } = useSnackbar();
 
@@ -53,9 +66,6 @@ export default function AccountGeneral() {
     email: account?.email || '',
     gender: genderview || '',
     street: account?.address.street || '',
-    district: account?.address.district || '',
-    city: account?.address.city || '',
-    ward: account?.address.ward || '',
     birthday: new Date(account?.birthday) || '',
   };
 
@@ -87,6 +97,9 @@ export default function AccountGeneral() {
 
   const onSubmit = async (data) => {
     try {
+      const city = state.selectedCity.option;
+      const ward = state.selectedWard.option;
+      const district = state.selectedDistrict.option;
       let newgender;
       if (data.gender === "Nam") {
         newgender = 1;
@@ -97,7 +110,7 @@ export default function AccountGeneral() {
       if (data.gender === "Không xác định") {
         newgender = 3;
       }
-      await updateinfo(data.fname, data.lname, data.email, birth, newgender, data.city, data.ward, data.district, data.street);
+      await updateinfo(data.fname, data.lname, data.email, birth, newgender, city, district, ward, data.street);
       enqueueSnackbar('Cập nhật tài khoản thành công!');
     } catch (error) {
       console.error(error);
@@ -174,10 +187,8 @@ export default function AccountGeneral() {
               />
 
               <RHFTextField name="phone" label="Số điện thoại" disabled/>
-              <RHFTextField name="street" label="Địa chỉ" />
 
               <RHFSelect name="gender" label="Giới tính">
-                <option value="" />
                 {genders.map((option) => (
                   <option key={option.code} value={option.label}>
                     {option.label}
@@ -185,10 +196,37 @@ export default function AccountGeneral() {
                 ))}
               </RHFSelect>
 
-              <RHFTextField name="district" label="Quận/Huyện" />
+              <Select
+                name="cityId"
+                key={`cityId_${selectedCity?.value}`}
+                isDisabled={cityOptions.length === 0}
+                options={cityOptions}
+                onChange={(option) => onCitySelect(option)}
+                placeholder="Tỉnh/Thành"
+                defaultValue={selectedCity}
+              />
 
-              <RHFTextField name="city" label="Tỉnh/Thành phố" />
-              <RHFTextField name="ward" label="Phường/Xã" />
+              <Select
+                name="districtId"
+                key={`districtId_${selectedDistrict?.value}`}
+                isDisabled={districtOptions.length === 0}
+                options={districtOptions}
+                onChange={(option) => onDistrictSelect(option)}
+                placeholder="Quận/Huyện"
+                defaultValue={selectedDistrict}
+              />
+
+              <Select
+                name="wardId"
+                key={`wardId_${selectedWard?.value}`}
+                isDisabled={wardOptions.length === 0}
+                options={wardOptions}
+                placeholder="Phường/Xã"
+                onChange={(option) => onWardSelect(option)}
+                defaultValue={selectedWard}
+              />
+
+              <RHFTextField name="street" label="Địa chỉ" />
             </Box>
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
