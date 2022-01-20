@@ -177,6 +177,7 @@ export default function AccountGeneral() {
               <RHFTextField name="lname" label="Họ" />
               <RHFTextField name="fname" label="Tên" />
               <RHFTextField name="email" label="Địa chỉ email"/>
+              <RHFTextField name="phone" label="Số điện thoại" disabled/>
               <DesktopDatePicker
                 name="birthday"
                 label="Ngày sinh"
