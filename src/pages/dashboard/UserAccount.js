@@ -20,7 +20,7 @@ import {
   AccountNotifications,
   AccountChangePassword,
   CreateConsultation,
-} from '../../sections/@dashboard/user/account';
+} from '../../sections/@dashboard/user/account/index';
 
 // ----------------------------------------------------------------------
 
@@ -31,7 +31,7 @@ export default function UserAccount() {
 
   const ACCOUNT_TABS = [
     {
-      value: 'Chung',
+      value: 'Tài khoản',
       icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
       component: <AccountGeneral />,
     },

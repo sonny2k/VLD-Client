@@ -255,21 +255,12 @@ function AuthProvider({ children }) {
       code,
     });
     const message = response.data;
-    const fail = "pending"; 
-    if (!response.data) {
-      dispatch({
-        type: 'VERIFYCODE',
-        payload: {
-          fail,
-        },
-      });
       dispatch({
         type: 'VERIFYCODE',
         payload: {
           message,
         },
       });
-    }
   };
 
   const logout = async () => {

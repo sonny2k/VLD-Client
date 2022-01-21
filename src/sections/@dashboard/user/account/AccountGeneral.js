@@ -15,7 +15,7 @@ import useLocationForm from '../../../../hooks/useLocationForm'
 // utils
 import { fData } from '../../../../utils/formatNumber';
 // _mock
-import { genders } from '../../../../_mock';
+import { genders } from '../../../../_mock/_gender';
 // components
 import { FormProvider, RHFSwitch, RHFSelect, RHFTextField, RHFUploadAvatar } from '../../../../components/hook-form';
 
@@ -65,6 +65,9 @@ export default function AccountGeneral() {
     photoURL: account?.profilepic || '',
     email: account?.email || '',
     gender: genderview || '',
+    cityId: account?.address.city || '',
+    districtId: account?.address.district || '',
+    wardId: account?.address.ward || '',
     street: account?.address.street || '',
     birthday: new Date(account?.birthday) || '',
   };
@@ -93,13 +96,14 @@ export default function AccountGeneral() {
     setValue,
     handleSubmit,
     formState: { isSubmitting },
+    control,
   } = methods;
 
   const onSubmit = async (data) => {
     try {
-      const city = state.selectedCity.option;
-      const ward = state.selectedWard.option;
-      const district = state.selectedDistrict.option;
+      const city = state.selectedCity.value;
+      const ward = state.selectedWard.value;
+      const district = state.selectedDistrict.value;
       let newgender;
       if (data.gender === "Nam") {
         newgender = 1;
@@ -187,8 +191,6 @@ export default function AccountGeneral() {
                 renderInput={(params) => <TextField {...params} />}
               />
 
-              <RHFTextField name="phone" label="Số điện thoại" disabled/>
-
               <RHFSelect name="gender" label="Giới tính">
                 {genders.map((option) => (
                   <option key={option.code} value={option.label}>
@@ -200,6 +202,7 @@ export default function AccountGeneral() {
               <Select
                 name="cityId"
                 key={`cityId_${selectedCity?.value}`}
+                control={control}
                 isDisabled={cityOptions.length === 0}
                 options={cityOptions}
                 onChange={(option) => onCitySelect(option)}
@@ -210,6 +213,7 @@ export default function AccountGeneral() {
               <Select
                 name="districtId"
                 key={`districtId_${selectedDistrict?.value}`}
+                control={control}
                 isDisabled={districtOptions.length === 0}
                 options={districtOptions}
                 onChange={(option) => onDistrictSelect(option)}
@@ -220,6 +224,7 @@ export default function AccountGeneral() {
               <Select
                 name="wardId"
                 key={`wardId_${selectedWard?.value}`}
+                control={control}
                 isDisabled={wardOptions.length === 0}
                 options={wardOptions}
                 placeholder="Phường/Xã"
