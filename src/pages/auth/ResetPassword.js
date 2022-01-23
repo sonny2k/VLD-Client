@@ -37,40 +37,20 @@ export default function ResetPassword() {
 
         <Container>
           <Box sx={{ maxWidth: 480, mx: 'auto' }}>
-            {!sent ? (
               <>
                 <Typography variant="h3" paragraph>
                   Bạn quên mật khẩu?
                 </Typography>
                 <Typography sx={{ color: 'text.secondary', mb: 5 }}>
-                  Vui lòng nhập số điện thoại ứng với tài khoản của bạn.
+                  Vui lòng nhập số điện thoại ứng với tài khoản của bạn và mật khẩu mới.
                 </Typography>
 
-                <ResetPasswordForm onSent={() => setSent(true)} onGetPhone={(value) => setPhone(value)} />
+                <ResetPasswordForm />
 
                 <Button fullWidth size="large" component={RouterLink} to={PATH_AUTH.login} sx={{ mt: 1 }}>
                   Trở về
                 </Button>
               </>
-            ) : (
-              <Box sx={{ textAlign: 'center' }}>
-                <SentIcon sx={{ mb: 5, mx: 'auto', height: 160 }} />
-
-                <Typography variant="h3" gutterBottom>
-                  Gửi yêu cầu thành công
-                </Typography>
-                <Typography>
-                  Chúng tôi đã gửi mã xác minh tới số điện thoại &nbsp;
-                  <strong>{phone}</strong>
-                  <br />
-                  Vui lòng kiểm tra tin nhắn.
-                </Typography>
-
-                <Button size="large" variant="contained" component={RouterLink} to={PATH_AUTH.verify} sx={{ mt: 5 }}>
-                  Nhập mã xác minh
-                </Button>
-              </Box>
-            )}
           </Box>
         </Container>
       </RootStyle>

@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import * as React from 'react';
-import Select from "react-select";
+import Select from 'react-select';
 import { useSnackbar } from 'notistack';
 import { useCallback } from 'react';
 // form
@@ -67,6 +67,9 @@ export default function AccountGeneral() {
     gender: genderview || '',
     street: account?.address.street || '',
     birthday: new Date(account?.birthday) || '',
+    city: account?.selectedCity || '',
+    ward: account?.selectedWard || '',
+    district: account?.selectedDistrict || '',
   };
 
   const methods = useForm({
@@ -186,8 +189,6 @@ export default function AccountGeneral() {
                 onChange={handleChange}
                 renderInput={(params) => <TextField {...params} />}
               />
-
-              <RHFTextField name="phone" label="Số điện thoại" disabled/>
 
               <RHFSelect name="gender" label="Giới tính">
                 {genders.map((option) => (
