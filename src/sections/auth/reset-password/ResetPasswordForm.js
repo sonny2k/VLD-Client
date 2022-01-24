@@ -81,7 +81,7 @@ export default function ResetPasswordForm({ onSent, onGetPhone }) {
       const phone = `+84${data.phone.slice(1)}`
       await verifycode(phone, data.code);
       if (message) {
-        await resetpassword(data.profilepic, data.birthday, data.gender, data.email, phone, data.password, data.firstName, data.lastName, data.city, data.district, data.ward, data.street, data.role);
+        await resetpassword(phone, data.password);
         enqueueSnackbar('Reset mật khẩu thành công');
       }
       if (fail) {
@@ -137,7 +137,7 @@ export default function ResetPasswordForm({ onSent, onGetPhone }) {
 
         <RHFTextField
           name="password"
-          label="Mật khẩu"
+          label="Mật khẩu mới"
           type={showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -152,7 +152,7 @@ export default function ResetPasswordForm({ onSent, onGetPhone }) {
 
         <RHFTextField
           name="passwordConfirmation"
-          label="Nhập lại mật khẩu"
+          label="Nhập lại mật khẩu mới"
           type={showPassword2 ? 'text' : 'password'}
           InputProps={{
             endAdornment: (

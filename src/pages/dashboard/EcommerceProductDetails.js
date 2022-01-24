@@ -84,15 +84,15 @@ export default function EcommerceProductDetails() {
     <Page title="Ecommerce: Product Details">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="Product Details"
+          heading="Chi tiết bác sĩ"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
+            { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
             {
-              name: 'E-Commerce',
+              name: 'Đặt lịch tư vấn',
               href: PATH_DASHBOARD.eCommerce.root,
             },
             {
-              name: 'Shop',
+              name: 'Chi tiết bác sĩ',
               href: PATH_DASHBOARD.eCommerce.shop,
             },
             { name: sentenceCase(name) },
@@ -166,7 +166,7 @@ export default function EcommerceProductDetails() {
 
         {!product && <SkeletonProduct />}
 
-        {error && <Typography variant="h6">404 Product not found</Typography>}
+        {error && <Typography variant="h6">404 không tìm thấy bác sĩ</Typography>}
       </Container>
     </Page>
   );

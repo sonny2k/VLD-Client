@@ -46,7 +46,7 @@ export default function ResetPassword() {
                 </Typography>
 
                 <ResetPasswordForm />
-
+                
                 <Button fullWidth size="large" component={RouterLink} to={PATH_AUTH.login} sx={{ mt: 1 }}>
                   Trở về
                 </Button>

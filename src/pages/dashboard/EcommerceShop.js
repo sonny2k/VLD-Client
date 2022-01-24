@@ -147,7 +147,7 @@ export default function EcommerceShop() {
             <>
               <Typography variant="body2" gutterBottom>
                 <strong>{filteredProducts.length}</strong>
-                &nbsp;Products found
+                &nbsp;Tìm thấy bác sĩ
               </Typography>
 
               <ShopTagFiltered

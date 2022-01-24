@@ -24,7 +24,7 @@ import { FormProvider, RHFSwitch, RHFSelect, RHFTextField, RHFUploadAvatar } fro
 export default function AccountGeneral() {
   
   const { state, onCitySelect, onDistrictSelect, onWardSelect } = useLocationForm();
-  
+
   const {
     cityOptions,
     districtOptions,
@@ -99,14 +99,11 @@ export default function AccountGeneral() {
     setValue,
     handleSubmit,
     formState: { isSubmitting },
-    control,
+    onChange
   } = methods;
 
   const onSubmit = async (data) => {
     try {
-      const city = state.selectedCity.value;
-      const ward = state.selectedWard.value;
-      const district = state.selectedDistrict.value;
       let newgender;
       if (data.gender === "Nam") {
         newgender = 1;
@@ -117,7 +114,7 @@ export default function AccountGeneral() {
       if (data.gender === "Không xác định") {
         newgender = 3;
       }
-      await updateinfo(data.fname, data.lname, data.email, birth, newgender, city, district, ward, data.street);
+      await updateinfo(data.fname, data.lname, data.email, birth, newgender, selectedCity, selectedDistrict, selectedWard, data.street);
       enqueueSnackbar('Cập nhật tài khoản thành công!');
     } catch (error) {
       console.error(error);
@@ -196,44 +193,35 @@ export default function AccountGeneral() {
 
               <RHFSelect name="gender" label="Giới tính">
                 {genders.map((option) => (
-                  <option key={option.code} value={option.label}>
+                  <option key={option.code}>
                     {option.label}
                   </option>
                 ))}
               </RHFSelect>
 
-              <Select
-                name="cityId"
-                key={`cityId_${selectedCity?.value}`}
-                control={control}
-                isDisabled={cityOptions.length === 0}
-                options={cityOptions}
-                onChange={(option) => onCitySelect(option)}
-                placeholder="Tỉnh/Thành"
-                defaultValue={selectedCity}
-              />
+              <RHFSelect name="cityId" label="Tỉnh/Thành phố" onChange={e => onCitySelect(e.target.value)} value={selectedCity}>
+                {cityOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </RHFSelect>
 
-              <Select
-                name="districtId"
-                key={`districtId_${selectedDistrict?.value}`}
-                control={control}
-                isDisabled={districtOptions.length === 0}
-                options={districtOptions}
-                onChange={(option) => onDistrictSelect(option)}
-                placeholder="Quận/Huyện"
-                defaultValue={selectedDistrict}
-              />
+              <RHFSelect name="districtId" label="Quận/Huyện" disabled={districtOptions.length === 0} onChange={e => onDistrictSelect(e.target.value)} value={selectedDistrict}>
+                {districtOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </RHFSelect>
 
-              <Select
-                name="wardId"
-                key={`wardId_${selectedWard?.value}`}
-                control={control}
-                isDisabled={wardOptions.length === 0}
-                options={wardOptions}
-                placeholder="Phường/Xã"
-                onChange={(option) => onWardSelect(option)}
-                defaultValue={selectedWard}
-              />
+              <RHFSelect name="wardId" label="Phường/Xã" disabled={wardOptions.length === 0} onChange={e => onWardSelect(e.target.value)} value={selectedWard}>
+                {wardOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </RHFSelect>
 
               <RHFTextField name="street" label="Địa chỉ" />
             </Box>

@@ -55,7 +55,7 @@ function useLocationForm() {
     useEffect(() => {
         (async function () {
             if (!selectedCity) return;
-            const options = await fetchLocationOptions(FETCH_TYPES.DISTRICTS, selectedCity.value);
+            const options = await fetchLocationOptions(FETCH_TYPES.DISTRICTS, selectedCity);
             setState({ ...state, districtOptions: options })
         })();
     }, [selectedCity]);
@@ -63,7 +63,7 @@ function useLocationForm() {
     useEffect(() => {
         (async function () {
             if (!selectedDistrict) return;
-            const options = await fetchLocationOptions(FETCH_TYPES.WARDS, selectedDistrict.value);
+            const options = await fetchLocationOptions(FETCH_TYPES.WARDS, selectedDistrict);
             setState({ ...state, wardOptions: options })
         })()
     }, [selectedDistrict])
