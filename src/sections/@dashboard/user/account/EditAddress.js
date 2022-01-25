@@ -21,7 +21,7 @@ import { FormProvider, RHFSwitch, RHFSelect, RHFTextField, RHFUploadAvatar } fro
 
 // ----------------------------------------------------------------------
 
-export default function AccountGeneral() {
+export default function EditAddress() {
   
   const { state, onCitySelect, onDistrictSelect, onWardSelect } = useLocationForm();
 
@@ -137,34 +137,6 @@ export default function AccountGeneral() {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          <Card sx={{ py: 10, px: 3, textAlign: 'center' }}>
-            <RHFUploadAvatar
-              name="photoURL"
-              accept="image/*"
-              maxSize={3145728}
-              onDrop={handleDrop}
-              helperText={
-                <Typography
-                  variant="caption"
-                  sx={{
-                    mt: 2,
-                    mx: 'auto',
-                    display: 'block',
-                    textAlign: 'center',
-                    color: 'text.secondary',
-                  }}
-                >
-                  Chỉ cho phép *.jpeg, *.jpg, *.png, *.gif
-                  <br /> Dung lượng tối đa {fData(3145728)}
-                </Typography>
-              }
-            />
-
-            {/* <RHFSwitch name="isPublic" labelPlacement="start" label="Thông tin cá nhân" sx={{ mt: 5 }} /> */}
-          </Card>
-        </Grid>
-
         <Grid item xs={12} md={8}>
           <Card sx={{ p: 3 }}>
             <Box
@@ -175,7 +147,7 @@ export default function AccountGeneral() {
                 gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
               }}
             >
-              <RHFTextField name="lname" label="Họ" />
+              {/* <RHFTextField name="lname" label="Họ" />
               <RHFTextField name="fname" label="Tên" />
               <RHFTextField name="email" label="Địa chỉ email"/>
               <RHFTextField name="phone" label="Số điện thoại" disabled/>
@@ -194,25 +166,33 @@ export default function AccountGeneral() {
                     {option.label}
                   </option>
                 ))}
-              </RHFSelect>
+              </RHFSelect> */}
 
-              <RHFTextField name="cityId" label="Tỉnh/Thành phố" onChange={e => onCitySelect(e.target.value)} value={state.selectedCity} disabled>
-              {cityOptions.map((option) => (
+              <RHFSelect name="cityId" label="Tỉnh/Thành phố" onChange={e => onCitySelect(e.target.value)} value={state.selectedCity}>
+                {cityOptions.map((option) => (
                   <option key={selectedCity?.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
-              </RHFTextField>
-          
+              </RHFSelect>
 
-              <RHFTextField name="districtId" label="Quận/Huyện" onChange={e => onDistrictSelect(e.target.value)} value={state.selectedDistrict} disabled/>
-                
-    
+              <RHFSelect name="districtId" label="Quận/Huyện" disabled={districtOptions.length === 0} onChange={e => onDistrictSelect(e.target.value)} value={state.selectedDistrict}>
+                {districtOptions.map((option) => (
+                  <option key={selectedDistrict?.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </RHFSelect>
 
-              <RHFTextField name="wardId" label="Phường/Xã" onChange={e => onWardSelect(e.target.value)} value={state.selectedWard} disabled/>
-   
+              <RHFSelect name="wardId" label="Phường/Xã" disabled={wardOptions.length === 0} onChange={e => onWardSelect(e.target.value)} value={state.selectedWard}>
+                {wardOptions.map((option) => (
+                  <option key={selectedWard?.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </RHFSelect>
 
-              <RHFTextField name="street" label="Địa chỉ" disabled/>
+              <RHFTextField name="street" label="Địa chỉ" />
             </Box>
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>

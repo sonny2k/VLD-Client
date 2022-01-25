@@ -20,6 +20,7 @@ import {
   AccountNotifications,
   AccountChangePassword,
   CreateConsultation,
+  EditAddress,
 } from '../../sections/@dashboard/user/account/index';
 
 // ----------------------------------------------------------------------
@@ -35,6 +36,12 @@ export default function UserAccount() {
       icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
       component: <AccountGeneral />,
     },
+    {
+      value: 'Địa chỉ',
+      icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
+      component: <EditAddress />,
+    },
+
     {
       value: 'Đặt Lịch Tư Vấn',
       icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
