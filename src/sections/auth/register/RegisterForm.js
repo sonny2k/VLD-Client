@@ -77,24 +77,15 @@ export default function RegisterForm() {
     formState: { errors, isSubmitting },
   } = methods;
 
-  let count = 0;
   const onSubmit = async (data) => {
     try {
-      count += 1;
       const phone = `+84${data.phone.slice(1)}`
       await verifycode(phone, data.code);
-      if (message) {
+      if (message === "approved") {
         await register(data.profilepic, data.birthday, data.gender, data.email, phone, data.password, data.firstName, data.lastName, data.city, data.district, data.ward, data.street, data.role);
         enqueueSnackbar('Tạo tài khoản thành công');
       }
-      if (fail) {
-        console.log("sai ma");
-        console.log(count);
-      }
-      if (count === 3) {
-        console.log("Ban nhap sai qua 3 lan roi")
-        document.getElementById('dk').disabled = true;
-      }
+      enqueueSnackbar('Sai mã xác minh, xin thử lại');
     } catch (error) {
       console.error(error);
       reset();
@@ -109,9 +100,6 @@ export default function RegisterForm() {
       const phonenum = `+84${data.phone.slice(1)}` 
       await sendcode(phonenum)
       enqueueSnackbar('Mã đã được gửi vào số điện thoại của bạn!');
-      if (sendstatus) {
-        enqueueSnackbar('Không gửi được mã, xin thử lại');
-      }
     } catch (error) {
       console.error(error);
       reset();

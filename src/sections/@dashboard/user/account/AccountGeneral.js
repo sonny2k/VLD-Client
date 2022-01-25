@@ -65,15 +65,13 @@ export default function AccountGeneral() {
     photoURL: account?.profilepic || '',
     email: account?.email || '',
     gender: genderview || '',
-    cityId: account?.address.city || '',
-    districtId: account?.address.district || '',
-    wardId: account?.address.ward || '',
     street: account?.address.street || '',
     birthday: new Date(account?.birthday) || '',
-    city: account?.selectedCity || '',
-    ward: account?.selectedWard || '',
-    district: account?.selectedDistrict || '',
   };
+
+  state.selectedCity = account?.address.city;
+  state.selectedDistrict = account?.address.district;
+  state.selectedWard = account?.address.ward;
 
   const methods = useForm({
     resolver: yupResolver(UpdateUserSchema),
@@ -99,7 +97,6 @@ export default function AccountGeneral() {
     setValue,
     handleSubmit,
     formState: { isSubmitting },
-    onChange
   } = methods;
 
   const onSubmit = async (data) => {
@@ -199,25 +196,25 @@ export default function AccountGeneral() {
                 ))}
               </RHFSelect>
 
-              <RHFSelect name="cityId" label="Tỉnh/Thành phố" onChange={e => onCitySelect(e.target.value)} value={selectedCity}>
+              <RHFSelect name="cityId" label="Tỉnh/Thành phố" onChange={e => onCitySelect(e.target.value)} value={state.selectedCity}>
                 {cityOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
+                  <option key={selectedCity?.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
               </RHFSelect>
 
-              <RHFSelect name="districtId" label="Quận/Huyện" disabled={districtOptions.length === 0} onChange={e => onDistrictSelect(e.target.value)} value={selectedDistrict}>
+              <RHFSelect name="districtId" label="Quận/Huyện" disabled={districtOptions.length === 0} onChange={e => onDistrictSelect(e.target.value)} value={state.selectedDistrict}>
                 {districtOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
+                  <option key={selectedDistrict?.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}
               </RHFSelect>
 
-              <RHFSelect name="wardId" label="Phường/Xã" disabled={wardOptions.length === 0} onChange={e => onWardSelect(e.target.value)} value={selectedWard}>
+              <RHFSelect name="wardId" label="Phường/Xã" disabled={wardOptions.length === 0} onChange={e => onWardSelect(e.target.value)} value={state.selectedWard}>
                 {wardOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
+                  <option key={selectedWard?.value} value={option.value}>
                     {option.label}
                   </option>
                 ))}

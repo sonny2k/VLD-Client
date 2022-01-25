@@ -74,24 +74,15 @@ export default function ResetPasswordForm({ onSent, onGetPhone }) {
     formState: { isSubmitting },
   } = methods;
 
-  let count = 0;
   const onSubmit = async (data) => {
     try {
-      count += 1;
       const phone = `+84${data.phone.slice(1)}`
       await verifycode(phone, data.code);
-      if (message) {
+      if (message === "approve") {
         await resetpassword(phone, data.password);
         enqueueSnackbar('Reset mật khẩu thành công');
       }
-      if (fail) {
-        console.log("sai ma");
-        console.log(count);
-      }
-      if (count === 3) {
-        console.log("Ban nhap sai qua 3 lan roi")
-        document.getElementById('dk').disabled = true;
-      }
+      enqueueSnackbar('Sai mã xác minh, xin thử lại');
     } catch (error) {
       console.error(error);
       reset();
@@ -123,7 +114,6 @@ export default function ResetPasswordForm({ onSent, onGetPhone }) {
       }
     } catch (error) {
       console.error(error);
-      reset();
       if (isMountedRef.current) {
         setError('afterSubmit', error);
       }

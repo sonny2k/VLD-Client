@@ -63,12 +63,11 @@ const handlers = {
     };
   },
   VERIFYCODE: (state, action) => {
-    const { message, fail } = action.payload;
+    const { message } = action.payload;
 
     return {
       ...state,
       message,
-      fail,
     };
   },
   CHANGEPASS: (state, action) => {
@@ -82,12 +81,11 @@ const handlers = {
     };
   },
   RESETPASSWORD: (state, action) => {
-    const { account } = action.payload;
+    const { message } = action.payload;
 
     return {
       ...state,
-      isAuthenticated: true,
-      account,
+      message,
     };
   },
 };
@@ -273,13 +271,12 @@ function AuthProvider({ children }) {
       phone,
       newpassword,
     });
-    const {accessToken, account} = response.data;
+    const { message } = response.data;
 
-  window.localStorage.setItem('accessToken', accessToken);
     dispatch({
       type: 'RESETPASSWORD',
       payload: {
-        account,
+        message,
       },
     });
   };
