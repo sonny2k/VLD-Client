@@ -8,4 +8,4 @@ export { default as AccountNotifications } from './AccountNotifications';
 export { default as AccountSocialLinks } from './AccountSocialLinks';
 export { default as AccountUser } from './AccountUser';
 export { default as CreateConsultation } from './CreateConsultation';
-export { default as EditAddress} from './EditAddress';
+export { default as EditAddress} from './EditInformation';

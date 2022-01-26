@@ -1,7 +1,6 @@
-import * as Yup from 'yup';
 import * as React from 'react';
-import Select from 'react-select';
 import { useSnackbar } from 'notistack';
+import * as Yup from 'yup';
 import { useCallback } from 'react';
 // form
 import { useForm } from 'react-hook-form';
@@ -21,7 +20,7 @@ import { FormProvider, RHFSwitch, RHFSelect, RHFTextField, RHFUploadAvatar } fro
 
 // ----------------------------------------------------------------------
 
-export default function AccountGeneral() {
+export default function EditInformation() {
   
   const { state, onCitySelect, onDistrictSelect, onWardSelect } = useLocationForm();
 
@@ -57,6 +56,12 @@ export default function AccountGeneral() {
   } 
 
   const name = `${account?.fname} ${account?.lname}`;
+
+  const {
+    cityRef,
+    districtRef,
+    wardRef,
+  } = React.createRef();
 
   const defaultValues = {
     fname: account?.fname || '',
@@ -116,8 +121,8 @@ export default function AccountGeneral() {
       const city = cityId.options[cityId.selectedIndex].text;
       const district = districtId.options[districtId.selectedIndex].text;
       const ward = wardId.options[wardId.selectedIndex].text;
-      await updateinfo(data.fname, data.lname, data.email, birth, newgender, city, district, ward, data.street);
-      enqueueSnackbar('Cập nhật tài khoản thành công!');
+      await updateinfo(city, district, ward, data.street, data.fname, data.lname, data.email, birth, newgender);
+      enqueueSnackbar('Cập nhật thông tin tài khoản thành công!');
     } catch (error) {
       console.error(error);
     }
@@ -144,7 +149,7 @@ export default function AccountGeneral() {
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <Card sx={{ py: 10, px: 3, textAlign: 'center' }}>
-            <RHFUploadAvatar
+          <RHFUploadAvatar 
               name="photoURL"
               accept="image/*"
               maxSize={3145728}
@@ -159,7 +164,7 @@ export default function AccountGeneral() {
                     textAlign: 'center',
                     color: 'text.secondary',
                   }}
-                >
+          disabled>
                   Chỉ cho phép *.jpeg, *.jpg, *.png, *.gif
                   <br /> Dung lượng tối đa {fData(3145728)}
                 </Typography>
@@ -169,7 +174,6 @@ export default function AccountGeneral() {
             {/* <RHFSwitch name="isPublic" labelPlacement="start" label="Thông tin cá nhân" sx={{ mt: 5 }} /> */}
           </Card>
         </Grid>
-
         <Grid item xs={12} md={8}>
           <Card sx={{ p: 3 }}>
             <Box
@@ -180,9 +184,9 @@ export default function AccountGeneral() {
                 gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
               }}
             >
-              <RHFTextField name="lname" label="Họ" disabled/>
-              <RHFTextField name="fname" label="Tên" disabled/>
-              <RHFTextField name="email" label="Địa chỉ email" disabled/>
+              <RHFTextField name="lname" label="Họ" />
+              <RHFTextField name="fname" label="Tên" />
+              <RHFTextField name="email" label="Địa chỉ email" />
               <RHFTextField name="phone" label="Số điện thoại" disabled/>
               <DesktopDatePicker
                 name="birthday"
@@ -190,32 +194,47 @@ export default function AccountGeneral() {
                 inputFormat="dd/MM/yyyy"
                 value={birth}
                 onChange={handleChange}
-                renderInput={(params) => <TextField {...params} disabled/>}
+                renderInput={(params) => <TextField {...params} />}
               />
 
-              <RHFSelect name="gender" label="Giới tính" disabled>
+              <RHFSelect name="gender" label="Giới tính" >
                 {genders.map((option) => (
                   <option key={option.code}>
                     {option.label}
                   </option>
                 ))}
+              </RHFSelect>   
+
+              <RHFSelect id="cityId" label="Tỉnh/Thành phố" onChange={e => onCitySelect(e.target.value)} value={selectedCity} ref={cityRef => selectedCity.label = cityRef}>
+                {cityOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
               </RHFSelect>
 
-              <RHFTextField name="cityId" label="Tỉnh/Thành phố" disabled/>
-          
+              <RHFSelect id="districtId" label="Quận/Huyện" disabled={districtOptions.length === 0} onChange={e => onDistrictSelect(e.target.value)} value={selectedDistrict} ref={districtRef}>
+                {districtOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </RHFSelect>
 
-              <RHFTextField name="districtId" label="Quận/Huyện" disabled/>
-                
-  
-              <RHFTextField name="wardId" label="Phường/Xã" disabled/>
-   
+              <RHFSelect id="wardId" label="Phường/Xã" disabled={wardOptions.length === 0} onChange={e => onWardSelect(e.target.value)} value={selectedWard} ref={wardRef}>
+                {wardOptions.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </RHFSelect>
 
-              <RHFTextField name="street" label="Địa chỉ" disabled/>
+              <RHFTextField name="street" label="Địa chỉ" />
             </Box>
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting} >
-                Chỉnh sửa thông tin
+                Lưu thay đổi
               </LoadingButton>
             </Stack>
           </Card>
