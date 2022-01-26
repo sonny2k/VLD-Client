@@ -40,6 +40,15 @@ const handlers = {
       account,
     };
   },
+  UPDATEADDRESS: (state, action) => {
+    const { account } = action.payload;
+
+    return {
+      ...state,
+      isAuthenticated: true,
+      account,
+    };
+  },
   LOGOUT: (state) => ({
     ...state,
     isAuthenticated: false,
@@ -185,6 +194,19 @@ function AuthProvider({ children }) {
     });
   };
 
+  const updateaddress = async (city, district, ward, street) => {
+    const response = await axios.put('/api/user/account/info', {
+      city, ward, district, street
+    });
+    const { account } = response.data;
+    dispatch({
+      type: 'UPDATEADDRESS',
+      payload: {
+        account,
+      },
+    });
+  };
+
   const changepass = async (password, newpass) => {
     const response = await axios.post('/api/user/changepassword', {
       password, newpass
@@ -293,6 +315,7 @@ function AuthProvider({ children }) {
         verifycode,
         createuser,
         updateinfo,
+        updateaddress,
         changepass,
         resetpassword,
       }}

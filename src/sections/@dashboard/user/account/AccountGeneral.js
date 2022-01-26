@@ -67,11 +67,10 @@ export default function AccountGeneral() {
     gender: genderview || '',
     street: account?.address.street || '',
     birthday: new Date(account?.birthday) || '',
+    cityId: account?.address.city || '',
+    districtId: account?.address.district || '',
+    wardId: account?.address.ward || '',
   };
-
-  state.selectedCity = account?.address.city;
-  state.selectedDistrict = account?.address.district;
-  state.selectedWard = account?.address.ward;
 
   const methods = useForm({
     resolver: yupResolver(UpdateUserSchema),
@@ -111,7 +110,7 @@ export default function AccountGeneral() {
       if (data.gender === "Không xác định") {
         newgender = 3;
       }
-      await updateinfo(data.fname, data.lname, data.email, birth, newgender, selectedCity, selectedDistrict, selectedWard, data.street);
+      await updateinfo(data.fname, data.lname, data.email, birth, newgender);
       enqueueSnackbar('Cập nhật tài khoản thành công!');
     } catch (error) {
       console.error(error);
@@ -196,20 +195,13 @@ export default function AccountGeneral() {
                 ))}
               </RHFSelect>
 
-              <RHFTextField name="cityId" label="Tỉnh/Thành phố" onChange={e => onCitySelect(e.target.value)} value={state.selectedCity} disabled>
-              {cityOptions.map((option) => (
-                  <option key={selectedCity?.value} value={option.value}>
-                    {option.label}
-                  </option>
-                ))}
-              </RHFTextField>
+              <RHFTextField name="cityId" label="Tỉnh/Thành phố" disabled/>
           
 
-              <RHFTextField name="districtId" label="Quận/Huyện" onChange={e => onDistrictSelect(e.target.value)} value={state.selectedDistrict} disabled/>
+              <RHFTextField name="districtId" label="Quận/Huyện" disabled/>
                 
-    
-
-              <RHFTextField name="wardId" label="Phường/Xã" onChange={e => onWardSelect(e.target.value)} value={state.selectedWard} disabled/>
+  
+              <RHFTextField name="wardId" label="Phường/Xã" disabled/>
    
 
               <RHFTextField name="street" label="Địa chỉ" disabled/>

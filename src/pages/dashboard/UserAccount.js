@@ -38,7 +38,7 @@ export default function UserAccount() {
     },
     {
       value: 'Địa chỉ',
-      icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
+      icon: <Iconify icon={'ant-design:home-outlined'} width={20} height={20} />,
       component: <EditAddress />,
     },
 
