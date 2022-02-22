@@ -4,8 +4,9 @@ import { Container, Box } from '@mui/material';
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
 import useSettings from '../../hooks/useSettings';
+import useAuth from '../../hooks/useAuth';
 // _mock_
-import { _userCards } from '../../_mock';
+import { getDoctors } from '../../_mock';
 // components
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
@@ -17,15 +18,17 @@ import { UserCard } from '../../sections/@dashboard/user/cards';
 export default function UserCards() {
   const { themeStretch } = useSettings();
 
+  const docs = getDoctors();
+
   return (
-    <Page title="User: Cards">
+    <Page title="Danh sách bác sĩ">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="User Cards"
+          heading="Danh sách bác sĩ"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.root },
-            { name: 'Cards' },
+            { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
+            { name: 'Cá nhân', href: PATH_DASHBOARD.user.root },
+            { name: 'Danh sách bác sĩ' },
           ]}
         />
 
@@ -40,8 +43,8 @@ export default function UserCards() {
             },
           }}
         >
-          {_userCards.map((user) => (
-            <UserCard key={user.id} user={user} />
+          {docs.map((doc) => (
+            <UserCard key={doc._id} doc={doc} />
           ))}
         </Box>
       </Container>

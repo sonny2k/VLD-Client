@@ -19,14 +19,19 @@ ShopProductCard.propTypes = {
 };
 
 export default function ShopProductCard({ product }) {
-  const { name, cover, price, colors, status, priceSale } = product;
 
-  const linkTo = `${PATH_DASHBOARD.eCommerce.root}/product/${paramCase(name)}`;
+  const { fname, lname, profilepic } = product.account;
+
+  const { _id } = product;
+
+  const name = `${lname} ${fname}`;
+
+  const linkTo = `${PATH_DASHBOARD.eCommerce.root}/product/${paramCase(_id)}`;
 
   return (
     <Card>
       <Box sx={{ position: 'relative' }}>
-        {status && (
+        {/* {status && (
           <Label
             variant="filled"
             color={(status === 'sale' && 'error') || 'info'}
@@ -40,8 +45,8 @@ export default function ShopProductCard({ product }) {
           >
             {status}
           </Label>
-        )}
-        <Image alt={name} src={cover} ratio="1/1" />
+        )} */}
+        <Image alt={name} src={profilepic} ratio="1/1" />
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
@@ -51,7 +56,7 @@ export default function ShopProductCard({ product }) {
           </Typography>
         </Link>
 
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
+        {/* <Stack direction="row" alignItems="center" justifyContent="space-between">
           <ColorPreview colors={colors} />
 
           <Stack direction="row" spacing={0.5}>
@@ -63,7 +68,7 @@ export default function ShopProductCard({ product }) {
 
             <Typography variant="subtitle1">{fCurrency(price)}</Typography>
           </Stack>
-        </Stack>
+        </Stack> */}
       </Stack>
     </Card>
   );

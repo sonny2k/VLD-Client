@@ -25,11 +25,13 @@ const OverlayStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 UserCard.propTypes = {
-  user: PropTypes.object.isRequired,
+  doctors: PropTypes.object.isRequired,
 };
 
-export default function UserCard({ user }) {
-  const { name, cover, position, follower, totalPost, avatarUrl, following } = user;
+export default function UserCard({ doctors }) {
+  const { fname, lname, profilepic } = doctors.account;
+
+  const name = `${lname} ${fname}`;
 
   return (
     <Card sx={{ textAlign: 'center' }}>
@@ -50,7 +52,7 @@ export default function UserCard({ user }) {
         />
         <Avatar
           alt={name}
-          src={avatarUrl}
+          src={profilepic}
           sx={{
             width: 64,
             height: 64,
@@ -63,23 +65,23 @@ export default function UserCard({ user }) {
           }}
         />
         <OverlayStyle />
-        <Image src={cover} alt={cover} ratio="16/9" />
+        {/* <Image src={cover} alt={cover} ratio="16/9" /> */}
       </Box>
 
       <Typography variant="subtitle1" sx={{ mt: 6 }}>
         {name}
       </Typography>
 
-      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+      {/* <Typography variant="body2" sx={{ color: 'text.secondary' }}>
         {position}
-      </Typography>
+      </Typography> */}
 
       <Stack alignItems="center">
         <SocialsButton initialColor sx={{ my: 2.5 }} />
       </Stack>
 
       <Divider sx={{ borderStyle: 'dashed' }} />
-
+{/* 
       <Box sx={{ py: 3, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}>
         <div>
           <Typography variant="caption" component="div" sx={{ mb: 0.75, color: 'text.disabled' }}>
@@ -101,7 +103,7 @@ export default function UserCard({ user }) {
           </Typography>
           <Typography variant="subtitle1">{fShortenNumber(totalPost)}</Typography>
         </div>
-      </Box>
+      </Box> */}
     </Card>
   );
 }

@@ -78,7 +78,7 @@ export default function HomeHero() {
 
         <HeroImgStyle
           alt="hero"
-          src="https://i0.wp.com/s1.uphinh.org/2022/01/05/100-bac-si-dang-online.png"
+          src="https://i.imgur.com/cE0w9pE.png"
           variants={varFade().inUp}
         />
 

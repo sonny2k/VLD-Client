@@ -1,5 +1,6 @@
 import _mock from './_mock';
 import { randomNumberRange, randomInArray } from './funcs';
+import axios from '../utils/axios'
 
 // ----------------------------------------------------------------------
 
@@ -83,16 +84,12 @@ export const _userFeeds = [...Array(3)].map((_, index) => ({
   ],
 }));
 
-export const _userCards = [...Array(24)].map((_, index) => ({
-  id: _mock.id(index),
-  avatarUrl: _mock.image.avatar(index),
-  cover: _mock.image.cover(index),
-  name: _mock.name.fullName(index),
-  follower: randomNumberRange(999, 99999),
-  following: randomNumberRange(999, 99999),
-  totalPost: randomNumberRange(999, 99999),
-  position: _mock.role(index),
-}));
+export async function getDoctors() {
+  const res = await axios.get('/api/home/doctor');
+  const doctors = res.data();
+  console.log(res.data);
+}
+
 
 export const _userPayment = [...Array(2)].map((_, index) => ({
   id: _mock.id(index),

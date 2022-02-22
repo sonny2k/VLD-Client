@@ -20,7 +20,7 @@ import {
   AccountNotifications,
   AccountChangePassword,
   CreateConsultation,
-  EditAddress,
+  EditInformation,
 } from '../../sections/@dashboard/user/account/index';
 
 // ----------------------------------------------------------------------
@@ -37,9 +37,9 @@ export default function UserAccount() {
       component: <AccountGeneral />,
     },
     {
-      value: 'Địa chỉ',
-      icon: <Iconify icon={'ant-design:home-outlined'} width={20} height={20} />,
-      component: <EditAddress />,
+      value: 'Sửa thông tin',
+      icon: <Iconify icon={'bx:bx-edit-alt'} width={20} height={20} />,
+      component: <EditInformation />,
     },
 
     {

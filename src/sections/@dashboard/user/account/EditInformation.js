@@ -57,12 +57,6 @@ export default function EditInformation() {
 
   const name = `${account?.fname} ${account?.lname}`;
 
-  const {
-    cityRef,
-    districtRef,
-    wardRef,
-  } = React.createRef();
-
   const defaultValues = {
     fname: account?.fname || '',
     lname: account?.lname || '',
@@ -72,9 +66,6 @@ export default function EditInformation() {
     gender: genderview || '',
     street: account?.address.street || '',
     birthday: new Date(account?.birthday) || '',
-    cityId: account?.address.city || '',
-    districtId: account?.address.district || '',
-    wardId: account?.address.ward || '',
   };
 
   const methods = useForm({
@@ -118,10 +109,18 @@ export default function EditInformation() {
       const cityId = document.getElementById("cityId");
       const districtId = document.getElementById("districtId");
       const wardId = document.getElementById("wardId");
-      const city = cityId.options[cityId.selectedIndex].text;
-      const district = districtId.options[districtId.selectedIndex].text;
-      const ward = wardId.options[wardId.selectedIndex].text;
-      await updateinfo(city, district, ward, data.street, data.fname, data.lname, data.email, birth, newgender);
+      if (cityId.options[cityId.selectedIndex] != null && districtId.options[districtId.selectedIndex] != null && wardId.options[wardId.selectedIndex] != null)  {
+        const city = cityId.options[cityId.selectedIndex].text;
+        const district = districtId.options[districtId.selectedIndex].text;
+        const ward = wardId.options[wardId.selectedIndex].text;
+        await updateinfo(data.fname, data.lname, data.email, birth, newgender, city, district, ward, data.street);
+      }
+      if (cityId.options[cityId.selectedIndex] == null || districtId.options[districtId.selectedIndex] == null || wardId.options[wardId.selectedIndex] == null) {
+        const c = account?.address.city;
+        const d = account?.address.district;
+        const w = account?.address.ward;
+        await updateinfo(data.fname, data.lname, data.email, birth, newgender, c, d, w, data.street);
+      }
       enqueueSnackbar('Cập nhật thông tin tài khoản thành công!');
     } catch (error) {
       console.error(error);
@@ -205,7 +204,7 @@ export default function EditInformation() {
                 ))}
               </RHFSelect>   
 
-              <RHFSelect id="cityId" label="Tỉnh/Thành phố" onChange={e => onCitySelect(e.target.value)} value={selectedCity} ref={cityRef => selectedCity.label = cityRef}>
+              <RHFSelect id="cityId" label="Tỉnh/Thành phố" onChange={e => onCitySelect(e.target.value)} value={selectedCity}>
                 {cityOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
@@ -213,7 +212,7 @@ export default function EditInformation() {
                 ))}
               </RHFSelect>
 
-              <RHFSelect id="districtId" label="Quận/Huyện" disabled={districtOptions.length === 0} onChange={e => onDistrictSelect(e.target.value)} value={selectedDistrict} ref={districtRef}>
+              <RHFSelect id="districtId" label="Quận/Huyện" disabled={districtOptions.length === 0} onChange={e => onDistrictSelect(e.target.value)} value={selectedDistrict}>
                 {districtOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
@@ -221,7 +220,7 @@ export default function EditInformation() {
                 ))}
               </RHFSelect>
 
-              <RHFSelect id="wardId" label="Phường/Xã" disabled={wardOptions.length === 0} onChange={e => onWardSelect(e.target.value)} value={selectedWard} ref={wardRef}>
+              <RHFSelect id="wardId" label="Phường/Xã" disabled={wardOptions.length === 0} onChange={e => onWardSelect(e.target.value)} value={selectedWard}>
                 {wardOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
