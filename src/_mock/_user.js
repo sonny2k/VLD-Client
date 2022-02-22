@@ -1,6 +1,5 @@
 import _mock from './_mock';
 import { randomNumberRange, randomInArray } from './funcs';
-import axios from '../utils/axios'
 
 // ----------------------------------------------------------------------
 
@@ -83,13 +82,6 @@ export const _userFeeds = [...Array(3)].map((_, index) => ({
     },
   ],
 }));
-
-export async function getDoctors() {
-  const res = await axios.get('/api/home/doctor');
-  const doctors = res.data();
-  console.log(res.data);
-}
-
 
 export const _userPayment = [...Array(2)].map((_, index) => ({
   id: _mock.id(index),

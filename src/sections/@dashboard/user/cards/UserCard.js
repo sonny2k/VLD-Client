@@ -25,11 +25,13 @@ const OverlayStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 UserCard.propTypes = {
-  doctors: PropTypes.object.isRequired,
+  doctor: PropTypes.object.isRequired,
 };
 
-export default function UserCard({ doctors }) {
-  const { fname, lname, profilepic } = doctors.account;
+export default function UserCard({ doctor }) {
+  const { fname, lname, profilepic } = doctor.account;
+
+  const { department, level, description, workcertificate } = doctor;
 
   const name = `${lname} ${fname}`;
 
@@ -65,45 +67,45 @@ export default function UserCard({ doctors }) {
           }}
         />
         <OverlayStyle />
-        {/* <Image src={cover} alt={cover} ratio="16/9" /> */}
+        <Image src={'https://i.imgur.com/ubQBnT3.jpg'} alt={name} ratio="16/9" />
       </Box>
 
       <Typography variant="subtitle1" sx={{ mt: 6 }}>
         {name}
       </Typography>
 
-      {/* <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-        {position}
-      </Typography> */}
+      <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+        {department}
+      </Typography>
 
       <Stack alignItems="center">
         <SocialsButton initialColor sx={{ my: 2.5 }} />
       </Stack>
 
       <Divider sx={{ borderStyle: 'dashed' }} />
-{/* 
+
       <Box sx={{ py: 3, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}>
         <div>
           <Typography variant="caption" component="div" sx={{ mb: 0.75, color: 'text.disabled' }}>
-            Follower
+            Trình độ 
           </Typography>
-          <Typography variant="subtitle1">{fShortenNumber(follower)}</Typography>
+          <Typography variant="subtitle1">{level}</Typography>
         </div>
 
         <div>
           <Typography variant="caption" component="div" sx={{ mb: 0.75, color: 'text.disabled' }}>
-            Following
+            Thông tin chung
           </Typography>
-          <Typography variant="subtitle1">{fShortenNumber(following)}</Typography>
+          <Typography variant="subtitle1">{description}</Typography>
         </div>
 
         <div>
           <Typography variant="caption" component="div" sx={{ mb: 0.75, color: 'text.disabled' }}>
-            Total Post
+            Chứng chỉ
           </Typography>
-          <Typography variant="subtitle1">{fShortenNumber(totalPost)}</Typography>
+          <Typography variant="subtitle1">{workcertificate}</Typography>
         </div>
-      </Box> */}
+      </Box>
     </Card>
   );
 }

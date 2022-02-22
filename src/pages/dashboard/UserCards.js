@@ -1,12 +1,12 @@
+import React, {useState, useEffect} from "react";
 // @mui
 import { Container, Box } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
 import useSettings from '../../hooks/useSettings';
-import useAuth from '../../hooks/useAuth';
-// _mock_
-import { getDoctors } from '../../_mock';
+// utils
+import axios from '../../utils/axios';
 // components
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
@@ -18,7 +18,20 @@ import { UserCard } from '../../sections/@dashboard/user/cards';
 export default function UserCards() {
   const { themeStretch } = useSettings();
 
-  const docs = getDoctors();
+  const [doctors, setDoctors] = useState([])
+  useEffect(() => {
+     async function fetchDoctors() {
+        const URL = '/api/home/doctor'
+        try {
+           const res = await axios.get(URL)
+           console.log(res.data)
+           setDoctors(res.data)
+        } catch (error) {
+           console.log(error)
+        }
+     }
+     fetchDoctors()
+  }, [])
 
   return (
     <Page title="Danh sách bác sĩ">
@@ -43,8 +56,8 @@ export default function UserCards() {
             },
           }}
         >
-          {docs.map((doc) => (
-            <UserCard key={doc._id} doc={doc} />
+          {doctors.map((doctor) => (
+            <UserCard key={doctor._id} doctor={doctor} />
           ))}
         </Box>
       </Container>
