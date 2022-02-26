@@ -1,20 +1,25 @@
 import * as React from 'react';
+import { useState } from 'react';
 import { format } from 'date-fns';
 // form
 import { useForm } from 'react-hook-form';
 // @mui
-import { Box, Grid, Card, Stack } from '@mui/material';
+import { Box, Grid, Card, Stack, Button } from '@mui/material';
+
 // hooks
 import useAuth from '../../../../hooks/useAuth';
 // _mock
 import { genders } from '../../../../_mock/_gender';
 // components
 import { FormProvider, RHFSelect, RHFTextField, RHFUploadAvatar } from '../../../../components/hook-form';
+import { ModalEditInformation } from '../../../../components/modal';
 
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral() {
   const { account } = useAuth();
+
+  const [openModal, setOpenModal] = useState(false);
 
   const gender = account.gender;
   let genderview = "";
@@ -98,6 +103,14 @@ export default function AccountGeneral() {
 
               <RHFTextField name="street" label="Địa chỉ" disabled/>
             </Box>
+            <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
+              <Button> className="openModalBtn" onClick={() => {
+                setOpenModal(true); 
+              }}
+                Chỉnh sửa thông tin
+              </Button>
+              {openModal && <Modal />}
+            </Stack>
           </Card>
         </Grid>
       </Grid>
