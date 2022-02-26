@@ -1,5 +1,6 @@
 import { capitalCase } from 'change-case';
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Tab, Box, Card, Tabs, Container } from '@mui/material';
@@ -8,6 +9,8 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
 import useAuth from '../../hooks/useAuth';
 import useSettings from '../../hooks/useSettings';
+// utils
+import axios from '../../utils/axios';
 // _mock_
 import { _userAbout, _userFeeds, _userFriends, _userGallery, _userFollowers } from '../../_mock';
 // components
@@ -45,7 +48,31 @@ const TabsWrapperStyle = styled('div')(({ theme }) => ({
 
 export default function UserProfile() {
   const { themeStretch } = useSettings();
-  const { user } = useAuth();
+
+  const { id } = useParams();
+
+  const [doctor, setDoctor] = useState(null);
+
+  const fetchDoctor = async () => {
+    const URL = `/api/home/doctor/${id}`;
+    try {
+       const res = await axios.get(URL);
+       console.log(res.data);
+       setDoctor(res.data);
+    } catch (error) {
+       console.log(error);
+    }
+  }
+
+  React.useEffect(() => {
+    fetchDoctor(id);
+  }, []);
+
+  const { account } = useAuth();
+
+  const { fname, lname } = doctor.account;
+
+  const name = `${lname} ${fname}`;
 
   const [currentTab, setCurrentTab] = useState('profile');
   const [findFriends, setFindFriends] = useState('');
@@ -82,14 +109,14 @@ export default function UserProfile() {
   ];
 
   return (
-    <Page title="User: Profile">
+    <Page title="Chi tiết bác sĩ">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="Profile"
+          heading="Chi tiết bác sĩ"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.root },
-            { name: user?.displayName || '' },
+            { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
+            { name: 'Danh sách bác sĩ', href: PATH_DASHBOARD.user.cards },
+            { name: name|| '' },
           ]}
         />
         <Card

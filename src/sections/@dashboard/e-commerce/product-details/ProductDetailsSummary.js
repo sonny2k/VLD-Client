@@ -55,8 +55,7 @@ export default function ProductDetailsSummary({ cart, product, onAddCart, onGoto
 
   const {
     id,
-    fname,
-    lname,
+    name,
     sizes,
     price,
     cover,
@@ -67,9 +66,7 @@ export default function ProductDetailsSummary({ cart, product, onAddCart, onGoto
     totalRating,
     totalReview,
     inventoryType,
-  } = product.account;
-
-  const name = `${lname} ${fname}`;
+  } = product;
 
   const alreadyProduct = cart.map((item) => item.id).includes(id);
 
@@ -131,7 +128,7 @@ export default function ProductDetailsSummary({ cart, product, onAddCart, onGoto
           {sentenceCase(inventoryType || '')}
         </Label>
 
-        {/* <Typography
+        <Typography
           variant="overline"
           sx={{
             mt: 2,
@@ -141,21 +138,21 @@ export default function ProductDetailsSummary({ cart, product, onAddCart, onGoto
           }}
         >
           {status}
-        </Typography> */}
+        </Typography>
 
         <Typography variant="h5" paragraph>
           {name}
         </Typography>
 
-        {/* <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
+        <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 2 }}>
           <Rating value={totalRating} precision={0.1} readOnly />
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
             ({fShortenNumber(totalReview)}
             reviews)
           </Typography>
-        </Stack> */}
+        </Stack>
 
-        {/* <Typography variant="h4" sx={{ mb: 3 }}>
+        <Typography variant="h4" sx={{ mb: 3 }}>
           <Box component="span" sx={{ color: 'text.disabled', textDecoration: 'line-through' }}>
             {priceSale && fCurrency(priceSale)}
           </Box>
@@ -186,9 +183,9 @@ export default function ProductDetailsSummary({ cart, product, onAddCart, onGoto
               />
             )}
           />
-        </Stack> */}
+        </Stack>
 
-        {/* <Stack direction="row" justifyContent="space-between" sx={{ mb: 3 }}>
+        <Stack direction="row" justifyContent="space-between" sx={{ mb: 3 }}>
           <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
             Size
           </Typography>
@@ -212,9 +209,9 @@ export default function ProductDetailsSummary({ cart, product, onAddCart, onGoto
               </option>
             ))}
           </RHFSelect>
-        </Stack> */}
+        </Stack>
 
-        {/* <Stack direction="row" justifyContent="space-between" sx={{ mb: 3 }}>
+        <Stack direction="row" justifyContent="space-between" sx={{ mb: 3 }}>
           <Typography variant="subtitle1" sx={{ mt: 0.5 }}>
             Quantity
           </Typography>
@@ -231,7 +228,7 @@ export default function ProductDetailsSummary({ cart, product, onAddCart, onGoto
               Available: {available}
             </Typography>
           </div>
-        </Stack> */}
+        </Stack>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 

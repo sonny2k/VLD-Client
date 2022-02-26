@@ -1,14 +1,21 @@
 import PropTypes from 'prop-types';
+import { paramCase } from 'change-case';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Card, Avatar, Divider, Typography, Stack } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
+import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import { Box, Card, Avatar, Divider, Typography, Stack, IconButton } from '@mui/material';
 // utils
 import cssStyles from '../../../../utils/cssStyles';
 import { fShortenNumber } from '../../../../utils/formatNumber';
+// routes
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 // components
 import Image from '../../../../components/Image';
 import SocialsButton from '../../../../components/SocialsButton';
 import SvgIconStyle from '../../../../components/SvgIconStyle';
+
+
 
 // ----------------------------------------------------------------------
 
@@ -31,7 +38,7 @@ UserCard.propTypes = {
 export default function UserCard({ doctor }) {
   const { fname, lname, profilepic } = doctor.account;
 
-  const { department, level, description, workcertificate } = doctor;
+  const { department, level, workcertificate, _id } = doctor;
 
   const name = `${lname} ${fname}`;
 
@@ -78,13 +85,18 @@ export default function UserCard({ doctor }) {
         {department}
       </Typography>
 
-      <Stack alignItems="center">
-        <SocialsButton initialColor sx={{ my: 2.5 }} />
-      </Stack>
-
+      <Box sx={{position: 'relative'}}>
+        <IconButton aria-label="Xem chi tiết" href={`${PATH_DASHBOARD.user.root}/profile/${paramCase(_id)}`}>
+          <InfoIcon />
+        </IconButton>
+        <IconButton aria-label="Hẹn khám" href={`${PATH_DASHBOARD.user.root}/profile/${paramCase(_id)}`}>
+          <EventAvailableIcon />
+        </IconButton>
+      </Box>
+    
       <Divider sx={{ borderStyle: 'dashed' }} />
 
-      <Box sx={{ py: 3, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}>
+      <Box sx={{ py: 3, display: 'grid', gridTemplateColumns: '1fr 1.5fr' }}>
         <div>
           <Typography variant="caption" component="div" sx={{ mb: 0.75, color: 'text.disabled' }}>
             Trình độ 
@@ -92,12 +104,12 @@ export default function UserCard({ doctor }) {
           <Typography variant="subtitle1">{level}</Typography>
         </div>
 
-        <div>
+        {/* <div>
           <Typography variant="caption" component="div" sx={{ mb: 0.75, color: 'text.disabled' }}>
-            Thông tin chung
+            Tốt nghiệp
           </Typography>
-          <Typography variant="subtitle1">{description}</Typography>
-        </div>
+          <Typography variant="subtitle1">{educationplace}</Typography>
+        </div> */}
 
         <div>
           <Typography variant="caption" component="div" sx={{ mb: 0.75, color: 'text.disabled' }}>

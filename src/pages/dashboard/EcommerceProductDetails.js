@@ -84,15 +84,15 @@ export default function EcommerceProductDetails() {
     <Page title="Ecommerce: Product Details">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="Chi tiết bác sĩ"
+          heading="Product Details"
           links={[
-            { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
+            { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
-              name: 'Đặt lịch tư vấn',
+              name: 'E-Commerce',
               href: PATH_DASHBOARD.eCommerce.root,
             },
             {
-              name: 'Chi tiết bác sĩ',
+              name: 'Shop',
               href: PATH_DASHBOARD.eCommerce.shop,
             },
             { name: sentenceCase(name) },
@@ -119,7 +119,7 @@ export default function EcommerceProductDetails() {
               </Grid>
             </Card>
 
-            {/* <Grid container sx={{ my: 8 }}>
+            <Grid container sx={{ my: 8 }}>
               {PRODUCT_DESCRIPTION.map((item) => (
                 <Grid item xs={12} md={4} key={item.title}>
                   <Box sx={{ my: 2, mx: 'auto', maxWidth: 280, textAlign: 'center' }}>
@@ -133,7 +133,7 @@ export default function EcommerceProductDetails() {
                   </Box>
                 </Grid>
               ))}
-            </Grid> */}
+            </Grid>
 
             <Card>
               <TabContext value={value}>
@@ -143,7 +143,7 @@ export default function EcommerceProductDetails() {
                     <Tab
                       disableRipple
                       value="2"
-                      label={`Review (${product.rating.length})`}
+                      label={`Review (${product.reviews.length})`}
                       sx={{ '& .MuiTab-wrapper': { whiteSpace: 'nowrap' } }}
                     />
                   </TabList>
@@ -166,7 +166,7 @@ export default function EcommerceProductDetails() {
 
         {!product && <SkeletonProduct />}
 
-        {error && <Typography variant="h6">404 không tìm thấy bác sĩ</Typography>}
+        {error && <Typography variant="h6">404 Product not found</Typography>}
       </Container>
     </Page>
   );

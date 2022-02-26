@@ -105,17 +105,17 @@ export default function EcommerceShop() {
   };
 
   return (
-    <Page title="Đặt lịch tư vấn: Danh sách bác sĩ">
+    <Page title="Ecommerce: Shop">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="Danh sách bác sĩ"
+          heading="Shop"
           links={[
-            { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
+            { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
-              name: 'Đặt lịch tư vấn',
+              name: 'E-Commerce',
               href: PATH_DASHBOARD.eCommerce.root,
             },
-            { name: 'Danh sách bác sĩ' },
+            { name: 'Shop' },
           ]}
         />
 
@@ -147,7 +147,7 @@ export default function EcommerceShop() {
             <>
               <Typography variant="body2" gutterBottom>
                 <strong>{filteredProducts.length}</strong>
-                &nbsp;Tìm thấy bác sĩ
+                &nbsp;Products found
               </Typography>
 
               <ShopTagFiltered
@@ -164,7 +164,7 @@ export default function EcommerceShop() {
           )}
         </Stack>
 
-        <ShopProductList products={filteredProducts} loading={!products && isDefault} />
+        <ShopProductList products={filteredProducts} loading={!products.length && isDefault} />
         <CartWidget />
       </Container>
     </Page>

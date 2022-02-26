@@ -1,11 +1,13 @@
 import PropTypes from 'prop-types';
-import { useRef } from 'react';
+import { useRef, useState, useEffect} from 'react';
 import Slider from 'react-slick';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Box, Stack, Card, Button, Container, Typography } from '@mui/material';
 // _mock_
 import { _carouselsMembers } from '../../_mock';
+// utils
+import axios from '../../utils/axios';
 // components
 import Image from '../../components/Image';
 import Iconify from '../../components/Iconify';
@@ -18,6 +20,21 @@ import { MotionInView, varFade } from '../../components/animate';
 export default function AboutTeam() {
   const carouselRef = useRef(null);
   const theme = useTheme();
+
+  const [doctors, setDoctors] = useState([])
+  useEffect(() => {
+     async function fetchDoctors() {
+        const URL = '/api/home/doctor'
+        try {
+           const res = await axios.get(URL)
+           console.log(res.data)
+           setDoctors(res.data)
+        } catch (error) {
+           console.log(error)
+        }
+     }
+     fetchDoctors()
+  }, [])
 
   const settings = {
     arrows: false,
@@ -78,8 +95,8 @@ export default function AboutTeam() {
       <Box sx={{ position: 'relative' }}>
         <CarouselArrows filled onNext={handleNext} onPrevious={handlePrevious}>
           <Slider ref={carouselRef} {...settings}>
-            {_carouselsMembers.map((member) => (
-              <MotionInView key={member.id} variants={varFade().in} sx={{ px: 1.5, py: 10 }}>
+            {doctors.map((member) => (
+              <MotionInView key={member._id} variants={varFade().in} sx={{ px: 1.5, py: 10 }}>
                 <MemberCard member={member} />
               </MotionInView>
             ))}
@@ -110,7 +127,11 @@ MemberCard.propTypes = {
 };
 
 function MemberCard({ member }) {
-  const { name, role, avatar } = member;
+  const { fname, lname, profilepic } = member.account;
+
+  const { department } = member;
+
+  const name = `${lname} ${fname}`;
 
   return (
     <Card key={name} sx={{ p: 1 }}>
@@ -118,9 +139,9 @@ function MemberCard({ member }) {
         {name}
       </Typography>
       <Typography variant="body2" sx={{ mb: 2, color: 'text.secondary' }}>
-        {role}
+        {department}
       </Typography>
-      <Image src={avatar} ratio="1/1" sx={{ borderRadius: 1.5 }} />
+      <Image src={profilepic} ratio="1/1" sx={{ borderRadius: 1.5 }} />
       <Stack alignItems="center" sx={{ mt: 2, mb: 1 }}>
         <SocialsButton sx={{ color: 'action.active' }} />
       </Stack>

@@ -214,8 +214,8 @@ export function getProducts() {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/home/doctor');
-      dispatch(slice.actions.getProductsSuccess(response.data));
+      const response = await axios.get('/api/products');
+      dispatch(slice.actions.getProductsSuccess(response.data.products));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
@@ -228,7 +228,9 @@ export function getProduct(name) {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get(`/api/home/doctor/${name}`);
+      const response = await axios.get('/api/products/product', {
+        params: { name },
+      });
       dispatch(slice.actions.getProductSuccess(response.data.product));
     } catch (error) {
       console.error(error);
