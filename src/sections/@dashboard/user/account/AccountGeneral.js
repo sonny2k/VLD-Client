@@ -1,10 +1,14 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { format } from 'date-fns';
+
 // form
 import { useForm } from 'react-hook-form';
 // @mui
 import { Box, Grid, Card, Stack, Button } from '@mui/material';
+import Modal from '@mui/material/Modal';
+import ModalEditInformation from './EditInformation';
+
 
 // hooks
 import useAuth from '../../../../hooks/useAuth';
@@ -12,14 +16,28 @@ import useAuth from '../../../../hooks/useAuth';
 import { genders } from '../../../../_mock/_gender';
 // components
 import { FormProvider, RHFSelect, RHFTextField, RHFUploadAvatar } from '../../../../components/hook-form';
-import { ModalEditInformation } from '../../../../components/modal';
+
 
 // ----------------------------------------------------------------------
 
 export default function AccountGeneral() {
   const { account } = useAuth();
 
-  const [openModal, setOpenModal] = useState(false);
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 800,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
 
   const gender = account.gender;
   let genderview = "";
@@ -104,12 +122,19 @@ export default function AccountGeneral() {
               <RHFTextField name="street" label="Địa chỉ" disabled/>
             </Box>
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-              <Button> className="openModalBtn" onClick={() => {
-                setOpenModal(true); 
-              }}
+              <Button variant='contained' className="openModalBtn" onClick={handleOpen}>
                 Chỉnh sửa thông tin
               </Button>
-              {openModal && <Modal />}
+              <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box sx={style}>
+                  <ModalEditInformation />
+                </Box>
+              </Modal>
             </Stack>
           </Card>
         </Grid>

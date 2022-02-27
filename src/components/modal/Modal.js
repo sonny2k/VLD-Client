@@ -9,14 +9,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Box, Grid, Card, Stack, Typography, TextField } from '@mui/material';
 import { LoadingButton, DesktopDatePicker } from '@mui/lab';
 // hooks
-import useAuth from '../../../../hooks/useAuth';
-import useLocationForm from '../../../../hooks/useLocationForm'
+import useAuth from '../../hooks/useAuth';
+import useLocationForm from '../../hooks/useLocationForm'
 // utils
-import { fData } from '../../../../utils/formatNumber';
+import { fData } from '../../utils/formatNumber';
 // _mock
-import { genders } from '../../../../_mock/_gender';
+import { genders } from '../../_mock/_gender';
 // components
-import { FormProvider, RHFSwitch, RHFSelect, RHFTextField, RHFUploadAvatar } from '../../../../components/hook-form';
+import { FormProvider, RHFSwitch, RHFSelect, RHFTextField, RHFUploadAvatar } from '../hook-form';
 
 export default function ModalEditInformation() {
   

@@ -20,7 +20,7 @@ import { FormProvider, RHFSwitch, RHFSelect, RHFTextField, RHFUploadAvatar } fro
 
 // ----------------------------------------------------------------------
 
-export default function EditInformation() {
+export default function ModalEditInformation() {
   
   const { state, onCitySelect, onDistrictSelect, onWardSelect } = useLocationForm();
 

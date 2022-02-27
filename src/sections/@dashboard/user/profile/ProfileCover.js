@@ -42,13 +42,15 @@ const InfoStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 ProfileCover.propTypes = {
-  myProfile: PropTypes.object,
+  doctor: PropTypes.object,
 };
 
-export default function ProfileCover({ myProfile }) {
+export default function ProfileCover({ doctor }) {
   const { user } = useAuth();
 
-  const { position, cover } = myProfile;
+  const { lname, fname, department } = doctor.account;
+
+  const name = `${lname} ${fname}`;
 
   return (
     <RootStyle>
@@ -71,11 +73,11 @@ export default function ProfileCover({ myProfile }) {
             textAlign: { xs: 'center', md: 'left' },
           }}
         >
-          <Typography variant="h4">{user?.displayName}</Typography>
-          <Typography sx={{ opacity: 0.72 }}>{position}</Typography>
+          <Typography variant="h4">{name}</Typography>
+          <Typography sx={{ opacity: 0.72 }}>{department}</Typography>
         </Box>
       </InfoStyle>
-      <Image alt="profile cover" src={cover} sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
+      <Image alt="profile cover" src={'https://i.imgur.com/ubQBnT3.jpg'} sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0 }} />
     </RootStyle>
   );
 }

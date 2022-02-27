@@ -1,10 +1,14 @@
 import PropTypes from 'prop-types';
 import { paramCase } from 'change-case';
+import * as React from 'react';
+
 // @mui
 import { styled } from '@mui/material/styles';
 import InfoIcon from '@mui/icons-material/Info';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import { Box, Card, Avatar, Divider, Typography, Stack, IconButton } from '@mui/material';
+import Modal from '@mui/material/Modal';
+import ModalCreateConsultation from '../account/CreateConsultation';
 // utils
 import cssStyles from '../../../../utils/cssStyles';
 import { fShortenNumber } from '../../../../utils/formatNumber';
@@ -41,6 +45,23 @@ export default function UserCard({ doctor }) {
   const { department, level, workcertificate, _id } = doctor;
 
   const name = `${lname} ${fname}`;
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 800,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    p: 4,
+  };
+
 
   return (
     <Card sx={{ textAlign: 'center' }}>
@@ -89,10 +110,22 @@ export default function UserCard({ doctor }) {
         <IconButton aria-label="Xem chi tiết" href={`${PATH_DASHBOARD.user.root}/profile/${paramCase(_id)}`}>
           <InfoIcon />
         </IconButton>
-        <IconButton aria-label="Hẹn khám" href={`${PATH_DASHBOARD.user.root}/profile/${paramCase(_id)}`}>
+        <IconButton className="openModalBtn" onClick={handleOpen}> 
+    
           <EventAvailableIcon />
         </IconButton>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+          >
+            <Box sx={style}>
+              <ModalCreateConsultation />
+            </Box>
+        </Modal>
       </Box>
+      
     
       <Divider sx={{ borderStyle: 'dashed' }} />
 

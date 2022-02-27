@@ -11,18 +11,18 @@ import ProfileSocialInfo from './ProfileSocialInfo';
 // ----------------------------------------------------------------------
 
 Profile.propTypes = {
-  myProfile: PropTypes.object,
+  doctor: PropTypes.object,
   posts: PropTypes.array,
 };
 
-export default function Profile({ myProfile, posts }) {
+export default function Profile({ doctor, posts }) {
   return (
     <Grid container spacing={3}>
       <Grid item xs={12} md={4}>
         <Stack spacing={3}>
-          <ProfileFollowInfo profile={myProfile} />
-          <ProfileAbout profile={myProfile} />
-          <ProfileSocialInfo profile={myProfile} />
+          {/* <ProfileFollowInfo doctor={doctor} /> */}
+          <ProfileAbout doctor={doctor} />
+          {/* <ProfileSocialInfo doctor={doctor} /> */}
         </Stack>
       </Grid>
 

@@ -4,10 +4,9 @@ import { useParams } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Tab, Box, Card, Tabs, Container } from '@mui/material';
+import LoadingScreen from '../../components/LoadingScreen';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
-// hooks
-import useAuth from '../../hooks/useAuth';
 import useSettings from '../../hooks/useSettings';
 // utils
 import axios from '../../utils/axios';
@@ -53,26 +52,18 @@ export default function UserProfile() {
 
   const [doctor, setDoctor] = useState(null);
 
-  const fetchDoctor = async () => {
-    const URL = `/api/home/doctor/${id}`;
-    try {
-       const res = await axios.get(URL);
-       console.log(res.data);
-       setDoctor(res.data);
-    } catch (error) {
-       console.log(error);
+  useEffect(() => {
+    async function fetchDoctor() {
+      const URL = `/api/home/doctor/${id}`
+      try {
+        const res = await axios.get(URL)
+        setDoctor(res.data)
+      } catch (error) {
+        console.log(error)
+      }
     }
-  }
-
-  React.useEffect(() => {
-    fetchDoctor(id);
-  }, []);
-
-  const { account } = useAuth();
-
-  const { fname, lname } = doctor.account;
-
-  const name = `${lname} ${fname}`;
+    fetchDoctor()
+  }, [id])
 
   const [currentTab, setCurrentTab] = useState('profile');
   const [findFriends, setFindFriends] = useState('');
@@ -85,30 +76,36 @@ export default function UserProfile() {
     setFindFriends(value);
   };
 
-  const PROFILE_TABS = [
-    {
-      value: 'profile',
-      icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
-      component: <Profile myProfile={_userAbout} posts={_userFeeds} />,
-    },
-    {
-      value: 'followers',
-      icon: <Iconify icon={'eva:heart-fill'} width={20} height={20} />,
-      component: <ProfileFollowers followers={_userFollowers} />,
-    },
-    {
-      value: 'friends',
-      icon: <Iconify icon={'eva:people-fill'} width={20} height={20} />,
-      component: <ProfileFriends friends={_userFriends} findFriends={findFriends} onFindFriends={handleFindFriends} />,
-    },
-    {
-      value: 'gallery',
-      icon: <Iconify icon={'ic:round-perm-media'} width={20} height={20} />,
-      component: <ProfileGallery gallery={_userGallery} />,
-    },
-  ];
+  let PROFILE_TABS;
+
+  if (doctor) {
+    PROFILE_TABS = [
+      {
+        value: 'profile',
+        icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
+        component: <Profile doctor={doctor} posts={_userFeeds} />,
+      },
+      {
+        value: 'followers',
+        icon: <Iconify icon={'eva:heart-fill'} width={20} height={20} />,
+        component: <ProfileFollowers followers={_userFollowers} />,
+      },
+      {
+        value: 'friends',
+        icon: <Iconify icon={'eva:people-fill'} width={20} height={20} />,
+        component: <ProfileFriends friends={_userFriends} findFriends={findFriends} onFindFriends={handleFindFriends} />,
+      },
+      {
+        value: 'gallery',
+        icon: <Iconify icon={'ic:round-perm-media'} width={20} height={20} />,
+        component: <ProfileGallery gallery={_userGallery} />,
+      },
+    ];
+  }
+  
 
   return (
+    doctor ?
     <Page title="Chi tiết bác sĩ">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
@@ -116,7 +113,7 @@ export default function UserProfile() {
           links={[
             { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
             { name: 'Danh sách bác sĩ', href: PATH_DASHBOARD.user.cards },
-            { name: name|| '' },
+            { name: `${doctor.level} ${doctor.account.lname} ${doctor.account.fname}` || '' },
           ]}
         />
         <Card
@@ -126,7 +123,7 @@ export default function UserProfile() {
             position: 'relative',
           }}
         >
-          <ProfileCover myProfile={_userAbout} />
+          <ProfileCover doctor={ doctor } />
 
           <TabsWrapperStyle>
             <Tabs
@@ -149,5 +146,7 @@ export default function UserProfile() {
         })}
       </Container>
     </Page>
+    :
+    <LoadingScreen />
   );
 }

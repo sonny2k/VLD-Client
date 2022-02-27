@@ -19,7 +19,7 @@ import { FormProvider, RHFSwitch, RHFSelect, RHFTextField, RHFUploadAvatar } fro
 
 // ----------------------------------------------------------------------
 
-export default function CreateConsultation() {
+export default function ModalCreateConsultation() {
   const { enqueueSnackbar } = useSnackbar();
 
   const { account } = useAuth();

@@ -36,11 +36,11 @@ export default function UserAccount() {
       icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
       component: <AccountGeneral />,
     },
-    {
-      value: 'Sửa thông tin',
-      icon: <Iconify icon={'bx:bx-edit-alt'} width={20} height={20} />,
-      component: <EditInformation />,
-    },
+    // {
+    //   value: 'Sửa thông tin',
+    //   icon: <Iconify icon={'bx:bx-edit-alt'} width={20} height={20} />,
+    //   component: <EditInformation />,
+    // },
 
     {
       value: 'Đặt Lịch Tư Vấn',

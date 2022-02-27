@@ -18,40 +18,40 @@ const IconStyle = styled(Iconify)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 ProfileAbout.propTypes = {
-  profile: PropTypes.object,
+  doctor: PropTypes.object,
 };
 
-export default function ProfileAbout({ profile }) {
-  const { quote, country, email, role, company, school } = profile;
+export default function ProfileAbout({ doctor }) {
+  const { description, educationplace, workcertificate, level, department  } = doctor;
 
   return (
     <Card>
-      <CardHeader title="About" />
+      <CardHeader title="Thông tin chung" />
 
       <Stack spacing={2} sx={{ p: 3 }}>
-        <Typography variant="body2">{quote}</Typography>
+        <Typography variant="body2">{description}</Typography>
 
         <Stack direction="row">
           <IconStyle icon={'eva:pin-fill'} />
           <Typography variant="body2">
-            Live at &nbsp;
+            Chứng chỉ hành nghề:&nbsp;
             <Link component="span" variant="subtitle2" color="text.primary">
-              {country}
+              {workcertificate}
             </Link>
           </Typography>
         </Stack>
 
         <Stack direction="row">
           <IconStyle icon={'eva:email-fill'} />
-          <Typography variant="body2">{email}</Typography>
+          <Typography variant="body2">{level}</Typography>
         </Stack>
 
         <Stack direction="row">
           <IconStyle icon={'ic:round-business-center'} />
           <Typography variant="body2">
-            {role} at &nbsp;
+            {department} tại&nbsp;
             <Link component="span" variant="subtitle2" color="text.primary">
-              {company}
+              Văn Lang Doctor
             </Link>
           </Typography>
         </Stack>
@@ -59,9 +59,9 @@ export default function ProfileAbout({ profile }) {
         <Stack direction="row">
           <IconStyle icon={'ic:round-business-center'} />
           <Typography variant="body2">
-            Studied at &nbsp;
+            Tốt nghiệp&nbsp;
             <Link component="span" variant="subtitle2" color="text.primary">
-              {school}
+              {educationplace}
             </Link>
           </Typography>
         </Stack>
