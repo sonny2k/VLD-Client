@@ -1,6 +1,6 @@
 import { capitalCase } from 'change-case';
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Tab, Box, Card, Tabs, Container } from '@mui/material';
@@ -52,14 +52,16 @@ export default function UserProfile() {
 
   const [doctor, setDoctor] = useState(null);
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     async function fetchDoctor() {
-      const URL = `/api/home/doctor/${id}`
+      const URL = `/api/home/doctor/${id}`;
       try {
-        const res = await axios.get(URL)
-        setDoctor(res.data)
+        const res = await axios.get(URL);
+        setDoctor(res.data);
       } catch (error) {
-        console.log(error)
+        navigate('/404');
       }
     }
     fetchDoctor()
@@ -102,7 +104,6 @@ export default function UserProfile() {
       },
     ];
   }
-  
 
   return (
     doctor ?
@@ -145,7 +146,7 @@ export default function UserProfile() {
           return isMatched && <Box key={tab.value}>{tab.component}</Box>;
         })}
       </Container>
-    </Page>
+    </Page>  
     :
     <LoadingScreen />
   );

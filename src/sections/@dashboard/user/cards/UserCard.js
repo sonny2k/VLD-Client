@@ -6,7 +6,7 @@ import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import InfoIcon from '@mui/icons-material/Info';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
-import { Box, Card, Avatar, Divider, Typography, Stack, IconButton } from '@mui/material';
+import { Box, Card, Avatar, Divider, Typography, Stack, IconButton, Tooltip } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import ModalCreateConsultation from '../account/CreateConsultation';
 // utils
@@ -107,26 +107,28 @@ export default function UserCard({ doctor }) {
       </Typography>
 
       <Box sx={{position: 'relative'}}>
-        <IconButton aria-label="Xem chi tiết" href={`${PATH_DASHBOARD.user.root}/profile/${paramCase(_id)}`}>
-          <InfoIcon />
-        </IconButton>
-        <IconButton className="openModalBtn" onClick={handleOpen}> 
-    
-          <EventAvailableIcon />
-        </IconButton>
+        <Tooltip title="Xem chi tiết">
+          <IconButton aria-label="Xem chi tiết" href={`${PATH_DASHBOARD.user.root}/profile/${paramCase(_id)}`}>
+            <InfoIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title="Hẹn khám">
+          <IconButton className="openModalBtn" onClick={handleOpen}> 
+            <EventAvailableIcon />
+          </IconButton>
+        </Tooltip>
         <Modal
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
           >
             <Box sx={style}>
-              <ModalCreateConsultation />
+              <ModalCreateConsultation doctor={doctor} />
             </Box>
-        </Modal>
+          </Modal>
       </Box>
       
-    
       <Divider sx={{ borderStyle: 'dashed' }} />
 
       <Box sx={{ py: 3, display: 'grid', gridTemplateColumns: '1fr 1.5fr' }}>

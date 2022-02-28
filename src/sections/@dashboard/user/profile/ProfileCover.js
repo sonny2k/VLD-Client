@@ -4,11 +4,12 @@ import { styled } from '@mui/material/styles';
 import { Box, Typography } from '@mui/material';
 // utils
 import cssStyles from '../../../../utils/cssStyles';
+import createAvatar from '../../../../utils/createAvatar';
 // hooks
 import useAuth from '../../../../hooks/useAuth';
 // components
-import MyAvatar from '../../../../components/MyAvatar';
 import Image from '../../../../components/Image';
+import Avatar from '../../../../components/Avatar';
 
 // ----------------------------------------------------------------------
 
@@ -45,17 +46,21 @@ ProfileCover.propTypes = {
   doctor: PropTypes.object,
 };
 
-export default function ProfileCover({ doctor }) {
+export default function ProfileCover({ doctor, ...other }) {
   const { user } = useAuth();
 
-  const { lname, fname, department } = doctor.account;
+  const { lname, fname, department, profilepic } = doctor.account;
 
   const name = `${lname} ${fname}`;
 
   return (
     <RootStyle>
       <InfoStyle>
-        <MyAvatar
+        <Avatar
+          src={profilepic}
+          alt={`${lname} ${fname}`}
+          color={profilepic ? 'default' : createAvatar(`${lname} ${fname}`).color}
+          {...other}
           sx={{
             mx: 'auto',
             borderWidth: 2,
@@ -64,7 +69,9 @@ export default function ProfileCover({ doctor }) {
             width: { xs: 80, md: 128 },
             height: { xs: 80, md: 128 },
           }}
-        />
+        >
+          {createAvatar(`${lname} ${fname}`).name}
+        </Avatar>
         <Box
           sx={{
             ml: { md: 3 },

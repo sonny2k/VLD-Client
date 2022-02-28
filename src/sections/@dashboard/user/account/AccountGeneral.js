@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
 
 // form
@@ -15,7 +15,8 @@ import useAuth from '../../../../hooks/useAuth';
 // _mock
 import { genders } from '../../../../_mock/_gender';
 // components
-import { FormProvider, RHFSelect, RHFTextField, RHFUploadAvatar } from '../../../../components/hook-form';
+import { FormProvider, RHFSelect, RHFTextField } from '../../../../components/hook-form';
+import MyAvatar from '../../../../components/MyAvatar';
 
 
 // ----------------------------------------------------------------------
@@ -26,7 +27,7 @@ export default function AccountGeneral() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
+  
   const style = {
     position: 'absolute',
     top: '50%',
@@ -38,7 +39,7 @@ export default function AccountGeneral() {
     boxShadow: 24,
     p: 4,
   };
-
+  
   const gender = account.gender;
   let genderview = "";
   if (gender === 1) {
@@ -57,7 +58,6 @@ export default function AccountGeneral() {
     fname: account?.fname || '',
     lname: account?.lname || '',
     phone: account?.phone || '',
-    photoURL: account?.profilepic || '',
     email: account?.email || '',
     gender: genderview || '',
     street: account?.address.street || '',
@@ -76,10 +76,15 @@ export default function AccountGeneral() {
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <Card sx={{ py: 10, px: 3, textAlign: 'center' }}>
-            <RHFUploadAvatar
-              name="photoURL"
-              accept="image/*"
-              maxSize={3145728}
+            <MyAvatar
+              sx={{
+                mx: 'auto',
+                borderWidth: 2,
+                borderStyle: 'solid',
+                borderColor: 'common.white',
+                width: { xs: 80, md: 128 },
+                height: { xs: 80, md: 128 },
+              }}
             />
 
             {/* <RHFSwitch name="isPublic" labelPlacement="start" label="Thông tin cá nhân" sx={{ mt: 5 }} /> */}

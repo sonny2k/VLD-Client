@@ -122,6 +122,7 @@ export default function ModalEditInformation() {
         await updateinfo(data.fname, data.lname, data.email, birth, newgender, c, d, w, data.street);
       }
       enqueueSnackbar('Cập nhật thông tin tài khoản thành công!');
+      window.location.reload();
     } catch (error) {
       console.error(error);
     }

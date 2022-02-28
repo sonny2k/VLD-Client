@@ -63,11 +63,11 @@ const handlers = {
     };
   },
   VERIFYCODE: (state, action) => {
-    const { message } = action.payload;
+    const { res } = action.payload;
 
     return {
       ...state,
-      message,
+      res,
     };
   },
   CHANGEPASS: (state, action) => {
@@ -233,18 +233,9 @@ function AuthProvider({ children }) {
   };
 
   const sendcode = async (phone) => {
-    const response = await axios.post('api/user/auth/sendcode', {
+    await axios.post('api/user/auth/sendcode', {
       phone,
     });
-    const sendstatus = "sendfail";
-    if (!response.data) {
-      dispatch({
-        type: 'SENDCODE',
-        payload: {
-          sendstatus,
-        },
-      });
-    }
   }
 
   const verifycode = async (phone, code) => {
@@ -252,11 +243,11 @@ function AuthProvider({ children }) {
       phone,
       code,
     });
-    const message = response.data;
+    const { res } = response.data;
       dispatch({
         type: 'VERIFYCODE',
         payload: {
-          message,
+          res,
         },
       });
   };
@@ -271,12 +262,12 @@ function AuthProvider({ children }) {
       phone,
       newpassword,
     });
-    const { message } = response.data;
+    const { mess } = response.data;
 
     dispatch({
       type: 'RESETPASSWORD',
       payload: {
-        message,
+        mess,
       },
     });
   };

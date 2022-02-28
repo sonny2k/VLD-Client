@@ -3,6 +3,7 @@ import 'yup-phone';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -23,9 +24,8 @@ export default function RegisterForm() {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { message, sendstatus, fail } = useAuth();
+  const { register, sendcode, verifycode, res } = useAuth();
 
-  const { register, sendcode, verifycode, createuser } = useAuth();
 
   const isMountedRef = useIsMountedRef();
 
@@ -80,11 +80,18 @@ export default function RegisterForm() {
   const onSubmit = async (data) => {
     try {
       const phone = `+84${data.phone.slice(1)}`
-      await verifycode(phone, data.code);
-      if (message === "approved") {
-        await register(data.profilepic, data.birthday, data.gender, data.email, phone, data.password, data.firstName, data.lastName, data.city, data.district, data.ward, data.street, data.role);
-        enqueueSnackbar('Tạo tài khoản thành công');
+      if (data.code) {
+        await verifycode(phone, data.code);
+        console.log(res);
       }
+      if (res) {
+        if (res === "approved") {
+          console.log(res)
+          await register(data.profilepic, data.birthday, data.gender, data.email, phone, data.password, data.firstName, data.lastName, data.city, data.district, data.ward, data.street, data.role);
+          enqueueSnackbar('Tạo tài khoản thành công');
+        }
+      }
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       enqueueSnackbar('Sai mã xác minh, xin thử lại');
     } catch (error) {
       console.error(error);

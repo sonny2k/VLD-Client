@@ -25,7 +25,7 @@ ResetPasswordForm.propTypes = {
 };
 
 export default function ResetPasswordForm({ onSent, onGetPhone }) {
-  const { message, sendstatus, fail } = useAuth();
+  const { mess, sendstatus, fail } = useAuth();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -77,8 +77,10 @@ export default function ResetPasswordForm({ onSent, onGetPhone }) {
   const onSubmit = async (data) => {
     try {
       const phone = `+84${data.phone.slice(1)}`
-      await verifycode(phone, data.code);
-      if (message === "approve") {
+      if (data.code) {
+        await verifycode(phone, data.code);
+      }
+      if (mess === "approve") {
         await resetpassword(phone, data.password);
         enqueueSnackbar('Reset mật khẩu thành công');
       }

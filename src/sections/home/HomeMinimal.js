@@ -138,7 +138,7 @@ export default function HomeMinimal() {
                 </Typography>
                 <Typography sx={{ color: isLight ? 'text.secondary' : 'common.white' }}>{card.description}</Typography>
                 <Typography variant="h5" paragraph> </Typography>
-                <Button size="medium" variant="contained">Đặt lịch tư vấn</Button>
+                <Button size="medium" variant="contained" href='/dashboard/user/cards'>Đặt lịch tư vấn</Button>
               </CardStyle>
             </MotionInView>
           ))}

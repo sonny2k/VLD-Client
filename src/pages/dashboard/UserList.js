@@ -117,25 +117,24 @@ export default function UserList() {
   const isNotFound = !filteredUsers.length && Boolean(filterName);
 
   return (
-    <Page title="User: List">
+    <Page title="Danh sách chờ duyệt">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="User List"
+          heading="Danh sách chờ duyệt"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.root },
-            { name: 'List' },
+            { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
+            { name: 'Danh sách chờ duyệt' },
           ]}
-          action={
-            <Button
-              variant="contained"
-              component={RouterLink}
-              to={PATH_DASHBOARD.user.newUser}
-              startIcon={<Iconify icon={'eva:plus-fill'} />}
-            >
-              New User
-            </Button>
-          }
+          // action={
+          //   <Button
+          //     variant="contained"
+          //     component={RouterLink}
+          //     to={PATH_DASHBOARD.user.newUser}
+          //     startIcon={<Iconify icon={'eva:plus-fill'} />}
+          //   >
+          //     New User
+          //   </Button>
+          // }
         />
 
         <Card>

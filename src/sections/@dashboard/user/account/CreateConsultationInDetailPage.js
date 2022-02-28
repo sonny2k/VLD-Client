@@ -1,8 +1,7 @@
 import * as Yup from 'yup';
 import * as React from 'react';
 import { useSnackbar } from 'notistack';
-import { useCallback, useState } from 'react';
-import PropTypes from 'prop-types';
+import { useCallback } from 'react';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -13,30 +12,17 @@ import { LoadingButton, DesktopDatePicker, DesktopTimePicker } from '@mui/lab';
 import useAuth from '../../../../hooks/useAuth';
 // utils
 import { fData } from '../../../../utils/formatNumber';
-import createAvatar from '../../../../utils/createAvatar';
 // _mock
 import { genders } from '../../../../_mock';
 // components
 import { FormProvider, RHFSwitch, RHFSelect, RHFTextField, RHFUploadAvatar } from '../../../../components/hook-form';
-import Avatar from '../../../../components/Avatar';
 
 // ----------------------------------------------------------------------
 
-export default function ModalCreateConsultation({ doctor, ...other }) {
+export default function ModalCreateConsultation() {
   const { enqueueSnackbar } = useSnackbar();
 
-  const { lname, fname, profilepic } = doctor.account;
-
-  const { level, department, available } = doctor
-
-  console.log(available);
-
-
   const { account } = useAuth();
-
-  ModalCreateConsultation.propTypes = {
-    doctor: PropTypes.object,
-  };
 
   const UpdateUserSchema = Yup.object().shape({
     displayName: Yup.string().required('Họ tên là bắt buộc'),
@@ -105,46 +91,7 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          <Card sx={{ py: 10, px: 3, textAlign: 'center' }}>
-            <Avatar
-              src={profilepic}
-              alt={`${lname} ${fname}`}
-              color={profilepic ? 'default' : createAvatar(`${lname} ${fname}`).color}
-              {...other}
-              sx={{
-                mx: 'auto',
-                borderWidth: 2,
-                borderStyle: 'solid',
-                borderColor: 'common.white',
-                width: { xs: 80, md: 128 },
-                height: { xs: 80, md: 128 },
-              }}
-            >
-              {createAvatar(`${lname} ${fname}`).name}
-            </Avatar>
-           
-            <Typography
-              variant="caption"
-              sx={{
-                mt: 2,
-                mx: 'auto',
-                display: 'block',
-                textAlign: 'center',
-                color: 'text.secondary',
-              }}
-            >
-                {level} {lname} {fname}
-                <br /> {department}
-                <br /> Sẵn sàng tư vấn: 20/11/2021
-
-            </Typography>
-        
-            {/* <RHFSwitch name="isPublic" labelPlacement="start" label="Hồ sơ bệnh án" sx={{ mt: 5 }} /> */}
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={12}>
           <Card sx={{ p: 3 }}>
             <Box
               sx={{

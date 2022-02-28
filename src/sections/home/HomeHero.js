@@ -152,7 +152,7 @@ export default function HomeHero() {
                 size="large"
                 variant="contained"
                 component={RouterLink}
-                to={PATH_DASHBOARD.root}
+                to={PATH_DASHBOARD.user.cards}
                 startIcon={<Iconify icon={'carbon:request-quote'} width={20} height={20} />}
               >
                 Đặt lịch khám

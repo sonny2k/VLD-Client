@@ -1,13 +1,17 @@
 import PropTypes from 'prop-types';
 import { useRef, useState, useEffect} from 'react';
+import { paramCase } from 'change-case';
 import Slider from 'react-slick';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Box, Stack, Card, Button, Container, Typography } from '@mui/material';
+import { Box, Stack, Card, Button, Container, Typography, IconButton, Tooltip } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
 // _mock_
 import { _carouselsMembers } from '../../_mock';
 // utils
 import axios from '../../utils/axios';
+// routes
+import { PATH_DASHBOARD } from '../../routes/paths';
 // components
 import Image from '../../components/Image';
 import Iconify from '../../components/Iconify';
@@ -129,7 +133,7 @@ MemberCard.propTypes = {
 function MemberCard({ member }) {
   const { fname, lname, profilepic } = member.account;
 
-  const { department } = member;
+  const { department, _id } = member;
 
   const name = `${lname} ${fname}`;
 
@@ -143,7 +147,11 @@ function MemberCard({ member }) {
       </Typography>
       <Image src={profilepic} ratio="1/1" sx={{ borderRadius: 1.5 }} />
       <Stack alignItems="center" sx={{ mt: 2, mb: 1 }}>
-        <SocialsButton sx={{ color: 'action.active' }} />
+        <Tooltip title="Xem chi tiết">
+          <IconButton aria-label="Xem chi tiết" href={`${PATH_DASHBOARD.user.root}/profile/${paramCase(_id)}`}>
+            <InfoIcon />
+          </IconButton>
+        </Tooltip>
       </Stack>
     </Card>
   );
