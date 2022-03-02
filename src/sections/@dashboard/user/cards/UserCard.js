@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 import { paramCase } from 'change-case';
+import { Link as RouterLink } from 'react-router-dom';
 import * as React from 'react';
 
 // @mui
 import { styled } from '@mui/material/styles';
 import InfoIcon from '@mui/icons-material/Info';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
-import { Box, Card, Avatar, Divider, Typography, Stack, IconButton, Tooltip } from '@mui/material';
+import { Box, Card, Avatar, Divider, Typography, Stack, IconButton, Tooltip, Link } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import ModalCreateConsultation from '../account/CreateConsultation';
 // utils
@@ -44,6 +45,8 @@ export default function UserCard({ doctor }) {
 
   const { department, level, workcertificate, _id } = doctor;
 
+  const linkTo = `${PATH_DASHBOARD.user.root}/profile/${paramCase(_id)}`;
+
   const name = `${lname} ${fname}`;
 
   const [open, setOpen] = React.useState(false);
@@ -80,28 +83,33 @@ export default function UserCard({ doctor }) {
             color: 'background.paper',
           }}
         />
-        <Avatar
-          alt={name}
-          src={profilepic}
-          sx={{
-            width: 64,
-            height: 64,
-            zIndex: 11,
-            left: 0,
-            right: 0,
-            bottom: -32,
-            mx: 'auto',
-            position: 'absolute',
-          }}
-        />
+        <Link to={linkTo} color="inherit" component={RouterLink}>
+          <Avatar
+            alt={name}
+            src={profilepic}
+            sx={{
+              width: 64,
+              height: 64,
+              zIndex: 11,
+              left: 0,
+              right: 0,
+              bottom: -32,
+              mx: 'auto',
+              position: 'absolute',
+            }}
+          />
+        </Link>
+        
         <OverlayStyle />
         <Image src={'https://i.imgur.com/ubQBnT3.jpg'} alt={name} ratio="16/9" />
       </Box>
 
-      <Typography variant="subtitle1" sx={{ mt: 6 }}>
-        {name}
-      </Typography>
-
+      <Link to={linkTo} color="inherit" component={RouterLink}>
+        <Typography variant="subtitle1" sx={{ mt: 6 }}>
+          {name}
+        </Typography>
+      </Link>
+      
       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
         {department}
       </Typography>

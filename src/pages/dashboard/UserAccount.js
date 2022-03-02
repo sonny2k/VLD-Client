@@ -42,11 +42,11 @@ export default function UserAccount() {
     //   component: <EditInformation />,
     // },
 
-    {
-      value: 'Đặt Lịch Tư Vấn',
-      icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
-      component: <CreateConsultation />,
-    },
+    // {
+    //   value: 'Đặt Lịch Tư Vấn',
+    //   icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
+    //   component: <CreateConsultation />,
+    // },
     // {
     //   value: 'Hồ sơ bệnh án',
     //   icon: <Iconify icon={'healthicons:medical-records-outline'} width={20} height={20} />,

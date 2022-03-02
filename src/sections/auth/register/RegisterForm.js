@@ -1,9 +1,7 @@
 import * as Yup from 'yup';
 import 'yup-phone';
 import { useSnackbar } from 'notistack';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -16,16 +14,17 @@ import useIsMountedRef from '../../../hooks/useIsMountedRef';
 // components
 import Iconify from '../../../components/Iconify';
 import { FormProvider, RHFTextField } from '../../../components/hook-form';
+// utils
+import axios from '../../../utils/axios';
 
 // ----------------------------------------------------------------------
 
 export default function RegisterForm() {
-  const navigate = useNavigate();
+  const { account } = useAuth();
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { register, sendcode, verifycode, res } = useAuth();
-
+  const { register, createuser } = useAuth();
 
   const isMountedRef = useIsMountedRef();
 
@@ -77,25 +76,51 @@ export default function RegisterForm() {
     formState: { errors, isSubmitting },
   } = methods;
 
+  const [ message, setMessage ] = useState('')
+
+  const sendcode = async (phone) => {
+    await axios.post('api/user/auth/sendcode', {
+      phone,
+    });
+  }
+
+  const verifycode = async (phone, code) => {
+    const res = await axios.post('api/user/auth/verifycode', {
+      phone,
+      code,
+    });
+    const mes = res.data;
+    setMessage(mes);
+  };
+
+  useEffect(() => {
+    const ver = async () => {
+      if (message) {
+        if (message.message === 'pending') {
+          enqueueSnackbar('Sai mã xác minh, xin thử lại');
+        }
+        if (message.message === "approved") {
+          handleSubmit(regis)();
+        }
+      }
+    };
+    
+    ver();
+  }, [message]);
+
+  const regis = async (data) => {
+    const phone = `+84${data.phone.slice(1)}`;
+    await register(data.profilepic, data.birthday, data.gender, data.email, phone, data.password, data.firstName, data.lastName, data.city, data.district, data.ward, data.street, data.role);
+    await createuser(account._id);
+    enqueueSnackbar('Tạo tài khoản thành công');
+  }
+
   const onSubmit = async (data) => {
     try {
       const phone = `+84${data.phone.slice(1)}`
-      if (data.code) {
-        await verifycode(phone, data.code);
-        console.log(res);
-      }
-      if (res) {
-        if (res === "approved") {
-          console.log(res)
-          await register(data.profilepic, data.birthday, data.gender, data.email, phone, data.password, data.firstName, data.lastName, data.city, data.district, data.ward, data.street, data.role);
-          enqueueSnackbar('Tạo tài khoản thành công');
-        }
-      }
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      enqueueSnackbar('Sai mã xác minh, xin thử lại');
+      await verifycode(phone, data.code);
     } catch (error) {
       console.error(error);
-      reset();
       if (isMountedRef.current) {
         setError('afterSubmit', error);
       } 

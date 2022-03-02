@@ -54,22 +54,6 @@ const handlers = {
       account,
     };
   },
-  SENDCODE: (state, action) => {
-    const { sendstatus } = action.payload;
-
-    return {
-      ...state,
-      sendstatus,
-    };
-  },
-  VERIFYCODE: (state, action) => {
-    const { res } = action.payload;
-
-    return {
-      ...state,
-      res,
-    };
-  },
   CHANGEPASS: (state, action) => {
     const { message } = action.payload;
 
@@ -232,26 +216,6 @@ function AuthProvider({ children }) {
     });
   };
 
-  const sendcode = async (phone) => {
-    await axios.post('api/user/auth/sendcode', {
-      phone,
-    });
-  }
-
-  const verifycode = async (phone, code) => {
-    const response = await axios.post('api/user/auth/verifycode', {
-      phone,
-      code,
-    });
-    const { res } = response.data;
-      dispatch({
-        type: 'VERIFYCODE',
-        payload: {
-          res,
-        },
-      });
-  };
-
   const logout = async () => {
     setSession(null);
     dispatch({ type: 'LOGOUT' });
@@ -280,8 +244,6 @@ function AuthProvider({ children }) {
         login,
         logout,
         register,
-        sendcode,
-        verifycode,
         createuser,
         updateinfo,
         changepass,

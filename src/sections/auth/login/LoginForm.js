@@ -54,7 +54,6 @@ export default function LoginForm() {
       await login(phonenum, data.password);
     } catch (error) {
       console.error(error);
-      reset();
       if (isMountedRef.current) {
         setError('afterSubmit', error);
       }

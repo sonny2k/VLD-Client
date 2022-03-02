@@ -2,7 +2,8 @@ import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import 'yup-phone';
 import { useSnackbar } from 'notistack';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 
 // form
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -16,7 +17,8 @@ import useIsMountedRef from '../../../hooks/useIsMountedRef';
 // components
 import Iconify from '../../../components/Iconify';
 import { FormProvider, RHFTextField } from '../../../components/hook-form';
-
+// utils
+import axios from '../../../utils/axios';
 // ----------------------------------------------------------------------
 
 ResetPasswordForm.propTypes = {
@@ -24,12 +26,12 @@ ResetPasswordForm.propTypes = {
   onGetPhone: PropTypes.func,
 };
 
-export default function ResetPasswordForm({ onSent, onGetPhone }) {
-  const { mess, sendstatus, fail } = useAuth();
+export default function ResetPasswordForm() {
+  const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { sendcode, verifycode, resetpassword } = useAuth();
+  const { resetpassword } = useAuth();
 
   const isMountedRef = useIsMountedRef();
 
@@ -45,26 +47,17 @@ export default function ResetPasswordForm({ onSent, onGetPhone }) {
   });
 
   const defaultValues = {
-    profilepic: '',
-    firstName: '',
-    lastName: '',
-    birthdate: '',
-    gender: '',
     phone: '',
     password: '',
     passwordConfirmation: '',
-    code: '', 
-    city: '',
-    district: '',
-    ward: '',
-    street: '',
-    role: 'user'
   };
 
   const methods = useForm({
     resolver: yupResolver(ResetPasswordSchema),
     defaultValues,
   });
+
+  const [ message, setMessage ] = useState('')
 
   const {
     reset, 
@@ -74,48 +67,63 @@ export default function ResetPasswordForm({ onSent, onGetPhone }) {
     formState: { isSubmitting },
   } = methods;
 
+  const sendcode = async (phone) => {
+    await axios.post('api/user/auth/sendcode', {
+      phone,
+    });
+  }
+
+  const verifycode = async (phone, code) => {
+    const res = await axios.post('api/user/auth/verifycode', {
+      phone,
+      code,
+    });
+    const mes = res.data;
+    setMessage(mes);
+  };
+
+  useEffect(() => {
+    const ver = async () => {
+      if (message) {
+        if (message.message === 'pending') {
+          enqueueSnackbar('Sai mã xác minh, xin thử lại');
+        }
+        if (message.message === "approved") {
+          handleSubmit(resetp)();
+        }
+      }
+    };
+    
+    ver();
+  }, [message]);
+
+  const resetp = async (data) => {
+    const phone = `+84${data.phone.slice(1)}`;
+    await resetpassword(phone, data.password);
+    enqueueSnackbar('Cập nhật mật khẩu thành công, vui lòng đăng nhập lại!');
+    navigate('/auth/login');
+  }
+
   const onSubmit = async (data) => {
     try {
       const phone = `+84${data.phone.slice(1)}`
-      if (data.code) {
-        await verifycode(phone, data.code);
-      }
-      if (mess === "approve") {
-        await resetpassword(phone, data.password);
-        enqueueSnackbar('Reset mật khẩu thành công');
-      }
-      enqueueSnackbar('Sai mã xác minh, xin thử lại');
+      await verifycode(phone, data.code);
     } catch (error) {
       console.error(error);
-      reset();
       if (isMountedRef.current) {
         setError('afterSubmit', error);
       } 
     }
   };
 
-  // const onSubmit = async (data) => {
-  //   try {
-  //     await new Promise((resolve) => setTimeout(resolve, 500));
-  //     if (isMountedRef.current) {
-  //       onSent();
-  //       onGetPhone(data.phone);
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
-
   const sc = async (data) => {
     try {
       const phonenum = `+84${data.phone.slice(1)}` 
       await sendcode(phonenum)
       enqueueSnackbar('Mã đã được gửi vào số điện thoại của bạn!');
-      if (sendstatus) {
-        enqueueSnackbar('Không gửi được mã, xin thử lại');
-      }
     } catch (error) {
       console.error(error);
+      reset();
       if (isMountedRef.current) {
         setError('afterSubmit', error);
       }
