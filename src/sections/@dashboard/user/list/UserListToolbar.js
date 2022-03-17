@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types';
+import React, { useState, useEffect } from 'react';
+
 // @mui
 import { useTheme, styled } from '@mui/material/styles';
 import { Toolbar, Tooltip, IconButton, Typography, InputAdornment } from '@mui/material';
@@ -27,6 +29,15 @@ UserListToolbar.propTypes = {
 export default function UserListToolbar({ numSelected, filterName, onFilterName, onDeleteUsers }) {
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
+  const [open, setOpen] = useState(null);
+
+  const handleOpen = (currentTarget) => {
+    setOpen(currentTarget);
+  };
+
+  const handleClose = () => {
+    setOpen(null);
+  };
 
   return (
     <RootStyle
@@ -65,7 +76,7 @@ export default function UserListToolbar({ numSelected, filterName, onFilterName,
         </Tooltip>
       ) : (
         <Tooltip title="Filter list">
-          <IconButton>
+          <IconButton> 
             <Iconify icon={'ic:round-filter-list'} />
           </IconButton>
         </Tooltip>
