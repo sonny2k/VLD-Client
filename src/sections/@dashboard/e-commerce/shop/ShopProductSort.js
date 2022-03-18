@@ -12,20 +12,20 @@ import MenuPopover from '../../../../components/MenuPopover';
 
 const SORT_BY_OPTIONS = [
   { value: 'Mắt', label: 'Mắt' },
-  { value: 'Thần Kinh', label: 'Thần Kinh' },
-  { value: 'Dạ dày', label: 'Dạ dày' },
+  { value: 'Ngoại', label: 'Ngoại' },
   { value: 'Tim mạch', label: 'Tim mạch' },
+  { value: 'Nhi', label: 'Nhi'},
 ];
 
-function renderLabel(label) {
-  if (label === 'Mắt') {
+function renderLabel(value) {
+  if (value === 'Mắt') {
     return 'Mắt';
   }
-  if (label === 'Thần kinh') {
-    return 'Thần kinh';
+  if (value === 'Ngoại') {
+    return 'Ngoại';
   }
-  if (label === 'Dạ dày') {
-    return 'Dạ dày';
+  if (value === 'Nhi') {
+    return 'Nhi';
   }
   return 'Tim mạch';
 }

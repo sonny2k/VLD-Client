@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 // @mui
-import { Container, Box, Card } from '@mui/material';
+import { Container, Box, Card, Stack } from '@mui/material';
+// redux
+import { useDispatch, useSelector } from '../../redux/store';
 // routes
-import { filter } from 'lodash';
+import { ProductListToolbar } from '../../sections/@dashboard/e-commerce/product-list';
+import { ShopProductSearch, ShopProductSort } from '../../sections/@dashboard/e-commerce/shop';
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
 import useSettings from '../../hooks/useSettings';
@@ -23,7 +26,7 @@ export default function UserCards() {
 
   const [filterName, setFilterName] = useState('');
 
-  const [selected, setSelected] = useState([]);
+  const [option, setOption] = useState('');
 
   const [filteredResults, setFilteredResults] = useState([]);
 
@@ -58,6 +61,20 @@ export default function UserCards() {
     }
   };
 
+  const handleSortBy = (value) => {
+    setOption.toLowerCase()
+    if (option && option.length > 1) {
+    const filteredData = doctors.filter (
+      (doctor) =>
+      doctor.department.toLowerCase().split('chuyên khoa')[1].trim() === ''
+    );
+    setFilteredResults(filteredData);
+      console.log(filteredData);
+    } else {
+      setFilteredResults([]);
+    }
+  };
+
   return (
     <Page title="Danh sách bác sĩ">
       <Container maxWidth={themeStretch ? false : 'lg'}>
@@ -71,11 +88,22 @@ export default function UserCards() {
         />
 
         <Card>
-          <UserListToolbar
-            numSelected={selected.length}
+        <Stack
+          spacing={2}
+          direction={{ xs: 'column', sm: 'row' }}
+          alignItems={{ sm: 'center' }}
+          justifyContent="space-between"
+          sx={{ mb: 2 }}
+        >
+          <ProductListToolbar 
             filterName={filterName}
             onFilterName={(keyword) => handleSearch(keyword)}
-          />
+            />
+        <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
+          <ShopProductSort />
+            
+        </Stack>
+        </Stack>
           <Box
             sx={{
               display: 'grid',
