@@ -11,20 +11,20 @@ import MenuPopover from '../../../../components/MenuPopover';
 // ----------------------------------------------------------------------
 
 const SORT_BY_OPTIONS = [
-  { value: 'Mắt', label: 'Mắt' },
-  { value: 'Ngoại', label: 'Ngoại' },
-  { value: 'Tim mạch', label: 'Tim mạch' },
-  { value: 'Nhi', label: 'Nhi'},
+  { value: 'mắt', label: 'Mắt' },
+  { value: 'tai mũi họng', label: 'Tai mũi họng' },
+  { value: 'tim mạch', label: 'Tim mạch' },
+  { value: 'nhi', label: 'Nhi' },
 ];
 
 function renderLabel(value) {
-  if (value === 'Mắt') {
+  if (value === 'mắt') {
     return 'Mắt';
   }
-  if (value === 'Ngoại') {
-    return 'Ngoại';
+  if (value === 'tai mũi họng') {
+    return 'Tai mũi họng';
   }
-  if (value === 'Nhi') {
+  if (value === 'nhi') {
     return 'Nhi';
   }
   return 'Tim mạch';
@@ -32,7 +32,7 @@ function renderLabel(value) {
 
 // ----------------------------------------------------------------------
 
-export default function ShopProductSort() {
+export default function ShopProductSort({ sortFunc }) {
   const dispatch = useDispatch();
 
   const { sortBy } = useSelector((state) => state.product);
@@ -49,6 +49,7 @@ export default function ShopProductSort() {
 
   const handleSortBy = (value) => {
     handleClose();
+    sortFunc(value);
     dispatch(sortByProducts(value));
   };
 

@@ -55,21 +55,18 @@ export default function UserCards() {
         // doctor.department.toLowerCase().split('chuyên khoa')[1].trim() === 'nội khoa'
       );
       setFilteredResults(filteredData);
-      console.log(filteredData);
     } else {
       setFilteredResults([]);
     }
   };
 
-  const handleSortBy = (value) => {
-    setOption.toLowerCase()
-    if (option && option.length > 1) {
-    const filteredData = doctors.filter (
-      (doctor) =>
-      doctor.department.toLowerCase().split('chuyên khoa')[1].trim() === ''
-    );
-    setFilteredResults(filteredData);
+  const handleSortOptions = (value) => {
+    value.toLowerCase();
+    if (value) {
+      console.log(value);
+      const filteredData = doctors.filter((doctor) => doctor.department.toLowerCase().includes(value));
       console.log(filteredData);
+      setFilteredResults(filteredData);
     } else {
       setFilteredResults([]);
     }
@@ -88,22 +85,18 @@ export default function UserCards() {
         />
 
         <Card>
-        <Stack
-          spacing={2}
-          direction={{ xs: 'column', sm: 'row' }}
-          alignItems={{ sm: 'center' }}
-          justifyContent="space-between"
-          sx={{ mb: 2 }}
-        >
-          <ProductListToolbar 
-            filterName={filterName}
-            onFilterName={(keyword) => handleSearch(keyword)}
-            />
-        <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-          <ShopProductSort />
-            
-        </Stack>
-        </Stack>
+          <Stack
+            spacing={2}
+            direction={{ xs: 'column', sm: 'row' }}
+            alignItems={{ sm: 'center' }}
+            justifyContent="space-between"
+            sx={{ mb: 2 }}
+          >
+            <ShopProductSearch filterName={filterName} onFilterName={(keyword) => handleSearch(keyword)} />
+            <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
+              <ShopProductSort sortFunc={handleSortOptions} />
+            </Stack>
+          </Stack>
           <Box
             sx={{
               display: 'grid',
