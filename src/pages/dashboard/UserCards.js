@@ -26,9 +26,9 @@ export default function UserCards() {
 
   const [filterName, setFilterName] = useState('');
 
-  const [option, setOption] = useState('');
-
   const [filteredResults, setFilteredResults] = useState([]);
+
+  const isNotFound = !filteredResults.length && Boolean(filterName);
 
   const [doctors, setDoctors] = useState([]);
   useEffect(() => {
@@ -97,6 +97,11 @@ export default function UserCards() {
               <ShopProductSort sortFunc={handleSortOptions} />
             </Stack>
           </Stack>
+          {isNotFound && (
+                        <Box sx={{ py: 3 }}>
+                          <SearchNotFound searchQuery={filterName} />
+                        </Box>
+                )}
           <Box
             sx={{
               display: 'grid',
@@ -107,7 +112,7 @@ export default function UserCards() {
                 md: 'repeat(3, 1fr)',
               },
             }}
-          >
+          > 
             {filteredResults.length > 0
               ? filteredResults.map((doctor) => <UserCard key={doctor._id} doctor={doctor} />)
               : doctors.map((doctor) => <UserCard key={doctor._id} doctor={doctor} />)}
