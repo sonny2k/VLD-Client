@@ -14,6 +14,7 @@ import DashboardHeader from './header';
 import NavbarVertical from './navbar/NavbarVertical';
 import NavbarHorizontal from './navbar/NavbarHorizontal';
 
+
 // ----------------------------------------------------------------------
 
 const MainStyle = styled('main', {
@@ -43,6 +44,7 @@ export default function DashboardLayout() {
   const { collapseClick, isCollapse } = useCollapseDrawer();
 
   const { themeLayout } = useSettings();
+
 
   const isDesktop = useResponsive('up', 'lg');
 

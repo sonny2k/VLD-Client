@@ -23,6 +23,7 @@ const ICONS = {
   booking: getIcon('ic_booking'),
 };
 
+
 const navConfig = [
   // GENERAL
   // ----------------------------------------------------------------------

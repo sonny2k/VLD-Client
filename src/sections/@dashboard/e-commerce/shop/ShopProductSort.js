@@ -11,15 +11,15 @@ import MenuPopover from '../../../../components/MenuPopover';
 // ----------------------------------------------------------------------
 
 const SORT_BY_OPTIONS = [
-  { value: 'mắt', label: 'Mắt' },
-  { value: 'tai mũi họng', label: 'Tai mũi họng' },
+  { value: 'mắt', label: 'Tất cả' },
+  // { value: 'tai mũi họng', label: 'Tai mũi họng' },
   { value: 'tim mạch', label: 'Tim mạch' },
   { value: 'nhi', label: 'Nhi' },
 ];
 
 function renderLabel(value) {
   if (value === 'mắt') {
-    return 'Mắt';
+    return 'Tất cả';
   }
   if (value === 'tai mũi họng') {
     return 'Tai mũi họng';

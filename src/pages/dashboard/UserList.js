@@ -1,5 +1,5 @@
 import { sentenceCase } from 'change-case';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { useTheme } from '@mui/material/styles';
@@ -23,6 +23,8 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 import useSettings from '../../hooks/useSettings';
 // _mock_
 import { _userList } from '../../_mock';
+// utils
+import axios from '../../utils/axios';
 // components
 import Page from '../../components/Page';
 import Label from '../../components/Label';
@@ -32,15 +34,14 @@ import SearchNotFound from '../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 // sections
 import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@dashboard/user/list';
-
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
+  { id: 'address', label: 'Địa chỉ', alignRight: false },
+  // { id: 'role', label: 'Vai trò', alignRight: false },
+  { id: 'department', label: 'Chuyên khoa', alignRight: false },
+  { id: 'gender', label: 'Giới tính', alignRight: false },
   { id: '' },
 ];
 
@@ -57,6 +58,21 @@ export default function UserList() {
   const [orderBy, setOrderBy] = useState('name');
   const [filterName, setFilterName] = useState('');
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const [doctors, setDoctors] = useState([]);
+  useEffect(() => {
+    async function fetchDoctors() {
+      const URL = '/api/home/doctor';
+      try {
+        const res = await axios.get(URL);
+        console.log(res.data);
+        setDoctors(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    fetchDoctors();
+  }, []);
 
   const handleRequestSort = (property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -117,24 +133,24 @@ export default function UserList() {
   const isNotFound = !filteredUsers.length && Boolean(filterName);
 
   return (
-    <Page title="Danh sách chờ duyệt">
+    <Page title="Danh sách bác sĩ">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="Danh sách chờ duyệt"
+          heading="Danh sách bác sĩ"
           links={[
             { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
             { name: 'Danh sách chờ duyệt' },
           ]}
-          // action={
-          //   <Button
-          //     variant="contained"
-          //     component={RouterLink}
-          //     to={PATH_DASHBOARD.user.newUser}
-          //     startIcon={<Iconify icon={'eva:plus-fill'} />}
-          //   >
-          //     New User
-          //   </Button>
-          // }
+          action={
+            <Button
+              variant="contained"
+              component={RouterLink}
+              to={PATH_DASHBOARD.user.newUser}
+              startIcon={<Iconify icon={'eva:plus-fill'} />}
+            >
+              Thêm bác sĩ
+            </Button>
+          }
         />
 
         <Card>
@@ -158,8 +174,8 @@ export default function UserList() {
                   onSelectAllClick={handleSelectAllClick}
                 />
                 <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, avatarUrl, isVerified } = row;
+                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((doctor) => {
+                    const { id, name, role, status, company, avatarUrl, gender, department } = doctor;
                     const isItemSelected = selected.indexOf(name) !== -1;
 
                     return (
@@ -181,16 +197,18 @@ export default function UserList() {
                           </Typography>
                         </TableCell>
                         <TableCell align="left">{company}</TableCell>
+                        
                         <TableCell align="left">{role}</TableCell>
-                        <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
-                        <TableCell align="left">
+                        <TableCell align="left">{gender}</TableCell>
+
+                        {/* <TableCell align="left">
                           <Label
                             variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
                             color={(status === 'banned' && 'error') || 'success'}
                           >
                             {sentenceCase(status)}
                           </Label>
-                        </TableCell>
+                        </TableCell> */}
 
                         <TableCell align="right">
                           <UserMoreMenu onDelete={() => handleDeleteUser(id)} userName={name} />

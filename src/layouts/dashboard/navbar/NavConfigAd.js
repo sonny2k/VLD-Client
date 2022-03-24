@@ -48,8 +48,8 @@ const navConfigAd = [
         icon: ICONS.user,
         children: [
           // { title: 'profile', path: PATH_DASHBOARD.user.profile },
-          { title: 'Bác sĩ', path: PATH_DASHBOARD.user.cards },
-          { title: 'Sản phẩm', path: PATH_DASHBOARD.user.list },
+          { title: 'Bác sĩ', path: PATH_DASHBOARD.user.list },
+          { title: 'Sản phẩm', path: PATH_DASHBOARD.eCommerce.list },
           // { title: 'create', path: PATH_DASHBOARD.user.newUser },
           // { title: 'edit', path: PATH_DASHBOARD.user.editById },
           { title: 'Tài khoản', path: PATH_DASHBOARD.user.account },

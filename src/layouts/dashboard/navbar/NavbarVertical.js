@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 // @mui
 import { styled, useTheme } from '@mui/material/styles';
@@ -16,10 +16,13 @@ import Logo from '../../../components/Logo';
 import Scrollbar from '../../../components/Scrollbar';
 import { NavSectionVertical } from '../../../components/nav-section';
 //
+import navConfigAd from './NavConfigAd';
+import NavbarAdmin from './NavbarAdmin';
 import navConfig from './NavConfig';
 import NavbarDocs from './NavbarDocs';
 import NavbarAccount from './NavbarAccount';
 import CollapseButton from './CollapseButton';
+import useAuth from '../../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
 
@@ -44,6 +47,10 @@ export default function NavbarVertical({ isOpenSidebar, onCloseSidebar }) {
 
   const { pathname } = useLocation();
 
+  const { account } = useAuth();
+
+  const [role, setRole] = useState();
+
   const isDesktop = useResponsive('up', 'lg');
 
   const { isCollapse, collapseClick, collapseHover, onToggleCollapse, onHoverEnter, onHoverLeave } =
@@ -53,8 +60,16 @@ export default function NavbarVertical({ isOpenSidebar, onCloseSidebar }) {
     if (isOpenSidebar) {
       onCloseSidebar();
     }
+
+    if (account.role === 'Người dùng' && 'Bác sĩ') {
+      setRole(navConfig);
+    }
+
+    if (account.role === 'Admin') {
+      setRole(navConfigAd);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  }, [pathname, account.role]);
 
   const renderContent = (
     <Scrollbar
@@ -83,8 +98,7 @@ export default function NavbarVertical({ isOpenSidebar, onCloseSidebar }) {
 
         <NavbarAccount isCollapse={isCollapse} />
       </Stack>
-
-      <NavSectionVertical navConfig={navConfig} isCollapse={isCollapse} />
+      <NavSectionVertical navConfig={role} isCollapse={isCollapse} />
 
       <Box sx={{ flexGrow: 1 }} />
 
