@@ -138,7 +138,7 @@ export function getConversations() {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/chat/conversations');
+      const response = await axios.get('minimal-assets-api.vercel.app/api/chat/conversations');
       dispatch(slice.actions.getConversationsSuccess(response.data.conversations));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
@@ -152,7 +152,7 @@ export function getConversation(conversationKey) {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/chat/conversation', {
+      const response = await axios.get('minimal-assets-api.vercel.app/api/chat/conversation', {
         params: { conversationKey },
       });
       dispatch(slice.actions.getConversationSuccess(response.data.conversation));

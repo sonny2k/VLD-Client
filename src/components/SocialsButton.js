@@ -7,27 +7,45 @@ import Iconify from './Iconify';
 
 // ----------------------------------------------------------------------
 
-SocialsButton.propTypes = {
+sButton.propTypes = {
   initialColor: PropTypes.bool,
   links: PropTypes.objectOf(PropTypes.string),
   simple: PropTypes.bool,
   sx: PropTypes.object,
 };
 
-export default function SocialsButton({ initialColor = false, simple = true, links = {}, sx, ...other }) {
-  const SOCIALS = [
+export default function sButton({ initialColor = false, simple = true, links = {}, sx, ...other }) {
+  const S = [
     {
-      name: 'Đặt lịch khám',
-      icon: 'teenyicons:appointments-outline',
-      socialColor: '#E02D69',
-      path: 'http://localhost:2542/dashboard/user/account',
+      name: 'FaceBook',
+      icon: 'eva:facebook-fill',
+      Color: '#1877F2',
+      path: links.facebook || '#facebook-link',
+    },
+    {
+      name: 'Instagram',
+      icon: 'ant-design:instagram-filled',
+      Color: '#E02D69',
+      path: links.instagram || '#instagram-link',
+    },
+    {
+      name: 'Linkedin',
+      icon: 'eva:linkedin-fill',
+      Color: '#007EBB',
+      path: links.linkedin || '#linkedin-link',
+    },
+    {
+      name: 'Twitter',
+      icon: 'eva:twitter-fill',
+      Color: '#00AAEC',
+      path: links.twitter || '#twitter-link',
     },
   ];
 
   return (
     <Stack direction="row" flexWrap="wrap" alignItems="center">
-      {SOCIALS.map((social) => {
-        const { name, icon, path, socialColor } = social;
+      {S.map((social) => {
+        const { name, icon, path, Color } = social;
         return simple ? (
           <Link key={name} href={path}>
             <Tooltip title={name} placement="top">
@@ -35,9 +53,9 @@ export default function SocialsButton({ initialColor = false, simple = true, lin
                 color="inherit"
                 sx={{
                   ...(initialColor && {
-                    color: socialColor,
+                    color: Color,
                     '&:hover': {
-                      bgcolor: alpha(socialColor, 0.08),
+                      bgcolor: alpha(Color, 0.08),
                     },
                   }),
                   ...sx,
@@ -60,11 +78,11 @@ export default function SocialsButton({ initialColor = false, simple = true, lin
               m: 0.5,
               flexShrink: 0,
               ...(initialColor && {
-                color: socialColor,
-                borderColor: socialColor,
+                color: Color,
+                borderColor: Color,
                 '&:hover': {
-                  borderColor: socialColor,
-                  bgcolor: alpha(socialColor, 0.08),
+                  borderColor: Color,
+                  bgcolor: alpha(Color, 0.08),
                 },
               }),
               ...sx,

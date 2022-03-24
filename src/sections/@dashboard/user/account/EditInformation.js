@@ -1,7 +1,6 @@
-import * as React from 'react';
 import { useSnackbar } from 'notistack';
 import * as Yup from 'yup';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -15,6 +14,8 @@ import useLocationForm from '../../../../hooks/useLocationForm'
 import { fData } from '../../../../utils/formatNumber';
 // _mock
 import { genders } from '../../../../_mock/_gender';
+// utils
+import axios from '../../../../utils/axios';
 // components
 import { FormProvider, RHFSwitch, RHFSelect, RHFTextField, RHFUploadAvatar } from '../../../../components/hook-form';
 
@@ -82,7 +83,7 @@ export default function ModalEditInformation() {
     birthcheck = new Date(account?.birthday)
   }
 
-  const [birth, setBirth] = React.useState(birthcheck);
+  const [birth, setBirth] = useState(birthcheck);
 
   const handleChange = (newDate) => {
     setBirth(newDate);
@@ -90,6 +91,7 @@ export default function ModalEditInformation() {
 
   const {
     setValue,
+    getValues,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
@@ -129,20 +131,36 @@ export default function ModalEditInformation() {
   };
 
   const handleDrop = useCallback(
-    (acceptedFiles) => {
+    async (acceptedFiles) => {
       const file = acceptedFiles[0];
-
       if (file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+          uploadImage(reader.result);
+        };
         setValue(
           'photoURL',
           Object.assign(file, {
-            preview: URL.createObjectURL(file),
+            preview: URL.createObjectURL(file),   
           })
         );
       }
     },
     [setValue]
   );
+
+  const uploadImage = async (base64EncodedImage) => {
+    const pic = base64EncodedImage.toString();
+    try {
+      await axios.post('/api/user/account/profilepic', {
+        pic
+      });
+    } catch (err) {
+      console.error(err);
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
+    }
+  };
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
@@ -154,6 +172,7 @@ export default function ModalEditInformation() {
               accept="image/*"
               maxSize={3145728}
               onDrop={handleDrop}
+              type='file'
               helperText={
                 <Typography
                   variant="caption"
@@ -164,7 +183,7 @@ export default function ModalEditInformation() {
                     textAlign: 'center',
                     color: 'text.secondary',
                   }}
-          disabled>
+                  disabled>
                   Chỉ cho phép *.jpeg, *.jpg, *.png, *.gif
                   <br /> Dung lượng tối đa {fData(3145728)}
                 </Typography>
@@ -213,7 +232,7 @@ export default function ModalEditInformation() {
                 ))}
               </RHFSelect>
 
-              <RHFSelect id="districtId" label="Quận/Huyện" disabled={districtOptions.length === 0} onChange={e => onDistrictSelect(e.target.value)} value={selectedDistrict}>
+              <RHFSelect id="districtId" label="Quận/Huyện" disabled={!districtOptions} onChange={e => onDistrictSelect(e.target.value)} value={selectedDistrict}>
                 {districtOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
@@ -221,7 +240,7 @@ export default function ModalEditInformation() {
                 ))}
               </RHFSelect>
 
-              <RHFSelect id="wardId" label="Phường/Xã" disabled={wardOptions.length === 0} onChange={e => onWardSelect(e.target.value)} value={selectedWard}>
+              <RHFSelect id="wardId" label="Phường/Xã" disabled={!wardOptions} onChange={e => onWardSelect(e.target.value)} value={selectedWard}>
                 {wardOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}

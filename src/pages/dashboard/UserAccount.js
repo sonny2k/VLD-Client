@@ -14,13 +14,8 @@ import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 // sections
 import {
   AccountGeneral,
-  AccountBilling,
-  AccountSocialLinks,
-  AccountUser,
   AccountNotifications,
   AccountChangePassword,
-  CreateConsultation,
-  EditInformation,
 } from '../../sections/@dashboard/user/account/index';
 
 // ----------------------------------------------------------------------

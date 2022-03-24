@@ -3,6 +3,7 @@ import * as Yup from 'yup';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
+import { format } from 'date-fns';
 // form
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -10,62 +11,47 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { LoadingButton } from '@mui/lab';
 import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel } from '@mui/material';
 // utils
-import { fData } from '../../../utils/formatNumber';
+import createAvatar from '../../../utils/createAvatar';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // _mock
 import { genders } from '../../../_mock';
 // components
 import Label from '../../../components/Label';
-import { FormProvider, RHFSelect, RHFSwitch, RHFTextField, RHFUploadAvatar } from '../../../components/hook-form';
+import { FormProvider, RHFSelect, RHFSwitch, RHFTextField } from '../../../components/hook-form';
+import Avatar from '../../../components/Avatar';
 
 // ----------------------------------------------------------------------
 
 UserNewForm.propTypes = {
-  isEdit: PropTypes.bool,
-  currentUser: PropTypes.object,
+  consultation: PropTypes.array,
 };
 
-export default function UserNewForm({ isEdit, currentUser }) {
+export default function UserNewForm({ consultation }) {
   const navigate = useNavigate();
+
+  const { date, hour, status, symptom } = consultation[0];
+
+  const { fname, lname, profilepic } = consultation[0].doctor.account;
+
+  const name = `${lname} ${fname}`;
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const NewUserSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    email: Yup.string().required('Email is required').email(),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    address: Yup.string().required('Address is required'),
-    country: Yup.string().required('country is required'),
-    company: Yup.string().required('Company is required'),
-    state: Yup.string().required('State is required'),
-    city: Yup.string().required('City is required'),
-    role: Yup.string().required('Role Number is required'),
-    avatarUrl: Yup.mixed().test('required', 'Avatar is required', (value) => value !== ''),
-  });
-
   const defaultValues = useMemo(
     () => ({
-      name: currentUser?.name || '',
-      email: currentUser?.email || '',
-      phoneNumber: currentUser?.phoneNumber || '',
-      address: currentUser?.address || '',
-      country: currentUser?.country || '',
-      state: currentUser?.state || '',
-      city: currentUser?.city || '',
-      zipCode: currentUser?.zipCode || '',
-      avatarUrl: currentUser?.avatarUrl || '',
-      isVerified: currentUser?.isVerified || true,
-      status: currentUser?.status,
-      company: currentUser?.company || '',
-      role: currentUser?.role || '',
+      name: name|| '',
+      date: format(new Date(date), 'dd/MM/yyyy') || '',
+      hour: hour || '',
+      symptom: symptom || '',
+      profilepic: profilepic || '',
+      status: status || ''
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [currentUser]
+    [consultation]
   );
 
   const methods = useForm({
-    resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
 
@@ -81,96 +67,72 @@ export default function UserNewForm({ isEdit, currentUser }) {
   const values = watch();
 
   useEffect(() => {
-    if (isEdit && currentUser) {
+    if (consultation) {
+      console.log(consultation)
       reset(defaultValues);
     }
-    if (!isEdit) {
+    if (!consultation) {
       reset(defaultValues);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEdit, currentUser]);
+  }, [consultation]);
 
   const onSubmit = async () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
-      enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
+      enqueueSnackbar('Update success!');
       navigate(PATH_DASHBOARD.user.list);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
-
-      if (file) {
-        setValue(
-          'avatarUrl',
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          })
-        );
-      }
-    },
-    [setValue]
-  );
-
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <Card sx={{ py: 10, px: 3 }}>
-            {isEdit && (
-              <Label
-                color={values.status !== 'active' ? 'error' : 'success'}
-                sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
-              >
-                {values.status}
-              </Label>
-            )}
+            <Label
+              color={values.status !== 'active' ? 'error' : 'success'}
+              sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
+            >
+              {values.status}
+            </Label>
 
             <Box sx={{ mb: 5 }}>
-              <RHFUploadAvatar
-                name="avatarUrl"
-                accept="image/*"
-                maxSize={3145728}
-                onDrop={handleDrop}
-                helperText={
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      mt: 2,
-                      mx: 'auto',
-                      display: 'block',
-                      textAlign: 'center',
-                      color: 'text.secondary',
-                    }}
-                  >
-                    Allowed *.jpeg, *.jpg, *.png, *.gif
-                    <br /> max size of {fData(3145728)}
-                  </Typography>
-                }
-              />
+              <Avatar
+                src={profilepic}
+                alt={`${lname} ${fname}`}
+                color={profilepic ? 'default' : createAvatar(`${lname} ${fname}`).color}
+                sx={{
+                  mx: 'auto',
+                  borderWidth: 2,
+                  borderStyle: 'solid',
+                  borderColor: 'common.white',
+                  width: { xs: 80, md: 128 },
+                  height: { xs: 80, md: 128 },
+                }}
+              >
+                {createAvatar(`${lname} ${fname}`).name}
+              </Avatar>
             </Box>
 
-            {isEdit && (
-              <FormControlLabel
-                labelPlacement="start"
-                control={
-                  <Controller
-                    name="status"
-                    control={control}
-                    render={({ field }) => (
-                      <Switch
-                        {...field}
-                        checked={field.value !== 'active'}
-                        onChange={(event) => field.onChange(event.target.checked ? 'banned' : 'active')}
-                      />
-                    )}
-                  />
-                }
+            <FormControlLabel
+              labelPlacement="start"
+              control={
+                <Controller
+                  name="status"
+                  control={control}
+                  render={({ field }) => (
+                    <Switch
+                      {...field}
+                      checked={field.value !== 'active'}
+                      onChange={(event) => field.onChange(event.target.checked ? 'banned' : 'active')}
+                    />
+                  )}
+                />
+              }
                 label={
                   <>
                     <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
@@ -183,7 +145,6 @@ export default function UserNewForm({ isEdit, currentUser }) {
                 }
                 sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
               />
-            )}
 
             <RHFSwitch
               name="isVerified"
@@ -213,30 +174,14 @@ export default function UserNewForm({ isEdit, currentUser }) {
                 gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
               }}
             >
-              <RHFTextField name="name" label="Full Name" />
-              <RHFTextField name="email" label="Email Address" />
-              <RHFTextField name="phoneNumber" label="Phone Number" />
-
-              <RHFSelect name="country" label="Country" placeholder="Country">
-                <option value="" />
-                {genders.map((option) => (
-                  <option key={option.code} value={option.label}>
-                    {option.label}
-                  </option>
-                ))}
-              </RHFSelect>
-
-              <RHFTextField name="state" label="State/Region" />
-              <RHFTextField name="city" label="City" />
-              <RHFTextField name="address" label="Address" />
-              <RHFTextField name="zipCode" label="Zip/Code" />
-              <RHFTextField name="company" label="Company" />
-              <RHFTextField name="role" label="Role" />
+              <RHFTextField name="date" label="Ngày hẹn" disabled/>
+              <RHFTextField name="hour" label="Giờ hẹn" disabled/>
+              <RHFTextField name="symptom" label="Triệu chứng" disabled/>
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!isEdit ? 'Create User' : 'Save Changes'}
+                {consultation.status === 'chờ khám' ? 'Hủy đặt hẹn' : null}
               </LoadingButton>
             </Stack>
           </Card>

@@ -20,7 +20,6 @@ import axios from '../../../utils/axios';
 // ----------------------------------------------------------------------
 
 export default function RegisterForm() {
-  const { account } = useAuth();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -50,7 +49,7 @@ export default function RegisterForm() {
     profilepic: '',
     firstName: '',
     lastName: '',
-    birthdate: '',
+    birthday: new Date('2015-01-01'),
     gender: '',
     phone: '',
     password: '',
@@ -60,7 +59,7 @@ export default function RegisterForm() {
     district: '',
     ward: '',
     street: '',
-    role: 'user'
+    role: 'Người dùng'
   };
 
   const methods = useForm({
@@ -99,8 +98,14 @@ export default function RegisterForm() {
         if (message.message === 'pending') {
           enqueueSnackbar('Sai mã xác minh, xin thử lại');
         }
+        if (message.message === 'Lỗi máy chủ') {
+          enqueueSnackbar('Bạn chưa gửi mã xác minh, xin thử lại');
+        }
+        if (message.message === 'Số điện thoại đã được đăng ký ở tài khoản khác') {
+          enqueueSnackbar('Số điện thoại đã được đăng ký ở tài khoản khác');
+        }
         if (message.message === "approved") {
-          handleSubmit(regis)();
+          await handleSubmit(regis)();
         }
       }
     };
@@ -111,7 +116,6 @@ export default function RegisterForm() {
   const regis = async (data) => {
     const phone = `+84${data.phone.slice(1)}`;
     await register(data.profilepic, data.birthday, data.gender, data.email, phone, data.password, data.firstName, data.lastName, data.city, data.district, data.ward, data.street, data.role);
-    await createuser(account._id);
     enqueueSnackbar('Tạo tài khoản thành công');
   }
 
@@ -129,16 +133,34 @@ export default function RegisterForm() {
 
   const sc = async (data) => {
     try {
+      setDisable(true);
+      countDownBtn()
       const phonenum = `+84${data.phone.slice(1)}` 
       await sendcode(phonenum)
       enqueueSnackbar('Mã đã được gửi vào số điện thoại của bạn!');
     } catch (error) {
       console.error(error);
-      reset();
       if (isMountedRef.current) {
         setError('afterSubmit', error);
       }
     }
+  }
+
+  const [ disable, setDisable ] = useState(false);
+
+  function countDownBtn() {
+    let timeLeft = 7;
+    const countDown = setInterval(() => {
+      let text = document.getElementById('sco').text;
+      if (timeLeft === 0) {
+        clearInterval(countDown);
+        text = "Gửi mã xác minh";
+        setDisable(false);
+      } else {
+        text = timeLeft;
+      }
+      timeLeft -= 1;
+    }, 1000)
   }
 
   return (
@@ -189,7 +211,7 @@ export default function RegisterForm() {
           spacing={2}
         >
           <RHFTextField name="code" label="Mã xác minh" />
-          <LoadingButton fullWidth size="medium" variant="text" onClick={handleSubmit(sc)}>
+          <LoadingButton disabled={disable} id='sco' fullWidth size="medium" variant="text" loading={isSubmitting} onClick={handleSubmit(sc)}>
             Gửi mã xác minh
           </LoadingButton>
         </Stack>

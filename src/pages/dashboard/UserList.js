@@ -1,264 +1,306 @@
-import { sentenceCase } from 'change-case';
-import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { paramCase } from 'change-case';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import unorm from 'unorm';
 // @mui
-import { useTheme } from '@mui/material/styles';
 import {
+  Box,
+  Tab,
+  Tabs,
   Card,
   Table,
-  Avatar,
+  Switch,
   Button,
-  Checkbox,
-  TableRow,
+  Tooltip,
+  Divider,
   TableBody,
-  TableCell,
   Container,
-  Typography,
+  IconButton,
   TableContainer,
   TablePagination,
+  FormControlLabel,
 } from '@mui/material';
+import LoadingScreen from '../../components/LoadingScreen';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
+import useTabs from '../../hooks/useTabs';
 import useSettings from '../../hooks/useSettings';
-// _mock_
-import { _userList } from '../../_mock';
+import useTable, { getComparator, emptyRows } from '../../hooks/useTable';
+// utils
+import axios from '../../utils/axios';
 // components
 import Page from '../../components/Page';
-import Label from '../../components/Label';
 import Iconify from '../../components/Iconify';
 import Scrollbar from '../../components/Scrollbar';
-import SearchNotFound from '../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
+import { TableEmptyRows, TableHeadCustom, TableNoData, TableSelectedActions } from '../../components/table';
 // sections
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@dashboard/user/list';
+import { UserTableToolbar, UserTableRow } from '../../sections/@dashboard/user/list';
 
 // ----------------------------------------------------------------------
 
+const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'đã hủy', 'đã hoàn thành'];
+ 
+const ROLE_OPTIONS = [
+  'Tất cả',
+  '08:00',
+  '09:00',
+  '10:00',
+  '11:00',
+  '13:00',
+  '14:00',
+  '15:00',
+  '16:00',
+  '17:00',
+];
+
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'company', label: 'Company', alignRight: false },
-  { id: 'role', label: 'Role', alignRight: false },
-  { id: 'isVerified', label: 'Verified', alignRight: false },
-  { id: 'status', label: 'Status', alignRight: false },
-  { id: '' },
+  { id: 'name', label: 'Bác sĩ', align: 'left' },
+  { id: 'date', label: 'Ngày', align: 'left' },
+  { id: 'hour', label: 'Giờ', align: 'left' },
+  { id: 'department', label: 'Chuyên khoa', align: 'center' },
+  { id: 'status', label: 'Trạng thái', align: 'center' },
+  { id: '' }
 ];
 
 // ----------------------------------------------------------------------
 
 export default function UserList() {
-  const theme = useTheme();
+  const {
+    dense,
+    page,
+    order,
+    orderBy,
+    rowsPerPage,
+    setPage,
+    //
+    selected,
+    setSelected,
+    onSelectRow,
+    onSelectAllRows,
+    //
+    onSort,
+    onChangeDense,
+    onChangePage,
+    onChangeRowsPerPage,
+  } = useTable();
+
   const { themeStretch } = useSettings();
 
-  const [userList, setUserList] = useState(_userList);
-  const [page, setPage] = useState(0);
-  const [order, setOrder] = useState('asc');
-  const [selected, setSelected] = useState([]);
-  const [orderBy, setOrderBy] = useState('name');
+  const navigate = useNavigate();
+
+  const [consult, setConsult] = useState([]);
+
+  useEffect(() => {
+    async function getConsult() {
+      const URL = '/api/user/consultation/viewlistconsult';
+      try {
+        const res = await axios.get(URL);
+        setConsult(res.data);
+        console.log(consult)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getConsult();
+  }, []);
+
   const [filterName, setFilterName] = useState('');
-  const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const handleRequestSort = (property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
+  const [filterRole, setFilterRole] = useState('Tất cả');
 
-  const handleSelectAllClick = (checked) => {
-    if (checked) {
-      const newSelecteds = userList.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
+  const { currentTab: filterStatus, onChangeTab: onChangeFilterStatus } = useTabs('Tất cả');
+
+  
+  function applySortFilter({ consult, comparator, filterName, filterStatus, filterRole }) {
+    const stabilizedThis = consult.map((el, index) => [el, index]);
+  
+    stabilizedThis.sort((a, b) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) return order;
+      return a[1] - b[1];
+    });
+  
+    consult = stabilizedThis.map((el) => el[0]);
+  
+    if (filterName) {
+        consult = consult.filter((item) => unorm.nfkd(item.doctor.account.lname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1 || item.doctor.account.fname.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
     }
-    setSelected([]);
-  };
-
-  const handleClick = (name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
+  
+    if (filterStatus !== 'Tất cả') {
+      consult = consult.filter((item) => item.status === filterStatus);
     }
-    setSelected(newSelected);
-  };
+  
+    if (filterRole !== 'Tất cả') {
+      consult = consult.filter((item) => item.hour === filterRole);
+    }
+  
+    return consult;
+  }
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const handleFilterByName = (filterName) => {
-    setFilterName(filterName);
-    setPage(0);
-  };
-
-  const handleDeleteUser = (userId) => {
-    const deleteUser = userList.filter((user) => user.id !== userId);
-    setSelected([]);
-    setUserList(deleteUser);
-  };
-
-  const handleDeleteMultiUser = (selected) => {
-    const deleteUsers = userList.filter((user) => !selected.includes(user.name));
-    setSelected([]);
-    setUserList(deleteUsers);
-  };
-
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
-
-  const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName);
-
-  const isNotFound = !filteredUsers.length && Boolean(filterName);
+  if (consult) {
+    const handleFilterName = (filterName) => {
+      setFilterName(filterName);
+      setPage(0);
+    };
+  
+    const handleFilterRole = (event) => {
+      setFilterRole(event.target.value);
+    };
+  
+    const handleDeleteRow = (id) => {
+      const deleteRow = consult.filter((row) => row._id !== id);
+      setSelected([]);
+      setConsult(deleteRow);
+    };
+  
+    const handleDeleteRows = (selected) => {
+      const deleteRows = consult.filter((row) => !selected.includes(row._id));
+      setSelected([]);
+      setConsult(deleteRows);
+    };
+  
+    const handleEditRow = (id) => {
+      navigate(`${PATH_DASHBOARD.user.root}/detail/${paramCase(id)}`);
+    };
+  
+    const dataFiltered = applySortFilter({
+      consult,
+      comparator: getComparator(order, orderBy),
+      filterName,
+      filterRole,
+      filterStatus,
+    });
+  
+    const denseHeight = dense ? 52 : 72;
+  
+    const isNotFound =
+      (!dataFiltered.length && !!filterName) ||
+      (!dataFiltered.length && !!filterRole) ||
+      (!dataFiltered.length && !!filterStatus);
+  
+    return (
+      <Page title="Lịch hẹn thăm khám">
+        <Container maxWidth={themeStretch ? false : 'lg'}>
+          <HeaderBreadcrumbs
+            heading="Lịch hẹn"
+            links={[
+              { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
+              { name: 'Lịch hẹn' },
+            ]}
+          />
+  
+          <Card>
+            <Tabs
+              allowScrollButtonsMobile
+              variant="scrollable"
+              scrollButtons="auto"
+              value={filterStatus}
+              onChange={onChangeFilterStatus}
+              sx={{ px: 2, bgcolor: 'background.neutral' }}
+            >
+              {STATUS_OPTIONS.map((tab) => (
+                <Tab disableRipple key={tab} label={tab} value={tab} />
+              ))}
+            </Tabs>
+  
+            <Divider />
+  
+            <UserTableToolbar
+              filterName={filterName}
+              filterRole={filterRole}
+              onFilterName={handleFilterName}
+              onFilterRole={handleFilterRole}
+              optionsRole={ROLE_OPTIONS}
+            />
+  
+            <Scrollbar>
+              <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
+                {selected.length > 0 && (
+                  <TableSelectedActions
+                    dense={dense}
+                    numSelected={selected.length}
+                    rowCount={consult.length}
+                    onSelectAllRows={(checked) =>
+                      onSelectAllRows(
+                        checked,
+                        consult.map((row) => row.id)
+                      )
+                    }
+                    actions={
+                      <Tooltip title="Delete">
+                        <IconButton color="primary" onClick={() => handleDeleteRows(selected)}>
+                          <Iconify icon={'eva:trash-2-outline'} />
+                        </IconButton>
+                      </Tooltip>
+                    }
+                  />
+                )}
+  
+                <Table size={dense ? 'small' : 'medium'}>
+                  <TableHeadCustom
+                    order={order}
+                    orderBy={orderBy}
+                    headLabel={TABLE_HEAD}
+                    rowCount={consult.length}
+                    numSelected={selected.length}
+                    onSort={onSort}
+                    onSelectAllRows={(checked) =>
+                      onSelectAllRows(
+                        checked,
+                        consult.map((row) => row._id)
+                      )
+                    }
+                  />
+  
+                  <TableBody>
+                    {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                      <UserTableRow
+                        key={row._id}
+                        row={row}
+                        selected={selected.includes(row._id)}
+                        onSelectRow={() => onSelectRow(row._id)}
+                        onDeleteRow={() => handleDeleteRow(row._id)}
+                        onEditRow={() => handleEditRow(row._id)}
+                      />
+                    ))}
+  
+                    <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, consult.length)} />
+  
+                    <TableNoData isNotFound={isNotFound} />
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Scrollbar>
+  
+            <Box sx={{ position: 'relative' }}>
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={dataFiltered.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={onChangePage}
+                onRowsPerPageChange={onChangeRowsPerPage}
+              />
+  
+              <FormControlLabel
+                control={<Switch checked={dense} onChange={onChangeDense} />}
+                label="Thu gọn"
+                sx={{ px: 3, py: 1.5, top: 0, position: { md: 'absolute' } }}
+              />
+            </Box>
+          </Card>
+        </Container>
+      </Page> 
+    );
+  }
+  
+  // ----------------------------------------------------------------------
 
   return (
-    <Page title="Danh sách chờ duyệt">
-      <Container maxWidth={themeStretch ? false : 'lg'}>
-        <HeaderBreadcrumbs
-          heading="Danh sách chờ duyệt"
-          links={[
-            { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
-            { name: 'Danh sách chờ duyệt' },
-          ]}
-          // action={
-          //   <Button
-          //     variant="contained"
-          //     component={RouterLink}
-          //     to={PATH_DASHBOARD.user.newUser}
-          //     startIcon={<Iconify icon={'eva:plus-fill'} />}
-          //   >
-          //     New User
-          //   </Button>
-          // }
-        />
-
-        <Card>
-          <UserListToolbar
-            numSelected={selected.length}
-            filterName={filterName}
-            onFilterName={handleFilterByName}
-            onDeleteUsers={() => handleDeleteMultiUser(selected)}
-          />
-
-          <Scrollbar>
-            <TableContainer sx={{ minWidth: 800 }}>
-              <Table>
-                <UserListHead
-                  order={order}
-                  orderBy={orderBy}
-                  headLabel={TABLE_HEAD}
-                  rowCount={userList.length}
-                  numSelected={selected.length}
-                  onRequestSort={handleRequestSort}
-                  onSelectAllClick={handleSelectAllClick}
-                />
-                <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
-                    const { id, name, role, status, company, avatarUrl, isVerified } = row;
-                    const isItemSelected = selected.indexOf(name) !== -1;
-
-                    return (
-                      <TableRow
-                        hover
-                        key={id}
-                        tabIndex={-1}
-                        role="checkbox"
-                        selected={isItemSelected}
-                        aria-checked={isItemSelected}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox checked={isItemSelected} onClick={() => handleClick(name)} />
-                        </TableCell>
-                        <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-                          <Avatar alt={name} src={avatarUrl} sx={{ mr: 2 }} />
-                          <Typography variant="subtitle2" noWrap>
-                            {name}
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="left">{company}</TableCell>
-                        <TableCell align="left">{role}</TableCell>
-                        <TableCell align="left">{isVerified ? 'Yes' : 'No'}</TableCell>
-                        <TableCell align="left">
-                          <Label
-                            variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                            color={(status === 'banned' && 'error') || 'success'}
-                          >
-                            {sentenceCase(status)}
-                          </Label>
-                        </TableCell>
-
-                        <TableCell align="right">
-                          <UserMoreMenu onDelete={() => handleDeleteUser(id)} userName={name} />
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
-                </TableBody>
-                {isNotFound && (
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                        <SearchNotFound searchQuery={filterName} />
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                )}
-              </Table>
-            </TableContainer>
-          </Scrollbar>
-
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={userList.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={(e, page) => setPage(page)}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
-        </Card>
-      </Container>
-    </Page>
+    <LoadingScreen/>
   );
 }
 
-// ----------------------------------------------------------------------
-
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function applySortFilter(array, comparator, query) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  if (query) {
-    return array.filter((_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
-  }
-  return stabilizedThis.map((el) => el[0]);
-}

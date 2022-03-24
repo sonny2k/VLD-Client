@@ -46,12 +46,11 @@ const handlers = {
     account: null,
   }),
   REGISTER: (state, action) => {
-    const { account } = action.payload;
 
     return {
       ...state,
       isAuthenticated: true,
-      account,
+      isInitialized: true,
     };
   },
   CHANGEPASS: (state, action) => {
@@ -200,19 +199,16 @@ function AuthProvider({ children }) {
       role,
     });
     const { accessToken, account } = response.data;
-
-    window.localStorage.setItem('accessToken', accessToken);
+    const id = account._id;
+    setSession(accessToken);
+    // await axios.post('/api/user/auth/createuser', {
+    //   id,
+    // });
     dispatch({
       type: 'REGISTER',
       payload: {
         account,
       },
-    });
-  };
-
-  const createuser = async (account) => {
-    await axios.post('/api/user/auth/createuser', {
-      account,
     });
   };
 
@@ -244,7 +240,6 @@ function AuthProvider({ children }) {
         login,
         logout,
         register,
-        createuser,
         updateinfo,
         changepass,
         resetpassword,

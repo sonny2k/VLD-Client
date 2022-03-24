@@ -2,6 +2,7 @@ import * as Yup from 'yup';
 import * as React from 'react';
 import { useSnackbar } from 'notistack';
 import { useCallback } from 'react';
+import { format } from 'date-fns';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -13,16 +14,19 @@ import useAuth from '../../../../hooks/useAuth';
 // utils
 import { fData } from '../../../../utils/formatNumber';
 // _mock
-import { genders } from '../../../../_mock';
+import { hours } from '../../../../_mock/_hour';
+import { datearray } from '../../../../_mock/_date';
 // components
-import { FormProvider, RHFSwitch, RHFSelect, RHFTextField, RHFUploadAvatar } from '../../../../components/hook-form';
+import { FormProvider, RHFSelect, RHFTextField } from '../../../../components/hook-form';
 
 // ----------------------------------------------------------------------
 
-export default function ModalCreateConsultation() {
+export default function ModalCreateConsultation({ doctor }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const { account } = useAuth();
+
+  const { available } = doctor
 
   const UpdateUserSchema = Yup.object().shape({
     displayName: Yup.string().required('Họ tên là bắt buộc'),
@@ -66,7 +70,8 @@ export default function ModalCreateConsultation() {
   const onSubmit = async () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
-      enqueueSnackbar('Update success!');
+      enqueueSnackbar('Đặt lịch khám thành công!');
+      window.location.replace('http://localhost:2542/dashboard/user/list')
     } catch (error) {
       console.error(error);
     }
@@ -94,56 +99,32 @@ export default function ModalCreateConsultation() {
         <Grid item xs={12} md={12}>
           <Card sx={{ p: 3 }}>
             <Box
-              sx={{
-                display: 'grid',
-                rowGap: 3,
-                columnGap: 2,
-                gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
-              }}
-            >
-              <DesktopDatePicker
-                name="birthday"
-                label="Thời gian tư vấn"
-                inputFormat="dd/MM/yyyy"
-                value={birth}
-                onChange={handleChange}
-                renderInput={(params) => <TextField {...params} />}
-              />
-              <DesktopTimePicker
-                name="time"
-                label="Khung giờ"
-                inputFormat='hh:mm'
-                onChange={handleChange}
-                renderInput={(params) => <TextField {...params} />}
-              />
-              {/* <RHFTextField name="phoneNumber" label="Số điện thoại" />
-              <RHFTextField name="lnameandfname" label="Họ và tên" /> */}
+                sx={{
+                  display: 'grid',
+                  rowGap: 3,
+                  columnGap: 2,
+                  gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
+                }}
+              >
+                <RHFSelect name="date" label="Ngày" placeholder="Ngày">
+                  {datearray.map((option, index) => (
+                    <option key={index}>
+                      {option.value}
+                    </option>
+                  ))}
+                </RHFSelect>
 
-              {/* <RHFSelect name="country" label="Country" placeholder="Quốc gia">
-                <option value="" />
-                {countries.map((option) => (
-                  <option key={option.code} value={option.label}>
-                    {option.label}
-                  </option>
-                ))}
-              </RHFSelect> */}
-                 {/* <RHFSelect name="country" label="Country" placeholder="Nhóm máu">
-                <option value="" />
-                {genders.map((option) => (
-                  <option key={option.code} value={option.label}>
-                    {option.label}
-                  </option>
-                ))}
-                </RHFSelect> */}
-
-              {/* <RHFTextField name="state" label="Quận/Huyện" />
-
-              <RHFTextField name="city" label="Thành phố" />
-              <RHFTextField name="zipCode" label="Phường/Xã" /> */}
-            </Box>
+                <RHFSelect name="hour" label="Giờ" placeholder="Giờ">
+                  {hours.map((option, index) => (
+                    <option key={index}>
+                      {option.label}
+                    </option>
+                  ))}
+                </RHFSelect>
+              </Box>
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-              <RHFTextField name="about" multiline rows={4} label="Ghi chú" />
+              <RHFTextField name="about" multiline rows={4} label="Triệu chứng" />
 
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                 Hẹn Tư Vấn

@@ -1,10 +1,11 @@
-import { capitalCase } from 'change-case';
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Tab, Box, Card, Tabs, Container } from '@mui/material';
 import LoadingScreen from '../../components/LoadingScreen';
+import { getProducts } from '../../redux/slices/product';
+import { useDispatch, useSelector } from '../../redux/store';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 import useSettings from '../../hooks/useSettings';
@@ -19,6 +20,7 @@ import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 // sections
 import {
   Profile,
+  Profile2,
   ProfileCover,
   ProfileFriends,
   ProfileGallery,
@@ -50,11 +52,17 @@ export default function UserProfile() {
 
   const { id } = useParams();
 
+  const { products } = useSelector((state) => state.product);
+
+  const dispatch = useDispatch();
+
   const [doctor, setDoctor] = useState(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    dispatch(getProducts());
+
     async function fetchDoctor() {
       const URL = `/api/home/doctor/${id}`;
       try {
@@ -65,9 +73,9 @@ export default function UserProfile() {
       }
     }
     fetchDoctor()
-  }, [id])
+  }, [id, dispatch])
 
-  const [currentTab, setCurrentTab] = useState('profile');
+  const [currentTab, setCurrentTab] = useState('Cá nhân');
   const [findFriends, setFindFriends] = useState('');
 
   const handleChangeTab = (newValue) => {
@@ -83,71 +91,74 @@ export default function UserProfile() {
   if (doctor) {
     PROFILE_TABS = [
       {
-        value: 'profile',
+        value: 'Cá nhân',
         icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
         component: <Profile doctor={doctor} posts={_userFeeds} />,
       },
       {
-        value: 'followers',
+        value: 'Đánh giá',
         icon: <Iconify icon={'eva:heart-fill'} width={20} height={20} />,
-        component: <ProfileFollowers followers={_userFollowers} />,
+        component: <Profile2 posts={_userFeeds} />,
       },
-      {
-        value: 'friends',
-        icon: <Iconify icon={'eva:people-fill'} width={20} height={20} />,
-        component: <ProfileFriends friends={_userFriends} findFriends={findFriends} onFindFriends={handleFindFriends} />,
-      },
-      {
-        value: 'gallery',
-        icon: <Iconify icon={'ic:round-perm-media'} width={20} height={20} />,
-        component: <ProfileGallery gallery={_userGallery} />,
-      },
+      // {
+      //   value: 'friends',
+      //   icon: <Iconify icon={'eva:people-fill'} width={20} height={20} />,
+      //   component: <ProfileFriends friends={_userFriends} findFriends={findFriends} onFindFriends={handleFindFriends} />,
+      // },
+      // {
+      //   value: 'gallery',
+      //   icon: <Iconify icon={'ic:round-perm-media'} width={20} height={20} />,
+      //   component: <ProfileGallery gallery={_userGallery} />,
+      // },
     ];
   }
 
+  if (doctor) {
+    return (
+      <Page title="Chi tiết bác sĩ">
+        <Container maxWidth={themeStretch ? false : 'lg'}>
+          <HeaderBreadcrumbs
+            heading="Chi tiết bác sĩ"
+            links={[
+              { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
+              { name: 'Danh sách bác sĩ', href: PATH_DASHBOARD.user.cards },
+              { name: `${doctor.level} ${doctor.account.lname} ${doctor.account.fname}` || '' },
+            ]}
+          />
+          <Card
+            sx={{
+              mb: 3,
+              height: 280,
+              position: 'relative',
+            }}
+          >
+            <ProfileCover doctor={ doctor } />
+  
+            <TabsWrapperStyle>
+              <Tabs
+                value={currentTab}
+                scrollButtons="auto"
+                variant="scrollable"
+                allowScrollButtonsMobile
+                onChange={(e, value) => handleChangeTab(value)}
+              >
+                {PROFILE_TABS.map((tab) => (
+                  <Tab disableRipple key={tab.value} value={tab.value} icon={tab.icon} label={tab.value} />
+                ))}
+              </Tabs>
+            </TabsWrapperStyle>
+          </Card>
+  
+          {PROFILE_TABS.map((tab) => {
+            const isMatched = tab.value === currentTab;
+            return isMatched && <Box key={tab.value}>{tab.component}</Box>;
+          })}
+        </Container>
+      </Page>  
+    );
+  }
+
   return (
-    doctor ?
-    <Page title="Chi tiết bác sĩ">
-      <Container maxWidth={themeStretch ? false : 'lg'}>
-        <HeaderBreadcrumbs
-          heading="Chi tiết bác sĩ"
-          links={[
-            { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
-            { name: 'Danh sách bác sĩ', href: PATH_DASHBOARD.user.cards },
-            { name: `${doctor.level} ${doctor.account.lname} ${doctor.account.fname}` || '' },
-          ]}
-        />
-        <Card
-          sx={{
-            mb: 3,
-            height: 280,
-            position: 'relative',
-          }}
-        >
-          <ProfileCover doctor={ doctor } />
-
-          <TabsWrapperStyle>
-            <Tabs
-              value={currentTab}
-              scrollButtons="auto"
-              variant="scrollable"
-              allowScrollButtonsMobile
-              onChange={(e, value) => handleChangeTab(value)}
-            >
-              {PROFILE_TABS.map((tab) => (
-                <Tab disableRipple key={tab.value} value={tab.value} icon={tab.icon} label={capitalCase(tab.value)} />
-              ))}
-            </Tabs>
-          </TabsWrapperStyle>
-        </Card>
-
-        {PROFILE_TABS.map((tab) => {
-          const isMatched = tab.value === currentTab;
-          return isMatched && <Box key={tab.value}>{tab.component}</Box>;
-        })}
-      </Container>
-    </Page>  
-    :
-    <LoadingScreen />
+    <LoadingScreen/>
   );
 }

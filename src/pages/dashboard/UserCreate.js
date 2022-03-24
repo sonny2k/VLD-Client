@@ -1,7 +1,10 @@
 import { paramCase, capitalCase } from 'change-case';
-import { useParams, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { format } from 'date-fns';
 // @mui
 import { Container } from '@mui/material';
+import axios from '../../utils/axios';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
@@ -13,31 +16,47 @@ import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 // sections
 import UserNewForm from '../../sections/@dashboard/user/UserNewForm';
+import LoadingScreen from '../../components/LoadingScreen';
 
 // ----------------------------------------------------------------------
 
 export default function UserCreate() {
   const { themeStretch } = useSettings();
-  const { pathname } = useLocation();
-  const { name = '' } = useParams();
-  const isEdit = pathname.includes('edit');
+  const { id } = useParams();
 
-  const currentUser = _userList.find((user) => paramCase(user.name) === name);
+  const navigate = useNavigate();
+  const [ consultation, setConsultation ] = useState();
+
+  useEffect(() => {
+    async function getConsultation() {
+      const URL = `/api/user/consultation/viewconsult/${id}`;
+      try {
+        const res = await axios.get(URL);
+        setConsultation(res.data);
+        console.log(consultation)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    getConsultation();
+  }, [id])
 
   return (
-    <Page title="User: Create a new user">
+    consultation ?
+    <Page title="Chi tiết lịch hẹn">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading={!isEdit ? 'Create a new user' : 'Edit user'}
+          heading={'Xem chi tiết lịch hẹn'}
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'User', href: PATH_DASHBOARD.user.list },
-            { name: !isEdit ? 'New user' : capitalCase(name) },
+            { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
+            { name: 'Danh sách lịch hẹn', href: PATH_DASHBOARD.user.list },
           ]}
         />
 
-        <UserNewForm isEdit={isEdit} currentUser={currentUser} />
+        <UserNewForm consultation={consultation}/>
       </Container>
     </Page>
+    :
+    <LoadingScreen />
   );
 }

@@ -3,6 +3,7 @@ import * as React from 'react';
 import { useSnackbar } from 'notistack';
 import { useCallback, useState } from 'react';
 import PropTypes from 'prop-types';
+import { format } from 'date-fns';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -12,12 +13,13 @@ import { LoadingButton, DesktopDatePicker, DesktopTimePicker } from '@mui/lab';
 // hooks
 import useAuth from '../../../../hooks/useAuth';
 // utils
-import { fData } from '../../../../utils/formatNumber';
 import createAvatar from '../../../../utils/createAvatar';
+import axios from '../../../../utils/axios';
 // _mock
-import { genders } from '../../../../_mock';
+import { hours } from '../../../../_mock/_hour';
+import { datearray } from '../../../../_mock/_date';
 // components
-import { FormProvider, RHFSwitch, RHFSelect, RHFTextField, RHFUploadAvatar } from '../../../../components/hook-form';
+import { FormProvider, RHFSelect, RHFTextField } from '../../../../components/hook-form';
 import Avatar from '../../../../components/Avatar';
 
 // ----------------------------------------------------------------------
@@ -27,10 +29,7 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
 
   const { lname, fname, profilepic } = doctor.account;
 
-  const { level, department, available } = doctor
-
-  console.log(available);
-
+  const { level, department, available, workcertificate } = doctor
 
   const { account } = useAuth();
 
@@ -49,6 +48,8 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
     note: account?.note || '',
     isPublic: account?.isPublic || '',
     birthday: new Date(account?.birthday) || '',
+    date: '',
+    hour: '',
   };
 
   const methods = useForm({
@@ -77,31 +78,29 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = async () => {
+  const onSubmit = async (data) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
-      enqueueSnackbar('Update success!');
+      enqueueSnackbar('Đặt lịch khám thành công!');
+      // try {
+      //   await axios.post('/api/user/consultation/createconsult', {
+      //     status: 1,
+      //     symptom: data.symptom,
+      //     date,
+      //     hour: data.,
+      //     doctor: doctor._id,
+      //     user: account._id
+      //   });
+      // } catch (err) {
+      //   console.error(err);
+      //   enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
+      // }
+      // window.location.replace('http://localhost:2542/dashboard/user/list')
     } catch (error) {
       console.error(error);
     }
   };
-
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
-
-      if (file) {
-        setValue(
-          'photoURL',
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          })
-        );
-      }
-    },
-    [setValue]
-  );
-
+  
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
@@ -136,7 +135,7 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
             >
                 {level} {lname} {fname}
                 <br /> {department}
-                <br /> Sẵn sàng tư vấn: 20/11/2021
+                <br /> {workcertificate}
 
             </Typography>
         
@@ -154,49 +153,25 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
                 gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
               }}
             >
-              <DesktopDatePicker
-                name="birthday"
-                label="Thời gian tư vấn"
-                inputFormat="dd/MM/yyyy"
-                value={birth}
-                onChange={handleChange}
-                renderInput={(params) => <TextField {...params} />}
-              />
-              <DesktopTimePicker
-                name="time"
-                label="Khung giờ"
-                inputFormat='hh:mm'
-                onChange={handleChange}
-                renderInput={(params) => <TextField {...params} />}
-              />
-              {/* <RHFTextField name="phoneNumber" label="Số điện thoại" />
-              <RHFTextField name="lnameandfname" label="Họ và tên" /> */}
+              <RHFSelect name="date" label="Ngày" placeholder="Ngày">
+                {datearray.map((option, index) => (
+                  <option key={index}>
+                    {option.value}
+                  </option>
+                ))}
+              </RHFSelect>
 
-              {/* <RHFSelect name="country" label="Country" placeholder="Quốc gia">
-                <option value="" />
-                {countries.map((option) => (
-                  <option key={option.code} value={option.label}>
+              <RHFSelect name="hour" label="Giờ" placeholder="Giờ">
+                {hours.map((option, index) => (
+                  <option key={index}>
                     {option.label}
                   </option>
                 ))}
-              </RHFSelect> */}
-                 {/* <RHFSelect name="country" label="Country" placeholder="Nhóm máu">
-                <option value="" />
-                {genders.map((option) => (
-                  <option key={option.code} value={option.label}>
-                    {option.label}
-                  </option>
-                ))}
-                </RHFSelect> */}
-
-              {/* <RHFTextField name="state" label="Quận/Huyện" />
-
-              <RHFTextField name="city" label="Thành phố" />
-              <RHFTextField name="zipCode" label="Phường/Xã" /> */}
+              </RHFSelect>
             </Box>
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-              <RHFTextField name="about" multiline rows={4} label="Ghi chú" />
+              <RHFTextField name="symptom" multiline rows={4} label="Triệu chứng" />
 
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                 Hẹn Tư Vấn
