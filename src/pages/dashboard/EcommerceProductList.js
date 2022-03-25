@@ -1,5 +1,6 @@
 import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import {
@@ -8,6 +9,7 @@ import {
   Table,
   TableRow,
   Checkbox,
+  Button,
   TableBody,
   TableCell,
   Container,
@@ -29,6 +31,7 @@ import useSettings from '../../hooks/useSettings';
 import Page from '../../components/Page';
 import Label from '../../components/Label';
 import Image from '../../components/Image';
+import Iconify from '../../components/Iconify';
 import Scrollbar from '../../components/Scrollbar';
 import SearchNotFound from '../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
@@ -137,15 +140,25 @@ export default function EcommerceProductList() {
     <Page title="Ecommerce: Product List">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="Product List"
+          heading="Danh sách thuốc"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
               name: 'E-Commerce',
               href: PATH_DASHBOARD.eCommerce.root,
             },
-            { name: 'Product List' },
+            { name: 'Danh sách thuốc' },
           ]}
+          action={
+            <Button
+              variant="contained"
+              component={RouterLink}
+              to={PATH_DASHBOARD.eCommerce.newProduct}
+              startIcon={<Iconify icon={'eva:plus-fill'} />}
+            >
+              Thêm sản phẩm
+            </Button>
+          }
         />
 
         <Card>

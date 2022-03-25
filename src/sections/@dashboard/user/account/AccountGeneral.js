@@ -40,7 +40,7 @@ export default function AccountGeneral() {
     p: 4,
   };
   
-  const gender = gender;
+  const gender = account.gender;
   let genderview = "";
   if (gender === 1) {
     genderview = "Nam"

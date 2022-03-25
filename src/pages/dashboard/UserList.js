@@ -1,63 +1,82 @@
-import { sentenceCase } from 'change-case';
 import { useState, useEffect } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { paramCase } from 'change-case';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import unorm from 'unorm';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import {
+  Box,
+  Tab,
+  Tabs,
   Card,
   Table,
-  Avatar,
+  Switch,
   Button,
-  Checkbox,
-  TableRow,
+  Tooltip,
+  Divider,
   TableBody,
-  TableCell,
   Container,
-  Typography,
+  IconButton,
   TableContainer,
   TablePagination,
+  FormControlLabel,
 } from '@mui/material';
+import LoadingScreen from '../../components/LoadingScreen';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
+import useTabs from '../../hooks/useTabs';
 import useSettings from '../../hooks/useSettings';
-// _mock_
-import { _userList } from '../../_mock';
+import useTable, { getComparator, emptyRows } from '../../hooks/useTable';
 // utils
 import axios from '../../utils/axios';
 // components
 import Page from '../../components/Page';
-import Label from '../../components/Label';
 import Iconify from '../../components/Iconify';
 import Scrollbar from '../../components/Scrollbar';
-import SearchNotFound from '../../components/SearchNotFound';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
+import { TableEmptyRows, TableHeadCustom, TableNoData, TableSelectedActions } from '../../components/table';
 // sections
-import { UserListHead, UserListToolbar, UserMoreMenu } from '../../sections/@dashboard/user/list';
+import { UserTableToolbar, UserTableRow } from '../../sections/@dashboard/user/list';
 // ----------------------------------------------------------------------
+const ROLE_OPTIONS = ['Tất cả', 'chuyên khoa tim mạch', 'chuyên khoa nhi'];
+
+const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'đã hủy', 'đã hoàn thành'];
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name', alignRight: false },
-  { id: 'address', label: 'Địa chỉ', alignRight: false },
-  // { id: 'role', label: 'Vai trò', alignRight: false },
-  { id: 'department', label: 'Chuyên khoa', alignRight: false },
-  { id: 'gender', label: 'Giới tính', alignRight: false },
+  { id: 'name', label: 'Bác sĩ', align: 'left' },
+  { id: 'street', label: 'Địa chỉ', align: 'center' },
+  { id: 'department', label: 'Chuyên khoa', align: 'center' },
+  { id: 'gender', label: 'Giới tính', align: 'center' },
+  { id: '' },
   { id: '' },
 ];
 
 // ----------------------------------------------------------------------
 
 export default function UserList() {
-  const theme = useTheme();
+  const {
+    dense,
+    page,
+    order,
+    orderBy,
+    rowsPerPage,
+    setPage,
+    //
+    selected,
+    setSelected,
+    onSelectRow,
+    onSelectAllRows,
+    //
+    onSort,
+    onChangeDense,
+    onChangePage,
+    onChangeRowsPerPage,
+  } = useTable();
+
   const { themeStretch } = useSettings();
 
-  const [userList, setUserList] = useState(_userList);
-  const [page, setPage] = useState(0);
-  const [order, setOrder] = useState('asc');
-  const [selected, setSelected] = useState([]);
-  const [orderBy, setOrderBy] = useState('name');
-  const [filterName, setFilterName] = useState('');
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const navigate = useNavigate();
 
   const [doctors, setDoctors] = useState([]);
   useEffect(() => {
@@ -65,7 +84,6 @@ export default function UserList() {
       const URL = '/api/home/doctor';
       try {
         const res = await axios.get(URL);
-        console.log(res.data);
         setDoctors(res.data);
       } catch (error) {
         console.log(error);
@@ -74,73 +92,80 @@ export default function UserList() {
     fetchDoctors();
   }, []);
 
-  const handleRequestSort = (property) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-  };
+  const [filterName, setFilterName] = useState('');
 
-  const handleSelectAllClick = (checked) => {
-    if (checked) {
-      const newSelecteds = userList.map((n) => n.name);
-      setSelected(newSelecteds);
-      return;
+  const [filterRole, setFilterRole] = useState('Tất cả');
+
+  // const { currentTab: filterStatus, onChangeTab: onChangeFilterStatus } = useTabs('Tất cả');
+
+  function applySortFilter({ doctors, comparator, filterName, filterStatus, filterRole }) {
+    const stabilizedThis = doctors.map((el, index) => [el, index]);
+
+    stabilizedThis.sort((a, b) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) return order;
+      return a[1] - b[1];
+    });
+
+    doctors = stabilizedThis.map((el) => el[0]);
+
+    if (filterName) {
+      doctors = doctors.filter(
+        (item) =>
+          unorm.nfd(item.account.lname).toLowerCase().indexOf(unorm.nfd(filterName).toLowerCase()) !== -1 ||
+          unorm.nfd(item.account.fname).toLowerCase().indexOf(unorm.nfd(filterName).toLowerCase()) !== -1
+      );
     }
-    setSelected([]);
-  };
 
-  const handleClick = (name) => {
-    const selectedIndex = selected.indexOf(name);
-    let newSelected = [];
-    if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, name);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(selected.slice(0, selectedIndex), selected.slice(selectedIndex + 1));
+    if (filterRole !== 'Tất cả') {
+      doctors = doctors.filter((item) => unorm.nfd(item.department).toLowerCase().indexOf(unorm.nfd(filterRole).toLowerCase()) !== -1);
     }
-    setSelected(newSelected);
-  };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+    return doctors;
+  }
 
-  const handleFilterByName = (filterName) => {
+  const handleFilterName = (filterName) => {
     setFilterName(filterName);
     setPage(0);
   };
 
-  const handleDeleteUser = (userId) => {
-    const deleteUser = userList.filter((user) => user.id !== userId);
-    setSelected([]);
-    setUserList(deleteUser);
+  const handleFilterRole = (event) => {
+    setFilterRole(event.target.value);
   };
 
-  const handleDeleteMultiUser = (selected) => {
-    const deleteUsers = userList.filter((user) => !selected.includes(user.name));
+  const handleDeleteRow = (id) => {
+    const deleteRow = doctors.filter((row) => row._id !== id);
     setSelected([]);
-    setUserList(deleteUsers);
+    setDoctors(deleteRow);
   };
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - userList.length) : 0;
+  const handleDeleteRows = (selected) => {
+    const deleteRows = doctors.filter((row) => !selected.includes(row._id));
+    setSelected([]);
+    setDoctors(deleteRows);
+  };
 
-  const filteredUsers = applySortFilter(userList, getComparator(order, orderBy), filterName);
+  const handleEditRow = (id) => {
+    navigate(`${PATH_DASHBOARD.user.root}/detail/${paramCase(id)}`);
+  };
 
-  const isNotFound = !filteredUsers.length && Boolean(filterName);
+  const dataFiltered = applySortFilter({
+    doctors,
+    comparator: getComparator(order, orderBy),
+    filterName,
+    filterRole,
+  });
 
-  return (
+  const denseHeight = dense ? 52 : 72;
+
+  const isNotFound = !dataFiltered.length && Boolean(filterName);
+
+  return doctors !== null ? (
     <Page title="Danh sách bác sĩ">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Danh sách bác sĩ"
-          links={[
-            { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
-            { name: 'Danh sách chờ duyệt' },
-          ]}
+          links={[{ name: 'Bảng điều khiển', href: PATH_DASHBOARD.root }, { name: 'Danh sách chờ duyệt' }]}
           action={
             <Button
               variant="contained"
@@ -154,129 +179,97 @@ export default function UserList() {
         />
 
         <Card>
-          <UserListToolbar
-            numSelected={selected.length}
+          <Divider />
+
+          <UserTableToolbar
             filterName={filterName}
-            onFilterName={handleFilterByName}
-            onDeleteUsers={() => handleDeleteMultiUser(selected)}
+            filterRole={filterRole}
+            onFilterName={handleFilterName}
+            onFilterRole={handleFilterRole}
+            optionsRole={ROLE_OPTIONS}
           />
 
           <Scrollbar>
-            <TableContainer sx={{ minWidth: 800 }}>
-              <Table>
-                <UserListHead
+            <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
+              {selected.length > 0 && (
+                <TableSelectedActions
+                  dense={dense}
+                  numSelected={selected.length}
+                  rowCount={doctors.length}
+                  onSelectAllRows={(checked) =>
+                    onSelectAllRows(
+                      checked,
+                      doctors.map((row) => row._id)
+                    )
+                  }
+                  actions={
+                    <Tooltip title="Delete">
+                      <IconButton color="primary" onClick={() => handleDeleteRows(selected)}>
+                        <Iconify icon={'eva:trash-2-outline'} />
+                      </IconButton>
+                    </Tooltip>
+                  }
+                />
+              )}
+
+              <Table size={dense ? 'small' : 'medium'}>
+                <TableHeadCustom
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={userList.length}
+                  rowCount={doctors.length}
                   numSelected={selected.length}
-                  onRequestSort={handleRequestSort}
-                  onSelectAllClick={handleSelectAllClick}
+                  onSort={onSort}
+                  onSelectAllRows={(checked) =>
+                    onSelectAllRows(
+                      checked,
+                      doctors.map((row) => row._id)
+                    )
+                  }
                 />
+
                 <TableBody>
-                  {filteredUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((doctor) => {
-                    const { id, name, role, status, company, avatarUrl, gender, department } = doctor;
-                    const isItemSelected = selected.indexOf(name) !== -1;
+                  {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                    <UserTableRow
+                      key={row._id}
+                      row={row}
+                      selected={selected.includes(row._id)}
+                      onSelectRow={() => onSelectRow(row._id)}
+                      onDeleteRow={() => handleDeleteRow(row._id)}
+                      onEditRow={() => handleEditRow(row._id)}
+                    />
+                  ))}
 
-                    return (
-                      <TableRow
-                        hover
-                        key={id}
-                        tabIndex={-1}
-                        role="checkbox"
-                        selected={isItemSelected}
-                        aria-checked={isItemSelected}
-                      >
-                        <TableCell padding="checkbox">
-                          <Checkbox checked={isItemSelected} onClick={() => handleClick(name)} />
-                        </TableCell>
-                        <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-                          <Avatar alt={name} src={avatarUrl} sx={{ mr: 2 }} />
-                          <Typography variant="subtitle2" noWrap>
-                            {name}
-                          </Typography>
-                        </TableCell>
-                        <TableCell align="left">{company}</TableCell>
-                        
-                        <TableCell align="left">{role}</TableCell>
-                        <TableCell align="left">{gender}</TableCell>
+                  <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, doctors.length)} />
 
-                        {/* <TableCell align="left">
-                          <Label
-                            variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-                            color={(status === 'banned' && 'error') || 'success'}
-                          >
-                            {sentenceCase(status)}
-                          </Label>
-                        </TableCell> */}
-
-                        <TableCell align="right">
-                          <UserMoreMenu onDelete={() => handleDeleteUser(id)} userName={name} />
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                  {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )}
+                  <TableNoData isNotFound={isNotFound} />
                 </TableBody>
-                {isNotFound && (
-                  <TableBody>
-                    <TableRow>
-                      <TableCell align="center" colSpan={6} sx={{ py: 3 }}>
-                        <SearchNotFound searchQuery={filterName} />
-                      </TableCell>
-                    </TableRow>
-                  </TableBody>
-                )}
               </Table>
             </TableContainer>
           </Scrollbar>
 
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component="div"
-            count={userList.length}
-            rowsPerPage={rowsPerPage}
-            page={page}
-            onPageChange={(e, page) => setPage(page)}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-          />
+          <Box sx={{ position: 'relative' }}>
+            <TablePagination
+              labelRowsPerPage="Số dòng mỗi trang:"
+              rowsPerPageOptions={[5, 10, 25]}
+              component="div"
+              count={dataFiltered.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={onChangePage}
+              onRowsPerPageChange={onChangeRowsPerPage}
+            />
+
+            <FormControlLabel
+              control={<Switch checked={dense} onChange={onChangeDense} />}
+              label="Thu gọn"
+              sx={{ px: 3, py: 1.5, top: 0, position: { md: 'absolute' } }}
+            />
+          </Box>
         </Card>
       </Container>
     </Page>
+  ) : (
+    <LoadingScreen />
   );
-}
-
-// ----------------------------------------------------------------------
-
-function descendingComparator(a, b, orderBy) {
-  if (b[orderBy] < a[orderBy]) {
-    return -1;
-  }
-  if (b[orderBy] > a[orderBy]) {
-    return 1;
-  }
-  return 0;
-}
-
-function getComparator(order, orderBy) {
-  return order === 'desc'
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
-}
-
-function applySortFilter(array, comparator, query) {
-  const stabilizedThis = array.map((el, index) => [el, index]);
-  stabilizedThis.sort((a, b) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
-  if (query) {
-    return array.filter((_user) => _user.name.toLowerCase().indexOf(query.toLowerCase()) !== -1);
-  }
-  return stabilizedThis.map((el) => el[0]);
 }

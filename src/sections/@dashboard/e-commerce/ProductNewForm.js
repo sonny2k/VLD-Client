@@ -25,7 +25,7 @@ import {
 
 // ----------------------------------------------------------------------
 
-const GENDER_OPTION = ['Men', 'Women', 'Kids'];
+// const GENDER_OPTION = ['Men', 'Women', 'Kids'];
 
 const CATEGORY_OPTION = [
   { group: 'Clothing', classify: ['Shirts', 'T-shirts', 'Jeans', 'Leather'] },
@@ -86,7 +86,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
       tags: currentProduct?.tags || [TAGS_OPTION[0]],
       inStock: true,
       taxes: true,
-      gender: currentProduct?.gender || GENDER_OPTION[2],
+      // gender: currentProduct?.gender || GENDER_OPTION[2],
       category: currentProduct?.category || CATEGORY_OPTION[0].classify[1],
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -192,7 +192,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                 <RHFTextField name="code" label="Product Code" />
                 <RHFTextField name="sku" label="Product SKU" />
 
-                <div>
+                {/* <div>
                   <LabelStyle>Gender</LabelStyle>
                   <RHFRadioGroup
                     name="gender"
@@ -201,7 +201,7 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                       '& .MuiFormControlLabel-root': { mr: 4 },
                     }}
                   />
-                </div>
+                </div> */}
 
                 <RHFSelect name="category" label="Category">
                   {CATEGORY_OPTION.map((category) => (
