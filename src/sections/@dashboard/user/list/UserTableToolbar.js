@@ -53,7 +53,7 @@ export default function UserTableToolbar({ filterName, filterRole, onFilterName,
         fullWidth
         value={filterName}
         onChange={(event) => onFilterName(event.target.value)}
-        placeholder="Tìm kiếm lịch hẹn"
+        placeholder="Tìm kiếm theo bác sĩ..."
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
@@ -9,7 +9,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel } from '@mui/material';
+import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel, Hidden } from '@mui/material';
 // utils
 import createAvatar from '../../../utils/createAvatar';
 // routes
@@ -36,7 +36,7 @@ export default function UserNewForm({ consultation }) {
 
   const name = `${lname} ${fname}`;
 
-  const { enqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();  
 
   const defaultValues = useMemo(
     () => ({
@@ -66,17 +66,6 @@ export default function UserNewForm({ consultation }) {
 
   const values = watch();
 
-  useEffect(() => {
-    if (consultation) {
-      console.log(consultation)
-      reset(defaultValues);
-    }
-    if (!consultation) {
-      reset(defaultValues);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [consultation]);
-
   const onSubmit = async () => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
@@ -94,10 +83,10 @@ export default function UserNewForm({ consultation }) {
         <Grid item xs={12} md={4}>
           <Card sx={{ py: 10, px: 3 }}>
             <Label
-              color={values.status !== 'active' ? 'error' : 'success'}
+              color={(status === "chờ xác nhận" && 'warning') || (status === "chờ khám" && 'info') || (status === 'đã hủy' && 'error') || (status === 'đã hoàn thành' && 'success')}
               sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
             >
-              {values.status}
+              {status}
             </Label>
 
             <Box sx={{ mb: 5 }}>
@@ -180,9 +169,13 @@ export default function UserNewForm({ consultation }) {
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+              {status === 'chờ xác nhận' ? 
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {consultation.status === 'chờ khám' ? 'Hủy đặt hẹn' : null}
+                Hủy đặt hẹn
               </LoadingButton>
+              :
+              null }
+              
             </Stack>
           </Card>
         </Grid>

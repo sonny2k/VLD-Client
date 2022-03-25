@@ -1,6 +1,6 @@
 import { paramCase, capitalCase } from 'change-case';
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 // @mui
 import { Container } from '@mui/material';
@@ -24,7 +24,6 @@ export default function UserCreate() {
   const { themeStretch } = useSettings();
   const { id } = useParams();
 
-  const navigate = useNavigate();
   const [ consultation, setConsultation ] = useState();
 
   useEffect(() => {
@@ -33,7 +32,6 @@ export default function UserCreate() {
       try {
         const res = await axios.get(URL);
         setConsultation(res.data);
-        console.log(consultation)
       } catch (error) {
         console.log(error)
       }
@@ -48,8 +46,9 @@ export default function UserCreate() {
         <HeaderBreadcrumbs
           heading={'Xem chi tiết lịch hẹn'}
           links={[
-            { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
+            { name: 'Bảng điều khiển', href: PATH_DASHBOARD.user.account },
             { name: 'Danh sách lịch hẹn', href: PATH_DASHBOARD.user.list },
+            { name: `Lịch hẹn ngày ${format(new Date(consultation[0].date), 'dd/MM/yyyy')} lúc ${consultation[0].hour}` },
           ]}
         />
 

@@ -98,7 +98,6 @@ export default function UserList() {
       try {
         const res = await axios.get(URL);
         setConsult(res.data);
-        console.log(consult)
       } catch (error) {
         console.log(error)
       }
@@ -125,7 +124,7 @@ export default function UserList() {
     consult = stabilizedThis.map((el) => el[0]);
   
     if (filterName) {
-        consult = consult.filter((item) => unorm.nfkd(item.doctor.account.lname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1 || item.doctor.account.fname.toLowerCase().indexOf(filterName.toLowerCase()) !== -1);
+        consult = consult.filter((item) => unorm.nfd(item.doctor.account.lname).toLowerCase().indexOf(unorm.nfd(filterName).toLowerCase()) !== -1 || unorm.nfd(item.doctor.account.fname).toLowerCase().indexOf(unorm.nfd(filterName.toLowerCase())) !== -1);
     }
   
     if (filterStatus !== 'Tất cả') {
@@ -139,7 +138,6 @@ export default function UserList() {
     return consult;
   }
 
-  if (consult) {
     const handleFilterName = (filterName) => {
       setFilterName(filterName);
       setPage(0);
@@ -181,6 +179,7 @@ export default function UserList() {
       (!dataFiltered.length && !!filterStatus);
   
     return (
+      consult !== null ?
       <Page title="Lịch hẹn thăm khám">
         <Container maxWidth={themeStretch ? false : 'lg'}>
           <HeaderBreadcrumbs
@@ -225,7 +224,7 @@ export default function UserList() {
                     onSelectAllRows={(checked) =>
                       onSelectAllRows(
                         checked,
-                        consult.map((row) => row.id)
+                        consult.map((row) => row._id)
                       )
                     }
                     actions={
@@ -267,7 +266,7 @@ export default function UserList() {
                     ))}
   
                     <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, consult.length)} />
-  
+      
                     <TableNoData isNotFound={isNotFound} />
                   </TableBody>
                 </Table>
@@ -276,6 +275,7 @@ export default function UserList() {
   
             <Box sx={{ position: 'relative' }}>
               <TablePagination
+                labelRowsPerPage='Số dòng mỗi trang:'
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
                 count={dataFiltered.length}
@@ -294,13 +294,8 @@ export default function UserList() {
           </Card>
         </Container>
       </Page> 
+      :
+      <LoadingScreen/>
     );
-  }
-  
-  // ----------------------------------------------------------------------
-
-  return (
-    <LoadingScreen/>
-  );
 }
 
