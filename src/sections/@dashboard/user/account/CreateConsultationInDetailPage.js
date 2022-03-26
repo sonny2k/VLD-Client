@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import * as React from 'react';
 import { useSnackbar } from 'notistack';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { format } from 'date-fns';
 // form
 import { useForm } from 'react-hook-form';
@@ -13,6 +13,7 @@ import { LoadingButton, DesktopDatePicker, DesktopTimePicker } from '@mui/lab';
 import useAuth from '../../../../hooks/useAuth';
 // utils
 import { fData } from '../../../../utils/formatNumber';
+import axios from '../../../../utils/axios';
 // _mock
 import { hours } from '../../../../_mock/_hour';
 import { datearray } from '../../../../_mock/_date';
@@ -28,17 +29,26 @@ export default function ModalCreateConsultation({ doctor }) {
 
   const { available } = doctor
 
+  const [ datec, setDateC ] = useState(null);
+
+  const [ hourc, setHourC ] = useState(null);
+
   const UpdateUserSchema = Yup.object().shape({
     displayName: Yup.string().required('Họ tên là bắt buộc'),
   });
+
+  const d = new Date();
+
+  d.setDate(d.getDate() + 1);
+
+  const dd = format(new Date(d), 'yyyy-MM-dd');
 
   const defaultValues = {
     displayName: account?.lname + account?.fname || '',
     phoneNumber: account?.phone || '',
     photoURL: account?.profilepic || '',
-    note: account?.note || '',
-    isPublic: account?.isPublic || '',
-    birthday: new Date(account?.birthday) || '',
+    date: dd,
+    hour: '08:00',
   };
 
   const methods = useForm({
@@ -67,13 +77,19 @@ export default function ModalCreateConsultation({ doctor }) {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = async () => {
+  const onSubmit = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      enqueueSnackbar('Đặt lịch khám thành công!');
+      await axios.post('/api/user/consultation/createconsult', {
+        symptom: data.symptom,
+        dateconsult: datec !== null ? datec : data.date,
+        hour: hourc !== null ? hourc : data.hour,
+        doctor: doctor._id,
+      });
+      enqueueSnackbar('Đặt hẹn thành công');
       window.location.replace('http://localhost:2542/dashboard/user/list')
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
     }
   };
 
@@ -106,7 +122,7 @@ export default function ModalCreateConsultation({ doctor }) {
                   gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
                 }}
               >
-                <RHFSelect name="date" label="Ngày" placeholder="Ngày">
+                <RHFSelect name="date" label="Ngày" placeholder="Ngày" onChange={(e) => setDateC(e.target.value)} value={datec}>
                   {datearray.map((option, index) => (
                     <option key={index}>
                       {option.value}
@@ -114,7 +130,7 @@ export default function ModalCreateConsultation({ doctor }) {
                   ))}
                 </RHFSelect>
 
-                <RHFSelect name="hour" label="Giờ" placeholder="Giờ">
+                <RHFSelect name="hour" label="Giờ" placeholder="Giờ" onChange={(e) => setHourC(e.target.value)} value={hourc}>
                   {hours.map((option, index) => (
                     <option key={index}>
                       {option.label}
@@ -124,7 +140,7 @@ export default function ModalCreateConsultation({ doctor }) {
               </Box>
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-              <RHFTextField name="about" multiline rows={4} label="Triệu chứng" />
+              <RHFTextField name="symptom" multiline rows={4} label="Triệu chứng" />
 
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                 Hẹn Tư Vấn

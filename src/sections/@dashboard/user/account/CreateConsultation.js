@@ -1,15 +1,15 @@
 import * as Yup from 'yup';
 import * as React from 'react';
 import { useSnackbar } from 'notistack';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-import { format } from 'date-fns';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { Box, Grid, Card, Stack, Typography, TextField } from '@mui/material';
-import { LoadingButton, DesktopDatePicker, DesktopTimePicker } from '@mui/lab';
+import { LoadingButton } from '@mui/lab';
+import { format } from 'date-fns';
 // hooks
 import useAuth from '../../../../hooks/useAuth';
 // utils
@@ -37,6 +37,16 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
     doctor: PropTypes.object,
   };
 
+  const d = new Date();
+
+  d.setDate(d.getDate() + 1);
+
+  const dd = format(new Date(d), 'yyyy-MM-dd');
+
+  const [ datec, setDateC ] = useState(null);
+
+  const [ hourc, setHourC ] = useState(null);
+
   const UpdateUserSchema = Yup.object().shape({
     displayName: Yup.string().required('Họ tên là bắt buộc'),
   });
@@ -45,32 +55,14 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
     displayName: account?.lname + account?.fname || '',
     phoneNumber: account?.phone || '',
     photoURL: account?.profilepic || '',
-    note: account?.note || '',
-    isPublic: account?.isPublic || '',
-    birthday: new Date(account?.birthday) || '',
-    date: '',
-    hour: '',
+    date: dd,
+    hour: '08:00',
   };
 
   const methods = useForm({
     resolver: yupResolver(UpdateUserSchema),
     defaultValues,
   });
-
-  let birthcheck;
-  if (account?.birthday === null) {
-    birthcheck = null
-  }
-  
-  if (account?.birthday != null) {
-    birthcheck = new Date(account?.birthday)
-  }
-
-  const [birth, setBirth] = React.useState(birthcheck);
-
-  const handleChange = (newDate) => {
-    setBirth(newDate);
-  };
 
   const {
     setValue,
@@ -80,24 +72,17 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
 
   const onSubmit = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      enqueueSnackbar('Đặt lịch khám thành công!');
-      // try {
-      //   await axios.post('/api/user/consultation/createconsult', {
-      //     status: 1,
-      //     symptom: data.symptom,
-      //     date,
-      //     hour: data.,
-      //     doctor: doctor._id,
-      //     user: account._id
-      //   });
-      // } catch (err) {
-      //   console.error(err);
-      //   enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
-      // }
-      // window.location.replace('http://localhost:2542/dashboard/user/list')
-    } catch (error) {
-      console.error(error);
+      await axios.post('/api/user/consultation/createconsult', {
+        symptom: data.symptom,
+        dateconsult: datec !== null ? datec : data.date,
+        hour: hourc !== null ? hourc : data.hour,
+        doctor: doctor._id,
+      });
+      enqueueSnackbar('Đặt hẹn thành công');
+      window.location.replace('http://localhost:2542/dashboard/user/list')
+    } catch (err) {
+      console.error(err);
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
     }
   };
   
@@ -153,7 +138,7 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
                 gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
               }}
             >
-              <RHFSelect name="date" label="Ngày" placeholder="Ngày">
+              <RHFSelect name="date" label="Ngày" placeholder="Ngày" onChange={(e) => setDateC(e.target.value)} value={datec}>
                 {datearray.map((option, index) => (
                   <option key={index}>
                     {option.value}
@@ -161,7 +146,7 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
                 ))}
               </RHFSelect>
 
-              <RHFSelect name="hour" label="Giờ" placeholder="Giờ">
+              <RHFSelect name="hour" label="Giờ" placeholder="Giờ" onChange={(e) => setHourC(e.target.value)} value={hourc}>
                 {hours.map((option, index) => (
                   <option key={index}>
                     {option.label}

@@ -9,7 +9,8 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Box, Card, Grid, Stack, Switch, Typography, FormControlLabel, Hidden } from '@mui/material';
+import { styled } from '@mui/material/styles';
+import { Box, Card, Grid, Stack, Typography, Button, Tooltip, Link, CardHeader } from '@mui/material';
 // utils
 import createAvatar from '../../../utils/createAvatar';
 // routes
@@ -18,8 +19,9 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 import { genders } from '../../../_mock';
 // components
 import Label from '../../../components/Label';
-import { FormProvider, RHFSelect, RHFSwitch, RHFTextField } from '../../../components/hook-form';
+import { FormProvider, RHFTextField } from '../../../components/hook-form';
 import Avatar from '../../../components/Avatar';
+import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
 
@@ -28,11 +30,21 @@ UserNewForm.propTypes = {
 };
 
 export default function UserNewForm({ consultation }) {
+  const IconStyle = styled(Iconify)(({ theme }) => ({
+    width: 20,
+    height: 20,
+    marginTop: 1,
+    flexShrink: 0,
+    marginRight: theme.spacing(2),
+  }));
+
   const navigate = useNavigate();
 
   const { date, hour, status, symptom } = consultation[0];
 
   const { fname, lname, profilepic } = consultation[0].doctor.account;
+
+  const { department, description, workcertificate, level, educationplace } = consultation[0].doctor;
 
   const name = `${lname} ${fname}`;
 
@@ -64,7 +76,9 @@ export default function UserNewForm({ consultation }) {
     formState: { isSubmitting },
   } = methods;
 
-  const values = watch();
+  const back = async () => {
+    navigate(PATH_DASHBOARD.user.list);
+  };
 
   const onSubmit = async () => {
     try {
@@ -78,7 +92,7 @@ export default function UserNewForm({ consultation }) {
   };
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <Card sx={{ py: 10, px: 3 }}>
@@ -107,49 +121,46 @@ export default function UserNewForm({ consultation }) {
               </Avatar>
             </Box>
 
-            <FormControlLabel
-              labelPlacement="start"
-              control={
-                <Controller
-                  name="status"
-                  control={control}
-                  render={({ field }) => (
-                    <Switch
-                      {...field}
-                      checked={field.value !== 'active'}
-                      onChange={(event) => field.onChange(event.target.checked ? 'banned' : 'active')}
-                    />
-                  )}
-                />
-              }
-                label={
-                  <>
-                    <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                      Banned
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Apply disable account
-                    </Typography>
-                  </>
-                }
-                sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
-              />
+            <CardHeader title="Thông tin chung" />
 
-            <RHFSwitch
-              name="isVerified"
-              labelPlacement="start"
-              label={
-                <>
-                  <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                    Email Verified
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    Disabling this will automatically send the user a verification email
-                  </Typography>
-                </>
-              }
-              sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-            />
+            <Stack spacing={2} sx={{ p: 3 }}>
+        <Typography variant="body2">{description}</Typography>
+
+        <Stack direction="row">
+          <IconStyle icon={'eva:pin-fill'} />
+          <Typography variant="body2">
+            Chứng chỉ hành nghề:&nbsp;
+            <Link component="span" variant="subtitle2" color="text.primary">
+              {workcertificate}
+            </Link>
+          </Typography>
+        </Stack>
+
+        <Stack direction="row">
+          <IconStyle icon={'eva:email-fill'} />
+          <Typography variant="body2">{level}</Typography>
+        </Stack>
+
+        <Stack direction="row">
+          <IconStyle icon={'ic:round-business-center'} />
+          <Typography variant="body2">
+            {department} tại&nbsp;
+            <Link component="span" variant="subtitle2" color="text.primary">
+              Văn Lang Doctor
+            </Link>
+          </Typography>
+        </Stack>
+
+        <Stack direction="row">
+          <IconStyle icon={'ic:round-business-center'} />
+          <Typography variant="body2">
+            Tốt nghiệp&nbsp;
+            <Link component="span" variant="subtitle2" color="text.primary">
+              {educationplace}
+            </Link>
+          </Typography>
+        </Stack>
+      </Stack>
           </Card>
         </Grid>
 
@@ -165,18 +176,82 @@ export default function UserNewForm({ consultation }) {
             >
               <RHFTextField name="date" label="Ngày hẹn" disabled/>
               <RHFTextField name="hour" label="Giờ hẹn" disabled/>
-              <RHFTextField name="symptom" label="Triệu chứng" disabled/>
             </Box>
 
-            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              {status === 'chờ xác nhận' ? 
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                Hủy đặt hẹn
-              </LoadingButton>
-              :
-              null }
-              
+            <Stack sx={{ mt: 3 }}>
+              <Box 
+                sx={{
+                  display: 'grid',
+                  columnGap: 2,
+                  rowGap: 3,
+                  gridTemplateColumns: { xs: 'repeat(1, 2fr)', sm: 'repeat(1, 2fr)' },
+                }}
+              >
+                { status === 'chờ xác nhận' ? 
+                  <RHFTextField name="symptom" multiline rows={4} label="Triệu chứng"/>
+                  :
+                  <RHFTextField name="symptom" multiline rows={4} label="Triệu chứng" disabled/>
+                }
+                
+              </Box>
             </Stack>
+            
+            {status === 'đã hủy' || status === 'đã hoàn thành' ?
+            <Stack alignItems="flex-end"  sx={{ mt: 3 }}>
+              <Box
+                sx={{
+                  display: 'grid',
+                  columnGap: 1,
+                  rowGap: 1,
+                  gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(1, 1fr)' },
+                }}
+              >
+                <Button onClick={handleSubmit(back)} variant="contained">
+                  Trở về
+                </Button>
+              </Box> 
+            </Stack>
+            :
+            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+              <Box
+                sx={{
+                  display: 'grid',
+                  columnGap: 1,
+                  rowGap: 1,
+                  gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
+                }}
+              >
+                {status === 'chờ xác nhận' ? 
+                  <Tooltip title="Lưu lại triệu chứng mới">
+                    <LoadingButton type="submit" variant="text" loading={isSubmitting} onClick={handleSubmit(onSubmit)} sx={{ position: 'absolute', low: 12, left: 24 }}>
+                      Lưu thay đổi
+                    </LoadingButton>
+                  </Tooltip>
+                  :
+                  <Label
+                    variant='contained'
+                    sx={{ position: 'absolute', low: 12, left: 24, width: 180 }}
+                  >
+                    Lưu ý: trang phục lịch sự
+                  </Label>
+                } 
+
+                <Button onClick={handleSubmit(back)} variant="outlined">
+                  Trở về
+                </Button>                
+
+                {status === 'chờ xác nhận' ?
+                  <LoadingButton type="submit" variant="contained" loading={isSubmitting} onClick={handleSubmit(onSubmit)}>
+                    Hủy lịch hẹn
+                  </LoadingButton>        
+                  :
+                  <LoadingButton type="submit" variant="contained" loading={isSubmitting} onClick={handleSubmit(onSubmit)}>
+                    Tham gia buổi tư vấn
+                  </LoadingButton>  
+                }
+              </Box> 
+            </Stack>
+            }
           </Card>
         </Grid>
       </Grid>

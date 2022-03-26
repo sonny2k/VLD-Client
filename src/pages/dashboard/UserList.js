@@ -20,7 +20,6 @@ import {
   TablePagination,
   FormControlLabel,
 } from '@mui/material';
-import LoadingScreen from '../../components/LoadingScreen';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
@@ -54,6 +53,19 @@ const ROLE_OPTIONS = [
   '16:00',
   '17:00',
 ];
+
+const DEPARTMENT_OPTIONS = [
+  'Tất cả',
+  'chuyên khoa tim mạch',
+  'chuyên khoa nội',
+  'chuyên khoa ngoại',
+  'chuyên khoa nhi',
+  'chuyên khoa Y học cổ truyền',
+  'chuyên khoa Vật lý trị liệu - phục hồi chức năng',
+  'chuyên khoa tai mũi họng',
+  'chuyên khoa răng-hàm-mặt',
+  'chuyên khoa ung bướu',
+]; 
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Bác sĩ', align: 'left' },
@@ -109,10 +121,12 @@ export default function UserList() {
 
   const [filterRole, setFilterRole] = useState('Tất cả');
 
+  const [filterDepartment, setFilterDepartment] = useState('Tất cả');
+
   const { currentTab: filterStatus, onChangeTab: onChangeFilterStatus } = useTabs('Tất cả');
 
   
-  function applySortFilter({ consult, comparator, filterName, filterStatus, filterRole }) {
+  function applySortFilter({ consult, comparator, filterName, filterStatus, filterRole, filterDepartment }) {
     const stabilizedThis = consult.map((el, index) => [el, index]);
   
     stabilizedThis.sort((a, b) => {
@@ -134,6 +148,10 @@ export default function UserList() {
     if (filterRole !== 'Tất cả') {
       consult = consult.filter((item) => item.hour === filterRole);
     }
+
+    if (filterDepartment !== 'Tất cả') {
+      consult = consult.filter((item) => unorm.nfd(item.doctor.department).toLowerCase().indexOf(unorm.nfd(filterDepartment).toLowerCase()) !== -1);
+    }
   
     return consult;
   }
@@ -145,6 +163,10 @@ export default function UserList() {
   
     const handleFilterRole = (event) => {
       setFilterRole(event.target.value);
+    };
+
+    const handleFilterDepartment = (event) => {
+      setFilterDepartment(event.target.value);
     };
   
     const handleDeleteRow = (id) => {
@@ -169,6 +191,7 @@ export default function UserList() {
       filterName,
       filterRole,
       filterStatus,
+      filterDepartment,
     });
   
     const denseHeight = dense ? 52 : 72;
@@ -179,7 +202,7 @@ export default function UserList() {
       (!dataFiltered.length && !!filterStatus);
   
     return (
-      consult !== null ?
+      consult && 
       <Page title="Lịch hẹn thăm khám">
         <Container maxWidth={themeStretch ? false : 'lg'}>
           <HeaderBreadcrumbs
@@ -209,9 +232,12 @@ export default function UserList() {
             <UserTableToolbar
               filterName={filterName}
               filterRole={filterRole}
+              filterDepartment={filterDepartment}
               onFilterName={handleFilterName}
               onFilterRole={handleFilterRole}
+              onFilterDepartment={handleFilterDepartment}
               optionsRole={ROLE_OPTIONS}
+              optionsDepartment={DEPARTMENT_OPTIONS}
             />
   
             <Scrollbar>
@@ -294,8 +320,6 @@ export default function UserList() {
           </Card>
         </Container>
       </Page> 
-      :
-      <LoadingScreen/>
     );
 }
 
