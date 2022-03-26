@@ -13,10 +13,9 @@ import { styled } from '@mui/material/styles';
 import { Box, Card, Grid, Stack, Typography, Button, Tooltip, Link, CardHeader } from '@mui/material';
 // utils
 import createAvatar from '../../../utils/createAvatar';
+import axios from '../../../utils/axios';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
-// _mock
-import { genders } from '../../../_mock';
 // components
 import Label from '../../../components/Label';
 import { FormProvider, RHFTextField } from '../../../components/hook-form';
@@ -40,7 +39,7 @@ export default function UserNewForm({ consultation }) {
 
   const navigate = useNavigate();
 
-  const { date, hour, status, symptom } = consultation[0];
+  const { date, hour, status, symptom, roomname } = consultation[0];
 
   const { fname, lname, profilepic } = consultation[0].doctor.account;
 
@@ -80,14 +79,29 @@ export default function UserNewForm({ consultation }) {
     navigate(PATH_DASHBOARD.user.list);
   };
 
-  const onSubmit = async () => {
+  const cancel = async () => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      enqueueSnackbar('Update success!');
-      navigate(PATH_DASHBOARD.user.list);
-    } catch (error) {
-      console.error(error);
+      await axios.post('/api/user/consultation/cancelconsult', {
+        _id: consultation[0]._id
+      });
+      enqueueSnackbar('Hủy lịch thành công');
+      window.location.replace('http://localhost:2542/dashboard/user/list')
+    } catch (err) {
+      console.error(err);
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
+    }
+  };
+
+  const changesymptom = async (data) => {
+    try {
+      await axios.put('/api/user/consultation/consultsymptom', {
+        _id: consultation[0]._id,
+        symptom: data.symptom
+      });
+      enqueueSnackbar('Thay đổi triệu chứng thành công');
+    } catch (err) {
+      console.error(err);
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
     }
   };
 
@@ -223,16 +237,16 @@ export default function UserNewForm({ consultation }) {
               >
                 {status === 'chờ xác nhận' ? 
                   <Tooltip title="Lưu lại triệu chứng mới">
-                    <LoadingButton type="submit" variant="text" loading={isSubmitting} onClick={handleSubmit(onSubmit)} sx={{ position: 'absolute', low: 12, left: 24 }}>
+                    <LoadingButton type="submit" variant="text" loading={isSubmitting} onClick={handleSubmit(changesymptom)} sx={{ position: 'absolute', low: 12, left: 24 }}>
                       Lưu thay đổi
                     </LoadingButton>
                   </Tooltip>
                   :
                   <Label
                     variant='contained'
-                    sx={{ position: 'absolute', low: 12, left: 24, width: 180 }}
+                    sx={{ position: 'absolute', low: 12, left: 24, width: "auto" }}
                   >
-                    Lưu ý: trang phục lịch sự
+                    Ghi chú: {roomname}
                   </Label>
                 } 
 
@@ -241,11 +255,11 @@ export default function UserNewForm({ consultation }) {
                 </Button>                
 
                 {status === 'chờ xác nhận' ?
-                  <LoadingButton type="submit" variant="contained" loading={isSubmitting} onClick={handleSubmit(onSubmit)}>
+                  <LoadingButton type="submit" variant="contained" loading={isSubmitting} onClick={handleSubmit(cancel)}>
                     Hủy lịch hẹn
                   </LoadingButton>        
                   :
-                  <LoadingButton type="submit" variant="contained" loading={isSubmitting} onClick={handleSubmit(onSubmit)}>
+                  <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                     Tham gia buổi tư vấn
                   </LoadingButton>  
                 }

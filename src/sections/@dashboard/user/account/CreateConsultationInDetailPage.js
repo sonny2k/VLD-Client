@@ -12,7 +12,6 @@ import { LoadingButton, DesktopDatePicker, DesktopTimePicker } from '@mui/lab';
 // hooks
 import useAuth from '../../../../hooks/useAuth';
 // utils
-import { fData } from '../../../../utils/formatNumber';
 import axios from '../../../../utils/axios';
 // _mock
 import { hours } from '../../../../_mock/_hour';
@@ -56,21 +55,6 @@ export default function ModalCreateConsultation({ doctor }) {
     defaultValues,
   });
 
-  let birthcheck;
-  if (account?.birthday === null) {
-    birthcheck = null
-  }
-  
-  if (account?.birthday != null) {
-    birthcheck = new Date(account?.birthday)
-  }
-
-  const [birth, setBirth] = React.useState(birthcheck);
-
-  const handleChange = (newDate) => {
-    setBirth(newDate);
-  };
-
   const {
     setValue,
     handleSubmit,
@@ -92,22 +76,6 @@ export default function ModalCreateConsultation({ doctor }) {
       enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
     }
   };
-
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
-
-      if (file) {
-        setValue(
-          'photoURL',
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          })
-        );
-      }
-    },
-    [setValue]
-  );
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
