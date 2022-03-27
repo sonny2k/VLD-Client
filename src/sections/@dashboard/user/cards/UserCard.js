@@ -60,6 +60,7 @@ export default function UserCard({ doctor }) {
     columnGap: 2,
     gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
     position: 'absolute',
+    width: "800px",
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',

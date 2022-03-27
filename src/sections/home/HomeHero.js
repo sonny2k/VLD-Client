@@ -157,16 +157,6 @@ export default function HomeHero() {
               >
                 Đặt lịch khám
               </Button>
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              <Button
-                size="large"
-                variant="outlined"
-                component={RouterLink}
-                to={PATH_DASHBOARD.root}
-                startIcon={<Iconify icon={'icons8:buy'} width={20} height={20} />}
-              >
-                Mua thuốc
-              </Button>
             </m.div>
 
             {/* <Stack spacing={2.5}>
