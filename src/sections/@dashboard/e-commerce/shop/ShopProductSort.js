@@ -11,28 +11,24 @@ import MenuPopover from '../../../../components/MenuPopover';
 // ----------------------------------------------------------------------
 
 const SORT_BY_OPTIONS = [
-  { value: 'Mắt', label: 'Mắt' },
-  { value: 'Thần Kinh', label: 'Thần Kinh' },
-  { value: 'Dạ dày', label: 'Dạ dày' },
-  { value: 'Tim mạch', label: 'Tim mạch' },
+  { value: 'thần kinh', label: 'Thần Kinh' },
+  { value: 'tim mạch', label: 'Tim mạch' },
+  { value: 'mắt', label: 'Tất cả'},
 ];
 
-function renderLabel(label) {
-  if (label === 'Mắt') {
-    return 'Mắt';
+function renderLabel(value) {
+  if (value === 'Mắt') {
+    return 'Tất cả';
   }
-  if (label === 'Thần kinh') {
+  if (value === 'thần kinh') {
     return 'Thần kinh';
-  }
-  if (label === 'Dạ dày') {
-    return 'Dạ dày';
   }
   return 'Tim mạch';
 }
 
 // ----------------------------------------------------------------------
 
-export default function ShopProductSort() {
+export default function ShopProductSort({ sortFunc }) {
   const dispatch = useDispatch();
 
   const { sortBy } = useSelector((state) => state.product);
@@ -49,6 +45,7 @@ export default function ShopProductSort() {
 
   const handleSortBy = (value) => {
     handleClose();
+    sortFunc(value);
     dispatch(sortByProducts(value));
   };
 

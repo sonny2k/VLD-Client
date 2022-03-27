@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { paramCase } from 'change-case';
+import PropTypes from 'prop-types';
 import parse from 'autosuggest-highlight/parse';
 import match from 'autosuggest-highlight/match';
 import { useNavigate } from 'react-router-dom';
@@ -26,7 +27,14 @@ const PopperStyle = styled((props) => <Popper placement="bottom-start" {...props
 
 // ----------------------------------------------------------------------
 
-export default function ShopProductSearch() {
+ShopProductSearch.propTypes = {
+  numSelected: PropTypes.number,
+  filterName: PropTypes.string,
+  onFilterName: PropTypes.func,
+  onDeleteProducts: PropTypes.func,
+};
+
+export default function ShopProductSearch({numSelected, filterName, onFilterName}) {
   const navigate = useNavigate();
 
   const isMountedRef = useIsMountedRef();
@@ -63,24 +71,24 @@ export default function ShopProductSearch() {
   };
 
   return (
-    <Autocomplete
-      size="small"
-      autoHighlight
-      popupIcon={null}
-      PopperComponent={PopperStyle}
-      options={searchResults}
-      onInputChange={(event, value) => handleChangeSearch(value)}
-      getOptionLabel={(product) => product.name}
-      noOptionsText={<SearchNotFound searchQuery={searchQuery} />}
-      isOptionEqualToValue={(option, value) => option.id === value.id}
-      renderInput={(params) => (
+    // <Autocomplete
+    //   size="small"
+    //   autoHighlight
+    //   popupIcon={null}
+    //   PopperComponent={PopperStyle}
+    //   options={searchResults}
+    //   onInputChange={(event, value) => handleChangeSearch(value)}
+    //   getOptionLabel={(product) => product.name}
+    //   noOptionsText={<SearchNotFound searchQuery={searchQuery} />}
+    //   isOptionEqualToValue={(option, value) => option.id === value.id}
+    //   renderInput={(params) => (
         <InputStyle
-          {...params}
           stretchStart={200}
           placeholder="Tìm theo tên..."
-          onKeyUp={handleKeyUp}
+          value={filterName}
+          onChange={(event) => onFilterName(event.target.value)}
+          // onKeyUp={handleKeyUp}
           InputProps={{
-            ...params.InputProps,
             startAdornment: (
               <InputAdornment position="start">
                 <Iconify icon={'eva:search-fill'} sx={{ ml: 1, width: 20, height: 20, color: 'text.disabled' }} />
@@ -88,30 +96,30 @@ export default function ShopProductSearch() {
             ),
           }}
         />
-      )}
-      renderOption={(props, product, { inputValue }) => {
-        const { name, cover } = product;
-        const matches = match(name, inputValue);
-        const parts = parse(name, matches);
+      // )}
+      // renderOption={(props, product, { inputValue }) => {
+      //   const { name, cover } = product;
+      //   const matches = match(name, inputValue);
+      //   const parts = parse(name, matches);
 
-        return (
-          <li {...props}>
-            <Image alt={cover} src={cover} sx={{ width: 48, height: 48, borderRadius: 1, flexShrink: 0, mr: 1.5 }} />
-            <Link underline="none" onClick={() => handleClick(name)}>
-              {parts.map((part, index) => (
-                <Typography
-                  key={index}
-                  component="span"
-                  variant="subtitle2"
-                  color={part.highlight ? 'primary' : 'textPrimary'}
-                >
-                  {part.text}
-                </Typography>
-              ))}
-            </Link>
-          </li>
-        );
-      }}
-    />
+        // return (
+        //   <li {...props}>
+        //     <Image alt={cover} src={cover} sx={{ width: 48, height: 48, borderRadius: 1, flexShrink: 0, mr: 1.5 }} />
+        //     <Link underline="none" onClick={() => handleClick(name)}>
+        //       {parts.map((part, index) => (
+        //         <Typography
+        //           key={index}
+        //           component="span"
+        //           variant="subtitle2"
+        //           color={part.highlight ? 'primary' : 'textPrimary'}
+        //         >
+        //           {part.text}
+        //         </Typography>
+        //       ))}
+        //     </Link>
+        //   </li>
+    //     );
+    //   }}
+    // />
   );
 }
