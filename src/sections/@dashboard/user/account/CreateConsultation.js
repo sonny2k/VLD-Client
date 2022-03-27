@@ -3,14 +3,16 @@ import * as React from 'react';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
-import { Box, Grid, Card, Stack, Typography, TextField } from '@mui/material';
+import { Box, Grid, Card, Stack, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { format } from 'date-fns';
 // hooks
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 import useAuth from '../../../../hooks/useAuth';
 // utils
 import createAvatar from '../../../../utils/createAvatar';
@@ -22,6 +24,7 @@ import { datearray } from '../../../../_mock/_date';
 import { FormProvider, RHFSelect, RHFTextField } from '../../../../components/hook-form';
 import Avatar from '../../../../components/Avatar';
 
+
 // ----------------------------------------------------------------------
 
 export default function ModalCreateConsultation({ doctor, ...other }) {
@@ -32,6 +35,8 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
   const { level, department, available, workcertificate } = doctor
 
   const { account } = useAuth();
+
+  const navigate = useNavigate();
 
   ModalCreateConsultation.propTypes = {
     doctor: PropTypes.object,
@@ -79,7 +84,7 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
         doctor: doctor._id,
       });
       enqueueSnackbar('Đặt hẹn thành công');
-      window.location.replace('http://localhost:2542/dashboard/user/list')
+      navigate(PATH_DASHBOARD.user.list);
     } catch (err) {
       console.error(err);
       enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');

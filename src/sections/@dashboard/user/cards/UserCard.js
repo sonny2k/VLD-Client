@@ -43,7 +43,7 @@ UserCard.propTypes = {
 export default function UserCard({ doctor }) {
   const { fname, lname, profilepic } = doctor.account;
 
-  const { department, level, workcertificate, _id } = doctor;
+  const { department, degree, workcertificate, _id } = doctor;
 
   const linkTo = `${PATH_DASHBOARD.user.root}/profile/${paramCase(_id)}`;
 
@@ -53,14 +53,17 @@ export default function UserCard({ doctor }) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+
   const style = {
+    display: 'block',
+    rowGap: 3,
+    columnGap: 2,
+    gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
     position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    width: 800,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
     boxShadow: 24,
     p: 4,
   };
@@ -144,7 +147,7 @@ export default function UserCard({ doctor }) {
           <Typography variant="caption" component="div" sx={{ mb: 0.75, color: 'text.disabled' }}>
             Trình độ 
           </Typography>
-          <Typography variant="subtitle1">{level}</Typography>
+          <Typography variant="subtitle1">{degree}</Typography>
         </div>
 
         {/* <div>

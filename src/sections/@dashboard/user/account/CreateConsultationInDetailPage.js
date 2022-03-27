@@ -1,16 +1,18 @@
 import * as Yup from 'yup';
 import * as React from 'react';
 import { useSnackbar } from 'notistack';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { format } from 'date-fns';
+import { useNavigate } from 'react-router-dom';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
-import { Box, Grid, Card, Stack, Typography, TextField } from '@mui/material';
-import { LoadingButton, DesktopDatePicker, DesktopTimePicker } from '@mui/lab';
+import { Box, Grid, Card, Stack, Typography, Button } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 // hooks
 import useAuth from '../../../../hooks/useAuth';
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 // utils
 import axios from '../../../../utils/axios';
 // _mock
@@ -27,6 +29,8 @@ export default function ModalCreateConsultation({ doctor }) {
   const { account } = useAuth();
 
   const { available } = doctor
+
+  const navigate = useNavigate();
 
   const [ datec, setDateC ] = useState(null);
 
@@ -70,15 +74,19 @@ export default function ModalCreateConsultation({ doctor }) {
         doctor: doctor._id,
       });
       enqueueSnackbar('Đặt hẹn thành công');
-      window.location.replace('http://localhost:2542/dashboard/user/list')
+      navigate(PATH_DASHBOARD.user.list);
     } catch (err) {
       console.error(err);
       enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
     }
   };
+  
+  const back = async () => {
+    navigate(PATH_DASHBOARD.user.cards);
+  };
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+    <FormProvider methods={methods}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={12}>
           <Card sx={{ p: 3 }}>
@@ -109,10 +117,22 @@ export default function ModalCreateConsultation({ doctor }) {
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
               <RHFTextField name="symptom" multiline rows={4} label="Triệu chứng" />
-
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                Hẹn Tư Vấn
-              </LoadingButton>
+              <Box
+                sx={{
+                  display: 'grid',
+                  columnGap: 1,
+                  rowGap: 1,
+                  gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(2, 1fr)' },
+                }}
+              >
+                <Button variant="outlined" onClick={handleSubmit(back)}>
+                  Trở về
+                </Button>
+              
+                <LoadingButton type="submit" variant="contained" onClick={handleSubmit(onSubmit)} loading={isSubmitting}>
+                  Hẹn Tư Vấn
+                </LoadingButton>
+              </Box>
             </Stack>
           </Card>
         </Grid>

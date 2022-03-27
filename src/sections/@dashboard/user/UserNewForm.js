@@ -1,12 +1,10 @@
 import PropTypes from 'prop-types';
-import * as Yup from 'yup';
-import { useState, useEffect, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 // form
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
 // @mui
 import { LoadingButton } from '@mui/lab';
 import { styled } from '@mui/material/styles';
@@ -43,9 +41,9 @@ export default function UserNewForm({ consultation }) {
 
   const { fname, lname, profilepic } = consultation[0].doctor.account;
 
-  const { department, description, workcertificate, level, educationplace } = consultation[0].doctor;
+  const { department, description, workcertificate, level, educationplace, degree } = consultation[0].doctor;
 
-  const name = `${lname} ${fname}`;
+  const name = `${level} ${lname} ${fname}`;
 
   const { enqueueSnackbar } = useSnackbar();  
 
@@ -85,7 +83,7 @@ export default function UserNewForm({ consultation }) {
         _id: consultation[0]._id
       });
       enqueueSnackbar('Hủy lịch thành công');
-      window.location.replace('http://localhost:2542/dashboard/user/list')
+      navigate(PATH_DASHBOARD.user.list);
     } catch (err) {
       console.error(err);
       enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
@@ -135,46 +133,51 @@ export default function UserNewForm({ consultation }) {
               </Avatar>
             </Box>
 
-            <CardHeader title="Thông tin chung" />
+            <CardHeader title={name} />
 
             <Stack spacing={2} sx={{ p: 3 }}>
-        <Typography variant="body2">{description}</Typography>
+              <Typography variant="body2">{description}</Typography>
 
-        <Stack direction="row">
-          <IconStyle icon={'eva:pin-fill'} />
-          <Typography variant="body2">
-            Chứng chỉ hành nghề:&nbsp;
-            <Link component="span" variant="subtitle2" color="text.primary">
-              {workcertificate}
-            </Link>
-          </Typography>
-        </Stack>
+              <Stack direction="row">
+                <IconStyle icon={'eva:pin-fill'} />
+                <Typography variant="body2">
+                  Chứng chỉ hành nghề:&nbsp;
+                  <Link component="span" variant="subtitle2" color="text.primary">
+                    {workcertificate}
+                  </Link>
+                </Typography>
+              </Stack>
 
-        <Stack direction="row">
-          <IconStyle icon={'eva:email-fill'} />
-          <Typography variant="body2">{level}</Typography>
-        </Stack>
+              <Stack direction="row">
+                <IconStyle icon={'eva:email-fill'} />
+                <Typography variant="body2">
+                  Trình độ:&nbsp;
+                  <Link component="span" variant="subtitle2" color="text.primary">
+                    {degree} 
+                  </Link>
+                </Typography>
+              </Stack>
 
-        <Stack direction="row">
-          <IconStyle icon={'ic:round-business-center'} />
-          <Typography variant="body2">
-            {department} tại&nbsp;
-            <Link component="span" variant="subtitle2" color="text.primary">
-              Văn Lang Doctor
-            </Link>
-          </Typography>
-        </Stack>
+              <Stack direction="row">
+                <IconStyle icon={'ic:round-business-center'} />
+                <Typography variant="body2">
+                  Phòng ban:&nbsp;
+                  <Link component="span" variant="subtitle2" color="text.primary">
+                    {department}
+                  </Link>
+                </Typography>
+              </Stack>
 
-        <Stack direction="row">
-          <IconStyle icon={'ic:round-business-center'} />
-          <Typography variant="body2">
-            Tốt nghiệp&nbsp;
-            <Link component="span" variant="subtitle2" color="text.primary">
-              {educationplace}
-            </Link>
-          </Typography>
-        </Stack>
-      </Stack>
+              <Stack direction="row">
+                <IconStyle icon={'ic:round-business-center'} />
+                  <Typography variant="body2">
+                    Tốt nghiệp&nbsp;
+                  <Link component="span" variant="subtitle2" color="text.primary">
+                    {educationplace}
+                  </Link>
+                  </Typography>
+              </Stack>
+            </Stack>
           </Card>
         </Grid>
 
@@ -237,9 +240,9 @@ export default function UserNewForm({ consultation }) {
               >
                 {status === 'chờ xác nhận' ? 
                   <Tooltip title="Lưu lại triệu chứng mới">
-                    <LoadingButton type="submit" variant="text" loading={isSubmitting} onClick={handleSubmit(changesymptom)} sx={{ position: 'absolute', low: 12, left: 24 }}>
+                    <Button variant="text" onClick={handleSubmit(changesymptom)} sx={{ position: 'absolute', low: 12, left: 24 }}>
                       Lưu thay đổi
-                    </LoadingButton>
+                    </Button>
                   </Tooltip>
                   :
                   <Label
