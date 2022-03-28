@@ -11,19 +11,43 @@ import MenuPopover from '../../../../components/MenuPopover';
 // ----------------------------------------------------------------------
 
 const SORT_BY_OPTIONS = [
+  { value: 'tất cả', label: 'Tất cả'},
   { value: 'thần kinh', label: 'Thần Kinh' },
   { value: 'tim mạch', label: 'Tim mạch' },
-  { value: 'mắt', label: 'Tất cả'},
+  { value: 'nội', label: 'Nội' },
+  { value: 'ngoại', label: 'Ngoại' },
+  { value: 'nhãn khoa', label: 'Nhãn khoa' },
+  { value: 'tai mũi họng', label: 'Tai mũi họng' },
+  { value: 'ung bướu', label: 'Ung bướu' },
+  { value: 'răng-hàm-mặt', label: 'Răng-hàm-mặt' },
 ];
 
 function renderLabel(value) {
-  if (value === 'Mắt') {
-    return 'Tất cả';
-  }
   if (value === 'thần kinh') {
     return 'Thần kinh';
   }
-  return 'Tim mạch';
+  if (value === 'tim mạch') {
+    return 'Tim mạch';
+  }
+  if (value === 'nội') {
+    return 'Nội';
+  }
+  if (value === 'ngoại') {
+    return 'Ngoại';
+  }
+  if (value === 'nhãn khoa') {
+    return 'Nhãn khoa';
+  }
+  if (value === 'tai mũi họng') {
+    return 'Tai mũi họng';
+  }
+  if (value === 'ung bướu') {
+    return 'ung bướu';
+  }
+  if (value === 'răng-hàm-mặt') {
+    return 'Răng-hàm-mặt';
+  }
+  return 'Tất cả';
 }
 
 // ----------------------------------------------------------------------

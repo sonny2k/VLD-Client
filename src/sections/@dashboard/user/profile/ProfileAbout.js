@@ -22,7 +22,7 @@ ProfileAbout.propTypes = {
 };
 
 export default function ProfileAbout({ doctor }) {
-  const { description, educationplace, workcertificate, level, department  } = doctor;
+  const { description, educationplace, workcertificate, level, department, degree, workhistory  } = doctor;
 
   return (
     <Card>
@@ -32,7 +32,7 @@ export default function ProfileAbout({ doctor }) {
         <Typography variant="body2">{description}</Typography>
 
         <Stack direction="row">
-          <IconStyle icon={'eva:pin-fill'} />
+          <IconStyle icon={'carbon:certificate'} />
           <Typography variant="body2">
             Chứng chỉ hành nghề:&nbsp;
             <Link component="span" variant="subtitle2" color="text.primary">
@@ -42,26 +42,41 @@ export default function ProfileAbout({ doctor }) {
         </Stack>
 
         <Stack direction="row">
-          <IconStyle icon={'eva:email-fill'} />
-          <Typography variant="body2">{level}</Typography>
-        </Stack>
-
-        <Stack direction="row">
-          <IconStyle icon={'ic:round-business-center'} />
+          <IconStyle icon={'fa6-solid:ranking-star'} />
           <Typography variant="body2">
-            {department} tại&nbsp;
+            Trình độ:&nbsp;
             <Link component="span" variant="subtitle2" color="text.primary">
-              Văn Lang Doctor
+              {degree}
             </Link>
           </Typography>
         </Stack>
 
         <Stack direction="row">
-          <IconStyle icon={'ic:round-business-center'} />
+          <IconStyle icon={'healthicons:outpatient-department'} />
+          <Typography variant="body2">
+            Phòng ban:&nbsp;
+            <Link component="span" variant="subtitle2" color="text.primary">
+              {department}
+            </Link>
+          </Typography>
+        </Stack>
+
+        <Stack direction="row">
+          <IconStyle icon={'fa-solid:user-graduate'} />
           <Typography variant="body2">
             Tốt nghiệp&nbsp;
             <Link component="span" variant="subtitle2" color="text.primary">
               {educationplace}
+            </Link>
+          </Typography>
+        </Stack>
+
+        <Stack direction="row">
+          <IconStyle icon={'ic:twotone-timeline'} />
+          <Typography variant="body2">
+            Quá trình công tác |&nbsp;
+            <Link component="span" variant="subtitle2" color="text.primary">
+              {workhistory}
             </Link>
           </Typography>
         </Stack>

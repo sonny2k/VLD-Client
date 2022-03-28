@@ -14,4 +14,3 @@ if (d1 && d2 && d3) {
     const day3 = format(new Date(d3), 'yyyy-MM-dd');
     datearray.push({value: day1}, {value: day2}, {value: day3});
 }
-console.log(datearray);

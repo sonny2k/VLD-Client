@@ -36,6 +36,7 @@ import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import { TableEmptyRows, TableHeadCustom, TableNoData, TableSelectedActions } from '../../components/table';
 // sections
 import { UserTableToolbar, UserTableRow } from '../../sections/@dashboard/user/list';
+import LoadingScreen from '../../components/LoadingScreen';
 
 // ----------------------------------------------------------------------
 
@@ -59,9 +60,8 @@ const DEPARTMENT_OPTIONS = [
   'chuyên khoa tim mạch',
   'chuyên khoa nội',
   'chuyên khoa ngoại',
-  'chuyên khoa nhi',
-  'chuyên khoa Y học cổ truyền',
-  'chuyên khoa Vật lý trị liệu - phục hồi chức năng',
+  'chuyên khoa thần kinh',
+  'chuyên khoa nhãn khoa',
   'chuyên khoa tai mũi họng',
   'chuyên khoa răng-hàm-mặt',
   'chuyên khoa ung bướu',
@@ -102,7 +102,9 @@ export default function UserList() {
 
   const navigate = useNavigate();
 
-  const [consult, setConsult] = useState([]);
+  const [ loaded, setLoaded ] = useState(false);
+
+  const [ consult, setConsult ] = useState([]);
 
   useEffect(() => {
     async function getConsult() {
@@ -110,6 +112,9 @@ export default function UserList() {
       try {
         const res = await axios.get(URL);
         setConsult(res.data);
+        if (res.data) {
+          setLoaded(true);
+        }
       } catch (error) {
         console.log(error)
       }
@@ -138,7 +143,7 @@ export default function UserList() {
     consult = stabilizedThis.map((el) => el[0]);
   
     if (filterName) {
-        consult = consult.filter((item) => unorm.nfd(item.doctor.account.lname).toLowerCase().indexOf(unorm.nfd(filterName).toLowerCase()) !== -1 || unorm.nfd(item.doctor.account.fname).toLowerCase().indexOf(unorm.nfd(filterName.toLowerCase())) !== -1);
+      consult = consult.filter((item) => unorm.nfkd(item.doctor.account.lname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1 || unorm.nfkd(item.doctor.account.fname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1);
     }
   
     if (filterStatus !== 'Tất cả') {
@@ -150,7 +155,7 @@ export default function UserList() {
     }
 
     if (filterDepartment !== 'Tất cả') {
-      consult = consult.filter((item) => unorm.nfd(item.doctor.department).toLowerCase().indexOf(unorm.nfd(filterDepartment).toLowerCase()) !== -1);
+      consult = consult.filter((item) => unorm.nfkd(item.doctor.department).toLowerCase().indexOf(unorm.nfkd(filterDepartment).toLowerCase()) !== -1);
     }
   
     return consult;
@@ -199,11 +204,140 @@ export default function UserList() {
     const isNotFound =
       (!dataFiltered.length && !!filterName) ||
       (!dataFiltered.length && !!filterRole) ||
+      (!dataFiltered.length && !!filterDepartment) ||
       (!dataFiltered.length && !!filterStatus);
   
-    return (
-      consult && 
-      <Page title="Lịch hẹn thăm khám">
+    if (consult.length > 0) {
+      return (
+        <Page title="Lịch hẹn thăm khám">
+          <Container maxWidth={themeStretch ? false : 'lg'}>
+            <HeaderBreadcrumbs
+              heading="Lịch hẹn"
+              links={[
+                { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
+                { name: 'Lịch hẹn' },
+              ]}
+            />
+    
+            <Card>
+              <Tabs
+                allowScrollButtonsMobile
+                variant="scrollable"
+                scrollButtons="auto"
+                value={filterStatus}
+                onChange={onChangeFilterStatus}
+                sx={{ px: 2, bgcolor: 'background.neutral' }}
+              >
+                {STATUS_OPTIONS.map((tab) => (
+                  <Tab disableRipple key={tab} label={tab} value={tab} />
+                ))}
+              </Tabs>
+    
+              <Divider />
+    
+              <UserTableToolbar
+                filterName={filterName}
+                filterRole={filterRole}
+                filterDepartment={filterDepartment}
+                onFilterName={handleFilterName}
+                onFilterRole={handleFilterRole}
+                onFilterDepartment={handleFilterDepartment}
+                optionsRole={ROLE_OPTIONS}
+                optionsDepartment={DEPARTMENT_OPTIONS}
+              />
+    
+              <Scrollbar>
+                <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
+                  {selected.length > 0 && (
+                    <TableSelectedActions
+                      dense={dense}
+                      numSelected={selected.length}
+                      rowCount={consult.length}
+                      onSelectAllRows={(checked) =>
+                        onSelectAllRows(
+                          checked,
+                          consult.map((row) => row._id)
+                        )
+                      }
+                      actions={
+                        <Tooltip title="Delete">
+                          <IconButton color="primary" onClick={() => handleDeleteRows(selected)}>
+                            <Iconify icon={'eva:trash-2-outline'} />
+                          </IconButton>
+                        </Tooltip>
+                      }
+                    />
+                  )}
+    
+                  <Table size={dense ? 'small' : 'medium'}>
+                    <TableHeadCustom
+                      order={order}
+                      orderBy={orderBy}
+                      headLabel={TABLE_HEAD}
+                      rowCount={consult.length}
+                      numSelected={selected.length}
+                      onSort={onSort}
+                      onSelectAllRows={(checked) =>
+                        onSelectAllRows(
+                          checked,
+                          consult.map((row) => row._id)
+                        )
+                      }
+                    />
+    
+                    <TableBody>
+                      {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                        <UserTableRow
+                          key={row._id}
+                          row={row}
+                          selected={selected.includes(row._id)}
+                          onSelectRow={() => onSelectRow(row._id)}
+                          onDeleteRow={() => handleDeleteRow(row._id)}
+                          onEditRow={() => handleEditRow(row._id)}
+                        />
+                      ))}
+    
+                      <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, consult.length)} />
+        
+                      <TableNoData isNotFound={isNotFound} />
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Scrollbar>
+    
+              <Box sx={{ position: 'relative' }}>
+                <TablePagination
+                  labelRowsPerPage='Số dòng mỗi trang:'
+                  rowsPerPageOptions={[5, 10, 25]}
+                  component="div"
+                  count={dataFiltered.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={onChangePage}
+                  onRowsPerPageChange={onChangeRowsPerPage}
+                />
+    
+                <FormControlLabel
+                  control={<Switch checked={dense} onChange={onChangeDense} />}
+                  label="Thu gọn"
+                  sx={{ px: 3, py: 1.5, top: 0, position: { md: 'absolute' } }}
+                />
+              </Box>
+            </Card>
+          </Container>
+        </Page> 
+      );
+    }
+
+    if (consult.length === 0 && loaded === false) {
+      return (
+        <LoadingScreen />
+      ); 
+    }
+   
+    if (consult.length === 0 && loaded === true) {
+      return (
+        <Page title="Lịch hẹn thăm khám">
         <Container maxWidth={themeStretch ? false : 'lg'}>
           <HeaderBreadcrumbs
             heading="Lịch hẹn"
@@ -320,6 +454,8 @@ export default function UserList() {
           </Card>
         </Container>
       </Page> 
-    );
+      );
+    }
+  
 }
 

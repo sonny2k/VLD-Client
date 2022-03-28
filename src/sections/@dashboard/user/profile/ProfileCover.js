@@ -47,11 +47,12 @@ ProfileCover.propTypes = {
 };
 
 export default function ProfileCover({ doctor, ...other }) {
-  const { user } = useAuth();
 
   const { lname, fname, department, profilepic } = doctor.account;
 
-  const name = `${lname} ${fname}`;
+  const { level } = doctor;
+
+  const name = `${level} ${lname} ${fname}`;
 
   return (
     <RootStyle>

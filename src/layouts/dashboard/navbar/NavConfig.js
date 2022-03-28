@@ -53,7 +53,7 @@ const navConfig = [
           // { title: 'create', path: PATH_DASHBOARD.user.newUser },
           // { title: 'edit', path: PATH_DASHBOARD.user.editById },
           { title: 'Tài khoản', path: PATH_DASHBOARD.user.account },
-          { title: 'Toa thuốc', path: PATH_DASHBOARD.invoice.root },
+          // { title: 'Toa thuốc', path: PATH_DASHBOARD.invoice.root },
         ],
       },
 

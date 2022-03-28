@@ -43,11 +43,11 @@ UserCard.propTypes = {
 export default function UserCard({ doctor }) {
   const { fname, lname, profilepic } = doctor.account;
 
-  const { department, degree, workcertificate, _id } = doctor;
+  const { department, degree, workcertificate, _id, level } = doctor;
 
   const linkTo = `${PATH_DASHBOARD.user.root}/profile/${paramCase(_id)}`;
 
-  const name = `${lname} ${fname}`;
+  const name = `${level} ${lname} ${fname}`;
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);

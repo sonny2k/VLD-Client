@@ -61,7 +61,6 @@ export default function UserProfile() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(getProducts());
 
     async function fetchDoctor() {
       const URL = `/api/home/doctor/${id}`;

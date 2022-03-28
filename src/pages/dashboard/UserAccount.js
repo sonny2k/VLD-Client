@@ -52,11 +52,11 @@ export default function UserAccount() {
     //   icon: <Iconify icon={'ic:round-receipt'} width={20} height={20} />,
     //   component: <AccountBilling cards={_userPayment} addressBook={_userAddressBook} invoices={_userInvoices} />,
     // },
-    {
-      value: 'Toa thuốc của tôi',
-      icon: <Iconify icon={'fontisto:prescription'} width={20} height={20} />,
-      component: <AccountNotifications />,
-    },
+    // {
+    //   value: 'Toa thuốc của tôi',
+    //   icon: <Iconify icon={'fontisto:prescription'} width={20} height={20} />,
+    //   component: <AccountNotifications />,
+    // },
     // {
     //   value: 'social_links',
     //   icon: <Iconify icon={'eva:share-fill'} width={20} height={20} />,

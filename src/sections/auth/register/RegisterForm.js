@@ -114,9 +114,16 @@ export default function RegisterForm() {
   }, [message]);
 
   const regis = async (data) => {
-    const phone = `+84${data.phone.slice(1)}`;
-    await register(data.profilepic, data.birthday, data.gender, data.email, phone, data.password, data.firstName, data.lastName, data.city, data.district, data.ward, data.street, data.role);
-    enqueueSnackbar('Tạo tài khoản thành công');
+    try {
+      const phone = `+84${data.phone.slice(1)}`;
+      await register(data.profilepic, data.birthday, data.gender, data.email, phone, data.password, data.firstName, data.lastName, data.city, data.district, data.ward, data.street, data.role);
+      enqueueSnackbar('Tạo tài khoản thành công');
+    } catch (error) {
+      console.error(error);
+      if (isMountedRef.current) {
+        setError('afterSubmit', error);
+      } 
+    }
   }
 
   const onSubmit = async (data) => {

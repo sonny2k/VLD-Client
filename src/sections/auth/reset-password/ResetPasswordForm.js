@@ -64,7 +64,7 @@ export default function ResetPasswordForm() {
 
     setError,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { errors, isSubmitting },
   } = methods;
 
   const sendcode = async (phone) => {
@@ -98,11 +98,18 @@ export default function ResetPasswordForm() {
   }, [message]);
 
   const resetp = async (data) => {
-    const phone = `+84${data.phone.slice(1)}`;
-    await resetpassword(phone, data.password);
-    enqueueSnackbar('Cập nhật mật khẩu thành công, vui lòng đăng nhập lại!');
-    navigate('/auth/login');
-  }
+    try {
+      const phone = `+84${data.phone.slice(1)}`;
+      await resetpassword(phone, data.password);
+      enqueueSnackbar('Cập nhật mật khẩu thành công, vui lòng đăng nhập lại!');
+      navigate('/auth/login');
+    } catch (error) {
+      console.error(error);
+      if (isMountedRef.current) {
+        setError('afterSubmit', error);
+      } 
+    }
+  };
 
   const onSubmit = async (data) => {
     try {
@@ -133,6 +140,8 @@ export default function ResetPasswordForm() {
   return (
     <FormProvider methods={methods} >
       <Stack spacing={3}>
+        {!!errors.afterSubmit && <Alert severity="error">{errors.afterSubmit.message}</Alert>}
+
         <RHFTextField name="phone" label="Số điện thoại" />
 
         <RHFTextField

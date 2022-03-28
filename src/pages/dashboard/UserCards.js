@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
+import unorm from 'unorm';
 // @mui
-import { Container, Box, Card, Stack } from '@mui/material';
+import { Container, Box, Card, Stack, TextField, MenuItem } from '@mui/material';
 // redux
-import { useDispatch, useSelector } from '../../redux/store';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
-import { ShopProductSearch, ShopProductSort } from '../../sections/@dashboard/e-commerce/shop';
+import { ShopProductSearch } from '../../sections/@dashboard/e-commerce/shop';
 // hooks
 import useSettings from '../../hooks/useSettings';
 // utils
@@ -16,7 +16,8 @@ import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import SearchNotFound from '../../components/SearchNotFound';
 // sections
 import { UserCard } from '../../sections/@dashboard/user/cards';
-
+import EmptyContent from '../../components/EmptyContent';
+import LoadingScreen from '../../components/LoadingScreen';
 // ----------------------------------------------------------------------
 
 export default function UserCards() {
@@ -24,9 +25,19 @@ export default function UserCards() {
 
   const [filterName, setFilterName] = useState('');
 
-  const [filteredResults, setFilteredResults] = useState([]);
+  const [filterDepartment, setFilterDepartment] = useState('Tất cả');
 
-  const isNotFound = !filteredResults.length && Boolean(filterName);
+  const DEPARTMENT_OPTIONS = [
+    'Tất cả',
+    'chuyên khoa tim mạch',
+    'chuyên khoa nội',
+    'chuyên khoa ngoại',
+    'chuyên khoa thần kinh',
+    'chuyên khoa nhãn khoa',
+    'chuyên khoa tai mũi họng',
+    'chuyên khoa răng-hàm-mặt',
+    'chuyên khoa ung bướu',
+  ]; 
 
   const [doctors, setDoctors] = useState([])
   useEffect(() => {
@@ -35,7 +46,7 @@ export default function UserCards() {
         try {
            const res = await axios.get(URL)
            console.log(res.data)
-           setDoctors(res.data)
+           await setDoctors(res.data)
         } catch (error) {
            console.log(error)
         }
@@ -43,81 +54,127 @@ export default function UserCards() {
      fetchDoctors()
   }, []);
 
-  const handleSearch = (searchValue) => {
-    setFilterName(searchValue); // input.toLowerCase()
-    if (filterName && filterName.length > 1) {
-      const filteredData = doctors.filter(
-        (doctor) =>
-          doctor.account.fname.toLowerCase().includes(filterName) ||
-          doctor.account.lname.toLowerCase().includes(filterName)
+  function handleSortAndSearch({doctors}) {
+
+    if (filterName) {
+      doctors = doctors.filter(
+        (item) =>
+        unorm.nfkd(item.account.lname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1 || 
+        unorm.nfkd(item.account.fname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1
         // doctor.department.toLowerCase().split('chuyên khoa')[1].trim() === 'nội khoa'
       );
-      setFilteredResults(filteredData);
-    } else {
-      setFilteredResults([]);
     }
+
+    if (filterDepartment !== 'Tất cả') {
+      doctors = doctors.filter((item) => unorm.nfkd(item.department).toLowerCase().indexOf(unorm.nfkd(filterDepartment).toLowerCase()) !== -1);
+    }
+
+    return doctors;
   };
 
-  const handleSortOptions = (value) => {
-    value.toLowerCase();
-    if (value) {
-      console.log(value);
-      const filteredData = doctors.filter((doctor) => doctor.department.toLowerCase().includes(value));
-      console.log(filteredData);
-      setFilteredResults(filteredData);
-    } else {
-      setFilteredResults([]);
-    }
+  const handleFilterName = (filterName) => {
+    setFilterName(filterName);
   };
 
+  const onFilterDepartment = (event) => {
+    setFilterDepartment(event.target.value);
+  };
 
-  return (
-    <Page title="Danh sách bác sĩ">
-      <Container maxWidth={themeStretch ? false : 'lg'}>
-        <HeaderBreadcrumbs
-          heading="Danh sách bác sĩ"
-          links={[
-            { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
-            { name: 'Cá nhân', href: PATH_DASHBOARD.user.root },
-            { name: 'Danh sách bác sĩ' },
-          ]}
-        />
+  const dataFiltered = handleSortAndSearch({
+    doctors,
+  });
 
-        <Card>
-          <Stack
-            spacing={2}
-            direction={{ xs: 'column', sm: 'row' }}
-            alignItems={{ sm: 'center' }}
-            justifyContent="space-between"
-            sx={{ mb: 2 }}
-          >
-            <ShopProductSearch filterName={filterName} onFilterName={(keyword) => handleSearch(keyword)} />
-            <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-              <ShopProductSort sortFunc={handleSortOptions} />
-            </Stack>
-          </Stack>
-          {/* {isNotFound && (
-                        <Box sx={{ py: 3 }}>
-                          <SearchNotFound searchQuery={filterName} />
-                        </Box>
-                )} */}
-          <Box
-            sx={{
-              display: 'grid',
-              gap: 3,
-              gridTemplateColumns: {
-                xs: 'repeat(1, 1fr)',
-                sm: 'repeat(2, 1fr)',
-                md: 'repeat(3, 1fr)',
-            },
-          }}
-        >
-          {filteredResults.length > 0
-              ? filteredResults.map((doctor) => <UserCard key={doctor._id} doctor={doctor} />)
-              : doctors.map((doctor) => <UserCard key={doctor._id} doctor={doctor} />)}
-          </Box>
-        </Card>
-      </Container>
-    </Page>
-  );
-}
+  const isNotFound =
+    (!dataFiltered.length && filterName) ||
+    (!dataFiltered.length && filterDepartment);
+
+    if (doctors.length > 0) {
+      return ( 
+        <Page title="Danh sách bác sĩ">
+          <Container maxWidth={themeStretch ? false : 'lg'}>
+            <HeaderBreadcrumbs
+              heading="Danh sách bác sĩ"
+              links={[
+                { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
+                { name: 'Cá nhân', href: PATH_DASHBOARD.user.root },
+                { name: 'Danh sách bác sĩ' },
+              ]}
+            />
+    
+            <Card>
+              <Stack
+                direction={{ xs: 'column', sm: 'row' }}
+                alignItems={{ sm: 'center' }}
+                justifyContent="space-between"
+                sx={{ mb: 2 }}
+              >
+                <Stack direction="row" marginLeft={1} spacing={2} flexShrink={0} sx={{ my: 1 }}>
+                  <ShopProductSearch filterName={filterName} onFilterName={(keyword) => handleFilterName(keyword)} />
+                </Stack>
+                
+                <Stack direction="row" marginLeft={1} marginRight={1} spacing={2} flexShrink={0} sx={{ my: 1 }}>
+                <TextField
+                  fullWidth
+                  select
+                  label="Chuyên khoa"
+                  value={filterDepartment}
+                  onChange={onFilterDepartment}
+                  SelectProps={{
+                    MenuProps: {
+                      sx: { '& .MuiPaper-root': { maxHeight: 260 } },
+                    },
+                  }}
+                  sx={{
+                    maxWidth: { sm: 240 },
+                    textTransform: 'capitalize',
+                  }}
+                >
+                {DEPARTMENT_OPTIONS.map((option) => (
+                <MenuItem
+                  key={option}
+                  value={option}
+                  sx={{
+                    mx: 1,
+                    my: 0.5,
+                    borderRadius: 0.75,
+                    typography: 'body2',
+                    textTransform: 'capitalize',
+                  }}
+                >
+                  {option}
+                </MenuItem>
+                ))}
+                </TextField>
+    
+                </Stack>
+              </Stack>
+    
+              {dataFiltered.length === 0 && isNotFound && <EmptyContent
+                  title="Không tìm thấy bác sĩ"
+                  sx={{
+                    '& span.MuiBox-root': { height: 160 },
+                  }}
+              />}
+              <Box
+                sx={{
+                  display: 'grid',
+                  gap: 3,
+                  gridTemplateColumns: {
+                    xs: 'repeat(1, 1fr)',
+                    sm: 'repeat(2, 1fr)',
+                    md: 'repeat(3, 1fr)',
+                },
+              }}
+            >
+              {dataFiltered.map((doctor) => <UserCard key={doctor._id} doctor={doctor} />)}
+              </Box>
+            </Card>
+          </Container>
+        </Page>
+      );
+    }
+    return (
+      <LoadingScreen />
+    );
+  }
+

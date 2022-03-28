@@ -41,7 +41,7 @@ export default function UserNewForm({ consultation }) {
 
   const { fname, lname, profilepic } = consultation[0].doctor.account;
 
-  const { department, description, workcertificate, level, educationplace, degree } = consultation[0].doctor;
+  const { department, description, workcertificate, level, educationplace, degree, workhistory } = consultation[0].doctor;
 
   const name = `${level} ${lname} ${fname}`;
 
@@ -138,45 +138,57 @@ export default function UserNewForm({ consultation }) {
             <Stack spacing={2} sx={{ p: 3 }}>
               <Typography variant="body2">{description}</Typography>
 
-              <Stack direction="row">
-                <IconStyle icon={'eva:pin-fill'} />
-                <Typography variant="body2">
-                  Chứng chỉ hành nghề:&nbsp;
-                  <Link component="span" variant="subtitle2" color="text.primary">
-                    {workcertificate}
-                  </Link>
-                </Typography>
-              </Stack>
+              <Typography variant="body2">{description}</Typography>
 
-              <Stack direction="row">
-                <IconStyle icon={'eva:email-fill'} />
-                <Typography variant="body2">
-                  Trình độ:&nbsp;
-                  <Link component="span" variant="subtitle2" color="text.primary">
-                    {degree} 
-                  </Link>
-                </Typography>
-              </Stack>
+        <Stack direction="row">
+          <IconStyle icon={'carbon:certificate'} />
+          <Typography variant="body2">
+            Chứng chỉ hành nghề:&nbsp;
+            <Link component="span" variant="subtitle2" color="text.primary">
+              {workcertificate}
+            </Link>
+          </Typography>
+        </Stack>
 
-              <Stack direction="row">
-                <IconStyle icon={'ic:round-business-center'} />
-                <Typography variant="body2">
-                  Phòng ban:&nbsp;
-                  <Link component="span" variant="subtitle2" color="text.primary">
-                    {department}
-                  </Link>
-                </Typography>
-              </Stack>
+        <Stack direction="row">
+          <IconStyle icon={'fa6-solid:ranking-star'} />
+          <Typography variant="body2">
+            Trình độ:&nbsp;
+            <Link component="span" variant="subtitle2" color="text.primary">
+              {degree}
+            </Link>
+          </Typography>
+        </Stack>
 
-              <Stack direction="row">
-                <IconStyle icon={'ic:round-business-center'} />
-                  <Typography variant="body2">
-                    Tốt nghiệp&nbsp;
-                  <Link component="span" variant="subtitle2" color="text.primary">
-                    {educationplace}
-                  </Link>
-                  </Typography>
-              </Stack>
+        <Stack direction="row">
+          <IconStyle icon={'healthicons:outpatient-department'} />
+          <Typography variant="body2">
+            Phòng ban:&nbsp;
+            <Link component="span" variant="subtitle2" color="text.primary">
+              {department}
+            </Link>
+          </Typography>
+        </Stack>
+
+        <Stack direction="row">
+          <IconStyle icon={'fa-solid:user-graduate'} />
+          <Typography variant="body2">
+            Tốt nghiệp&nbsp;
+            <Link component="span" variant="subtitle2" color="text.primary">
+              {educationplace}
+            </Link>
+          </Typography>
+        </Stack>
+
+        <Stack direction="row">
+          <IconStyle icon={'ic:twotone-timeline'} />
+          <Typography variant="body2">
+            Quá trình công tác |&nbsp;
+            <Link component="span" variant="subtitle2" color="text.primary">
+              {workhistory}
+            </Link>
+          </Typography>
+        </Stack>
             </Stack>
           </Card>
         </Grid>
