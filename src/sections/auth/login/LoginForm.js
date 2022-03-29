@@ -34,6 +34,7 @@ export default function LoginForm() {
   const defaultValues = {
     phone: '',
     password: '',
+    remember: true,
   };
 
   const methods = useForm({
@@ -84,7 +85,7 @@ export default function LoginForm() {
       </Stack>
 
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
-        <RHFCheckbox name="remember" label="Ghi nhớ số điện thoại" />
+        <RHFCheckbox name="remember" label="Giữ trạng thái đăng nhập" />
         <Link component={RouterLink} variant="subtitle2" to={PATH_AUTH.resetPassword}>
           Quên mật khẩu?
         </Link>

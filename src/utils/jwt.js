@@ -1,6 +1,5 @@
 import jwtDecode from 'jwt-decode';
 import { verify, sign } from 'jsonwebtoken';
-//
 import axios from './axios';
 
 // ----------------------------------------------------------------------
@@ -18,16 +17,17 @@ import axios from './axios';
 //   return decoded.exp > currentTime;
 // };
 
-//  const handleTokenExpired = (exp) => {
+
+// function HandleTokenExpired() {
 //   let expiredTimer;
 
 //   window.clearTimeout(expiredTimer);
-//   const currentTime = Date.now();
-//   const timeLeft = exp * 1000 - currentTime;
+//   const timeLeft = 5000;
 //   console.log(timeLeft);
 //   expiredTimer = window.setTimeout(() => {
 //     console.log('expired');
-//     // You can do what ever you want here, like show a notification
+//     setSession(null);
+//     window.location.replace('/auth/login')
 //   }, timeLeft);
 // };
 

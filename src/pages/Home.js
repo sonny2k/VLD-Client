@@ -36,7 +36,7 @@ const ContentStyle = styled('div')(({ theme }) => ({
 
 export default function HomePage() {
   return (
-    <Page title="Văn Lang Doctor">
+    <Page title="Trang chủ">
       <RootStyle>
         <HomeHero />
         <ContentStyle>

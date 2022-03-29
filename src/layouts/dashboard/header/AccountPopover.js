@@ -21,10 +21,10 @@ const MENU_OPTIONS = [
     label: 'Trang chủ',
     linkTo: '/',
   },
-  {
-    label: 'Hồ sơ',
-    linkTo: PATH_DASHBOARD.user.profile,
-  },
+  // {
+  //   label: 'Hồ sơ',
+  //   linkTo: PATH_DASHBOARD.user.profile,
+  // },
   {
     label: 'Cài đặt tài khoản',
     linkTo: PATH_DASHBOARD.user.account,

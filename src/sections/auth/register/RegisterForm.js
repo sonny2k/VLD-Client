@@ -2,12 +2,14 @@ import * as Yup from 'yup';
 import 'yup-phone';
 import { useSnackbar } from 'notistack';
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { Stack, IconButton, InputAdornment, Alert, Divider } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import { PATH_DASHBOARD } from '../../../routes/paths';
 // hooks
 import useAuth from '../../../hooks/useAuth';
 import useIsMountedRef from '../../../hooks/useIsMountedRef';
@@ -23,7 +25,9 @@ export default function RegisterForm() {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { register, createuser } = useAuth();
+  const { register } = useAuth();
+
+  const navigate = useNavigate();
 
   const isMountedRef = useIsMountedRef();
 
@@ -118,6 +122,7 @@ export default function RegisterForm() {
       const phone = `+84${data.phone.slice(1)}`;
       await register(data.profilepic, data.birthday, data.gender, data.email, phone, data.password, data.firstName, data.lastName, data.city, data.district, data.ward, data.street, data.role);
       enqueueSnackbar('Tạo tài khoản thành công');
+      navigate(PATH_DASHBOARD.user.account);
     } catch (error) {
       console.error(error);
       if (isMountedRef.current) {

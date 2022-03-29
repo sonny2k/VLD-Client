@@ -46,11 +46,12 @@ const handlers = {
     account: null,
   }),
   REGISTER: (state, action) => {
+    const { account } = action.payload;
 
     return {
       ...state,
       isAuthenticated: true,
-      isInitialized: true,
+      account
     };
   },
   CHANGEPASS: (state, action) => {
@@ -199,8 +200,7 @@ function AuthProvider({ children }) {
       role,
     });
     const { accessToken, account } = response.data;
-    const id = account._id;
-    setSession(accessToken);
+    await setSession(accessToken);
     // await axios.post('/api/user/auth/createuser', {
     //   id,
     // });
