@@ -1,5 +1,5 @@
-import { paramCase } from 'change-case';
 import { useState, useEffect } from 'react';
+import { paramCase } from 'change-case';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import unorm from 'unorm';
 // @mui
@@ -22,13 +22,14 @@ import {
   FormControlLabel,
 } from '@mui/material';
 import LoadingScreen from '../../components/LoadingScreen';
-// utils
-import axios from '../../utils/axios';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
+import useTabs from '../../hooks/useTabs';
 import useSettings from '../../hooks/useSettings';
 import useTable, { getComparator, emptyRows } from '../../hooks/useTable';
+// utils
+import axios from '../../utils/axios';
 // components
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
@@ -36,23 +37,22 @@ import Scrollbar from '../../components/Scrollbar';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import { TableEmptyRows, TableHeadCustom, TableNoData, TableSelectedActions } from '../../components/table';
 // sections
-import { ProductTableToolbar, ProductTableRow } from '../../sections/@dashboard/e-commerce/product-list';
-
+import { DepartmentTableToolbar, DepartmentTableRow } from '../../sections/@dashboard/user/department';
 // ----------------------------------------------------------------------
-const ROLE_OPTIONS = ['Tất cả', 'thuốc ho', 'thuốc đau bụng'];
+const ROLE_OPTIONS = ['Tất cả', 'chuyên khoa tim mạch', 'chuyên khoa nhi'];
 
 const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'đã hủy', 'đã hoàn thành'];
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Sản phẩm', align: 'left' },
-  { id: 'createdAt', label: 'Ngày tạo', align: 'center' },
-  { id: 'categories', label: 'Loại', align: 'center' },
+  { id: 'name', label: 'Chuyên khoa', align: 'left' },
+  { id: 'description', label: 'Mô tả', align: 'center' },
+  { id: '' },
   { id: '' },
 ];
 
 // ----------------------------------------------------------------------
 
-export default function EcommerceProductList() {
+export default function DepartmentList() {
   const {
     dense,
     page,
@@ -71,30 +71,33 @@ export default function EcommerceProductList() {
     onChangePage,
     onChangeRowsPerPage,
   } = useTable();
+
   const { themeStretch } = useSettings();
 
   const navigate = useNavigate();
 
-  const [products, setProducts] = useState([]);
+  const [departments, setDepartments] = useState([]);
   useEffect(() => {
-    async function getProducts() {
-      const URL = '/api/admin/product/viewProduct';
+    async function getDepartments() {
+      const URL = '/api/admin/department/viewListDepartment';
       try {
         const res = await axios.get(URL);
-        setProducts(res.data);
+        setDepartments(res.data);
       } catch (error) {
         console.log(error);
       }
     }
-    getProducts();
+    getDepartments();
   }, []);
 
   const [filterName, setFilterName] = useState('');
 
   const [filterRole, setFilterRole] = useState('Tất cả');
 
-  function applySortFilter({ products, comparator, filterName, filterStatus, filterRole }) {
-    const stabilizedThis = products.map((el, index) => [el, index]);
+  // const { currentTab: filterStatus, onChangeTab: onChangeFilterStatus } = useTabs('Tất cả');
+
+  function applySortFilter({ departments, comparator, filterName, filterStatus, filterRole }) {
+    const stabilizedThis = departments.map((el, index) => [el, index]);
 
     stabilizedThis.sort((a, b) => {
       const order = comparator(a[0], b[0]);
@@ -102,21 +105,20 @@ export default function EcommerceProductList() {
       return a[1] - b[1];
     });
 
-    products = stabilizedThis.map((el) => el[0]);
+    departments = stabilizedThis.map((el) => el[0]);
 
     if (filterName) {
-      products = products.filter(
-        (item) =>
-          unorm.nfd(item.title).toLowerCase().indexOf(unorm.nfd(filterName).toLowerCase()) !== -1
+      departments = departments.filter(
+        (item) => unorm.nfd(item.departments).toLowerCase().indexOf(unorm.nfd(filterName).toLowerCase()) !== -1
       );
     }
     if (filterRole !== 'Tất cả') {
-      products = products.filter(
-        (item) => unorm.nfd(item.products).toLowerCase().indexOf(unorm.nfd(filterRole).toLowerCase()) !== -1
+      departments = departments.filter(
+        (item) => unorm.nfd(item.departments).toLowerCase().indexOf(unorm.nfd(filterRole).toLowerCase()) !== -1
       );
     }
 
-    return products;
+    return departments;
   }
 
   const handleFilterName = (filterName) => {
@@ -129,15 +131,15 @@ export default function EcommerceProductList() {
   };
 
   const handleDeleteRow = (id) => {
-    const deleteRow = products.filter((row) => row._id !== id);
+    const deleteRow = departments.filter((row) => row._id !== id);
     setSelected([]);
-    setProducts(deleteRow);
+    setDepartments(deleteRow);
   };
 
   const handleDeleteRows = (selected) => {
-    const deleteRows = products.filter((row) => !selected.includes(row._id));
+    const deleteRows = departments.filter((row) => !selected.includes(row._id));
     setSelected([]);
-    setProducts(deleteRows);
+    setDepartments(deleteRows);
   };
 
   const handleEditRow = (id) => {
@@ -145,44 +147,38 @@ export default function EcommerceProductList() {
   };
 
   const dataFiltered = applySortFilter({
-    products,
+    departments,
     comparator: getComparator(order, orderBy),
     filterName,
+    filterRole,
   });
 
   const denseHeight = dense ? 52 : 72;
 
   const isNotFound = !dataFiltered.length && Boolean(filterName);
 
-  return products !== null ? (
-    <Page title="Ecommerce: Product List">
+  return departments !== null ? (
+    <Page title="Danh sách chuyên khoa">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="Danh sách thuốc"
-          links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            {
-              name: 'E-Commerce',
-              href: PATH_DASHBOARD.eCommerce.root,
-            },
-            { name: 'Danh sách thuốc' },
-          ]}
-          action={
-            <Button
-              variant="contained"
-              component={RouterLink}
-              to={PATH_DASHBOARD.eCommerce.newProduct}
-              startIcon={<Iconify icon={'eva:plus-fill'} />}
-            >
-              Thêm sản phẩm
-            </Button>
-          }
+          heading="Danh sách chuyên khoa"
+          links={[{ name: 'Bảng điều khiển', href: PATH_DASHBOARD.root }, { name: 'Danh sách chuyên khoa' }]}
+          // action={
+          //   <Button
+          //     variant="contained"
+          //     component={RouterLink}
+          //     to={PATH_DASHBOARD.user.department}
+          //     startIcon={<Iconify icon={'eva:plus-fill'} />}
+          //   >
+          //     Thêm chuyên khoa
+          //   </Button>
+          // }
         />
 
         <Card>
           <Divider />
 
-          <ProductTableToolbar
+          <DepartmentTableToolbar
             filterName={filterName}
             filterRole={filterRole}
             onFilterName={handleFilterName}
@@ -196,11 +192,11 @@ export default function EcommerceProductList() {
                 <TableSelectedActions
                   dense={dense}
                   numSelected={selected.length}
-                  rowCount={products.length}
+                  rowCount={departments.length}
                   onSelectAllRows={(checked) =>
                     onSelectAllRows(
                       checked,
-                      products.map((row) => row._id)
+                      departments.map((row) => row._id)
                     )
                   }
                   actions={
@@ -218,20 +214,20 @@ export default function EcommerceProductList() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={products.length}
+                  rowCount={departments.length}
                   numSelected={selected.length}
                   onSort={onSort}
                   onSelectAllRows={(checked) =>
                     onSelectAllRows(
                       checked,
-                      products.map((row) => row._id)
+                      departments.map((row) => row._id)
                     )
                   }
                 />
 
                 <TableBody>
                   {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-                    <ProductTableRow
+                    <DepartmentTableRow
                       key={row._id}
                       row={row}
                       selected={selected.includes(row._id)}
@@ -241,7 +237,7 @@ export default function EcommerceProductList() {
                     />
                   ))}
 
-                  <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, products.length)} />
+                  <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, departments.length)} />
 
                   <TableNoData isNotFound={isNotFound} />
                 </TableBody>

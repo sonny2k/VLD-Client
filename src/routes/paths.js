@@ -59,6 +59,7 @@ export const PATH_DASHBOARD = {
     list: path(ROOTS_DASHBOARD, '/user/list'),
     newUser: path(ROOTS_DASHBOARD, '/user/new'),
     editById: path(ROOTS_DASHBOARD, `/user/reece-chung/edit`),
+    department: path(ROOTS_DASHBOARD, '/user/department'),
     account: path(ROOTS_DASHBOARD, '/user/account')
   },
   eCommerce: {
@@ -78,7 +79,8 @@ export const PATH_DASHBOARD = {
     post: path(ROOTS_DASHBOARD, '/blog/post/:title'),
     postById: path(ROOTS_DASHBOARD, '/blog/post/apply-these-7-secret-techniques-to-improve-event'),
     newPost: path(ROOTS_DASHBOARD, '/blog/new-post')
-  }
+  },
+  
 };
 
 export const PATH_DOCS = 'https://docs-minimals.vercel.app/introduction';

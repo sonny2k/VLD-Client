@@ -92,6 +92,7 @@ export default function Router() {
             { path: 'list', element: <UserList /> },
             { path: 'new', element: <UserCreate /> },
             { path: ':name/edit', element: <UserCreate /> },
+            { path: 'department', element: <DepartmentList /> },
             { path: 'account', element: <UserAccount /> },
           ],
         },
@@ -182,6 +183,7 @@ const UserCards = Loadable(lazy(() => import('../pages/dashboard/UserCards')));
 const UserList = Loadable(lazy(() => import('../pages/dashboard/UserList')));
 const UserAccount = Loadable(lazy(() => import('../pages/dashboard/UserAccount')));
 const UserCreate = Loadable(lazy(() => import('../pages/dashboard/UserCreate')));
+const DepartmentList = Loadable(lazy(() => import('../pages/dashboard/DepartmentList')));
 const Chat = Loadable(lazy(() => import('../pages/dashboard/Chat')));
 const Mail = Loadable(lazy(() => import('../pages/dashboard/Mail')));
 const Calendar = Loadable(lazy(() => import('../pages/dashboard/Calendar')));

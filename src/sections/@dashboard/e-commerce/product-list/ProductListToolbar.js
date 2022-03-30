@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types';
+import React, { useState, useEffect } from 'react';
+
 // @mui
 import { useTheme, styled } from '@mui/material/styles';
 import { Toolbar, Tooltip, IconButton, Typography, InputAdornment } from '@mui/material';
@@ -21,12 +23,21 @@ ProductListToolbar.propTypes = {
   numSelected: PropTypes.number,
   filterName: PropTypes.string,
   onFilterName: PropTypes.func,
-  onDeleteProducts: PropTypes.func,
+  onDeleteUsers: PropTypes.func,
 };
 
 export default function ProductListToolbar({ numSelected, filterName, onFilterName, onDeleteProducts }) {
   const theme = useTheme();
   const isLight = theme.palette.mode === 'light';
+  const [open, setOpen] = useState(null);
+
+  const handleOpen = (currentTarget) => {
+    setOpen(currentTarget);
+  };
+
+  const handleClose = () => {
+    setOpen(null);
+  };
 
   return (
     <RootStyle
@@ -55,6 +66,20 @@ export default function ProductListToolbar({ numSelected, filterName, onFilterNa
             ),
           }}
         />
+      )}
+
+      {numSelected > 0 ? (
+        <Tooltip title="Delete">
+          <IconButton onClick={onDeleteProducts}>
+            <Iconify icon={'eva:trash-2-outline'} />
+          </IconButton>
+        </Tooltip>
+      ) : (
+        <Tooltip title="Filter list">
+          <IconButton> 
+            <Iconify icon={'ic:round-filter-list'} />
+          </IconButton>
+        </Tooltip>
       )}
     </RootStyle>
   );
