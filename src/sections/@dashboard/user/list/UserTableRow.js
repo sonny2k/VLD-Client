@@ -17,9 +17,10 @@ UserTableRow.propTypes = {
   onEditRow: PropTypes.func,
   onSelectRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
+  onCancel: PropTypes.func,
 };
 
-export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
+export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onCancel }) {
   const theme = useTheme();
 
   const { fname, profilepic, lname } = row.doctor.account;
@@ -78,7 +79,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
       <TableCell align="center">
         <Label
           variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-          color={(status === "chờ xác nhận" && 'warning') || (status === "chờ khám" && 'info') || (status === 'đã hủy' && 'error') || (status === 'đã hoàn thành' && 'success')}
+          color={(status === "chờ xác nhận" && 'warning') || (status === "chờ khám" && 'info') || (status === 'bị từ chối' && 'error') || (status === 'đã hoàn thành' && 'success')}
           sx={{ textTransform: 'capitalize' }}
         >
           {status}
@@ -92,16 +93,36 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
           onClose={handleCloseMenu}
           actions={
             <>
-              {/* <MenuItem
+            {status === "chờ khám" && <MenuItem
                 onClick={() => {
-                  onDeleteRow();
+                  onCancel();
                   handleCloseMenu();
                 }}
                 sx={{ color: 'error.main' }}
               >
                 <Iconify icon={'eva:trash-2-outline'} />
-                Delete
-              </MenuItem> */}
+                Hủy lịch hẹn
+              </MenuItem> }
+              {status === "chờ khám" && <MenuItem
+                onClick={() => {
+                  onEditRow();
+                  handleCloseMenu();
+                }}
+                sx={{ color: 'info.main' }}
+              >
+                <Iconify icon={'healthicons:group-discussion-meeting'} />
+                Tham gia buổi tư vấn
+              </MenuItem> }
+              {status === "chờ xác nhận" && <MenuItem
+                onClick={() => {
+                  onCancel();
+                  handleCloseMenu();
+                }}
+                sx={{ color: 'error.main' }}
+              >
+                <Iconify icon={'eva:trash-2-outline'} />
+                Hủy lịch hẹn
+              </MenuItem> }
               <MenuItem
                 onClick={() => {
                   onEditRow();

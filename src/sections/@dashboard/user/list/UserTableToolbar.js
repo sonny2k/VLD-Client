@@ -16,42 +16,9 @@ UserTableToolbar.propTypes = {
   optionsDepartment: PropTypes.arrayOf(PropTypes.string),
 };
 
-export default function UserTableToolbar({ filterName, filterRole, filterDepartment, onFilterDepartment, onFilterName, onFilterRole, optionsRole, optionsDepartment }) {
+export default function UserTableToolbar({ filterName, filterDepartment, onFilterDepartment, onFilterName, optionsDepartment }) {
   return (
     <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ py: 2.5, px: 3 }}>
-      <TextField
-        fullWidth
-        select
-        label="Giờ hẹn"
-        value={filterRole}
-        onChange={onFilterRole}
-        SelectProps={{
-          MenuProps: {
-            sx: { '& .MuiPaper-root': { maxHeight: 260 } },
-          },
-        }}
-        sx={{
-          maxWidth: { sm: 240 },
-          textTransform: 'capitalize',
-        }}
-      >
-        {optionsRole.map((option) => (
-          <MenuItem
-            key={option}
-            value={option}
-            sx={{
-              mx: 1,
-              my: 0.5,
-              borderRadius: 0.75,
-              typography: 'body2',
-              textTransform: 'capitalize',
-            }}
-          >
-            {option}
-          </MenuItem>
-        ))}
-      </TextField>
-
       <TextField
         fullWidth
         select

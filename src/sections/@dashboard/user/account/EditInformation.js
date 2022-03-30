@@ -19,6 +19,7 @@ import axios from '../../../../utils/axios';
 // components
 import { FormProvider, RHFSwitch, RHFSelect, RHFTextField, RHFUploadAvatar } from '../../../../components/hook-form';
 
+
 // ----------------------------------------------------------------------
 
 export default function ModalEditInformation() {
@@ -33,7 +34,7 @@ export default function ModalEditInformation() {
     selectedDistrict,
     selectedWard,
   } = state;
-  
+
   const { enqueueSnackbar } = useSnackbar();
 
   const { account, updateinfo } = useAuth();
@@ -112,11 +113,20 @@ export default function ModalEditInformation() {
       const districtId = document.getElementById("districtId");
       const wardId = document.getElementById("wardId");
       if (cityId.options[cityId.selectedIndex] != null && districtId.options[districtId.selectedIndex] != null && wardId.options[wardId.selectedIndex] != null)  {
-        const city = cityId.options[cityId.selectedIndex].text;
-        const district = districtId.options[districtId.selectedIndex].text;
-        const ward = wardId.options[wardId.selectedIndex].text;
+        const city = cityId.options[cityId.selectedIndex].value;
+        const district = districtId.options[districtId.selectedIndex].value;
+        const ward = wardId.options[wardId.selectedIndex].value;
         await updateinfo(data.fname, data.lname, data.email, birth, newgender, city, district, ward, data.street);
       }
+      // if (districtId.options[districtId.selectedIndex] != null && wardId.options[wardId.selectedIndex] != null)  {
+      //   const district = districtId.options[districtId.selectedIndex].value;
+      //   const ward = wardId.options[wardId.selectedIndex].value;
+      //   await updateinfo(data.fname, data.lname, data.email, birth, newgender, data.city, district, ward, data.street);
+      // }
+      // if (wardId.options[wardId.selectedIndex] != null)  {
+      //   const ward = wardId.options[wardId.selectedIndex].value;
+      //   await updateinfo(data.fname, data.lname, data.email, birth, newgender, data.city, data.district, ward, data.street);
+      // }
       if (cityId.options[cityId.selectedIndex] == null || districtId.options[districtId.selectedIndex] == null || wardId.options[wardId.selectedIndex] == null) {
         const c = account?.address.city;
         const d = account?.address.district;
@@ -224,7 +234,7 @@ export default function ModalEditInformation() {
                 ))}
               </RHFSelect>   
 
-              <RHFSelect id="cityId" label="Tỉnh/Thành phố" onChange={e => onCitySelect(e.target.value)} value={selectedCity}>
+              <RHFSelect name="city" id="cityId" label="Tỉnh/Thành phố" onChange={e => onCitySelect(e.target.value)} value={selectedCity}>
                 {cityOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
@@ -232,7 +242,7 @@ export default function ModalEditInformation() {
                 ))}
               </RHFSelect>
 
-              <RHFSelect id="districtId" label="Quận/Huyện" disabled={!districtOptions} onChange={e => onDistrictSelect(e.target.value)} value={selectedDistrict}>
+              <RHFSelect name="district" id="districtId" label="Quận/Huyện" disabled={districtOptions.length === 0} onChange={e => onDistrictSelect(e.target.value)} value={selectedDistrict}>
                 {districtOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
@@ -240,7 +250,7 @@ export default function ModalEditInformation() {
                 ))}
               </RHFSelect>
 
-              <RHFSelect id="wardId" label="Phường/Xã" disabled={!wardOptions} onChange={e => onWardSelect(e.target.value)} value={selectedWard}>
+              <RHFSelect name="ward" id="wardId" label="Phường/Xã" disabled={!wardOptions.length === 0} onChange={e => onWardSelect(e.target.value)} value={selectedWard}>
                 {wardOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}

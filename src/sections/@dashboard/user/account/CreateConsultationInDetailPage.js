@@ -1,5 +1,6 @@
 import * as Yup from 'yup';
 import * as React from 'react';
+import 'yup-phone';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
 import { format } from 'date-fns';
@@ -36,8 +37,12 @@ export default function ModalCreateConsultation({ doctor }) {
 
   const [ hourc, setHourC ] = useState(null);
 
-  const UpdateUserSchema = Yup.object().shape({
-    displayName: Yup.string().required('Họ tên là bắt buộc'),
+  const createConsultSchema = Yup.object().shape({
+    name: Yup.string()
+    .min(2, "Tối thiểu 2 kí tự")
+    .max(30, "Tối đa 30 kí tự")
+    .required("Vui lòng nhập họ tên hợp lệ!"),
+    phone: Yup.string().min(10, "Vui lòng nhập số điện thoại có 10 chữ số").max(10, "Vui lòng nhập số điện thoại có 10 chữ số").phone('VN', true, 'Số điện thoại không hợp lệ'),
   });
 
   const d = new Date();
@@ -47,15 +52,15 @@ export default function ModalCreateConsultation({ doctor }) {
   const dd = format(new Date(d), 'yyyy-MM-dd');
 
   const defaultValues = {
-    displayName: account?.lname + account?.fname || '',
-    phoneNumber: account?.phone || '',
+    name: `${account?.lname} ${account?.fname}` || '',
+    phone: `0${account?.phone.slice(3)}` || '',
     photoURL: account?.profilepic || '',
     date: dd,
     hour: '08:00',
   };
 
   const methods = useForm({
-    resolver: yupResolver(UpdateUserSchema),
+    resolver: yupResolver(createConsultSchema),
     defaultValues,
   });
 
@@ -69,11 +74,13 @@ export default function ModalCreateConsultation({ doctor }) {
     try {
       await axios.post('/api/user/consultation/createconsult', {
         symptom: data.symptom,
+        name: data.name,
+        phone: data.phone,
         dateconsult: datec !== null ? datec : data.date,
         hour: hourc !== null ? hourc : data.hour,
         doctor: doctor._id,
       });
-      enqueueSnackbar('Đặt hẹn thành công');
+      enqueueSnackbar('Bạn đã đăng kí lịch thăm khám thành công');
       navigate(PATH_DASHBOARD.user.list);
     } catch (err) {
       console.error(err);
@@ -98,6 +105,10 @@ export default function ModalCreateConsultation({ doctor }) {
                   gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
                 }}
               >
+                <RHFTextField name="name" label="Họ và tên" />
+
+                <RHFTextField name="phone" label="Số điện thoại" />
+
                 <RHFSelect name="date" label="Ngày" placeholder="Ngày" onChange={(e) => setDateC(e.target.value)} value={datec}>
                   {datearray.map((option, index) => (
                     <option key={index}>

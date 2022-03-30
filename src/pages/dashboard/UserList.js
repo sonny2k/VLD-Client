@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { paramCase } from 'change-case';
+import { useSnackbar } from 'notistack';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import unorm from 'unorm';
 // @mui
@@ -40,20 +41,7 @@ import LoadingScreen from '../../components/LoadingScreen';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'đã hủy', 'đã hoàn thành'];
- 
-const ROLE_OPTIONS = [
-  'Tất cả',
-  '08:00',
-  '09:00',
-  '10:00',
-  '11:00',
-  '13:00',
-  '14:00',
-  '15:00',
-  '16:00',
-  '17:00',
-];
+const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'bị từ chối', 'đã hoàn thành'];
 
 const DEPARTMENT_OPTIONS = [
   'Tất cả',
@@ -102,6 +90,8 @@ export default function UserList() {
 
   const navigate = useNavigate();
 
+  const { enqueueSnackbar } = useSnackbar();  
+
   const [ loaded, setLoaded ] = useState(false);
 
   const [ consult, setConsult ] = useState([]);
@@ -120,11 +110,9 @@ export default function UserList() {
       }
     }
     getConsult();
-  }, []);
+  }, [consult]);
 
   const [filterName, setFilterName] = useState('');
-
-  const [filterRole, setFilterRole] = useState('Tất cả');
 
   const [filterDepartment, setFilterDepartment] = useState('Tất cả');
 
@@ -149,10 +137,6 @@ export default function UserList() {
     if (filterStatus !== 'Tất cả') {
       consult = consult.filter((item) => item.status === filterStatus);
     }
-  
-    if (filterRole !== 'Tất cả') {
-      consult = consult.filter((item) => item.hour === filterRole);
-    }
 
     if (filterDepartment !== 'Tất cả') {
       consult = consult.filter((item) => unorm.nfkd(item.doctor.department).toLowerCase().indexOf(unorm.nfkd(filterDepartment).toLowerCase()) !== -1);
@@ -164,10 +148,6 @@ export default function UserList() {
     const handleFilterName = (filterName) => {
       setFilterName(filterName);
       setPage(0);
-    };
-  
-    const handleFilterRole = (event) => {
-      setFilterRole(event.target.value);
     };
 
     const handleFilterDepartment = (event) => {
@@ -189,12 +169,24 @@ export default function UserList() {
     const handleEditRow = (id) => {
       navigate(`${PATH_DASHBOARD.user.root}/detail/${paramCase(id)}`);
     };
+
+    const cancel = async (_id) => {
+      try {
+        await axios.post('/api/user/consultation/cancelconsult', {
+          _id
+        });
+        enqueueSnackbar('Hủy lịch thành công');
+        navigate(PATH_DASHBOARD.user.list);
+      } catch (err) {
+        console.error(err);
+        enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
+      }
+    };
   
     const dataFiltered = applySortFilter({
       consult,
       comparator: getComparator(order, orderBy),
       filterName,
-      filterRole,
       filterStatus,
       filterDepartment,
     });
@@ -203,7 +195,6 @@ export default function UserList() {
   
     const isNotFound =
       (!dataFiltered.length && !!filterName) ||
-      (!dataFiltered.length && !!filterRole) ||
       (!dataFiltered.length && !!filterDepartment) ||
       (!dataFiltered.length && !!filterStatus);
   
@@ -237,12 +228,9 @@ export default function UserList() {
     
               <UserTableToolbar
                 filterName={filterName}
-                filterRole={filterRole}
                 filterDepartment={filterDepartment}
                 onFilterName={handleFilterName}
-                onFilterRole={handleFilterRole}
                 onFilterDepartment={handleFilterDepartment}
-                optionsRole={ROLE_OPTIONS}
                 optionsDepartment={DEPARTMENT_OPTIONS}
               />
     
@@ -294,6 +282,7 @@ export default function UserList() {
                           onSelectRow={() => onSelectRow(row._id)}
                           onDeleteRow={() => handleDeleteRow(row._id)}
                           onEditRow={() => handleEditRow(row._id)}
+                          onCancel={() => cancel(row._id)}
                         />
                       ))}
     
@@ -365,12 +354,9 @@ export default function UserList() {
   
             <UserTableToolbar
               filterName={filterName}
-              filterRole={filterRole}
               filterDepartment={filterDepartment}
               onFilterName={handleFilterName}
-              onFilterRole={handleFilterRole}
               onFilterDepartment={handleFilterDepartment}
-              optionsRole={ROLE_OPTIONS}
               optionsDepartment={DEPARTMENT_OPTIONS}
             />
   

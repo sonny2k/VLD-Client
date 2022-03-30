@@ -37,19 +37,21 @@ export default function UserNewForm({ consultation }) {
 
   const navigate = useNavigate();
 
-  const { date, hour, status, symptom, roomname } = consultation[0];
+  const { date, hour, status, symptom, roomname, name, phone } = consultation[0];
 
   const { fname, lname, profilepic } = consultation[0].doctor.account;
 
   const { department, description, workcertificate, level, educationplace, degree, workhistory } = consultation[0].doctor;
 
-  const name = `${level} ${lname} ${fname}`;
+  const doctorname = `${level} ${lname} ${fname}`;
 
   const { enqueueSnackbar } = useSnackbar();  
 
   const defaultValues = useMemo(
     () => ({
-      name: name|| '',
+      name: doctorname|| '',
+      username: name || '',
+      phone: phone || '',
       date: format(new Date(date), 'dd/MM/yyyy') || '',
       hour: hour || '',
       symptom: symptom || '',
@@ -109,7 +111,7 @@ export default function UserNewForm({ consultation }) {
         <Grid item xs={12} md={4}>
           <Card sx={{ py: 10, px: 3 }}>
             <Label
-              color={(status === "chờ xác nhận" && 'warning') || (status === "chờ khám" && 'info') || (status === 'đã hủy' && 'error') || (status === 'đã hoàn thành' && 'success')}
+              color={(status === "chờ xác nhận" && 'warning') || (status === "chờ khám" && 'info') || (status === 'bị từ chối' && 'error') || (status === 'đã hoàn thành' && 'success')}
               sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
             >
               {status}
@@ -133,13 +135,11 @@ export default function UserNewForm({ consultation }) {
               </Avatar>
             </Box>
 
-            <CardHeader title={name} />
+            <CardHeader title={doctorname} />
 
             <Stack spacing={2} sx={{ p: 3 }}>
               <Typography variant="body2">{description}</Typography>
-
-              <Typography variant="body2">{description}</Typography>
-
+              
         <Stack direction="row">
           <IconStyle icon={'carbon:certificate'} />
           <Typography variant="body2">
@@ -203,6 +203,8 @@ export default function UserNewForm({ consultation }) {
                 gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
               }}
             >
+              <RHFTextField name="username" label="Họ tên người hẹn" disabled/>
+              <RHFTextField name="phone" label="Số điện thoại người hẹn" disabled/>
               <RHFTextField name="date" label="Ngày hẹn" disabled/>
               <RHFTextField name="hour" label="Giờ hẹn" disabled/>
             </Box>
@@ -225,7 +227,7 @@ export default function UserNewForm({ consultation }) {
               </Box>
             </Stack>
             
-            {status === 'đã hủy' || status === 'đã hoàn thành' ?
+            {status === 'bị từ chối' || status === 'đã hoàn thành' ?
             <Stack alignItems="flex-end"  sx={{ mt: 3 }}>
               <Box
                 sx={{
@@ -257,12 +259,9 @@ export default function UserNewForm({ consultation }) {
                     </Button>
                   </Tooltip>
                   :
-                  <Label
-                    variant='contained'
-                    sx={{ position: 'absolute', low: 12, left: 24, width: "auto" }}
-                  >
-                    Ghi chú: {roomname}
-                  </Label>
+                  <LoadingButton variant="text" loading={isSubmitting} onClick={handleSubmit(cancel)} sx={{ position: 'absolute', low: 12, left: 24 }}>
+                    Hủy lịch hẹn
+                  </LoadingButton>
                 } 
 
                 <Button onClick={handleSubmit(back)} variant="outlined">
