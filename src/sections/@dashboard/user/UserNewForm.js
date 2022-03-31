@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 // @mui
 import { LoadingButton } from '@mui/lab';
 import { styled } from '@mui/material/styles';
-import { Box, Card, Grid, Stack, Typography, Button, Tooltip, Link, CardHeader } from '@mui/material';
+import { Box, Card, Grid, Stack, Typography, Button, Tooltip, Link, CardHeader, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 // utils
 import createAvatar from '../../../utils/createAvatar';
 import axios from '../../../utils/axios';
@@ -46,6 +46,21 @@ export default function UserNewForm({ consultation }) {
   const doctorname = `${level} ${lname} ${fname}`;
 
   const { enqueueSnackbar } = useSnackbar();  
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const cancelAndClose = () => {
+    cancel();
+    handleClose();
+  }
 
   const defaultValues = useMemo(
     () => ({
@@ -259,7 +274,7 @@ export default function UserNewForm({ consultation }) {
                     </Button>
                   </Tooltip>
                   :
-                  <LoadingButton variant="text" loading={isSubmitting} onClick={handleSubmit(cancel)} sx={{ position: 'absolute', low: 12, left: 24 }}>
+                  <LoadingButton variant="text" loading={isSubmitting} onClick={handleClickOpen} sx={{ position: 'absolute', low: 12, left: 24 }}>
                     Hủy lịch hẹn
                   </LoadingButton>
                 } 
@@ -269,17 +284,36 @@ export default function UserNewForm({ consultation }) {
                 </Button>                
 
                 {status === 'chờ xác nhận' ?
-                  <LoadingButton type="submit" variant="contained" loading={isSubmitting} onClick={handleSubmit(cancel)}>
+                  <LoadingButton variant="contained" loading={isSubmitting} onClick={handleClickOpen}>
                     Hủy lịch hẹn
                   </LoadingButton>        
                   :
-                  <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                  <LoadingButton variant="contained" loading={isSubmitting}>
                     Tham gia buổi tư vấn
                   </LoadingButton>  
                 }
               </Box> 
             </Stack>
             }
+            <Dialog
+              open={open}
+              onClose={handleClose}
+            >
+            <DialogTitle sx={{ m: 1, p: 2 }}>
+              {"Bạn muốn hủy lịch hẹn?"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText>
+                Buổi hẹn sẽ bị xóa khỏi hệ thống sau khi nhấp đồng ý, bạn có muốn tiếp tục?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose}>Trở về</Button>
+              <Button variant='contained' onClick={cancelAndClose} autoFocus>
+                Đồng ý
+              </Button>
+            </DialogActions>
+            </Dialog>
           </Card>
         </Grid>
       </Grid>

@@ -1,13 +1,17 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { paramCase } from 'change-case';
 import { format } from 'date-fns';
+import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Checkbox, TableRow, TableCell, Typography, MenuItem } from '@mui/material';
+import { Avatar, Checkbox, TableRow, TableCell, Typography, MenuItem, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, Link } from '@mui/material';
 // components
 import Label from '../../../../components/Label';
 import Iconify from '../../../../components/Iconify';
 import { TableMoreMenu } from '../../../../components/table';
+// routes
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -27,9 +31,21 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
 
   const { department } = row.doctor
 
-  const { date, hour, status } = row;
+  const { date, hour, status, _id } = row;
+
+  const linkTo = `${PATH_DASHBOARD.user.root}/detail/${paramCase(_id)}`;
 
   const name = `${lname} ${fname}`;
+
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const [openMenu, setOpenMenuActions] = useState(null);
 
@@ -41,6 +57,11 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
     setOpenMenuActions(null);
   };
 
+  const cancelAndClose = () => {
+    onCancel();
+    handleClose();
+  }
+
   return (
     <TableRow hover selected={selected}>
       <TableCell padding="checkbox">
@@ -49,9 +70,11 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
 
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
         <Avatar alt={name} src={profilepic} sx={{ mr: 2 }} />
-        <Typography variant="subtitle2" noWrap>
-          {name}
-        </Typography>
+        <Link to={linkTo} color="inherit" component={RouterLink}>
+          <Typography variant="subtitle2" noWrap>
+            {name}
+          </Typography>
+        </Link>
       </TableCell>
 
       <TableCell align="left">{format(new Date(date), 'dd/MM/yyyy')}</TableCell>
@@ -93,16 +116,16 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
           onClose={handleCloseMenu}
           actions={
             <>
-            {status === "chờ khám" && <MenuItem
+              <MenuItem
                 onClick={() => {
-                  onCancel();
+                  onEditRow();
                   handleCloseMenu();
                 }}
-                sx={{ color: 'error.main' }}
               >
-                <Iconify icon={'eva:trash-2-outline'} />
-                Hủy lịch hẹn
-              </MenuItem> }
+                <Iconify icon={'openmoji:details'} />
+                Xem chi tiết
+              </MenuItem>
+
               {status === "chờ khám" && <MenuItem
                 onClick={() => {
                   onEditRow();
@@ -113,9 +136,22 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
                 <Iconify icon={'healthicons:group-discussion-meeting'} />
                 Tham gia buổi tư vấn
               </MenuItem> }
+
+              {status === "chờ khám" && <MenuItem
+                onClick={() => {
+                  handleClickOpen();
+                  handleCloseMenu();
+                }}
+                sx={{ color: 'error.main' }}
+              >
+                <Iconify icon={'eva:trash-2-outline'} />
+                Hủy lịch hẹn
+              </MenuItem> 
+              }
+
               {status === "chờ xác nhận" && <MenuItem
                 onClick={() => {
-                  onCancel();
+                  handleClickOpen();
                   handleCloseMenu();
                 }}
                 sx={{ color: 'error.main' }}
@@ -123,18 +159,28 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
                 <Iconify icon={'eva:trash-2-outline'} />
                 Hủy lịch hẹn
               </MenuItem> }
-              <MenuItem
-                onClick={() => {
-                  onEditRow();
-                  handleCloseMenu();
-                }}
-              >
-                <Iconify icon={'openmoji:details'} />
-                Xem chi tiết
-              </MenuItem>
             </>
           }
         />
+        <Dialog
+        open={open}
+        onClose={handleClose}
+        >
+        <DialogTitle sx={{ m: 1, p: 2 }}>
+          {"Bạn muốn hủy lịch hẹn?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Buổi hẹn sẽ bị xóa khỏi hệ thống sau khi nhấp đồng ý, bạn có muốn tiếp tục?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Trở về</Button>
+          <Button variant='contained' onClick={cancelAndClose} autoFocus>
+            Đồng ý
+          </Button>
+        </DialogActions>
+      </Dialog>
       </TableCell>
     </TableRow>
   );
