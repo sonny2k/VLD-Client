@@ -36,20 +36,6 @@ export default function ModalEditInformation() {
     selectedWard,
   } = state;
 
-//   useEffect(() => {
-//     (async function () {
-//       const cityId = document.getElementById("cityId");
-//       const districtId = document.getElementById("districtId");
-//       const wardId = document.getElementById("wardId");
-//       if (cityOptions.length > 0 && districtId.options[districtId.selectedIndex].value !== selectedDistrict) {
-//         onDistrictSelect(districtId.options[districtId.selectedIndex].value)
-//       }
-//       if (districtOptions.length > 0 && wardId.options[wardId.selectedIndex].value !== selectedWard) {
-//         onDistrictSelect(wardId.options[wardId.selectedIndex].value)
-//       }
-//     })();
-// }, [selectedCity, selectedDistrict]);
-
   const { enqueueSnackbar } = useSnackbar();
 
   const { account, updateinfo } = useAuth();
@@ -127,22 +113,23 @@ export default function ModalEditInformation() {
       const cityId = document.getElementById("cityId");
       const districtId = document.getElementById("districtId");
       const wardId = document.getElementById("wardId");
-      if (cityId.options[cityId.selectedIndex] != null && districtId.options[districtId.selectedIndex] != null && wardId.options[wardId.selectedIndex] != null)  {
+      if (cityId.options[cityId.selectedIndex] !== null && districtId.options[districtId.selectedIndex] !== null && wardId.options[wardId.selectedIndex] !== null)  {
         const city = cityId.options[cityId.selectedIndex].value;
         const district = districtId.options[districtId.selectedIndex].value;
         const ward = wardId.options[wardId.selectedIndex].value;
         await updateinfo(data.fname, data.lname, data.email, birth, newgender, city, district, ward, data.street);
       }
-      // if (districtId.options[districtId.selectedIndex] != null && wardId.options[wardId.selectedIndex] != null)  {
+      // if (cityId.options[cityId.selectedIndex] !== null && districtId.options[districtId.selectedIndex] === null && wardId.options[wardId.selectedIndex] === null)  {
+      //   const city = cityId.options[cityId.selectedIndex].value;
       //   const district = districtId.options[districtId.selectedIndex].value;
       //   const ward = wardId.options[wardId.selectedIndex].value;
-      //   await updateinfo(data.fname, data.lname, data.email, birth, newgender, data.city, district, ward, data.street);
+      //   await updateinfo(data.fname, data.lname, data.email, birth, newgender, city, district, ward, data.street);
       // }
-      // if (wardId.options[wardId.selectedIndex] != null)  {
+      // if (wardId.options[wardId.selectedIndex] === null)  {
       //   const ward = wardId.options[wardId.selectedIndex].value;
       //   await updateinfo(data.fname, data.lname, data.email, birth, newgender, data.city, data.district, ward, data.street);
       // }
-      if (cityId.options[cityId.selectedIndex] == null || districtId.options[districtId.selectedIndex] == null || wardId.options[wardId.selectedIndex] == null) {
+      if (cityId.options[cityId.selectedIndex] === null || districtId.options[districtId.selectedIndex] === null || wardId.options[wardId.selectedIndex] === null) {
         const c = account?.address.city;
         const d = account?.address.district;
         const w = account?.address.ward;
@@ -152,6 +139,7 @@ export default function ModalEditInformation() {
       window.location.reload();
     } catch (error) {
       console.error(error);
+      enqueueSnackbar('Vui lòng chọn Quận/Huyện của bạn');
     }
   };
 
@@ -250,6 +238,7 @@ export default function ModalEditInformation() {
               </RHFSelect>   
 
               {cityOptions.length > 0 && <RHFSelect name="city" id="cityId" label="Tỉnh/Thành phố" onChange={e => onCitySelect(e.target.value)} value={selectedCity}>
+                <option disabled selected value> -- Vui lòng chọn tỉnh/thành phố -- </option>
                 {cityOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
@@ -258,6 +247,7 @@ export default function ModalEditInformation() {
               </RHFSelect> }
 
               {districtOptions.length > 0 && <RHFSelect name="district" id="districtId" label="Quận/Huyện" disabled={districtOptions.length === 0} onChange={e => onDistrictSelect(e.target.value)} value={selectedDistrict}>
+                <option disabled selected value> -- Vui lòng chọn quận/huyện -- </option>
                 {districtOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}
@@ -265,7 +255,8 @@ export default function ModalEditInformation() {
                 ))}
               </RHFSelect> }
 
-              {wardOptions.length > 0 && <RHFSelect name="ward" id="wardId" label="Phường/Xã" disabled={!wardOptions.length === 0} onChange={e => onWardSelect(e.target.value)} value={selectedWard}>
+              {wardOptions.length > 0 && <RHFSelect name="ward" id="wardId" label="Phường/Xã" disabled={wardOptions.length === 0} onChange={e => onWardSelect(e.target.value)} value={selectedWard}>
+                <option disabled selected value> -- Vui lòng chọn phường/xã -- </option>
                 {wardOptions.map((option) => (
                   <option key={option.value} value={option.value}>
                     {option.label}

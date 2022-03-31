@@ -40,6 +40,8 @@ export default function AccountPopover() {
 
   const name = `${account?.lname} ${account?.fname}`;
 
+  const phone = `0${account?.phone.slice(3)}`
+
   const isMountedRef = useIsMountedRef();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -108,7 +110,7 @@ export default function AccountPopover() {
             {name}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account?.phone}
+            {phone}
           </Typography>
         </Box>
 

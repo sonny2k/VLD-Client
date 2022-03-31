@@ -19,18 +19,13 @@ const menuConfig = [
     path: '/',
   },
   {
-    title: 'Nhà thuốc',
-    icon: <Iconify icon={'bx:bxs-store-alt'} {...ICON_SIZE} />,
-    path: '/pages',
-  },
-  {
     title: 'Câu hỏi & giải đáp',
     icon: <Iconify icon={'ic:twotone-question-answer'} {...ICON_SIZE} />,
     path: PATH_PAGE.faqs,
   },
   {
     title: 'Các dịch vụ',
-    path: '/pages',
+    path: '/',
     icon: <Iconify icon={'ic:round-home-repair-service'} {...ICON_SIZE} />,
     children: [
       {
@@ -70,7 +65,7 @@ const menuConfig = [
   {
     title: 'Tin tức',
     icon: <Iconify icon={'emojione-monotone:newspaper'} {...ICON_SIZE} />,
-    path: '/pages',
+    path: PATH_PAGE.comingSoon,
   },
 ];
 
