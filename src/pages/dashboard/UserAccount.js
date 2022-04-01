@@ -23,6 +23,10 @@ import {
   EditInformation,
 } from '../../sections/@dashboard/user/account/index';
 
+import {
+  ProfileFollowers,
+} from '../../sections/@dashboard/user/profile/index';
+
 // ----------------------------------------------------------------------
 
 export default function UserAccount() {
@@ -42,11 +46,11 @@ export default function UserAccount() {
     //   component: <EditInformation />,
     // },
 
-    {
-      value: 'Đặt Lịch Tư Vấn',
-      icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
-      component: <CreateConsultation />,
-    },
+    // {
+    //   value: 'Đặt Lịch Tư Vấn',
+    //   icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
+    //   component: <CreateConsultation />,
+    // },
     // {
     //   value: 'Hồ sơ bệnh án',
     //   icon: <Iconify icon={'healthicons:medical-records-outline'} width={20} height={20} />,
@@ -57,11 +61,11 @@ export default function UserAccount() {
     //   icon: <Iconify icon={'ic:round-receipt'} width={20} height={20} />,
     //   component: <AccountBilling cards={_userPayment} addressBook={_userAddressBook} invoices={_userInvoices} />,
     // },
-    {
-      value: 'Toa thuốc của tôi',
-      icon: <Iconify icon={'fontisto:prescription'} width={20} height={20} />,
-      component: <AccountNotifications />,
-    },
+    // {
+    //   value: 'Yêu cầu',
+    //   icon: <Iconify icon={'fontisto:prescription'} width={20} height={20} />,
+    //   component: <ProfileFollowers />,
+    // },
     // {
     //   value: 'social_links',
     //   icon: <Iconify icon={'eva:share-fill'} width={20} height={20} />,

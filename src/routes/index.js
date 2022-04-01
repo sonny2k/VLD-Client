@@ -10,6 +10,8 @@ import AuthGuard from '../guards/AuthGuard';
 // import RoleBasedGuard from '../guards/RoleBasedGuard';
 // config
 import { PATH_AFTER_LOGIN } from '../config';
+import { _userFollowers } from '../_mock';
+
 // components
 import LoadingScreen from '../components/LoadingScreen';
 
@@ -93,6 +95,7 @@ export default function Router() {
             { path: 'new', element: <UserCreate /> },
             { path: ':name/edit', element: <UserCreate /> },
             { path: 'department', element: <DepartmentList /> },
+            { path: 'request', element:<RequestList followers = {_userFollowers}/>},
             { path: 'account', element: <UserAccount /> },
           ],
         },
@@ -184,6 +187,7 @@ const UserList = Loadable(lazy(() => import('../pages/dashboard/UserList')));
 const UserAccount = Loadable(lazy(() => import('../pages/dashboard/UserAccount')));
 const UserCreate = Loadable(lazy(() => import('../pages/dashboard/UserCreate')));
 const DepartmentList = Loadable(lazy(() => import('../pages/dashboard/DepartmentList')));
+const RequestList = Loadable(lazy(() => import('../pages/dashboard/RequestList')));
 const Chat = Loadable(lazy(() => import('../pages/dashboard/Chat')));
 const Mail = Loadable(lazy(() => import('../pages/dashboard/Mail')));
 const Calendar = Loadable(lazy(() => import('../pages/dashboard/Calendar')));

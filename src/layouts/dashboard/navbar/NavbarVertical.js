@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import unorm from 'unorm';
 // @mui
 import { styled, useTheme } from '@mui/material/styles';
 import { Box, Stack, Drawer } from '@mui/material';
@@ -17,6 +18,7 @@ import Scrollbar from '../../../components/Scrollbar';
 import { NavSectionVertical } from '../../../components/nav-section';
 //
 import navConfigAd from './NavConfigAd';
+import navConfigDoc from './NavConfigDoc';
 import NavbarAdmin from './NavbarAdmin';
 import navConfig from './NavConfig';
 import NavbarDocs from './NavbarDocs';
@@ -61,15 +63,19 @@ export default function NavbarVertical({ isOpenSidebar, onCloseSidebar }) {
       onCloseSidebar();
     }
 
-    if (account.role === 'Người dùng' && 'Bác sĩ') {
+    if (account.role ===  'Người dùng') {
       setRole(navConfig);
+    }
+
+    if (unorm.nfd(account.role).toLowerCase().indexOf(unorm.nfd('Bác sĩ').toLowerCase()) !== -1) {
+      setRole(navConfigDoc);
     }
 
     if (account.role === 'Admin') {
       setRole(navConfigAd);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname, account.role]);
+  }, []);
 
   const renderContent = (
     <Scrollbar

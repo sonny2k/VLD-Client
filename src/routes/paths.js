@@ -60,6 +60,7 @@ export const PATH_DASHBOARD = {
     newUser: path(ROOTS_DASHBOARD, '/user/new'),
     editById: path(ROOTS_DASHBOARD, `/user/reece-chung/edit`),
     department: path(ROOTS_DASHBOARD, '/user/department'),
+    request: path(ROOTS_DASHBOARD, '/user/request'),
     account: path(ROOTS_DASHBOARD, '/user/account')
   },
   eCommerce: {
