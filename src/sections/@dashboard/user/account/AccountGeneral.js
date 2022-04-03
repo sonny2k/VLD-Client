@@ -40,6 +40,8 @@ export default function ModalEditInformation() {
 
   const { account, updateinfo } = useAuth();
 
+  const cursor = true;
+
   const UpdateUserSchema = Yup.object().shape({
     fname: Yup.string().required('Vui lòng điền tên chính xác'),
     lname: Yup.string().matches(/^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/, 'Vui lòng điền họ chính xác'),
@@ -216,7 +218,7 @@ export default function ModalEditInformation() {
                 gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
               }}
             >
-              <RHFTextField name="lname" label="Họ" />
+              <RHFTextField autoFocus={cursor} name="lname" label="Họ" />
               <RHFTextField name="fname" label="Tên" />
               <RHFTextField name="email" label="Địa chỉ email" />
               <RHFTextField name="phone" label="Số điện thoại" disabled/>

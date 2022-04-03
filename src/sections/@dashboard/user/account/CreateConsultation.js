@@ -33,7 +33,7 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
 
   const { lname, fname, profilepic } = doctor.account;
 
-  const { level, department, available, workcertificate } = doctor
+  const { level, department, availables, workcertificate } = doctor;
 
   const { account } = useAuth();
 
@@ -43,15 +43,11 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
     doctor: PropTypes.object,
   };
 
-  const d = new Date();
+  const [ datec, setDateC ] = useState(format(new Date(availables[0].date), 'yyyy-MM-dd'));
+  
+  const [ position, setPosition ] = useState(0);
 
-  d.setDate(d.getDate() + 1);
-
-  const dd = format(new Date(d), 'yyyy-MM-dd');
-
-  const [ datec, setDateC ] = useState(null);
-
-  const [ hourc, setHourC ] = useState(null);
+  const [ hourc, setHourC ] = useState(availables[0].hours[0].time);
 
   const createConsultSchema = Yup.object().shape({
     name: Yup.string()
@@ -65,8 +61,6 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
     name: `${account?.lname} ${account?.fname}` || '',
     phone: `0${account?.phone.slice(3)}` || '',
     photoURL: account?.profilepic || '',
-    date: dd,
-    hour: '08:00',
   };
 
   const methods = useForm({
@@ -86,8 +80,8 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
         symptom: data.symptom,
         name: data.name,
         phone: data.phone,
-        dateconsult: datec !== null ? datec : data.date,
-        hour: hourc !== null ? hourc : data.hour,
+        dateconsult: datec,
+        hour: hourc,
         doctor: doctor._id,
       });
       enqueueSnackbar('Bạn đã đăng kí lịch thăm khám thành công');
@@ -155,19 +149,22 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
 
               <RHFTextField name="phone" label="Số điện thoại" />
 
-              <RHFSelect name="date" label="Ngày" placeholder="Ngày" onChange={(e) => setDateC(e.target.value)} value={datec}>
-                {datearray.map((option, index) => (
-                  <option key={index}>
-                    {option.value}
+              <RHFSelect name="date" label="Ngày" placeholder="Ngày" onChange={(e) => {setPosition(e.target.selectedIndex); setDateC(e.target.value); setHourC(availables[e.target.selectedIndex].hours[0].time)}}>
+                {availables.map((option, index) => (
+                  <option key={index} value={format(new Date(option.date), 'yyyy-MM-dd')}>
+                    {format(new Date(option.date), 'dd-MM-yyyy')}
                   </option>
                 ))}
               </RHFSelect>
 
-              <RHFSelect name="hour" label="Giờ" placeholder="Giờ" onChange={(e) => setHourC(e.target.value)} value={hourc}>
-                {hours.map((option, index) => (
-                  <option key={index}>
-                    {option.label}
+              <RHFSelect name="hour" label="Giờ" placeholder="Giờ" onChange={(e) => setHourC(e.target.value)}>
+                {availables[position].hours.map((option, index) => (
+                  option.status === false ? 
+                  <option key={index} value={option.time}>
+                    {option.time}
                   </option>
+                  :
+                  null
                 ))}
               </RHFSelect>
             </Box>

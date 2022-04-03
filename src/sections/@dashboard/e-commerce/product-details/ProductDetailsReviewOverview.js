@@ -35,8 +35,8 @@ ProductDetailsReviewOverview.propTypes = {
   onOpen: PropTypes.func,
 };
 
-export default function ProductDetailsReviewOverview({ product, onOpen }) {
-  const { totalRating, totalReview, ratings } = product;
+export default function ProductDetailsReviewOverview({ doctor, onOpen }) {
+  const { totalRating, totalReview, ratings } = doctor;
 
   const total = sumBy(ratings, (star) => star.starCount);
 
@@ -44,7 +44,7 @@ export default function ProductDetailsReviewOverview({ product, onOpen }) {
     <Grid container>
       <GridStyle item xs={12} md={4}>
         <Typography variant="subtitle1" gutterBottom>
-          Average rating
+          Đánh giá trung bình
         </Typography>
         <Typography variant="h2" gutterBottom sx={{ color: 'error.main' }}>
           {totalRating}/5
@@ -70,7 +70,7 @@ export default function ProductDetailsReviewOverview({ product, onOpen }) {
       <GridStyle item xs={12} md={4}>
         <Link href="#move_add_review" underline="none">
           <Button size="large" onClick={onOpen} variant="outlined" startIcon={<Iconify icon={'eva:edit-2-fill'} />}>
-            Write your review
+            Viết nhận xét của bạn
           </Button>
         </Link>
       </GridStyle>

@@ -27,6 +27,10 @@ import {
   ProfileFollowers,
 } from '../../sections/@dashboard/user/profile';
 
+import {
+  ProductDetailsReview
+} from '../../sections/@dashboard/e-commerce/product-details'
+
 // ----------------------------------------------------------------------
 
 const TabsWrapperStyle = styled('div')(({ theme }) => ({
@@ -94,15 +98,15 @@ export default function UserProfile() {
         icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
         component: <Profile doctor={doctor} posts={_userFeeds} />,
       },
-      {
-        value: 'Đánh giá',
-        icon: <Iconify icon={'eva:heart-fill'} width={20} height={20} />,
-        component: <Profile2 posts={_userFeeds} />,
-      },
       // {
-      //   value: 'friends',
+      //   value: 'Đánh giá',
+      //   icon: <Iconify icon={'eva:heart-fill'} width={20} height={20} />,
+      //   component: <ProductDetailsReview doctor={doctor} />,
+      // },
+      // {
+      //   value: 'Yeu cau',
       //   icon: <Iconify icon={'eva:people-fill'} width={20} height={20} />,
-      //   component: <ProfileFriends friends={_userFriends} findFriends={findFriends} onFindFriends={handleFindFriends} />,
+      //   component: <ProfileFollowers followers={_userFollowers} />,
       // },
       // {
       //   value: 'gallery',

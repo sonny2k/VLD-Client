@@ -25,10 +25,10 @@ export default function UserCards() {
 
   const [filterName, setFilterName] = useState('');
 
-  const [filterDepartment, setFilterDepartment] = useState('Tất cả');
+  const [filterDepartment, setFilterDepartment] = useState('Tất cả chuyên khoa');
 
   const DEPARTMENT_OPTIONS = [
-    'Tất cả',
+    'Tất cả chuyên khoa',
     'chuyên khoa tim mạch',
     'chuyên khoa nội',
     'chuyên khoa ngoại',
@@ -65,7 +65,7 @@ export default function UserCards() {
       );
     }
 
-    if (filterDepartment !== 'Tất cả') {
+    if (filterDepartment !== 'Tất cả chuyên khoa') {
       doctors = doctors.filter((item) => unorm.nfkd(item.department).toLowerCase().indexOf(unorm.nfkd(filterDepartment).toLowerCase()) !== -1);
     }
 
@@ -100,19 +100,18 @@ export default function UserCards() {
                 { name: 'Danh sách bác sĩ' },
               ]}
             />
-    
-            <Card>
+
               <Stack
                 direction={{ xs: 'column', sm: 'row' }}
                 alignItems={{ sm: 'center' }}
                 justifyContent="space-between"
                 sx={{ mb: 2 }}
               >
-                <Stack direction="row" marginLeft={1} spacing={2} flexShrink={0} sx={{ my: 1 }}>
+                <Stack>
                   <ShopProductSearch filterName={filterName} onFilterName={(keyword) => handleFilterName(keyword)} />
                 </Stack>
                 
-                <Stack direction="row" marginLeft={1} marginRight={1} spacing={2} flexShrink={0} sx={{ my: 1 }}>
+                <Stack>
                 <TextField
                   fullWidth
                   select
@@ -168,7 +167,6 @@ export default function UserCards() {
             >
               {dataFiltered.map((doctor) => <UserCard key={doctor._id} doctor={doctor} />)}
               </Box>
-            </Card>
           </Container>
         </Page>
       );

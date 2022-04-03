@@ -71,14 +71,14 @@ export default function ProductDetailsReviewForm({ onClose, id, ...other }) {
   return (
     <RootStyle {...other} id={id}>
       <Typography variant="subtitle1" gutterBottom>
-        Add Review
+        Thêm nhận xét
       </Typography>
 
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Stack spacing={3}>
           <div>
             <Stack direction="row" flexWrap="wrap" alignItems="center" spacing={1.5}>
-              <Typography variant="body2">Your review about this product:</Typography>
+              <Typography variant="body2">Nhận xét của bạn về bác sĩ:</Typography>
 
               <Controller
                 name="rating"
@@ -97,10 +97,10 @@ export default function ProductDetailsReviewForm({ onClose, id, ...other }) {
 
           <Stack direction="row" justifyContent="flex-end" spacing={1.5}>
             <Button color="inherit" variant="outlined" onClick={onCancel}>
-              Cancel
+              Hủy
             </Button>
             <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-              Post review
+              Đăng nhận xét
             </LoadingButton>
           </Stack>
         </Stack>

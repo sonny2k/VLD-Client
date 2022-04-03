@@ -10,10 +10,10 @@ import ProductDetailsReviewOverview from './ProductDetailsReviewOverview';
 // ----------------------------------------------------------------------
 
 ProductDetailsReview.propTypes = {
-  product: PropTypes.object,
+  doctor: PropTypes.object,
 };
 
-export default function ProductDetailsReview({ product }) {
+export default function ProductDetailsReview({ doctor }) {
   const [reviewBox, setReviewBox] = useState(false);
 
   const handleOpenReviewBox = () => {
@@ -26,7 +26,7 @@ export default function ProductDetailsReview({ product }) {
 
   return (
     <>
-      <ProductDetailsReviewOverview product={product} onOpen={handleOpenReviewBox} />
+      <ProductDetailsReviewOverview doctor={doctor} onOpen={handleOpenReviewBox} />
 
       <Divider />
 
@@ -35,7 +35,7 @@ export default function ProductDetailsReview({ product }) {
         <Divider />
       </Collapse>
 
-      <ProductDetailsReviewList product={product} />
+      <ProductDetailsReviewList doctor={doctor} />
     </>
   );
 }
