@@ -170,10 +170,13 @@ export default function UserList() {
       navigate(`${PATH_DASHBOARD.user.root}/detail/${paramCase(id)}`);
     };
 
-    const cancel = async (_id) => {
+    const cancel = async (_id, doctor, date, hour) => {
       try {
         await axios.post('/api/user/consultation/cancelconsult', {
-          _id
+          _id,
+          doctor,
+          date,
+          hour,
         });
         enqueueSnackbar('Hủy lịch thành công');
         navigate(PATH_DASHBOARD.user.list);
@@ -282,7 +285,7 @@ export default function UserList() {
                           onSelectRow={() => onSelectRow(row._id)}
                           onDeleteRow={() => handleDeleteRow(row._id)}
                           onEditRow={() => handleEditRow(row._id)}
-                          onCancel={() => cancel(row._id)}
+                          onCancel={() => cancel(row._id, row.doctor, row.date, row.hour)}
                         />
                       ))}
     

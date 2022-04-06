@@ -141,7 +141,7 @@ export default function ModalEditInformation() {
       window.location.reload();
     } catch (error) {
       console.error(error);
-      enqueueSnackbar('Vui lòng chọn Quận/Huyện của bạn');
+      enqueueSnackbar('Vui lòng chọn Quận/Huyện của bạn', { variant: 'error' });
     }
   };
 

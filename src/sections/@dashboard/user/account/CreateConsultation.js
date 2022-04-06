@@ -43,11 +43,11 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
     doctor: PropTypes.object,
   };
 
-  const [ datec, setDateC ] = useState(format(new Date(availables[0].date), 'yyyy-MM-dd'));
+  const [ datec, setDateC ] = useState(null);
   
-  const [ position, setPosition ] = useState(0);
+  const [ position, setPosition ] = useState(null);
 
-  const [ hourc, setHourC ] = useState(availables[0].hours[0].time);
+  const [ hourc, setHourC ] = useState(null);
 
   const createConsultSchema = Yup.object().shape({
     name: Yup.string()
@@ -75,20 +75,42 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
   } = methods;
 
   const onSubmit = async (data) => {
+    
     try {
-      await axios.post('/api/user/consultation/createconsult', {
-        symptom: data.symptom,
-        name: data.name,
-        phone: data.phone,
-        dateconsult: datec,
-        hour: hourc,
-        doctor: doctor._id,
-      });
-      enqueueSnackbar('Bạn đã đăng kí lịch thăm khám thành công');
-      navigate(PATH_DASHBOARD.user.list);
+      if (datec !== null && hourc !== null) {
+        await axios.post('/api/user/consultation/createconsult', {
+          symptom: data.symptom,
+          name: data.name,
+          phone: data.phone,
+          dateconsult: datec,
+          hour: hourc,
+          doctor: doctor._id,
+        });
+        enqueueSnackbar('Bạn đã đăng kí lịch thăm khám thành công');
+        navigate(PATH_DASHBOARD.user.list);
+      }
+
+      if (hourc === null && datec !== null) {
+        const hourId = document.getElementById('hourid');
+        const hournew = hourId.options[hourId.selectedIndex].value;
+        await axios.post('/api/user/consultation/createconsult', {
+          symptom: data.symptom,
+          name: data.name,
+          phone: data.phone,
+          dateconsult: datec,
+          hour: hournew,
+          doctor: doctor._id,
+        });
+        enqueueSnackbar('Bạn đã đăng kí lịch thăm khám thành công');
+        navigate(PATH_DASHBOARD.user.list);
+      }
+
+      if (datec === null && hourc === null) {
+        enqueueSnackbar('Vui lòng chọn ngày', { variant: 'error' } );
+      }
     } catch (err) {
       console.error(err);
-      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
+      enqueueSnackbar('Các giờ trong ngày đã được đặt trước, vui lòng chọn ngày khác', { variant: 'error' });
     }
   };
   
@@ -149,7 +171,8 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
 
               <RHFTextField name="phone" label="Số điện thoại" />
 
-              <RHFSelect name="date" label="Ngày" placeholder="Ngày" onChange={(e) => {setPosition(e.target.selectedIndex); setDateC(e.target.value); setHourC(availables[e.target.selectedIndex].hours[0].time)}}>
+              <RHFSelect id="dateid" name="date" label="Ngày" placeholder="Ngày" onChange={(e) => {setPosition(e.target.selectedIndex - 1); setDateC(e.target.value);}}>
+                <option disabled selected> -- Vui lòng chọn ngày -- </option>
                 {availables.map((option, index) => (
                   <option key={index} value={format(new Date(option.date), 'yyyy-MM-dd')}>
                     {format(new Date(option.date), 'dd-MM-yyyy')}
@@ -157,16 +180,18 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
                 ))}
               </RHFSelect>
 
-              <RHFSelect name="hour" label="Giờ" placeholder="Giờ" onChange={(e) => setHourC(e.target.value)}>
+              { position !== null && <RHFSelect id="hourid" name="hour" label="Giờ" placeholder="Giờ" onChange={(e) => setHourC(e.target.value)}>
                 {availables[position].hours.map((option, index) => (
                   option.status === false ? 
                   <option key={index} value={option.time}>
                     {option.time}
                   </option>
                   :
-                  null
+                  <option disabled>
+                    khung giờ {option.time} đã được đặt
+                  </option>
                 ))}
-              </RHFSelect>
+              </RHFSelect> }
             </Box>
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
