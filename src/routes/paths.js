@@ -57,11 +57,14 @@ export const PATH_DASHBOARD = {
     profile: path(ROOTS_DASHBOARD, '/user/profile/:name'),
     cards: path(ROOTS_DASHBOARD, '/user/cards'),
     list: path(ROOTS_DASHBOARD, '/user/list'),
+    doctorlist: path(ROOTS_DASHBOARD, '/user/doctorlist'),
     newUser: path(ROOTS_DASHBOARD, '/user/new'),
     editById: path(ROOTS_DASHBOARD, `/user/reece-chung/edit`),
     department: path(ROOTS_DASHBOARD, '/user/department'),
     request: path(ROOTS_DASHBOARD, '/user/request'),
-    account: path(ROOTS_DASHBOARD, '/user/account')
+    account: path(ROOTS_DASHBOARD, '/user/account'),
+    doctoraccount: path(ROOTS_DASHBOARD, '/user/doctoraccount'),
+    registercalendar: path(ROOTS_DASHBOARD, '/user/registercalendar'),
   },
   eCommerce: {
     root: path(ROOTS_DASHBOARD, '/e-commerce'),
