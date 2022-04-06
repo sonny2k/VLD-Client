@@ -97,7 +97,10 @@ export default function UserNewForm({ consultation }) {
   const cancel = async () => {
     try {
       await axios.post('/api/user/consultation/cancelconsult', {
-        _id: consultation[0]._id
+        _id: consultation[0]._id,
+        doctor: consultation[0].doctor,
+        date: consultation[0].date,
+        hour: consultation[0].hour
       });
       enqueueSnackbar('Hủy lịch thành công');
       navigate(PATH_DASHBOARD.user.list);
