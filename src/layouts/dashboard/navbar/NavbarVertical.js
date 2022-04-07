@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import unorm from 'unorm';
 // @mui
 import { styled, useTheme } from '@mui/material/styles';
 import { Box, Stack, Drawer } from '@mui/material';
@@ -16,10 +17,14 @@ import Logo from '../../../components/Logo';
 import Scrollbar from '../../../components/Scrollbar';
 import { NavSectionVertical } from '../../../components/nav-section';
 //
+import navConfigAd from './NavConfigAd';
+import navConfigDoc from './NavConfigDoc';
+import NavbarAdmin from './NavbarAdmin';
 import navConfig from './NavConfig';
 import NavbarDocs from './NavbarDocs';
 import NavbarAccount from './NavbarAccount';
 import CollapseButton from './CollapseButton';
+import useAuth from '../../../hooks/useAuth';
 
 // ----------------------------------------------------------------------
 
@@ -44,6 +49,10 @@ export default function NavbarVertical({ isOpenSidebar, onCloseSidebar }) {
 
   const { pathname } = useLocation();
 
+  const { account } = useAuth();
+
+  const [role, setRole] = useState();
+
   const isDesktop = useResponsive('up', 'lg');
 
   const { isCollapse, collapseClick, collapseHover, onToggleCollapse, onHoverEnter, onHoverLeave } =
@@ -53,8 +62,20 @@ export default function NavbarVertical({ isOpenSidebar, onCloseSidebar }) {
     if (isOpenSidebar) {
       onCloseSidebar();
     }
+   
+    if (account.role ===  'Người dùng') {
+      setRole(navConfig);
+    }
+
+    if (unorm.nfd(account.role).toLowerCase().indexOf(unorm.nfd('Bác sĩ').toLowerCase()) !== -1) {
+      setRole(navConfigDoc);
+    }
+
+    if (account.role === 'Admin') {
+      setRole(navConfigAd);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname]);
+  }, []);
 
   const renderContent = (
     <Scrollbar
@@ -84,7 +105,7 @@ export default function NavbarVertical({ isOpenSidebar, onCloseSidebar }) {
         <NavbarAccount isCollapse={isCollapse} />
       </Stack>
 
-      <NavSectionVertical navConfig={navConfig} isCollapse={isCollapse} />
+      <NavSectionVertical navConfig={role} isCollapse={isCollapse} />
 
       <Box sx={{ flexGrow: 1 }} />
 

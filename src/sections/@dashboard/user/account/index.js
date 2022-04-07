@@ -10,3 +10,5 @@ export { default as AccountUser } from './AccountUser';
 export { default as CreateConsultation } from './CreateConsultation';
 export { default as CreateConsultationInDetailPage } from './CreateConsultationInDetailPage';
 export { default as EditInformation} from './EditInformation';
+export { default as AccountDoctor} from './AccountDoctor';
+export { default as RegisterCalendar} from './RegisterCalendar';
