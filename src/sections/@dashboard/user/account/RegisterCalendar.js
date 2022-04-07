@@ -1,16 +1,13 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { format } from 'date-fns';
-
 // form
 import { useForm } from 'react-hook-form';
 // @mui
-import { Box, Grid, Card, Stack, Button, TextField } from '@mui/material';
+import { Box, Grid, Card, Stack, Button, TextField, Checkbox, Autocomplete } from '@mui/material';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { LoadingButton, DesktopDatePicker } from '@mui/lab';
-import Modal from '@mui/material/Modal';
-import ModalEditInformation from './EditInformation';
-
-
 // hooks
 import useAuth from '../../../../hooks/useAuth';
 // _mock
@@ -18,7 +15,6 @@ import { genders } from '../../../../_mock/_gender';
 // components
 import { FormProvider, RHFSelect, RHFTextField } from '../../../../components/hook-form';
 import MyAvatar from '../../../../components/MyAvatar';
-
 
 // ----------------------------------------------------------------------
 
@@ -28,7 +24,10 @@ export default function RegisterCalendar() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  
+
+  const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+  const checkedIcon = <CheckBoxIcon fontSize="small" />;
+
   const style = {
     position: 'absolute',
     top: '50%',
@@ -40,32 +39,9 @@ export default function RegisterCalendar() {
     boxShadow: 24,
     p: 4,
   };
-  
-  const gender = account.gender;
-  let genderview = "";
-  if (gender === 1) {
-    genderview = "Nam"
-  } 
-  if (gender === 2) {
-    genderview = "Nữ"
-  } 
-  if (gender === 3) {
-    genderview = "Không xác định"
-  } 
-
-  const name = `${account?.fname} ${account?.lname}`;
 
   const defaultValues = {
-    fname: account?.fname || '',
-    lname: account?.lname || '',
-    phone: account?.phone || '',
-    email: account?.email || '',
-    street: account?.address.street || '',
     birthday: format(new Date(account?.birthday), 'dd/MM/yyyy') || '',
-    gender: genderview || '',
-    cityId: account?.address.city || '',
-    districtId: account?.address.district || '',
-    wardId: account?.address.ward || '',
   };
 
   const methods = useForm({
@@ -74,11 +50,11 @@ export default function RegisterCalendar() {
 
   let birthcheck;
   if (account?.birthday === null) {
-    birthcheck = null
+    birthcheck = null;
   }
-  
+
   if (account?.birthday != null) {
-    birthcheck = new Date(account?.birthday)
+    birthcheck = new Date(account?.birthday);
   }
 
   const [birth, setBirth] = React.useState(birthcheck);
@@ -87,6 +63,17 @@ export default function RegisterCalendar() {
     setBirth(newDate);
   };
 
+  const top100Films = [
+    { label: '08:00' },
+    { label: '09:00' },
+    { label: '10:00' },
+    { label: '11:00' },
+    { label: '13:00' },
+    { label: '14:00' },
+    { label: '15:00' },
+    { label: '16:00' },
+    { label: '17:00' },
+  ];
   return (
     <FormProvider methods={methods}>
       <Grid container spacing={3}>
@@ -117,7 +104,7 @@ export default function RegisterCalendar() {
                 gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
               }}
             >
-                <DesktopDatePicker
+              <DesktopDatePicker
                 name="birthday"
                 label="Ngày 1"
                 inputFormat="dd/MM/yyyy"
@@ -125,7 +112,21 @@ export default function RegisterCalendar() {
                 onChange={handleChange}
                 renderInput={(params) => <TextField {...params} />}
               />
-              <RHFTextField name="birthday" label="Giờ" />
+              <Autocomplete
+                multiple
+                id="checkboxes-tags-demo"
+                options={top100Films}
+                disableCloseOnSelect
+                getOptionLabel={(option) => option.label}
+                renderOption={(props, option, { selected }) => (
+                  <li {...props}>
+                    <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected} />
+                    {option.label}
+                  </li>
+                )}
+                style={{ width: 500 }}
+                renderInput={(params) => <TextField {...params} label="Giờ" placeholder="Chọn giờ" />}
+              />
               <DesktopDatePicker
                 name="birthday"
                 label="Ngày 2"
@@ -133,8 +134,22 @@ export default function RegisterCalendar() {
                 value={birth}
                 onChange={handleChange}
                 renderInput={(params) => <TextField {...params} />}
+              />
+              <Autocomplete
+                multiple
+                id="checkboxes-tags-demo"
+                options={top100Films}
+                disableCloseOnSelect
+                getOptionLabel={(option) => option.label}
+                renderOption={(props, option, { selected }) => (
+                  <li {...props}>
+                    <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected} />
+                    {option.label}
+                  </li>
+                )}
+                style={{ width: 500 }}
+                renderInput={(params) => <TextField {...params} label="Giờ" placeholder="Chọn giờ" />}
               />              
-              <RHFTextField name="birthday" label="Địa chỉ email" /> 
               <DesktopDatePicker
                 name="birthday"
                 label="Ngày 3"
@@ -143,22 +158,118 @@ export default function RegisterCalendar() {
                 onChange={handleChange}
                 renderInput={(params) => <TextField {...params} />}
               />
-            <RHFTextField name="birthday" label="Địa chỉ email" /> 
+              <Autocomplete
+                multiple
+                id="checkboxes-tags-demo"
+                options={top100Films}
+                disableCloseOnSelect
+                getOptionLabel={(option) => option.label}
+                renderOption={(props, option, { selected }) => (
+                  <li {...props}>
+                    <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected} />
+                    {option.label}
+                  </li>
+                )}
+                style={{ width: 500 }}
+                renderInput={(params) => <TextField {...params} label="Giờ" placeholder="Chọn giờ" />}
+              />
+              <DesktopDatePicker
+                name="birthday"
+                label="Ngày 3"
+                inputFormat="dd/MM/yyyy"
+                value={birth}
+                onChange={handleChange}
+                renderInput={(params) => <TextField {...params} />}
+              />
+              <Autocomplete
+                multiple
+                id="checkboxes-tags-demo"
+                options={top100Films}
+                disableCloseOnSelect
+                getOptionLabel={(option) => option.label}
+                renderOption={(props, option, { selected }) => (
+                  <li {...props}>
+                    <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected} />
+                    {option.label}
+                  </li>
+                )}
+                style={{ width: 500 }}
+                renderInput={(params) => <TextField {...params} label="Giờ" placeholder="Chọn giờ" />}
+              />
+              <DesktopDatePicker
+                name="birthday"
+                label="Ngày 3"
+                inputFormat="dd/MM/yyyy"
+                value={birth}
+                onChange={handleChange}
+                renderInput={(params) => <TextField {...params} />}
+              />
+              <Autocomplete
+                multiple
+                id="checkboxes-tags-demo"
+                options={top100Films}
+                disableCloseOnSelect
+                getOptionLabel={(option) => option.label}
+                renderOption={(props, option, { selected }) => (
+                  <li {...props}>
+                    <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected} />
+                    {option.label}
+                  </li>
+                )}
+                style={{ width: 500 }}
+                renderInput={(params) => <TextField {...params} label="Giờ" placeholder="Chọn giờ" />}
+              />
+              <DesktopDatePicker
+                name="birthday"
+                label="Ngày 3"
+                inputFormat="dd/MM/yyyy"
+                value={birth}
+                onChange={handleChange}
+                renderInput={(params) => <TextField {...params} />}
+              />
+              <Autocomplete
+                multiple
+                id="checkboxes-tags-demo"
+                options={top100Films}
+                disableCloseOnSelect
+                getOptionLabel={(option) => option.label}
+                renderOption={(props, option, { selected }) => (
+                  <li {...props}>
+                    <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected} />
+                    {option.label}
+                  </li>
+                )}
+                style={{ width: 500 }}
+                renderInput={(params) => <TextField {...params} label="Giờ" placeholder="Chọn giờ" />}
+              />
+              <DesktopDatePicker
+                name="birthday"
+                label="Ngày 3"
+                inputFormat="dd/MM/yyyy"
+                value={birth}
+                onChange={handleChange}
+                renderInput={(params) => <TextField {...params} />}
+              />
+              <Autocomplete
+                multiple
+                id="checkboxes-tags-demo"
+                options={top100Films}
+                disableCloseOnSelect
+                getOptionLabel={(option) => option.label}
+                renderOption={(props, option, { selected }) => (
+                  <li {...props}>
+                    <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected} />
+                    {option.label}
+                  </li>
+                )}
+                style={{ width: 500 }}
+                renderInput={(params) => <TextField {...params} label="Giờ" placeholder="Chọn giờ" />}
+              />
             </Box>
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-              <Button variant='contained' className="openModalBtn" onClick={handleOpen}>
+              <Button variant="contained" className="openModalBtn" onClick={handleOpen}>
                 Chỉnh sửa thông tin
               </Button>
-              <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-              >
-                <Box sx={style}>
-                  <ModalEditInformation />
-                </Box>
-              </Modal>
             </Stack>
           </Card>
         </Grid>

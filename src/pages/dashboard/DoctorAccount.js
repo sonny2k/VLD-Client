@@ -23,6 +23,7 @@ import {
   CreateConsultation,
   EditInformation,
   RegisterCalendar,
+  DoctorDetail,
 } from '../../sections/@dashboard/user/account/index';
 
 import {
@@ -42,11 +43,11 @@ export default function DoctorAccount() {
       icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
       component: <AccountDoctor/>,
     },
-    // {
-    //   value: 'Sửa thông tin',
-    //   icon: <Iconify icon={'bx:bx-edit-alt'} width={20} height={20} />,
-    //   component: <EditInformation />,
-    // },
+    {
+      value: 'Thông tin chi tiết',
+      icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
+      component: <DoctorDetail />,
+    },
 
     {
       value: 'Đăng kí Lịch Tư Vấn',

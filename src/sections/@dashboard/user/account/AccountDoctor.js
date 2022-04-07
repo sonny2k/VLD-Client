@@ -106,8 +106,6 @@ export default function AccountDoctor() {
               <RHFTextField name="email" label="Địa chỉ email" disabled/>
               <RHFTextField name="phone" label="Số điện thoại" disabled/>
               <RHFTextField name="birthday" label="Ngày sinh" disabled/>
-              <RHFTextField name="workcertificate" label="Chứng chỉ" disabled/>
-
               <RHFSelect name="gender" label="Giới tính" disabled>
                 {genders.map((option) => (
                   <option key={option.code}>

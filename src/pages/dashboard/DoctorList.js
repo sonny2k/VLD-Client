@@ -56,10 +56,10 @@ const DEPARTMENT_OPTIONS = [
 ]; 
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Bác sĩ', align: 'left' },
+  { id: 'name', label: 'Bệnh nhân', align: 'left' },
   { id: 'date', label: 'Ngày', align: 'left' },
   { id: 'hour', label: 'Giờ', align: 'left' },
-  { id: 'department', label: 'Chuyên khoa', align: 'center' },
+  // { id: 'department', label: 'Chuyên khoa', align: 'center' },
   { id: 'status', label: 'Trạng thái', align: 'center' },
   { id: '' }
 ];
@@ -98,7 +98,7 @@ export default function DoctorList() {
 
   useEffect(() => {
     async function getConsult() {
-      const URL = '/api/user/consultation/viewlistconsult';
+      const URL = '/api/doctor/consultation/viewlistconsult';
       try {
         const res = await axios.get(URL);
         setConsult(res.data);
@@ -131,16 +131,16 @@ export default function DoctorList() {
     consult = stabilizedThis.map((el) => el[0]);
   
     if (filterName) {
-      consult = consult.filter((item) => unorm.nfkd(item.doctor.account.lname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1 || unorm.nfkd(item.doctor.account.fname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1);
+      consult = consult.filter((item) => unorm.nfkd(item.user.account.lname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1 || unorm.nfkd(item.doctor.account.fname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1);
     }
   
     if (filterStatus !== 'Tất cả') {
       consult = consult.filter((item) => item.status === filterStatus);
     }
 
-    if (filterDepartment !== 'Tất cả') {
-      consult = consult.filter((item) => unorm.nfkd(item.doctor.department).toLowerCase().indexOf(unorm.nfkd(filterDepartment).toLowerCase()) !== -1);
-    }
+    // if (filterDepartment !== 'Tất cả') {
+    //   consult = consult.filter((item) => unorm.nfkd(item.doctor.department).toLowerCase().indexOf(unorm.nfkd(filterDepartment).toLowerCase()) !== -1);
+    // }
   
     return consult;
   }
@@ -172,7 +172,7 @@ export default function DoctorList() {
 
     const cancel = async (_id) => {
       try {
-        await axios.post('/api/user/consultation/cancelconsult', {
+        await axios.post('/api/doctor/consultation/cancelconsult', {
           _id
         });
         enqueueSnackbar('Hủy lịch thành công');

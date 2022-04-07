@@ -27,7 +27,7 @@ DoctorTableRow.propTypes = {
 export default function DoctorTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onCancel }) {
   const theme = useTheme();
 
-  const { fname, profilepic, lname } = row.doctor.account;
+  const { fname, profilepic, lname } = row.user;
 
   const { department } = row.doctor
 
@@ -83,9 +83,9 @@ export default function DoctorTableRow({ row, selected, onEditRow, onSelectRow, 
         {hour}
       </TableCell>
 
-      <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
+      {/* <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
         {department}
-      </TableCell>
+      </TableCell> */}
 
       {/* <TableCell align="center">
         <Iconify
