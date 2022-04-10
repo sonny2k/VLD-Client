@@ -63,7 +63,7 @@ export default function NavbarVertical({ isOpenSidebar, onCloseSidebar }) {
       onCloseSidebar();
     }
    
-    if (account.role ===  'Người dùng') {
+    if (unorm.nfd(account.role).toLowerCase().indexOf(unorm.nfd('Người dùng').toLowerCase()) !== -1) {
       setRole(navConfig);
     }
 
@@ -71,7 +71,7 @@ export default function NavbarVertical({ isOpenSidebar, onCloseSidebar }) {
       setRole(navConfigDoc);
     }
 
-    if (account.role === 'Admin') {
+    if (unorm.nfd(account.role).toLowerCase().indexOf(unorm.nfd('Admin').toLowerCase()) !== -1) {
       setRole(navConfigAd);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

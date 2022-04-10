@@ -4,10 +4,10 @@ import { format } from 'date-fns';
 // form
 import { useForm } from 'react-hook-form';
 // @mui
-import { Box, Grid, Card, Stack, Button, TextField, Checkbox, Autocomplete } from '@mui/material';
+import { Box, Grid, Card, Stack, Button, TextField, Checkbox } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import { LoadingButton, DesktopDatePicker } from '@mui/lab';
+import { LoadingButton, DesktopDatePicker, Autocomplete } from '@mui/lab';
 // hooks
 import useAuth from '../../../../hooks/useAuth';
 // _mock
@@ -77,24 +77,7 @@ export default function RegisterCalendar() {
   return (
     <FormProvider methods={methods}>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          <Card sx={{ py: 10, px: 3, textAlign: 'center' }}>
-            <MyAvatar
-              sx={{
-                mx: 'auto',
-                borderWidth: 2,
-                borderStyle: 'solid',
-                borderColor: 'common.white',
-                width: { xs: 80, md: 128 },
-                height: { xs: 80, md: 128 },
-              }}
-            />
-
-            {/* <RHFSwitch name="isPublic" labelPlacement="start" label="Thông tin cá nhân" sx={{ mt: 5 }} /> */}
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={10}>
           <Card sx={{ p: 3 }}>
             <Box
               sx={{
@@ -120,12 +103,11 @@ export default function RegisterCalendar() {
                 getOptionLabel={(option) => option.label}
                 renderOption={(props, option, { selected }) => (
                   <li {...props}>
-                    <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected} />
+                    <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
                     {option.label}
                   </li>
                 )}
-                style={{ width: 500 }}
-                renderInput={(params) => <TextField {...params} label="Giờ" placeholder="Chọn giờ" />}
+                renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 1" placeholder="Chọn giờ" />}
               />
               <DesktopDatePicker
                 name="birthday"
@@ -143,12 +125,11 @@ export default function RegisterCalendar() {
                 getOptionLabel={(option) => option.label}
                 renderOption={(props, option, { selected }) => (
                   <li {...props}>
-                    <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected} />
+                    <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
                     {option.label}
                   </li>
                 )}
-                style={{ width: 500 }}
-                renderInput={(params) => <TextField {...params} label="Giờ" placeholder="Chọn giờ" />}
+                renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 2" placeholder="Chọn giờ" />}
               />              
               <DesktopDatePicker
                 name="birthday"
@@ -166,16 +147,15 @@ export default function RegisterCalendar() {
                 getOptionLabel={(option) => option.label}
                 renderOption={(props, option, { selected }) => (
                   <li {...props}>
-                    <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected} />
+                    <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
                     {option.label}
                   </li>
                 )}
-                style={{ width: 500 }}
-                renderInput={(params) => <TextField {...params} label="Giờ" placeholder="Chọn giờ" />}
+                renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 3" placeholder="Chọn giờ" />}
               />
               <DesktopDatePicker
                 name="birthday"
-                label="Ngày 3"
+                label="Ngày 4"
                 inputFormat="dd/MM/yyyy"
                 value={birth}
                 onChange={handleChange}
@@ -189,16 +169,15 @@ export default function RegisterCalendar() {
                 getOptionLabel={(option) => option.label}
                 renderOption={(props, option, { selected }) => (
                   <li {...props}>
-                    <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected} />
+                    <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
                     {option.label}
                   </li>
                 )}
-                style={{ width: 500 }}
-                renderInput={(params) => <TextField {...params} label="Giờ" placeholder="Chọn giờ" />}
+                renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 4" placeholder="Chọn giờ" />}
               />
               <DesktopDatePicker
                 name="birthday"
-                label="Ngày 3"
+                label="Ngày 5"
                 inputFormat="dd/MM/yyyy"
                 value={birth}
                 onChange={handleChange}
@@ -212,16 +191,15 @@ export default function RegisterCalendar() {
                 getOptionLabel={(option) => option.label}
                 renderOption={(props, option, { selected }) => (
                   <li {...props}>
-                    <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected} />
+                    <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
                     {option.label}
                   </li>
                 )}
-                style={{ width: 500 }}
-                renderInput={(params) => <TextField {...params} label="Giờ" placeholder="Chọn giờ" />}
+                renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 5" placeholder="Chọn giờ" />}
               />
               <DesktopDatePicker
                 name="birthday"
-                label="Ngày 3"
+                label="Ngày 6"
                 inputFormat="dd/MM/yyyy"
                 value={birth}
                 onChange={handleChange}
@@ -235,16 +213,15 @@ export default function RegisterCalendar() {
                 getOptionLabel={(option) => option.label}
                 renderOption={(props, option, { selected }) => (
                   <li {...props}>
-                    <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected} />
+                    <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
                     {option.label}
                   </li>
                 )}
-                style={{ width: 500 }}
-                renderInput={(params) => <TextField {...params} label="Giờ" placeholder="Chọn giờ" />}
+                renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 6" placeholder="Chọn giờ" />}
               />
               <DesktopDatePicker
                 name="birthday"
-                label="Ngày 3"
+                label="Ngày 7"
                 inputFormat="dd/MM/yyyy"
                 value={birth}
                 onChange={handleChange}
@@ -258,18 +235,17 @@ export default function RegisterCalendar() {
                 getOptionLabel={(option) => option.label}
                 renderOption={(props, option, { selected }) => (
                   <li {...props}>
-                    <Checkbox icon={icon} checkedIcon={checkedIcon} style={{ marginRight: 8 }} checked={selected} />
+                    <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
                     {option.label}
                   </li>
                 )}
-                style={{ width: 500 }}
-                renderInput={(params) => <TextField {...params} label="Giờ" placeholder="Chọn giờ" />}
+                renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 7" placeholder="Chọn giờ" />}
               />
             </Box>
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-              <Button variant="contained" className="openModalBtn" onClick={handleOpen}>
+              <LoadingButton variant="contained">
                 Lưu thay đổi
-              </Button>
+              </LoadingButton>
             </Stack>
           </Card>
         </Grid>
