@@ -22,11 +22,11 @@ import Iconify from '../../../components/Iconify';
 
 // ----------------------------------------------------------------------
 
-UserNewForm.propTypes = {
+DoctorConsultationDetail.propTypes = {
   consultation: PropTypes.array,
 };
 
-export default function UserNewForm({ consultation }) {
+export default function DoctorConsultationDetail({ consultation }) {
   const IconStyle = styled(Iconify)(({ theme }) => ({
     width: 20,
     height: 20,
@@ -37,13 +37,13 @@ export default function UserNewForm({ consultation }) {
 
   const navigate = useNavigate();
 
-  const { date, hour, status, symptom, roomname, name, phone } = consultation[0];
+  const { date, hour, status, symptom, name, phone } = consultation[0];
 
-  const { fname, lname, profilepic } = consultation[0].doctor.account;
+  const { fname, lname, profilepic } = consultation[0].user.account;
 
-  const { department, description, workcertificate, level, educationplace, degree, workhistory } = consultation[0].doctor;
+  const { bloodtype, height, weight, pastmedicalhistory, drughistory, familyhistory } = consultation[0].user;
 
-  const doctorname = `${level} ${lname} ${fname}`;
+  const requestname = `${lname} ${fname}`;
 
   const { enqueueSnackbar } = useSnackbar();  
 
@@ -64,8 +64,7 @@ export default function UserNewForm({ consultation }) {
 
   const defaultValues = useMemo(
     () => ({
-      name: doctorname|| '',
-      username: name || '',
+      username: name|| requestname,
       phone: phone || '',
       date: format(new Date(date), 'dd/MM/yyyy') || '',
       hour: hour || '',
@@ -91,19 +90,16 @@ export default function UserNewForm({ consultation }) {
   } = methods;
 
   const back = async () => {
-    navigate(PATH_DASHBOARD.user.list);
+    navigate(PATH_DASHBOARD.user.doctorlist);
   };
 
   const cancel = async () => {
     try {
-      await axios.post('/api/user/consultation/cancelconsult', {
+      await axios.post('/api/doctor/consultation/cancelconsultation', {
         _id: consultation[0]._id,
-        doctor: consultation[0].doctor,
-        date: consultation[0].date,
-        hour: consultation[0].hour
       });
-      enqueueSnackbar('Hủy lịch thành công');
-      navigate(PATH_DASHBOARD.user.list);
+      enqueueSnackbar('Từ chối lịch hẹn thành công');
+      navigate(PATH_DASHBOARD.user.doctorlist);
     } catch (err) {
       console.error(err);
       enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
@@ -120,6 +116,19 @@ export default function UserNewForm({ consultation }) {
     } catch (err) {
       console.error(err);
       enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
+    }
+  };
+
+  const confirm = async () => {
+    try {
+      await axios.post('/api/doctor/consultation/confirmconsultation', {
+        _id: consultation[0]._id,
+      });
+      enqueueSnackbar('Xác nhận buổi hẹn thành công');
+      navigate(PATH_DASHBOARD.user.doctorlist);
+    } catch (err) {
+      console.error(err);
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', { variant: 'error' });
     }
   };
 
@@ -153,57 +162,64 @@ export default function UserNewForm({ consultation }) {
               </Avatar>
             </Box>
 
-            <CardHeader title={doctorname} />
-
             <Stack spacing={2} sx={{ p: 3 }}>
-              <Typography variant="body2">{description}</Typography>
               
         <Stack direction="row">
-          <IconStyle icon={'carbon:certificate'} />
+          <IconStyle icon={'ic:outline-bloodtype'} />
           <Typography variant="body2">
-            Chứng chỉ hành nghề:&nbsp;
+            Nhóm máu:&nbsp;
             <Link component="span" variant="subtitle2" color="text.primary">
-              {workcertificate}
+              {bloodtype}
             </Link>
           </Typography>
         </Stack>
 
         <Stack direction="row">
-          <IconStyle icon={'fa6-solid:ranking-star'} />
+          <IconStyle icon={'mdi:human-male-height'} />
           <Typography variant="body2">
-            Trình độ:&nbsp;
+            Chiều cao:&nbsp;
             <Link component="span" variant="subtitle2" color="text.primary">
-              {degree}
+              {height}
             </Link>
           </Typography>
         </Stack>
 
         <Stack direction="row">
-          <IconStyle icon={'healthicons:outpatient-department'} />
+          <IconStyle icon={'icon-park-outline:weight'} />
           <Typography variant="body2">
-            Phòng ban:&nbsp;
+            Cân nặng:&nbsp;
             <Link component="span" variant="subtitle2" color="text.primary">
-              {department}
+              {weight}
             </Link>
           </Typography>
         </Stack>
 
         <Stack direction="row">
-          <IconStyle icon={'fa-solid:user-graduate'} />
+          <IconStyle icon={'bi:file-earmark-medical'} />
           <Typography variant="body2">
-            Tốt nghiệp&nbsp;
+            Tiền sử bệnh lý:&nbsp;
             <Link component="span" variant="subtitle2" color="text.primary">
-              {educationplace}
+              {pastmedicalhistory}
             </Link>
           </Typography>
         </Stack>
 
         <Stack direction="row">
-          <IconStyle icon={'ic:twotone-timeline'} />
+          <IconStyle icon={'healthicons:medicines'} />
           <Typography variant="body2">
-            Quá trình công tác |&nbsp;
+            Tiền sử dị ứng:&nbsp;
             <Link component="span" variant="subtitle2" color="text.primary">
-              {workhistory}
+              {drughistory}
+            </Link>
+          </Typography>
+        </Stack>
+
+        <Stack direction="row">
+          <IconStyle icon={'carbon:pedestrian-family'} />
+          <Typography variant="body2">
+            Tiền sử gia đình:&nbsp;
+            <Link component="span" variant="subtitle2" color="text.primary">
+              {familyhistory}
             </Link>
           </Typography>
         </Stack>
@@ -262,6 +278,48 @@ export default function UserNewForm({ consultation }) {
             </Stack>
             :
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+              {status === 'chờ xác nhận' ? 
+                <Box
+                sx={{
+                  display: 'grid',
+                  columnGap: 1,
+                  rowGap: 1,
+                  gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(3, 1fr)' },
+                }}
+              >
+                {status === 'chờ xác nhận' ? 
+                  <Tooltip title="Lưu lại triệu chứng mới">
+                    <Button variant="text" onClick={handleSubmit(changesymptom)} sx={{ position: 'absolute', low: 12, left: 24 }}>
+                      Lưu thay đổi
+                    </Button>
+                  </Tooltip>
+                  :
+                  <LoadingButton variant="text" loading={isSubmitting} onClick={handleClickOpen} sx={{ position: 'absolute', low: 12, left: 24 }}>
+                    Từ chối lịch hẹn
+                  </LoadingButton>
+                } 
+
+                <Button onClick={handleSubmit(back)} variant="outlined">
+                  Trở về
+                </Button>                
+
+                {status === 'chờ xác nhận' ?
+                  <LoadingButton variant="contained" color='error' loading={isSubmitting} onClick={handleClickOpen}>
+                    Từ chối lịch hẹn
+                  </LoadingButton>        
+                  :
+                  <LoadingButton variant="contained" loading={isSubmitting}>
+                    Tham gia buổi tư vấn
+                  </LoadingButton>  
+                }
+                
+                {status === 'chờ xác nhận' &&
+                  <LoadingButton variant="contained" color='info' loading={isSubmitting} onClick={handleSubmit(confirm)}>
+                    Xác nhận lịch hẹn
+                  </LoadingButton>        
+                } 
+              </Box>
+              :
               <Box
                 sx={{
                   display: 'grid',
@@ -278,7 +336,7 @@ export default function UserNewForm({ consultation }) {
                   </Tooltip>
                   :
                   <LoadingButton variant="text" color='error' loading={isSubmitting} onClick={handleClickOpen} sx={{ position: 'absolute', low: 12, left: 24 }}>
-                    Hủy lịch hẹn
+                    Từ chối lịch hẹn
                   </LoadingButton>
                 } 
 
@@ -288,14 +346,17 @@ export default function UserNewForm({ consultation }) {
 
                 {status === 'chờ xác nhận' ?
                   <LoadingButton variant="contained" color='error' loading={isSubmitting} onClick={handleClickOpen}>
-                    Hủy lịch hẹn
+                    Từ chối lịch hẹn
                   </LoadingButton>        
                   :
                   <LoadingButton variant="contained" color='info' loading={isSubmitting}>
                     Tham gia buổi tư vấn
                   </LoadingButton>  
                 }
-              </Box> 
+          
+              </Box>
+              
+              }
             </Stack>
             }
             <Dialog
@@ -303,11 +364,11 @@ export default function UserNewForm({ consultation }) {
               onClose={handleClose}
             >
             <DialogTitle sx={{ m: 1, p: 2 }}>
-              {"Bạn muốn hủy lịch hẹn?"}
+              {"Bạn muốn từ chối lịch hẹn?"}
             </DialogTitle>
             <DialogContent>
               <DialogContentText>
-                Buổi hẹn sẽ bị xóa khỏi hệ thống sau khi nhấp đồng ý, bạn có muốn tiếp tục?
+                Buổi hẹn sẽ hiển thị ở trạng thái bị từ chối ở phía người dùng sau khi nhấp đồng ý, bạn có muốn tiếp tục?
               </DialogContentText>
             </DialogContent>
             <DialogActions>

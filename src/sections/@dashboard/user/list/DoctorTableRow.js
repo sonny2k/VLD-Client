@@ -24,12 +24,12 @@ DoctorTableRow.propTypes = {
   onCancel: PropTypes.func,
 };
 
-export default function DoctorTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onCancel }) {
+export default function DoctorTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onCancel, onConfirm }) {
   const theme = useTheme();
 
-  const { fname, profilepic, lname } = row.doctor.account;
+  const { fname, profilepic, lname } = row.user.account;
 
-  const { department } = row.doctor
+  const { pastmedicalhistory } = row.user
 
   const { date, hour, status, _id } = row;
 
@@ -84,7 +84,7 @@ export default function DoctorTableRow({ row, selected, onEditRow, onSelectRow, 
       </TableCell>
 
       <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-        {department}
+        {pastmedicalhistory}
       </TableCell>
 
       {/* <TableCell align="center">
@@ -145,9 +145,20 @@ export default function DoctorTableRow({ row, selected, onEditRow, onSelectRow, 
                 sx={{ color: 'error.main' }}
               >
                 <Iconify icon={'eva:trash-2-outline'} />
-                Hủy lịch hẹn
+                Từ chối lịch hẹn
               </MenuItem> 
               }
+
+              {status === "chờ xác nhận" && <MenuItem
+                onClick={() => {
+                  onConfirm();
+                  handleCloseMenu();
+                }}
+                sx={{ color: 'success.main' }}
+              >
+                <Iconify icon={'line-md:confirm-circle'} />
+                Xác nhận lịch hẹn
+              </MenuItem> }
 
               {status === "chờ xác nhận" && <MenuItem
                 onClick={() => {
@@ -157,7 +168,7 @@ export default function DoctorTableRow({ row, selected, onEditRow, onSelectRow, 
                 sx={{ color: 'error.main' }}
               >
                 <Iconify icon={'eva:trash-2-outline'} />
-                Hủy lịch hẹn
+                Từ chối lịch hẹn
               </MenuItem> }
             </>
           }
@@ -167,11 +178,11 @@ export default function DoctorTableRow({ row, selected, onEditRow, onSelectRow, 
         onClose={handleClose}
         >
         <DialogTitle sx={{ m: 1, p: 2 }}>
-          {"Bạn muốn hủy lịch hẹn?"}
+          {"Bạn muốn từ chối lịch hẹn?"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Buổi hẹn sẽ bị xóa khỏi hệ thống sau khi nhấp đồng ý, bạn có muốn tiếp tục?
+            Buổi hẹn sẽ hiển thị ở trạng thái bị từ chối ở phía người dùng sau khi nhấp đồng ý, bạn có muốn tiếp tục?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

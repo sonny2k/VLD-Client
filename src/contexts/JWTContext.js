@@ -201,9 +201,7 @@ function AuthProvider({ children }) {
     });
     const { accessToken, account } = response.data;
     await setSession(accessToken);
-    // await axios.post('/api/user/auth/createuser', {
-    //   id,
-    // });
+    await axios.post('/api/user/auth/createuser');
     dispatch({
       type: 'REGISTER',
       payload: {

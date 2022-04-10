@@ -53,7 +53,7 @@ const navConfigDoc = [
         //   { title: 'Danh sách chờ duyệt', path: PATH_DASHBOARD.user.list },
           // { title: 'create', path: PATH_DASHBOARD.user.newUser },
           // { title: 'edit', path: PATH_DASHBOARD.user.editById },
-          { title: 'Tài khoản', path: PATH_DASHBOARD.user.doctoraccount },
+          { title: 'Tài khoản', path: PATH_DASHBOARD.user.account },
         ],
       },
 

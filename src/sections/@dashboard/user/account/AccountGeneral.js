@@ -199,7 +199,8 @@ export default function ModalEditInformation() {
                     color: 'text.secondary',
                   }}
                   disabled>
-                  Chỉ cho phép *.jpeg, *.jpg, *.png, *.gif
+                  Cập nhật ảnh đại diện
+                  <br /> Chỉ cho phép *.jpeg, *.jpg, *.png, *.gif
                   <br /> Dung lượng tối đa {fData(3145728)}
                 </Typography>
               }

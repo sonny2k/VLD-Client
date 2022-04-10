@@ -182,7 +182,7 @@ export default function UserList() {
         navigate(PATH_DASHBOARD.user.list);
       } catch (err) {
         console.error(err);
-        enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
+        enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', { variant: 'error' });
       }
     };
   

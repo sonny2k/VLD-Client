@@ -88,7 +88,7 @@ export default function Register() {
             </Typography>
             <Image
               alt="Đăng ký"
-              src="https://i.ibb.co/ZhwgNC5/Login-user.png"
+              src="https://i.ibb.co/gVr7RbT/doctor.png"
             />
           </SectionStyle>
         )}

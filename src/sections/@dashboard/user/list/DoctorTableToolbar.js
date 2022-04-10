@@ -56,7 +56,7 @@ export default function DoctorTableToolbar({ filterName, filterDepartment, onFil
         fullWidth
         value={filterName}
         onChange={(event) => onFilterName(event.target.value)}
-        placeholder="Tìm kiếm theo bác sĩ..."
+        placeholder="Tìm kiếm theo người khám..."
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

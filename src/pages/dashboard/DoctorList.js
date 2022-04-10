@@ -56,10 +56,10 @@ const DEPARTMENT_OPTIONS = [
 ]; 
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Bác sĩ', align: 'left' },
+  { id: 'name', label: 'Người khám', align: 'left' },
   { id: 'date', label: 'Ngày', align: 'left' },
   { id: 'hour', label: 'Giờ', align: 'left' },
-  { id: 'department', label: 'Chuyên khoa', align: 'center' },
+  { id: 'pastmedicalhistory', label: 'Tiền sử bệnh', align: 'center' },
   { id: 'status', label: 'Trạng thái', align: 'center' },
   { id: '' }
 ];
@@ -98,7 +98,7 @@ export default function DoctorList() {
 
   useEffect(() => {
     async function getConsult() {
-      const URL = '/api/user/consultation/viewlistconsult';
+      const URL = '/api/doctor/consultation/viewlistconsult';
       try {
         const res = await axios.get(URL);
         setConsult(res.data);
@@ -131,7 +131,7 @@ export default function DoctorList() {
     consult = stabilizedThis.map((el) => el[0]);
   
     if (filterName) {
-      consult = consult.filter((item) => unorm.nfkd(item.doctor.account.lname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1 || unorm.nfkd(item.doctor.account.fname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1);
+      consult = consult.filter((item) => unorm.nfkd(item.user.lname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1 || unorm.nfkd(item.user.fname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1);
     }
   
     if (filterStatus !== 'Tất cả') {
@@ -172,14 +172,27 @@ export default function DoctorList() {
 
     const cancel = async (_id) => {
       try {
-        await axios.post('/api/user/consultation/cancelconsult', {
-          _id
+        await axios.post('/api/doctor/consultation/cancelconsultation', {
+          _id,
         });
-        enqueueSnackbar('Hủy lịch thành công');
-        navigate(PATH_DASHBOARD.user.list);
+        enqueueSnackbar('Từ chối buổi hẹn thành công');
+        navigate(PATH_DASHBOARD.user.doctorlist);
       } catch (err) {
         console.error(err);
-        enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
+        enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', { variant: 'error' });
+      }
+    };
+
+    const confirm = async (_id) => {
+      try {
+        await axios.post('/api/doctor/consultation/confirmconsultation', {
+          _id,
+        });
+        enqueueSnackbar('Xác nhận buổi hẹn thành công');
+        navigate(PATH_DASHBOARD.user.doctorlist);
+      } catch (err) {
+        console.error(err);
+        enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', { variant: 'error' });
       }
     };
   
@@ -283,6 +296,7 @@ export default function DoctorList() {
                           onDeleteRow={() => handleDeleteRow(row._id)}
                           onEditRow={() => handleEditRow(row._id)}
                           onCancel={() => cancel(row._id)}
+                          onConfirm={() => confirm(row._id)}
                         />
                       ))}
     

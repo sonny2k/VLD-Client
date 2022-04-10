@@ -12,3 +12,4 @@ export { default as CreateConsultationInDetailPage } from './CreateConsultationI
 export { default as EditInformation} from './EditInformation';
 export { default as AccountDoctor} from './AccountDoctor';
 export { default as RegisterCalendar} from './RegisterCalendar';
+export { default as DoctorDetail} from './DoctorDetail';

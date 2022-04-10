@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import unorm from 'unorm';
 // @mui
 import { Container, Tab, Box, Tabs } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
 import useSettings from '../../hooks/useSettings';
+import useAuth from '../../hooks/useAuth';
 // _mock_
 import { _userPayment, _userAddressBook, _userInvoices, _userAbout } from '../../_mock';
 // components
@@ -16,6 +18,9 @@ import {
   AccountGeneral,
   AccountNotifications,
   AccountChangePassword,
+  RegisterCalendar,
+  AccountUser,
+  DoctorDetail,
 } from '../../sections/@dashboard/user/account/index';
 
 // ----------------------------------------------------------------------
@@ -25,18 +30,37 @@ export default function UserAccount() {
 
   const [currentTab, setCurrentTab] = useState('Tài khoản');
 
+  const { account } = useAuth();
+
+
   const ACCOUNT_TABS = [
     {
       value: 'Tài khoản',
       icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
       component: <AccountGeneral />,
     },
-    // {
-    //   value: 'Sửa thông tin',
-    //   icon: <Iconify icon={'bx:bx-edit-alt'} width={20} height={20} />,
-    //   component: <EditInformation />,
-    // },
-
+    (unorm.nfkd(account.role).toLowerCase().indexOf(unorm.nfkd('Bác sĩ').toLowerCase()) !== -1) ?
+    {
+      value: 'Đăng ký lịch tư vấn',
+      icon: <Iconify icon={'bx:bx-edit-alt'} width={20} height={20} />,
+      component: <RegisterCalendar />,
+    } :
+    {
+      value: 'Hồ sơ bệnh án',
+      icon: <Iconify icon={'healthicons:medical-records-outline'} width={20} height={20} />,
+      component: <AccountNotifications />,
+    },
+    (unorm.nfkd(account.role).toLowerCase().indexOf(unorm.nfkd('Bác sĩ').toLowerCase()) !== -1) ?
+    {
+      value: 'Thông tin chi tiết',
+      icon: <Iconify icon={'bx:bx-edit-alt'} width={20} height={20} />,
+      component: <DoctorDetail />,
+    } :
+    {
+      value: 'Thông tin chi tiết',
+      icon: <Iconify icon={'healthicons:medical-records-outline'} width={20} height={20} />,
+      component: <AccountUser />,
+    },
     // {
     //   value: 'Đặt Lịch Tư Vấn',
     //   icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
