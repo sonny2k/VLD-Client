@@ -170,10 +170,13 @@ export default function DoctorList() {
       navigate(`${PATH_DASHBOARD.user.root}/detail/${paramCase(id)}`);
     };
 
-    const cancel = async (_id) => {
+    const cancel = async (_id, doctor, date, hour) => {
       try {
         await axios.post('/api/doctor/consultation/cancelconsultation', {
           _id,
+          doctor,
+          date,
+          hour
         });
         enqueueSnackbar('Từ chối buổi hẹn thành công');
         navigate(PATH_DASHBOARD.user.doctorlist);
@@ -295,7 +298,7 @@ export default function DoctorList() {
                           onSelectRow={() => onSelectRow(row._id)}
                           onDeleteRow={() => handleDeleteRow(row._id)}
                           onEditRow={() => handleEditRow(row._id)}
-                          onCancel={() => cancel(row._id)}
+                          onCancel={() => cancel(row._id, row.doctor, row.date, row.hour)}
                           onConfirm={() => confirm(row._id)}
                         />
                       ))}

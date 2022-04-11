@@ -97,6 +97,9 @@ export default function DoctorConsultationDetail({ consultation }) {
     try {
       await axios.post('/api/doctor/consultation/cancelconsultation', {
         _id: consultation[0]._id,
+        doctor: consultation[0].doctor,
+        date: consultation[0].date,
+        hour: consultation[0].hour
       });
       enqueueSnackbar('Từ chối lịch hẹn thành công');
       navigate(PATH_DASHBOARD.user.doctorlist);
