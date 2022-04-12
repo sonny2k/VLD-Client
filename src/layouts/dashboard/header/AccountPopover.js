@@ -60,6 +60,7 @@ export default function AccountPopover() {
     try {
       await logout();
       navigate(PATH_AUTH.login, { replace: true });
+      enqueueSnackbar('Bạn đã đăng xuất khỏi hệ thống!');
 
       if (isMountedRef.current) {
         handleClose();

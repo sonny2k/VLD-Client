@@ -57,7 +57,7 @@ export default function UserCreate() {
           heading={'Xem chi tiết lịch hẹn'}
           links={[
             { name: 'Bảng điều khiển', href: PATH_DASHBOARD.user.account },
-            { name: 'Danh sách lịch hẹn', href: PATH_DASHBOARD.user.list },
+            { name: 'Danh sách lịch hẹn', href: (unorm.nfkd(account.role).toLowerCase().indexOf(unorm.nfkd("Người dùng").toLowerCase()) !== -1) ? PATH_DASHBOARD.user.list : PATH_DASHBOARD.user.doctorlist },
             { name: `Lịch hẹn ngày ${format(new Date(consultation[0].date), 'dd/MM/yyyy')} lúc ${consultation[0].hour}` },
           ]}
         />

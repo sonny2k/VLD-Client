@@ -43,6 +43,7 @@ const handlers = {
   LOGOUT: (state) => ({
     ...state,
     isAuthenticated: false,
+    isInitialized: true,
     account: null,
   }),
   REGISTER: (state, action) => {
@@ -151,7 +152,7 @@ function AuthProvider({ children }) {
     dispatch({
       type: 'LOGIN',
       payload: {
-        account,
+        account,  
       },
     });
   };

@@ -255,11 +255,7 @@ export default function DoctorConsultationDetail({ consultation }) {
                   gridTemplateColumns: { xs: 'repeat(1, 2fr)', sm: 'repeat(1, 2fr)' },
                 }}
               >
-                { status === 'chờ xác nhận' ? 
-                  <RHFTextField name="symptom" multiline rows={4} label="Triệu chứng"/>
-                  :
-                  <RHFTextField name="symptom" multiline rows={4} label="Triệu chứng" disabled/>
-                }
+                <RHFTextField name="symptom" multiline rows={3} label="Triệu chứng" disabled/>
                 
               </Box>
             </Stack>
@@ -290,17 +286,7 @@ export default function DoctorConsultationDetail({ consultation }) {
                   gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(3, 1fr)' },
                 }}
               >
-                {status === 'chờ xác nhận' ? 
-                  <Tooltip title="Lưu lại triệu chứng mới">
-                    <Button variant="text" onClick={handleSubmit(changesymptom)} sx={{ position: 'absolute', low: 12, left: 24 }}>
-                      Lưu thay đổi
-                    </Button>
-                  </Tooltip>
-                  :
-                  <LoadingButton variant="text" loading={isSubmitting} onClick={handleClickOpen} sx={{ position: 'absolute', low: 12, left: 24 }}>
-                    Từ chối lịch hẹn
-                  </LoadingButton>
-                } 
+
 
                 <Button onClick={handleSubmit(back)} variant="outlined">
                   Trở về
@@ -312,7 +298,7 @@ export default function DoctorConsultationDetail({ consultation }) {
                   </LoadingButton>        
                   :
                   <LoadingButton variant="contained" loading={isSubmitting}>
-                    Tham gia buổi tư vấn
+                    Tham gia buổi hẹn
                   </LoadingButton>  
                 }
                 
@@ -328,24 +314,19 @@ export default function DoctorConsultationDetail({ consultation }) {
                   display: 'grid',
                   columnGap: 1,
                   rowGap: 1,
-                  gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
+                  gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(3, 1fr)' },
                 }}
               >
-                {status === 'chờ xác nhận' ? 
-                  <Tooltip title="Lưu lại triệu chứng mới">
-                    <Button variant="text" onClick={handleSubmit(changesymptom)} sx={{ position: 'absolute', low: 12, left: 24 }}>
-                      Lưu thay đổi
-                    </Button>
-                  </Tooltip>
-                  :
-                  <LoadingButton variant="text" color='error' loading={isSubmitting} onClick={handleClickOpen} sx={{ position: 'absolute', low: 12, left: 24 }}>
-                    Từ chối lịch hẹn
-                  </LoadingButton>
-                } 
 
                 <Button onClick={handleSubmit(back)} variant="outlined">
                   Trở về
-                </Button>                
+                </Button>         
+
+                {status === 'chờ khám' &&
+                  <LoadingButton variant="contained" color='error' loading={isSubmitting} onClick={handleClickOpen}>
+                  Từ chối lịch hẹn
+                  </LoadingButton>  
+                }       
 
                 {status === 'chờ xác nhận' ?
                   <LoadingButton variant="contained" color='error' loading={isSubmitting} onClick={handleClickOpen}>
@@ -353,7 +334,7 @@ export default function DoctorConsultationDetail({ consultation }) {
                   </LoadingButton>        
                   :
                   <LoadingButton variant="contained" color='info' loading={isSubmitting}>
-                    Tham gia buổi tư vấn
+                    Tham gia buổi hẹn
                   </LoadingButton>  
                 }
           
