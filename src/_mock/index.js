@@ -12,5 +12,6 @@ export * from './_ecommerce';
 export * from './_analytics';
 export * from './_gender';
 export * from './_top100Films';
+export * from './_bloodtype';
 
 export default _mock;

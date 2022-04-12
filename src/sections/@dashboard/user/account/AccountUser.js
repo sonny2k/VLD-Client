@@ -1,49 +1,43 @@
 import * as Yup from 'yup';
 import { useSnackbar } from 'notistack';
-import { useCallback } from 'react';
+import { useCallback, useState, useEffect } from 'react';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { Box, Grid, Card, Stack, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import LoadingScreen from '../../../../components/LoadingScreen';
 // hooks
 import useAuth from '../../../../hooks/useAuth';
 // utils
 import { fData } from '../../../../utils/formatNumber';
+import axios from '../../../../utils/axios';
+import createAvatar from '../../../../utils/createAvatar';
 // _mock
-import { genders } from '../../../../_mock';
+import { bloodtypes } from '../../../../_mock';
 // components
 import { FormProvider, RHFSwitch, RHFSelect, RHFTextField, RHFUploadAvatar } from '../../../../components/hook-form';
+import Avatar from '../../../../components/Avatar';
 
 // ----------------------------------------------------------------------
 
-export default function AccountGeneral() {
+export default function AccountUser() {
   const { enqueueSnackbar } = useSnackbar();
 
+  const [user, setUser] = useState(null);
+
   const { account } = useAuth();
+
+  const { lname, fname, profilepic } = account;
+
 
   const UpdateUserSchema = Yup.object().shape({
     displayName: Yup.string().required('Họ tên là bắt buộc'),
   });
 
-  const defaultValues = {
-    displayName: account?.lname + account?.fname || '',
-    phoneNumber: account?.phone || '',
-    photoURL: account?.profilepic || '',
-    email: account?.email || '',
-    country: account?.country || '',
-    address: account?.address || '',
-    state: account?.state || '',
-    city: account?.address.city || '',
-    zipCode: account?.zipCode || '',
-    about: account?.about || '',
-    isPublic: account?.isPublic || '',
-  };
-
   const methods = useForm({
-    resolver: yupResolver(UpdateUserSchema),
-    defaultValues,
+    resolver: yupResolver(),
   });
 
   const {
@@ -61,6 +55,19 @@ export default function AccountGeneral() {
     }
   };
 
+  useEffect(() => {
+    async function getInfo() {
+      const URL = '/api/user/userinfo';
+      try {
+        const res = await axios.get(URL);
+        setUser(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getInfo();
+  }, []);
+
   const handleDrop = useCallback(
     (acceptedFiles) => {
       const file = acceptedFiles[0];
@@ -76,33 +83,28 @@ export default function AccountGeneral() {
     },
     [setValue]
   );
-
+  if (user !== null) {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <Card sx={{ py: 10, px: 3, textAlign: 'center' }}>
-            <RHFUploadAvatar
-              name="photoURL"
-              accept="image/*"
-              maxSize={3145728}
-              onDrop={handleDrop}
-              helperText={
-                <Typography
-                  variant="caption"
-                  sx={{
-                    mt: 2,
-                    mx: 'auto',
-                    display: 'block',
-                    textAlign: 'center',
-                    color: 'text.secondary',
-                  }}
-                >
-                  Allowed *.jpeg, *.jpg, *.png, *.gif
-                  <br /> max size of {fData(3145728)}
-                </Typography>
-              }
-            />
+          <Avatar
+              src={profilepic}
+              alt={`${lname} ${fname}`}
+              color={profilepic ? 'default' : createAvatar(`${lname} ${fname}`).color}
+            
+              sx={{
+                mx: 'auto',
+                borderWidth: 2,
+                borderStyle: 'solid',
+                borderColor: 'common.white',
+                width: { xs: 80, md: 128 },
+                height: { xs: 80, md: 128 },
+              }}
+            >
+              {createAvatar(`${lname} ${fname}`).name}
+            </Avatar>
 
             {/* <RHFSwitch name="isPublic" labelPlacement="start" label="Hồ sơ bệnh án" sx={{ mt: 5 }} /> */}
           </Card>
@@ -118,38 +120,22 @@ export default function AccountGeneral() {
                 gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
               }}
             >
-              <RHFTextField name="displayName" label="Nhóm máu" />
-              <RHFTextField name="email" label="Địa chỉ email" />
+              <RHFTextField name="height" label="Chiều cao" defaultValue={user.height} />
+              <RHFTextField name="weight" label="Cân nặng" defaultValue={user.weight} />
+              <RHFTextField name="pastmedicalhistory" label="Tiền sử bệnh lý" defaultValue={user.pastmedicalhistory} />
+              <RHFTextField name="drughistory" label="Tiền sử dị ứng" defaultValue={user.drughistory} />
+              <RHFTextField name="familyhistory" label="Tiền sử gia đình" defaultValue={user.familyhistory} />
 
-              <RHFTextField name="phoneNumber" label="Số điện thoại" />
-              <RHFTextField name="address" label="Tên đường" />
-
-              {/* <RHFSelect name="country" label="Country" placeholder="Quốc gia">
-                <option value="" />
-                {countries.map((option) => (
-                  <option key={option.code} value={option.label}>
-                    {option.label}
-                  </option>
-                ))}
-              </RHFSelect> */}
-                 <RHFSelect name="country" label="Country" placeholder="Nhóm máu">
-                <option value="" />
-                {genders.map((option) => (
+                 <RHFSelect name="bloodtype" label="Nhóm máu" placeholder="Nhóm máu" defaultValue={user.bloodtype}>
+                {bloodtypes.map((option) => (
                   <option key={option.code} value={option.label}>
                     {option.label}
                   </option>
                 ))}
                 </RHFSelect>
-
-              <RHFTextField name="state" label="Quận/Huyện" />
-
-              <RHFTextField name="city" label="Thành phố" />
-              <RHFTextField name="zipCode" label="Phường/Xã" />
             </Box>
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-              <RHFTextField name="about" multiline rows={4} label="About" />
-
               <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                 Lưu thay đổi
               </LoadingButton>
@@ -159,4 +145,6 @@ export default function AccountGeneral() {
       </Grid>
     </FormProvider>
   );
+ }
+  return <LoadingScreen />;
 }
