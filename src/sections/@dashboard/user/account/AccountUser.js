@@ -32,12 +32,14 @@ export default function AccountUser() {
   const { lname, fname, profilepic } = account;
 
 
-  const UpdateUserSchema = Yup.object().shape({
-    displayName: Yup.string().required('Họ tên là bắt buộc'),
+  const UserSchema = Yup.object().shape({
+    height: Yup.string().required('Chiều cao là bắt buộc'),
+    weight: Yup.string().required('Cân nặng là bắt buộc'),
   });
 
   const methods = useForm({
-    resolver: yupResolver(),
+    resolver: yupResolver(UserSchema),
+    
   });
 
   const {
@@ -46,12 +48,21 @@ export default function AccountUser() {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = async () => {
+  const onSubmit = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      enqueueSnackbar('Update success!');
+      await axios.put('/api/user/userinfo', {
+        bloodtype: data.bloodtype,
+        height: data.height,
+        weight: data.weight,
+        pastmedicalhistory: data.pastmedicalhistory,
+        drughistory: data.drughistory,
+        familyhistory: data.familyhistory,
+      });
+      enqueueSnackbar('Cập nhật thông tin chi tiết thành công');
+      window.location.reload();
     } catch (error) {
       console.error(error);
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', { variant: 'error' });
     }
   };
 
@@ -128,7 +139,7 @@ export default function AccountUser() {
 
                  <RHFSelect name="bloodtype" label="Nhóm máu" placeholder="Nhóm máu" defaultValue={user.bloodtype}>
                 {bloodtypes.map((option) => (
-                  <option key={option.code} value={option.label}>
+                  <option key={option.code} >
                     {option.label}
                   </option>
                 ))}
