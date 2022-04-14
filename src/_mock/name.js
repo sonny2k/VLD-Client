@@ -6,7 +6,7 @@ export const fullName = [
   'Nguyễn Huy Dũng',
   'Phan Thị Ngọc Bích',
   'Lưu Văn Được',
-  'Lainey Davidson',
+  'Nguyễn Thời Không',
   'Cristopher Cardenas',
   'Melanie Noble',
   'Chase Day',

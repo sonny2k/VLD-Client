@@ -23,14 +23,14 @@ export default function InvoiceDetails() {
   const invoice = _invoices.find((invoice) => invoice.id === id);
 
   return (
-    <Page title="Invoice: View">
+    <Page title="Toa thuốc: Xem chi tiết">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="Invoice Details"
+          heading="Chi tiết toa thuốc"
           links={[
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             {
-              name: 'Invoices',
+              name: 'Toa thuốc',
               href: PATH_DASHBOARD.invoice.root,
             },
             { name: invoice?.invoiceNumber || '' },

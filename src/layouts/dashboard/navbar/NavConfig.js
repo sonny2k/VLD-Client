@@ -50,6 +50,8 @@ const navConfig = [
           // { title: 'profile', path: PATH_DASHBOARD.user.profile },
           { title: 'Đặt lịch tư vấn', path: PATH_DASHBOARD.user.cards },
           { title: 'Danh sách lịch hẹn', path: PATH_DASHBOARD.user.list },
+          { title: 'Chi tiết toa thuốc', path: PATH_DASHBOARD.invoice.demoView },
+
           // { title: 'create', path: PATH_DASHBOARD.user.newUser },
           // { title: 'edit', path: PATH_DASHBOARD.user.editById },
           { title: 'Tài khoản', path: PATH_DASHBOARD.user.account },

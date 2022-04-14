@@ -1,9 +1,9 @@
 // ----------------------------------------------------------------------
 
 export const title = [
-  'Apply These 7 Secret Techniques To Improve Event',
-  'Believing These 7 Myths About Event Keeps You From Growing',
-  "Don't Waste Time! 7 Facts Until You Reach Your Event",
+  'Thuốc đau họng',
+  'Thuốc sổ mũi',
+  "Thuốc đau tim",
   'How 7 Things Will Change The Way You Approach Event',
   "Event Awards: 7 Reasons Why They Don't Work & What You Can Do About It",
   "Event Doesn't Have To Be Hard. Read These 7 Tips",
@@ -87,9 +87,9 @@ export const sentence = [
 ];
 
 export const description = [
-  'Occaecati est et illo quibusdam accusamus qui. Incidunt aut et molestiae ut facere aut. Est quidem iusto praesentium excepturi harum nihil tenetur facilis. Ut omnis voluptates nihil accusantium doloribus eaque debitis.',
-  'Atque eaque ducimus minima distinctio velit. Laborum et veniam officiis. Delectus ex saepe hic id laboriosam officia. Odit nostrum qui illum saepe debitis ullam. Laudantium beatae modi fugit ut. Dolores consequatur beatae nihil voluptates rem maiores.',
-  'Rerum eius velit dolores. Explicabo ad nemo quibusdam. Voluptatem eum suscipit et ipsum et consequatur aperiam quia. Rerum nulla sequi recusandae illum velit quia quas. Et error laborum maiores cupiditate occaecati.',
+  '1 viên sáng, 1 viên chiều.',
+  '1 viên sáng, 1 viên chiều.',
+  'uống trước khi ngủ.',
   'Et non omnis qui. Qui sunt deserunt dolorem aut velit cumque adipisci aut enim. Nihil quis quisquam nesciunt dicta nobis ab aperiam dolorem repellat. Voluptates non blanditiis. Error et tenetur iste soluta cupiditate ratione perspiciatis et. Quibusdam aliquid nam sunt et quisquam non esse.',
   'Nihil ea sunt facilis praesentium atque. Ab animi alias sequi molestias aut velit ea. Sed possimus eos. Et est aliquid est voluptatem.',
   'Non rerum modi. Accusamus voluptatem odit nihil in. Quidem et iusto numquam veniam culpa aperiam odio aut enim. Quae vel dolores. Pariatur est culpa veritatis aut dolorem.',

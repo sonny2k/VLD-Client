@@ -81,15 +81,6 @@ export default function InvoiceToolbar({ invoice }) {
             </IconButton>
           </Tooltip>
         </Stack>
-
-        <Button
-          color="inherit"
-          variant="outlined"
-          startIcon={<Iconify icon={'eva:checkmark-fill'} />}
-          sx={{ alignSelf: 'flex-end' }}
-        >
-          Mark as Paid
-        </Button>
       </Stack>
 
       <Dialog fullScreen open={open}>

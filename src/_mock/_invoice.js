@@ -14,7 +14,7 @@ export const _invoices = [...Array(20)].map((_, index) => ({
   totalPrice: _mock.number.price(index + 1),
   createDate: add(new Date(), { days: index, hours: index }),
   dueDate: add(new Date(), { days: index + 15, hours: index }),
-  status: randomInArray(['paid', 'unpaid', 'overdue', 'draft']),
+  status: randomInArray(['Đã hoàn thành']),
   invoiceFrom: {
     id: _mock.id(index),
     name: _mock.name.fullName(index),
