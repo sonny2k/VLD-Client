@@ -5,7 +5,21 @@ import { format } from 'date-fns';
 import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Checkbox, TableRow, TableCell, Typography, MenuItem, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, Link } from '@mui/material';
+import {
+  Avatar,
+  Checkbox,
+  TableRow,
+  TableCell,
+  Typography,
+  MenuItem,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Button,
+  Link,
+} from '@mui/material';
 // components
 import Label from '../../../../components/Label';
 import Iconify from '../../../../components/Iconify';
@@ -22,14 +36,23 @@ UserTableRow.propTypes = {
   onSelectRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
   onCancel: PropTypes.func,
+  onViewPrescription: PropTypes.func,
 };
 
-export default function UserTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onCancel }) {
+export default function UserTableRow({
+  row,
+  selected,
+  onEditRow,
+  onSelectRow,
+  onDeleteRow,
+  onCancel,
+  onViewPrescription,
+}) {
   const theme = useTheme();
 
   const { fname, profilepic, lname } = row.doctor.account;
 
-  const { department } = row.doctor
+  const { department } = row.doctor;
 
   const { date, hour, status, _id } = row;
 
@@ -60,7 +83,7 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
   const cancelAndClose = () => {
     onCancel();
     handleClose();
-  }
+  };
 
   return (
     <TableRow hover selected={selected}>
@@ -102,7 +125,12 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
       <TableCell align="center">
         <Label
           variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-          color={(status === "chờ xác nhận" && 'warning') || (status === "chờ khám" && 'info') || (status === 'bị từ chối' && 'error') || (status === 'đã hoàn thành' && 'success')}
+          color={
+            (status === 'chờ xác nhận' && 'warning') ||
+            (status === 'chờ khám' && 'info') ||
+            (status === 'bị từ chối' && 'error') ||
+            (status === 'đã hoàn thành' && 'success')
+          }
           sx={{ textTransform: 'capitalize' }}
         >
           {status}
@@ -116,71 +144,83 @@ export default function UserTableRow({ row, selected, onEditRow, onSelectRow, on
           onClose={handleCloseMenu}
           actions={
             <>
-              <MenuItem
-                onClick={() => {
-                  onEditRow();
-                  handleCloseMenu();
-                }}
-              >
-                <Iconify icon={'openmoji:details'} />
-                Xem chi tiết
-              </MenuItem>
+              {status === 'đã hoàn thành' ? (
+                <MenuItem
+                  onClick={() => {
+                    onViewPrescription();
+                    handleCloseMenu();
+                  }}
+                >
+                  <Iconify icon={'openmoji:details'} />
+                  Xem chi tiết
+                </MenuItem>
+              ) : (
+                <MenuItem
+                  onClick={() => {
+                    onEditRow();
+                    handleCloseMenu();
+                  }}
+                >
+                  <Iconify icon={'openmoji:details'} />
+                  Xem chi tiết
+                </MenuItem>
+              )}
 
-              {status === "chờ khám" && <MenuItem
-                onClick={() => {
-                  onEditRow();
-                  handleCloseMenu();
-                }}
-                sx={{ color: 'info.main' }}
-              >
-                <Iconify icon={'healthicons:group-discussion-meeting'} />
-                Tham gia buổi tư vấn
-              </MenuItem> }
+              {status === 'chờ khám' && (
+                <MenuItem
+                  onClick={() => {
+                    onEditRow();
+                    handleCloseMenu();
+                  }}
+                  sx={{ color: 'info.main' }}
+                >
+                  <Iconify icon={'healthicons:group-discussion-meeting'} />
+                  Tham gia buổi tư vấn
+                </MenuItem>
+              )}
 
-              {status === "chờ khám" && <MenuItem
-                onClick={() => {
-                  handleClickOpen();
-                  handleCloseMenu();
-                }}
-                sx={{ color: 'error.main' }}
-              >
-                <Iconify icon={'eva:trash-2-outline'} />
-                Hủy lịch hẹn
-              </MenuItem> 
-              }
+              {status === 'chờ khám' && (
+                <MenuItem
+                  onClick={() => {
+                    handleClickOpen();
+                    handleCloseMenu();
+                  }}
+                  sx={{ color: 'error.main' }}
+                >
+                  <Iconify icon={'eva:trash-2-outline'} />
+                  Hủy lịch hẹn
+                </MenuItem>
+              )}
 
-              {status === "chờ xác nhận" && <MenuItem
-                onClick={() => {
-                  handleClickOpen();
-                  handleCloseMenu();
-                }}
-                sx={{ color: 'error.main' }}
-              >
-                <Iconify icon={'eva:trash-2-outline'} />
-                Hủy lịch hẹn
-              </MenuItem> }
+              {status === 'chờ xác nhận' && (
+                <MenuItem
+                  onClick={() => {
+                    handleClickOpen();
+                    handleCloseMenu();
+                  }}
+                  sx={{ color: 'error.main' }}
+                >
+                  <Iconify icon={'eva:trash-2-outline'} />
+                  Hủy lịch hẹn
+                </MenuItem>
+              )}
             </>
           }
         />
-        <Dialog
-        open={open}
-        onClose={handleClose}
-        >
-        <DialogTitle sx={{ m: 1, p: 2 }}>
-          {"Bạn muốn hủy lịch hẹn?"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            Buổi hẹn sẽ bị xóa khỏi hệ thống sau khi nhấp đồng ý, bạn có muốn tiếp tục?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Trở về</Button>
-          <Button variant='contained' onClick={cancelAndClose} autoFocus>
-            Đồng ý
-          </Button>
-        </DialogActions>
-      </Dialog>
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle sx={{ m: 1, p: 2 }}>{'Bạn muốn hủy lịch hẹn?'}</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Buổi hẹn sẽ bị xóa khỏi hệ thống sau khi nhấp đồng ý, bạn có muốn tiếp tục?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Trở về</Button>
+            <Button variant="contained" onClick={cancelAndClose} autoFocus>
+              Đồng ý
+            </Button>
+          </DialogActions>
+        </Dialog>
       </TableCell>
     </TableRow>
   );

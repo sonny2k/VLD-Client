@@ -15,16 +15,16 @@ import InvoicePDF from './InvoicePDF';
 // ----------------------------------------------------------------------
 
 InvoiceToolbar.propTypes = {
-  invoice: PropTypes.object.isRequired,
+  pre : PropTypes.object.isRequired,
 };
 
-export default function InvoiceToolbar({ invoice }) {
+export default function InvoiceToolbar({ pre }) {
   const navigate = useNavigate();
 
   const { toggle: open, onOpen, onClose } = useToggle();
 
   const handleEdit = () => {
-    navigate(PATH_DASHBOARD.invoice.edit(invoice.id));
+    navigate(PATH_DASHBOARD.pre.edit(pre.id));
   };
 
   return (
@@ -50,8 +50,8 @@ export default function InvoiceToolbar({ invoice }) {
           </Tooltip>
 
           <PDFDownloadLink
-            document={<InvoicePDF invoice={invoice} />}
-            fileName={invoice.invoiceNumber}
+            document={<InvoicePDF pre={pre} />}
+            fileName={pre.invoiceNumber}
             style={{ textDecoration: 'none' }}
           >
             {({ loading }) => (
@@ -100,7 +100,7 @@ export default function InvoiceToolbar({ invoice }) {
           </DialogActions>
           <Box sx={{ flexGrow: 1, height: '100%', overflow: 'hidden' }}>
             <PDFViewer width="100%" height="100%" style={{ border: 'none' }}>
-              <InvoicePDF invoice={invoice} />
+              <InvoicePDF pre={pre} />
             </PDFViewer>
           </Box>
         </Box>

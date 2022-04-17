@@ -9,10 +9,10 @@ import styles from './InvoiceStyle';
 // ----------------------------------------------------------------------
 
 InvoicePDF.propTypes = {
-  invoice: PropTypes.object.isRequired,
+  pre: PropTypes.object.isRequired,
 };
 
-export default function InvoicePDF({ invoice }) {
+export default function InvoicePDF({ pre }) {
   const {
     items,
     taxes,
@@ -25,7 +25,7 @@ export default function InvoicePDF({ invoice }) {
     invoiceFrom,
     invoiceNumber,
     subTotalPrice,
-  } = invoice;
+  } = pre;
 
   return (
     <Document>
@@ -40,28 +40,17 @@ export default function InvoicePDF({ invoice }) {
 
         <View style={[styles.gridContainer, styles.mb40]}>
           <View style={styles.col6}>
-            <Text style={[styles.overline, styles.mb8]}>Invoice from</Text>
-            <Text style={styles.body1}>{invoiceFrom.name}</Text>
-            <Text style={styles.body1}>{invoiceFrom.address}</Text>
-            <Text style={styles.body1}>{invoiceFrom.phone}</Text>
+            <Text style={[styles.overline, styles.mb8]}>Thông tin bác sĩ</Text>
+            <Text style={styles.body1}>aaa</Text>
+            <Text style={styles.body1}>aaa</Text>
+            <Text style={styles.body1}>aaa</Text>
           </View>
 
           <View style={styles.col6}>
-            <Text style={[styles.overline, styles.mb8]}>Invoice to</Text>
-            <Text style={styles.body1}>{invoiceTo.name}</Text>
-            <Text style={styles.body1}>{invoiceTo.address}</Text>
-            <Text style={styles.body1}>{invoiceTo.phone}</Text>
-          </View>
-        </View>
-
-        <View style={[styles.gridContainer, styles.mb40]}>
-          <View style={styles.col6}>
-            <Text style={[styles.overline, styles.mb8]}>Date create</Text>
-            <Text style={styles.body1}>{fDate(createDate)}</Text>
-          </View>
-          <View style={styles.col6}>
-            <Text style={[styles.overline, styles.mb8]}>Due date</Text>
-            <Text style={styles.body1}>{fDate(dueDate)}</Text>
+            <Text style={[styles.overline, styles.mb8]}>Thông tin bệnh nhân</Text>
+            <Text style={styles.body1}>aaa</Text>
+            <Text style={styles.body1}>aaa</Text>
+            <Text style={styles.body1}>aaa</Text>
           </View>
         </View>
 
@@ -92,7 +81,7 @@ export default function InvoicePDF({ invoice }) {
             </View>
           </View>
 
-          <View style={styles.tableBody}>
+          {/* <View style={styles.tableBody}>
             {items.map((item, index) => (
               <View style={styles.tableRow} key={item.id}>
                 <View style={styles.tableCell_1}>
@@ -164,8 +153,8 @@ export default function InvoicePDF({ invoice }) {
               <View style={[styles.tableCell_3, styles.alignRight]}>
                 <Text style={styles.h4}>{fCurrency(totalPrice)}</Text>
               </View>
-            </View>
-          </View>
+            </View> */}
+          {/* </View> */}
         </View>
 
         <View style={[styles.gridContainer, styles.footer]}>

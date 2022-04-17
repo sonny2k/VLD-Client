@@ -1,7 +1,9 @@
 import PropTypes from 'prop-types';
+import { format } from 'date-fns';
 // @mui
 import { styled, useTheme } from '@mui/material/styles';
 import {
+  Avatar,
   Box,
   Card,
   Grid,
@@ -36,31 +38,41 @@ const RowResultStyle = styled(TableRow)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 InvoiceDetails.propTypes = {
-  invoice: PropTypes.object.isRequired,
+  pre: PropTypes.object.isRequired,
 };
 
-export default function InvoiceDetails({ invoice }) {
+export default function InvoiceDetails({ pre }) {
   const theme = useTheme();
 
-  if (!invoice) {
+  if (!pre) {
     return null;
   }
 
-  const {
-    items,
-    status,
-    department,
-    symptom,
-    invoiceTo,
-    createDate,
-    invoiceFrom,
-    invoiceNumber,
-    signature,
-  } = invoice;
+  const { fname, lname } = pre.docinfo.doctor.account;
+
+  const { department, signature } = pre.docinfo.doctor;
+
+  const { gender } = pre.userinfo.user.account;
+
+  const { weight, height, pastmedicalhistory } = pre.userinfo.user;
+
+  const namedoc = `${lname} ${fname}`;
+
+  const { name } = pre.userinfo;
+
+  const { quantity,everate,morningrate,noonrate } = pre.prescription.medicines[0];
+
+  const { title, image } = pre.prescription.medicines[0].product;
+
+  const { product } = pre.prescription;
+
+  const { date, status, symptom } = pre.consultation.consultation;
+
+  const { diagnosis, pname, note } = pre.consultation;
 
   return (
     <>
-      <InvoiceToolbar invoice={invoice} />
+      <InvoiceToolbar pre={pre} />
 
       <Card sx={{ pt: 5, px: 5 }}>
         <Grid container>
@@ -78,40 +90,45 @@ export default function InvoiceDetails({ invoice }) {
                   (status === 'overdue' && 'error') ||
                   'default'
                 }
-                sx={{ textTransform: 'uppercase', mb: 1 }}
+                sx={{ textTransform: 'uppercase', color:'Green', mb: 1 }}
               >
                 {status}
               </Label>
 
-              <Typography variant="h6">{invoiceNumber}</Typography>
+              <Typography variant="h6">{pname}</Typography>
             </Box>
           </Grid>
           <Grid item xs={4} sm={4} sx={{ mb: 4 }}>
             <Typography paragraph variant="overline" sx={{ color: 'text.disabled' }}>
               Thông tin cơ bản
             </Typography>
-            <Typography variant="body2">Triệu chứng: </Typography>
-            <Typography variant="body2">Tiền sử bệnh:</Typography>
-            <Typography variant="body2">Chẩn đoán:</Typography>
+            <Typography variant="body2">Triệu chứng: {symptom}</Typography>
+            <Typography variant="body2">Tiền sử bệnh: {pastmedicalhistory}</Typography>
+            <Typography variant="body2">Chẩn đoán: {diagnosis}</Typography>
           </Grid>
 
           <Grid item xs={4} sm={4} sx={{ mb: 4 }}>
             <Typography paragraph variant="overline" sx={{ color: 'text.disabled' }}>
               Thông tin bệnh nhân
             </Typography>
-            <Typography variant="body2">{invoiceTo.name}</Typography>
-            <Typography variant="body2">Giới tính: </Typography>
-            <Typography variant="body2">Chiều cao: </Typography>
-            <Typography variant="body2">Cân nặng: </Typography>
+            <Typography variant="body2">Tên: {name}</Typography>
+            {gender === 1 || gender === 2 ? (
+            <Typography variant="body2">Giới tính: {gender === 1 ? 'Nam' : 'Nữ'} </Typography>
+            ) : (
+            <Typography variant="body2">Không xác định </Typography>
+            )}
+            <Typography variant="body2">Cân nặng: {weight} </Typography>
+            <Typography variant="body2">Chiều cao: {height} </Typography>
           </Grid>
 
           <Grid item xs={4} sm={4} sx={{ mb: 4 }}>
             <Typography paragraph variant="overline" sx={{ color: 'text.disabled' }}>
               Thông tin bác sĩ  
             </Typography>
-            <Typography variant="body2">{invoiceFrom.name}</Typography>
-            <Typography variant="body2">Chuyên khoa: Tim mạch</Typography>
-            <Typography variant="body2">Ngày tạo: {fDate(createDate)}</Typography>
+            <Typography variant="body2">Tên: {namedoc}</Typography>
+            <Typography variant="body2">Chuyên khoa: {department}</Typography>
+            <Typography variant="body2">Ngày tạo: {format(new Date(date), 'dd/MM/yyyy')}</Typography>
+            <Typography variant="body2">Đơn vị: VLang Doctor</Typography>
           </Grid>
 
         </Grid>
@@ -126,32 +143,39 @@ export default function InvoiceDetails({ invoice }) {
                 }}
               >
                 <TableRow>
-                  <TableCell width={40}>#</TableCell>
                   <TableCell align="left">Sản phẩm</TableCell>
-                  <TableCell align="left">Số lượng</TableCell>
+                  <TableCell align="center">Số lượng</TableCell>
                   <TableCell align="left">Liều lượng ngày</TableCell>
                   <TableCell align="left">Liều lượng buổi</TableCell>
                 </TableRow>
               </TableHead>
 
               <TableBody>
-                {items.map((row, index) => (
+                {/* {product.map((option) => ( */}
                   <TableRow
-                    key={index}
+                    // key={option.product}
                     sx={{
                       borderBottom: (theme) => `solid 1px ${theme.palette.divider}`,
                     }}
                   >
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell align="left">
-                      <Box sx={{ maxWidth: 560 }}>
-                        <Typography variant="subtitle2">{row.title}</Typography>
-                      </Box>
+                    {/* <TableCell>{option + 1}</TableCell> */}
+                    <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
+                      <Avatar alt={title} src={image} sx={{ mr: 2 }} />
+                      <Typography variant="subtitle2" noWrap>
+                        {title}
+                      </Typography>
                     </TableCell>
-                    <TableCell align="left">{row.quantity}</TableCell>
+                    <TableCell align="center">{quantity}</TableCell>
+                    <TableCell align="left">Sáng, Trưa, Chiều</TableCell>
+                    <TableCell align="left" >
+                      Buổi sáng: {morningrate},
+                      Buổi trưa: {noonrate},
+                      Buổi chiều: {everate}
+                    </TableCell>
                   </TableRow>
-                ))}
+                {/* ) )} */}
               </TableBody>
+
             </Table>
           </TableContainer>
         </Scrollbar>
@@ -159,13 +183,11 @@ export default function InvoiceDetails({ invoice }) {
         <Grid container>
           <Grid item xs={12} md={9} sx={{ py: 3 }}>
             <Typography variant="subtitle2">Ghi chú</Typography>
-            <Typography variant="body2">
-              Tránh làm việc nặng, kích động, xem phim kinh dị
-            </Typography>
+            <Typography variant="body2">{note}</Typography>
           </Grid>
           <Grid item xs={12} md={3} sx={{ py: 3, textAlign: 'right' }}>
           <Typography variant="subtitle2">Chữ kí bác sĩ</Typography>
-          <Image alt="signature" src="https://i.ibb.co/Yp3kFbY/signature.png"/>            
+          <Image alt="signature" src={signature}/>            
           </Grid>
         </Grid>
       </Card>
