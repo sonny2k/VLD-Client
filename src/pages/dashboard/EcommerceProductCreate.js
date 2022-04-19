@@ -1,8 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect,useState } from 'react';
 import { paramCase } from 'change-case';
 import { useParams, useLocation } from 'react-router-dom';
+
 // @mui
 import { Container } from '@mui/material';
+// utils
+import axios from '../../utils/axios';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
 import { getProducts } from '../../redux/slices/product';
@@ -25,6 +28,19 @@ export default function EcommerceProductCreate() {
   const { products } = useSelector((state) => state.product);
   const isEdit = pathname.includes('edit');
   const currentProduct = products.find((product) => paramCase(product.name) === name);
+  const [prod, setProd] = useState(null);
+  useEffect(() => {
+    getProd();
+  }, []);
+  const getProd = async () => {
+    try {
+      const res = await axios.get(`/api/admin/product/viewProduct`)
+      setProd(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
 
   useEffect(() => {
     dispatch(getProducts());

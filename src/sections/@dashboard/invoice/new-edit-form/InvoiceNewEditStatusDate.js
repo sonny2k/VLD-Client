@@ -8,7 +8,7 @@ import { RHFSelect } from '../../../../components/hook-form';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = ['paid', 'unpaid', 'overdue', 'draft'];
+const STATUS_OPTIONS = ['đã hoàn thành'];
 
 // ----------------------------------------------------------------------
 
@@ -21,29 +21,6 @@ export default function InvoiceNewEditStatusDate() {
       direction={{ xs: 'column', sm: 'row' }}
       sx={{ p: 3, bgcolor: 'background.neutral' }}
     >
-      <RHFSelect
-        fullWidth
-        name="status"
-        label="Status"
-        InputLabelProps={{ shrink: true }}
-        SelectProps={{ native: false, sx: { textTransform: 'capitalize' } }}
-      >
-        {STATUS_OPTIONS.map((option) => (
-          <MenuItem
-            key={option}
-            value={option}
-            sx={{
-              mx: 1,
-              my: 0.5,
-              borderRadius: 0.75,
-              typography: 'body2',
-              textTransform: 'capitalize',
-            }}
-          >
-            {option}
-          </MenuItem>
-        ))}
-      </RHFSelect>
 
       <Controller
         name="createDate"
@@ -51,23 +28,6 @@ export default function InvoiceNewEditStatusDate() {
         render={({ field, fieldState: { error } }) => (
           <DatePicker
             label="Date create"
-            value={field.value}
-            onChange={(newValue) => {
-              field.onChange(newValue);
-            }}
-            renderInput={(params) => (
-              <TextField {...params} fullWidth error={!!error} helperText={error?.message} />
-            )}
-          />
-        )}
-      />
-
-      <Controller
-        name="dueDate"
-        control={control}
-        render={({ field, fieldState: { error } }) => (
-          <DatePicker
-            label="Due date"
             value={field.value}
             onChange={(newValue) => {
               field.onChange(newValue);

@@ -21,10 +21,11 @@ DoctorTableRow.propTypes = {
   onEditRow: PropTypes.func,
   onSelectRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
+  onViewPrescription: PropTypes.func,
   onCancel: PropTypes.func,
 };
 
-export default function DoctorTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onCancel, onConfirm }) {
+export default function DoctorTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow, onCancel, onConfirm, onViewPrescription }) {
   const theme = useTheme();
 
   const { fname, profilepic, lname } = row.user.account;
@@ -116,15 +117,27 @@ export default function DoctorTableRow({ row, selected, onEditRow, onSelectRow, 
           onClose={handleCloseMenu}
           actions={
             <>
-              <MenuItem
-                onClick={() => {
-                  onEditRow();
-                  handleCloseMenu();
-                }}
-              >
-                <Iconify icon={'openmoji:details'} />
-                Xem chi tiết
-              </MenuItem>
+              {status === 'đã hoàn thành' ? (
+                <MenuItem
+                  onClick={() => {
+                    onViewPrescription();
+                    handleCloseMenu();
+                  }}
+                >
+                  <Iconify icon={'openmoji:details'} />
+                  Xem chi tiết
+                </MenuItem>
+              ) : (
+                <MenuItem
+                  onClick={() => {
+                    onEditRow();
+                    handleCloseMenu();
+                  }}
+                >
+                  <Iconify icon={'openmoji:details'} />
+                  Xem chi tiết
+                </MenuItem>
+              )}
 
               {status === "chờ khám" && <MenuItem
                 onClick={() => {

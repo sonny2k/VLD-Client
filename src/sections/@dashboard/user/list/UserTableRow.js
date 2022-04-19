@@ -144,7 +144,7 @@ export default function UserTableRow({
           onClose={handleCloseMenu}
           actions={
             <>
-              {status === 'đã hoàn thành' ? (
+              {status === 'đã hoàn thành'  ? (
                 <MenuItem
                   onClick={() => {
                     onViewPrescription();

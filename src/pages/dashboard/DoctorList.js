@@ -170,6 +170,10 @@ export default function DoctorList() {
       navigate(`${PATH_DASHBOARD.user.root}/detail/${paramCase(id)}`);
     };
 
+    const handlePrescription = (id) => {
+      navigate(`${PATH_DASHBOARD.prescription.root}/${paramCase(id)}`);
+    };
+
     const cancel = async (_id, doctor, date, hour) => {
       try {
         await axios.post('/api/doctor/consultation/cancelconsultation', {
@@ -298,6 +302,7 @@ export default function DoctorList() {
                           onSelectRow={() => onSelectRow(row._id)}
                           onDeleteRow={() => handleDeleteRow(row._id)}
                           onEditRow={() => handleEditRow(row._id)}
+                          onViewPrescription={() => handlePrescription(row._id)}
                           onCancel={() => cancel(row._id, row.doctor, row.date, row.hour)}
                           onConfirm={() => confirm(row._id)}
                         />

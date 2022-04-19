@@ -1,9 +1,11 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router-dom';
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
+import unorm from 'unorm';
 // @mui
 import { Box, Stack, Button, Dialog, Tooltip, IconButton, DialogActions, CircularProgress } from '@mui/material';
 // hooks
+import useAuth from '../../../../hooks/useAuth';
 import useToggle from '../../../../hooks/useToggle';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
@@ -21,6 +23,8 @@ InvoiceToolbar.propTypes = {
 export default function InvoiceToolbar({ pre }) {
   const navigate = useNavigate();
 
+  const { account } = useAuth();
+
   const { toggle: open, onOpen, onClose } = useToggle();
 
   const handleEdit = () => {
@@ -36,12 +40,13 @@ export default function InvoiceToolbar({ pre }) {
         alignItems={{ sm: 'center' }}
         sx={{ mb: 5 }}
       >
-        <Stack direction="row" spacing={1}>
-          <Tooltip title="Edit">
+       <Stack direction="row" spacing={1}>
+
+       {unorm.nfd(account.role).toLowerCase().indexOf(unorm.nfd('Bác sĩ').toLowerCase()) !== -1 && <Tooltip title="Edit">
             <IconButton onClick={handleEdit}>
               <Iconify icon={'eva:edit-fill'} />
             </IconButton>
-          </Tooltip>
+          </Tooltip>}
 
           <Tooltip title="View">
             <IconButton onClick={onOpen}>

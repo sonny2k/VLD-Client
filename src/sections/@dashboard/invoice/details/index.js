@@ -64,7 +64,7 @@ export default function InvoiceDetails({ pre }) {
 
   const { title, image } = pre.prescription.medicines[0].product;
 
-  const { product } = pre.prescription;
+  const { medicines } = pre.prescription;
 
   const { date, status, symptom } = pre.consultation.consultation;
 
@@ -73,7 +73,6 @@ export default function InvoiceDetails({ pre }) {
   return (
     <>
       <InvoiceToolbar pre={pre} />
-
       <Card sx={{ pt: 5, px: 5 }}>
         <Grid container>
           <Grid item xs={12} sm={6} sx={{ mb: 6 }}>
@@ -145,37 +144,33 @@ export default function InvoiceDetails({ pre }) {
                 <TableRow>
                   <TableCell align="left">Sản phẩm</TableCell>
                   <TableCell align="center">Số lượng</TableCell>
-                  <TableCell align="left">Liều lượng ngày</TableCell>
                   <TableCell align="left">Liều lượng buổi</TableCell>
                 </TableRow>
               </TableHead>
-
+              {medicines.map((pro,index) => (
               <TableBody>
-                {/* {product.map((option) => ( */}
                   <TableRow
-                    // key={option.product}
+                    key={index}
                     sx={{
                       borderBottom: (theme) => `solid 1px ${theme.palette.divider}`,
                     }}
                   >
                     {/* <TableCell>{option + 1}</TableCell> */}
                     <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Avatar alt={title} src={image} sx={{ mr: 2 }} />
+                      <Avatar alt={title} src={pro.product.image} sx={{ mr: 2 }} />
                       <Typography variant="subtitle2" noWrap>
-                        {title}
+                        {pro.product.title}
                       </Typography>
                     </TableCell>
-                    <TableCell align="center">{quantity}</TableCell>
-                    <TableCell align="left">Sáng, Trưa, Chiều</TableCell>
+                    <TableCell align="center">{pro.quantity}</TableCell>
                     <TableCell align="left" >
-                      Buổi sáng: {morningrate},
-                      Buổi trưa: {noonrate},
-                      Buổi chiều: {everate}
+                      Buổi sáng: {pro.morningrate},
+                      Buổi trưa: {pro.noonrate},
+                      Buổi chiều: {pro.everate}
                     </TableCell>
                   </TableRow>
-                {/* ) )} */}
-              </TableBody>
-
+                </TableBody>
+                       ))}
             </Table>
           </TableContainer>
         </Scrollbar>
@@ -190,7 +185,9 @@ export default function InvoiceDetails({ pre }) {
           <Image alt="signature" src={signature}/>            
           </Grid>
         </Grid>
+
       </Card>
+
     </>
   );
 }
