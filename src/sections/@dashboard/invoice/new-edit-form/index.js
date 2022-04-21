@@ -2,17 +2,19 @@ import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo,useState } from 'react';
 import * as React from 'react';
+import unorm from 'unorm';
 
 // form
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
-import { DataGrid } from '@mui/x-data-grid';
 import { styled } from '@mui/material/styles';
 import { LoadingButton } from '@mui/lab';
-import { Card, Chip, Grid, Stack, TextField, Typography, Autocomplete, InputAdornment, Table, TableBody, TableCell, TableRow, TableContainer, TableHead } from '@mui/material';
+import { Card,Avatar,Checkbox, Chip, Grid, Stack, TextField, Typography, Autocomplete,Table, InputAdornment, TableBody, TableCell, TableRow, TableContainer, TableHead, Tooltip, IconButton } from '@mui/material';
+// hooks
+import useTable, { getComparator, emptyRows } from '../../../../hooks/useTable';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 // components
@@ -25,53 +27,19 @@ import {
   RHFRadioGroup,
   RHFUploadMultiFile,
 } from '../../../../components/hook-form';
+import { TableEmptyRows, TableHeadCustom, TableNoData, TableSelectedActions } from '../../../../components/table';
+import Scrollbar from '../../../../components/Scrollbar';
+import Iconify from '../../../../components/Iconify';
+import { InvoiceTableRow, InvoiceTableToolbar } from '../list';
+
+
+
 
 // ----------------------------------------------------------------------
-
-const columns = [
-  {
-    field: 'lastName',
-    headerName: 'Sản phẩm',
-    width: 100,
-    editable: false,
-  },
-  {
-    field: 'quantity',
-    headerName: 'Số lượng',
-    type: 'number',
-    width: 90,
-    editable: true,
-  },
-  {
-    field: 'morningrate',
-    headerName: 'Liều lượng buổi sáng',
-    width: 170,
-    editable: true,
-  },
-  {
-    field: 'noonrate',
-    headerName: 'Liều lượng buổi trưa',
-    width: 170,
-    editable: true,
-  },
-  {
-    field: 'everate',
-    headerName: 'Liều lượng buổi chiều',
-    width: 180,
-    editable: true,
-  },
-];
-
-const rows = [
-  { id: 1, lastName: '{pro.title}' , quantity: '' },
-  { id: 2, lastName: 'Lannister', quantity: '' },
-  { id: 3, lastName: 'Lannister',  quantity: '' },
-  { id: 4, lastName: 'Stark', quantity: '' },
-  { id: 5, lastName: 'Targaryen',  quantity: null },
-  { id: 6, lastName: 'Melisandre', quantity: '' },
-  { id: 7, lastName: 'Clifford', quantity: '' },
-  { id: 8, lastName: 'Frances', quantity: '' },
-  { id: 9, lastName: 'Roxie', quantity: '' },
+const TABLE_HEAD = [
+  { id: 'title', label: 'Tên thuốc', align: 'left' },
+  { id: 'description', label: 'Mô tả', align: 'left' },
+  { id: '' }
 ];
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
@@ -83,34 +51,78 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 InvoiceNewEditForm.propTypes = {
-  isEdit: PropTypes.bool,
-  prod: PropTypes.object.isRequired,
+  isEdit: PropTypes.array,
+  prod: PropTypes.array,
 };
 
 export default function InvoiceNewEditForm({ isEdit, prod }) {
+  const {
+    dense,
+    page,
+    order,
+    orderBy,
+    rowsPerPage,
+    setPage,
+    //
+    selected,
+    setSelected,
+    onSelectRow,
+    onSelectAllRows,
+    //
+    onSort,
+    onChangeDense,
+    onChangePage,
+    onChangeRowsPerPage,
+  } = useTable();
+  const [filterName, setFilterName] = useState('');
+
+  function applySortFilter({ prod, comparator, filterName}) {
+    const stabilizedThis = prod.map((el, index) => [el, index]);
+  
+    stabilizedThis.sort((a, b) => {
+      const order = comparator(a[0], b[0]);
+      if (order !== 0) return order;
+      return a[1] - b[1];
+    });
+  
+    prod = stabilizedThis.map((el) => el[0]);
+  
+    if (filterName) {
+      prod = prod.filter((item) => unorm.nfkd(item.title).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1);
+    }
+  
+    return prod;
+  }
+
+    const handleFilterName = (filterName) => {
+      setFilterName(filterName);
+      setPage(0);
+    };
+
+    const dataFiltered = applySortFilter({
+      prod,
+      comparator: getComparator(order, orderBy),
+      filterName,
+    });
+
+    const denseHeight = dense ? 52 : 72;
+  
+    const isNotFound =
+      (!dataFiltered.length && !!filterName);
+     
+
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const { title } = prod;
+  const { title, description, image } = prod;
 
-  
-  
 
   const NewProductSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     description: Yup.string().required('Description is required'),
     imquantitys: Yup.array().min(1, 'Imquantitys is required'),
   });
-
-  // const defaultValues = useMemo(
-  //   () => ({
-  //     name:  prod?.title || '',
-  //     imquantitys: prod?.imquantity || [],
-  //   }),
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   [prod]
-  // );
 
   const methods = useForm({
     resolver: yupResolver(NewProductSchema),
@@ -149,58 +161,38 @@ export default function InvoiceNewEditForm({ isEdit, prod }) {
     }
   };
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      setValue(
-        'imquantitys',
-        acceptedFiles.map((file) =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          })
-        )
-      );
-    },
-    [setValue]
-  );
-
   const handleRemoveAll = () => {
     setValue('imquantitys', []);
   };
 
-  const handleRemove = (file) => {
-    const filteredItems = values.imquantitys?.filter((_file) => _file !== file);
-    setValue('imquantitys', filteredItems);
-  };
 
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={12}>
-          <Card sx={{ p: 3 }}>
-            <Stack spacing={3}>
-
-            <Grid item xs={4} sm={4} sx={{ mb: 4 }}>
+            <Card sx={{ pt: 5, px: 5 }}>
+      <Grid container>
+          <Grid item xs={4} sm={4} sx={{ mb: 4 }}>
             <Typography paragraph variant="overline" sx={{ color: 'text.disabled' }}>
               Thông tin cơ bản
             </Typography>
             <Typography variant="body2">Triệu chứng: </Typography>
             <Typography variant="body2">Tiền sử bệnh: </Typography>
             <Typography variant="body2">Chẩn đoán: </Typography>
-            </Grid>
+          </Grid>
 
-            <Grid item xs={4} sm={4} sx={{ mb: 4 }}>
+          <Grid item xs={4} sm={4} sx={{ mb: 4 }}>
             <Typography paragraph variant="overline" sx={{ color: 'text.disabled' }}>
               Thông tin bệnh nhân
             </Typography>
             <Typography variant="body2">Tên: </Typography>
-            {/* {gender === 1 || gender === 2 ? ( */}
-            <Typography variant="body2">Giới tính: </Typography>
-            {/* ) : ( */}
-            <Typography variant="body2">Không xác định </Typography>
-            {/* )} */}
-            <Typography variant="body2">Cân nặng: </Typography>
+            <Typography variant="body2">Giới tính:  </Typography>
+            <Typography variant="body2">Cân nặng:  </Typography>
             <Typography variant="body2">Chiều cao:  </Typography>
           </Grid>
+        </Grid>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={12}>
+          <Card sx={{ p: 3 }}>
+            <Stack spacing={3}>
 
               <RHFTextField name="pname" label="Tên toa thuốc" />
 
@@ -212,17 +204,54 @@ export default function InvoiceNewEditForm({ isEdit, prod }) {
               <RHFTextField name="symptom" label="Ghi chú" />
               </div>
 
-              <div style={{ height: 400, width: '100%' }}>
-                <DataGrid
-                rows={rows}
-                columns={columns}
-                pquantitySize={5}
-                rowsPerPquantityOptions={[5]}
-                checkboxSelection
-                disableSelectionOnClick
-                />
-              </div>
+              <div>
+              {/* <InvoiceTableToolbar
+              filterName={filterName}
+              onFilterName={handleFilterName}
+              />  */}
+              <Scrollbar>
+              <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
+  
+                <Table size={dense ? 'small' : 'medium'}>
+                  <TableHeadCustom
+                    order={order}
+                    orderBy={orderBy}
+                    headLabel={TABLE_HEAD}
+                    rowCount={prod.length}
+                    numSelected={selected.length}
+                    onSort={onSort}
+                    onSelectAllRows={(checked) =>
+                      onSelectAllRows(
+                        checked,
+                        prod.map((row) => row._id)
+                      )
+                    }
+                  />
+  
+                  <TableBody>
+                  <TableRow hover selected={selected}>
+                  {/* <TableCell padding="checkbox">
+                        <Checkbox checked={selected} onClick={onSelectRow} />
+                      </TableCell> */}
 
+                      <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Avatar alt={title} src={image} sx={{ mr: 2 }} />
+                          <Typography variant="subtitle2" noWrap>
+                            {title}
+                          </Typography>
+                      </TableCell>
+
+                      <TableCell align="left">{description}</TableCell>
+                    </TableRow>
+  
+                    <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, prod.length)} />
+      
+                    <TableNoData isNotFound={isNotFound} />
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Scrollbar>
+              </div>
             </Stack>
           </Card>
         </Grid>
@@ -235,6 +264,7 @@ export default function InvoiceNewEditForm({ isEdit, prod }) {
           </Stack>
         </Grid>
       </Grid>
+      </Card>
     </FormProvider>
   );
 }
