@@ -56,7 +56,7 @@ export default function UserTableRow({
 
   const { date, hour, status, _id } = row;
 
-  const linkTo = `${PATH_DASHBOARD.user.root}/detail/${paramCase(_id)}`;
+  const linkTo = status === "đã hoàn thành" ? `${PATH_DASHBOARD.prescription.root}/${paramCase(_id)}` : `${PATH_DASHBOARD.user.root}/detail/${paramCase(_id)}`;
 
   const name = `${lname} ${fname}`;
 

@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
+import { useSnackbar } from 'notistack';
+import { useState, useEffect, useCallback } from 'react';
 import { format, getDate } from 'date-fns';
 // form
 import { useForm } from 'react-hook-form';
@@ -22,9 +23,11 @@ import { FormProvider, RHFSelect, RHFTextField } from '../../../../components/ho
 // ----------------------------------------------------------------------
 
 export default function RegisterCalendar() {
-  const { account } = useAuth();
+  const [ disableInput, setDisableInput ] = useState(false);
 
   const [doc, setDoctor] = useState(null);
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -63,6 +66,7 @@ export default function RegisterCalendar() {
       setD6(doc.availables[5].date);
       setD7(doc.availables[6].date);
     }
+    
   }, [doc]);
 
   const md2 = new Date(d1);
@@ -89,6 +93,11 @@ export default function RegisterCalendar() {
   const methods = useForm({
     defaultValues,
   });
+
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods;
 
   const handleChange1 = (newDate) => {
     setD1(newDate);
@@ -118,20 +127,82 @@ export default function RegisterCalendar() {
     setD7(newDate);
   };
 
-  const top100Films = [
-    { label: '08:00' },
-    { label: '09:00' },
-    { label: '10:00' },
-    { label: '11:00' },
-    { label: '13:00' },
-    { label: '14:00' },
-    { label: '15:00' },
-    { label: '16:00' },
-    { label: '17:00' },
+  const workinghours = [
+    { time: '08:00' },
+    { time: '09:00' },
+    { time: '10:00' },
+    { time: '11:00' },
+    { time: '13:00' },
+    { time: '14:00' },
+    { time: '15:00' },
+    { time: '16:00' },
+    { time: '17:00' },
   ];
+
   if (doc !== null) {
+    const hourswork = [
+      { time: doc.availables[0].hours[0].time },
+      { time: doc.availables[0].hours[1].time },
+      { time: doc.availables[0].hours[2].time }
+    ]
+    const hourswork1 = [
+      { time: doc.availables[1].hours[0].time },
+      { time: doc.availables[1].hours[1].time },
+      { time: doc.availables[1].hours[2].time }
+    ]
+    const hourswork2 = [
+      { time: doc.availables[2].hours[0].time },
+      { time: doc.availables[2].hours[1].time },
+      { time: doc.availables[2].hours[2].time }
+    ]
+    const hourswork3 = [
+      { time: doc.availables[3].hours[0].time },
+      { time: doc.availables[3].hours[1].time },
+      { time: doc.availables[3].hours[2].time }
+    ]
+    const hourswork4 = [
+      { time: doc.availables[4].hours[0].time },
+      { time: doc.availables[4].hours[1].time },
+      { time: doc.availables[4].hours[2].time }
+    ]
+    const hourswork5 = [
+      { time: doc.availables[5].hours[0].time },
+      { time: doc.availables[5].hours[1].time },
+      { time: doc.availables[5].hours[2].time }
+    ]
+    const hourswork6 = [
+      { time: doc.availables[6].hours[0].time },
+      { time: doc.availables[6].hours[1].time },
+      { time: doc.availables[6].hours[2].time }
+    ]
+
+    const onSubmit = async (data) => {
+      try {
+        await axios.post("/api/doctor/account/workingtime", {
+          date1: data.day1,
+          date2: data.day1,
+          date3: data.day1,
+          date4: data.day1,
+          date5: data.day1,
+          date6: data.day1,
+          date7: data.day1,
+          hour11: data.day1, hour12: data.day1, hour13: data.day1,
+          hour21: data.day1, hour22: data.day1, hour23: data.day1,
+          hour31: data.day1, hour32: data.day1, hour33: data.day1,
+          hour41: data.day1, hour42: data.day1, hour43: data.day1,
+          hour51: data.day1, hour52: data.day1, hour53: data.day1,
+          hour61: data.day1, hour62: data.day1, hour63: data.day1,
+          hour71: data.day1, hour72: data.day1, hour73: data.day1
+        });
+        enqueueSnackbar('Lưu thời gian làm việc thành công');
+      } catch (error) {
+        console.error(error);
+        enqueueSnackbar('Đã xảy ra lỗi, vui lòng thử lại', { variant: 'error' });
+      }
+    };
+
     return (
-      <FormProvider methods={methods}>
+      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={10}>
             <Card sx={{ p: 3 }}>
@@ -155,16 +226,18 @@ export default function RegisterCalendar() {
                 <Autocomplete
                   multiple
                   id="checkboxes-tags-demo"
-                  options={top100Films}
+                  options={workinghours}
+                  defaultValue={hourswork}
                   disableCloseOnSelect
-                  getOptionLabel={(option) => option.label}
+                  getOptionLabel={(option) => option.time}
                   renderOption={(props, option, { selected }) => (
                     <li {...props}>
                       <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
-                      {option.label}
+                      {option.time}
                     </li>
                   )}
                   renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 1" placeholder="Chọn giờ" />}
+                  onChange={(e, value) => value.length === 3 ? setDisableInput(true) : console.log(value.length)}
                 />
                 <DesktopDatePicker
                   name="day2"
@@ -178,13 +251,14 @@ export default function RegisterCalendar() {
                 <Autocomplete
                   multiple
                   id="checkboxes-tags-demo"
-                  options={top100Films}
+                  options={workinghours}
+                  defaultValue={hourswork1}
                   disableCloseOnSelect
-                  getOptionLabel={(option) => option.label}
+                  getOptionLabel={(option) => option.time}
                   renderOption={(props, option, { selected }) => (
                     <li {...props}>
                       <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
-                      {option.label}
+                      {option.time}
                     </li>
                   )}
                   renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 2" placeholder="Chọn giờ" />}
@@ -199,15 +273,17 @@ export default function RegisterCalendar() {
                   renderInput={(params) => <TextField {...params} />}
                 />
                 <Autocomplete
+                  onChange={(event, value) => console.log(value)}
                   multiple
                   id="checkboxes-tags-demo"
-                  options={top100Films}
+                  options={workinghours}
+                  defaultValue={hourswork2}
                   disableCloseOnSelect
-                  getOptionLabel={(option) => option.label}
+                  getOptionLabel={(option) => option.time}
                   renderOption={(props, option, { selected }) => (
                     <li {...props}>
                       <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
-                      {option.label}
+                      {option.time}
                     </li>
                   )}
                   renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 3" placeholder="Chọn giờ" />}
@@ -224,13 +300,14 @@ export default function RegisterCalendar() {
                 <Autocomplete
                   multiple
                   id="checkboxes-tags-demo"
-                  options={top100Films}
+                  options={workinghours}
+                  defaultValue={hourswork3}
                   disableCloseOnSelect
-                  getOptionLabel={(option) => option.label}
+                  getOptionLabel={(option) => option.time}
                   renderOption={(props, option, { selected }) => (
                     <li {...props}>
                       <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
-                      {option.label}
+                      {option.time}
                     </li>
                   )}
                   renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 4" placeholder="Chọn giờ" />}
@@ -247,13 +324,14 @@ export default function RegisterCalendar() {
                 <Autocomplete
                   multiple
                   id="checkboxes-tags-demo"
-                  options={top100Films}
+                  options={workinghours}
+                  defaultValue={hourswork4}
                   disableCloseOnSelect
-                  getOptionLabel={(option) => option.label}
+                  getOptionLabel={(option) => option.time}
                   renderOption={(props, option, { selected }) => (
                     <li {...props}>
                       <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
-                      {option.label}
+                      {option.time}
                     </li>
                   )}
                   renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 5" placeholder="Chọn giờ" />}
@@ -270,13 +348,14 @@ export default function RegisterCalendar() {
                 <Autocomplete
                   multiple
                   id="checkboxes-tags-demo"
-                  options={top100Films}
+                  options={workinghours}
+                  defaultValue={hourswork5}
                   disableCloseOnSelect
-                  getOptionLabel={(option) => option.label}
+                  getOptionLabel={(option) => option.time}
                   renderOption={(props, option, { selected }) => (
                     <li {...props}>
                       <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
-                      {option.label}
+                      {option.time}
                     </li>
                   )}
                   renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 6" placeholder="Chọn giờ" />}
@@ -293,20 +372,21 @@ export default function RegisterCalendar() {
                 <Autocomplete
                   multiple
                   id="checkboxes-tags-demo"
-                  options={top100Films}
+                  options={workinghours}
+                  defaultValue={hourswork6}
                   disableCloseOnSelect
-                  getOptionLabel={(option) => option.label}
+                  getOptionLabel={(option) => option.time}
                   renderOption={(props, option, { selected }) => (
                     <li {...props}>
                       <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
-                      {option.label}
+                      {option.time}
                     </li>
                   )}
                   renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 7" placeholder="Chọn giờ" />}
                 />
               </Box>
               <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-                <LoadingButton variant="contained">
+                <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                   Lưu thay đổi
                 </LoadingButton>
               </Stack>

@@ -1,12 +1,16 @@
 import PropTypes from 'prop-types';
+import { useState, useEffect } from 'react';
+import unorm from 'unorm';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Box, Stack, AppBar, Toolbar } from '@mui/material';
 // hooks
 import useOffSetTop from '../../../hooks/useOffSetTop';
 import useResponsive from '../../../hooks/useResponsive';
+import useAuth from '../../../hooks/useAuth';
 // utils
 import cssStyles from '../../../utils/cssStyles';
+import axios from '../../../utils/axios';
 // config
 import { HEADER, NAVBAR } from '../../../config';
 // components
@@ -17,6 +21,7 @@ import { IconButtonAnimate } from '../../../components/animate';
 import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
 import NotificationsPopover from './NotificationsPopover';
+import LoadingScreen from '../../../components/LoadingScreen';
 
 // ----------------------------------------------------------------------
 
@@ -60,30 +65,66 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
 
   const isDesktop = useResponsive('up', 'lg');
 
+  const [notis, setNotifications] = useState([null]);
+
+  const { account } = useAuth();
+
+  useEffect(() => {
+    
+  if (unorm.nfkd(account.role).toLowerCase().indexOf(unorm.nfkd("Người dùng").toLowerCase()) !== -1) {
+    const role = "user";
+    getNoti(role);
+  } else {
+    const role = "doctor";
+    getNoti(role);
+  }
+    async function getNoti(role) {
+      const URL = `/api/admin/notification/notice/${role}`;
+      try {
+        const res = await axios.get(URL);
+        setNotifications(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getNoti();
+  }, [notis]);
+
+  if (notis !== null) {
+    return (
+      <RootStyle isCollapse={isCollapse} isOffset={isOffset} verticalLayout={verticalLayout}>
+        <Toolbar
+          sx={{
+            minHeight: '100% !important',
+            px: { lg: 5 },
+          }}
+        >
+          {isDesktop && verticalLayout && <Logo sx={{ mr: 2.5 }} />}
+  
+          {!isDesktop && (
+            <IconButtonAnimate onClick={onOpenSidebar} sx={{ mr: 1, color: 'text.primary' }}>
+              <Iconify icon="eva:menu-2-fill" />
+            </IconButtonAnimate>
+          )}
+  
+          <Searchbar />
+          <Box sx={{ flexGrow: 1 }} />
+  
+          { unorm.nfkd(account.role).toLowerCase().indexOf(unorm.nfkd("Admin").toLowerCase()) !== -1 ?
+          <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
+            <AccountPopover />
+          </Stack> 
+          :
+          <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
+            <NotificationsPopover notis={notis}/>
+            <AccountPopover />
+          </Stack> 
+          }
+        </Toolbar>
+      </RootStyle>
+    );
+  }
   return (
-    <RootStyle isCollapse={isCollapse} isOffset={isOffset} verticalLayout={verticalLayout}>
-      <Toolbar
-        sx={{
-          minHeight: '100% !important',
-          px: { lg: 5 },
-        }}
-      >
-        {isDesktop && verticalLayout && <Logo sx={{ mr: 2.5 }} />}
-
-        {!isDesktop && (
-          <IconButtonAnimate onClick={onOpenSidebar} sx={{ mr: 1, color: 'text.primary' }}>
-            <Iconify icon="eva:menu-2-fill" />
-          </IconButtonAnimate>
-        )}
-
-        <Searchbar />
-        <Box sx={{ flexGrow: 1 }} />
-
-        <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
-          <NotificationsPopover />
-          <AccountPopover />
-        </Stack>
-      </Toolbar>
-    </RootStyle>
+    <LoadingScreen />
   );
 }
