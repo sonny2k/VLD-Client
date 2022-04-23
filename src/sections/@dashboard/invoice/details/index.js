@@ -76,7 +76,7 @@ export default function InvoiceDetails({ pre }) {
       <Card sx={{ pt: 5, px: 5 }}>
         <Grid container>
           <Grid item xs={12} sm={6} sx={{ mb: 6 }}>
-            <Image disabledEffect visibleByDefault alt="logo" src="/logo/logo_full.svg" sx={{ maxWidth: 120 }} />
+            <Image disabledEffect visibleByDefault alt="logo" src="/logo/logo_full.png" sx={{ maxWidth: 250 }} />
           </Grid>
 
           <Grid item xs={12} sm={6} sx={{ mb: 5 }}>
@@ -111,11 +111,7 @@ export default function InvoiceDetails({ pre }) {
               Thông tin bệnh nhân
             </Typography>
             <Typography variant="body2">Tên: {name}</Typography>
-            {gender === 1 || gender === 2 ? (
-            <Typography variant="body2">Giới tính: {gender === 1 ? 'Nam' : 'Nữ'} </Typography>
-            ) : (
-            <Typography variant="body2">Không xác định </Typography>
-            )}
+            <Typography variant="body2">Giới tính: {gender === 1 && 'Nam' || gender === 2 && 'Nữ' || gender === 3 && 'Không xác định' || gender === null && 'Không xác định'} </Typography>
             <Typography variant="body2">Cân nặng: {weight} </Typography>
             <Typography variant="body2">Chiều cao: {height} </Typography>
           </Grid>

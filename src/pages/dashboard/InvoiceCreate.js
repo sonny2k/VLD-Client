@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import unorm from 'unorm';
 import { useSnackbar } from 'notistack';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { DataGrid } from '@mui/x-data-grid';
 
 // form
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 // @mui
@@ -13,25 +13,14 @@ import { styled } from '@mui/material/styles';
 import { LoadingButton } from '@mui/lab';
 import {
   Card,
-  Avatar,
-  Checkbox,
-  Chip,
   Grid,
   Stack,
-  Box,
-  TextField,
   Typography,
   Container,
-  Autocomplete,
   Table,
-  InputAdornment,
   TableBody,
-  TableCell,
-  TableRow,
   TableContainer,
-  TableHead,
-  Tooltip,
-  IconButton,
+  Button
 } from '@mui/material';
 import { InvoiceTableRow, InvoiceTableToolbar } from '../../sections/@dashboard/user/list';
 // utils
@@ -55,7 +44,6 @@ import LoadingScreen from '../../components/LoadingScreen';
 const TABLE_HEAD = [
   { id: 'title', label: 'Tên thuốc', align: 'left' },
   { id: 'description', label: 'Mô tả', align: 'left' },
-  { id: '' },
 ];
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
@@ -85,7 +73,7 @@ const columns = [
 let rows = [];
 // ----------------------------------------------------------------------
 
-export default function InvoiceCreate() {
+export default function InvoiceCreate({consultation}) {
   const {
     dense,
     page,
@@ -109,6 +97,8 @@ export default function InvoiceCreate() {
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const location = useLocation();
 
   const [prod, setProd] = useState([]);
   useEffect(() => {
@@ -216,22 +206,23 @@ export default function InvoiceCreate() {
                 <Typography paragraph variant="overline" sx={{ color: 'text.disabled' }}>
                   Thông tin cơ bản
                 </Typography>
-                <Typography variant="body2">Triệu chứng: </Typography>
-                <Typography variant="body2">Tiền sử bệnh: </Typography>
-                <Typography variant="body2">Chẩn đoán: </Typography>
+                <Typography variant="body2">Triệu chứng: {location.state.symptom1}</Typography>
+                <Typography variant="body2">Tiền sử bệnh: {location.state.pastmedicalhistory1}</Typography>
+                <Typography variant="body2">Tiền sử dị ứng thuốc: {location.state.drughistory1}</Typography>
+                <Typography variant="body2">Tiền sử gia đình: {location.state.familyhistory1}</Typography>
               </Grid>
 
               <Grid item xs={4} sm={4} sx={{ mb: 4 }}>
                 <Typography paragraph variant="overline" sx={{ color: 'text.disabled' }}>
                   Thông tin bệnh nhân
                 </Typography>
-                <Typography variant="body2">Tên: </Typography>
-                <Typography variant="body2">Giới tính: </Typography>
-                <Typography variant="body2">Cân nặng: </Typography>
-                <Typography variant="body2">Chiều cao: </Typography>
+                <Typography variant="body2">Họ và tên: {location.state.name}</Typography>
+                <Typography variant="body2">Giới tính: {location.state.gender1 === 1 && 'Nam' || location.state.gender1 === 2 && 'Nữ' || location.state.gender1 === 3 && 'Không xác định' || location.state.gender1 === null && 'Không xác định'}</Typography>
+                <Typography variant="body2">Cân nặng: {location.state.weight1}</Typography>
+                <Typography variant="body2">Chiều cao: {location.state.height1}</Typography>
               </Grid>
             </Grid>
-            <Grid container spacing={3}>
+            <Grid container>
               <Grid item xs={12} md={12}>
                 <Card sx={{ p: 3 }}>
                   <Stack spacing={3}>
@@ -247,7 +238,7 @@ export default function InvoiceCreate() {
                     <div>
                       <InvoiceTableToolbar filterName={filterName} onFilterName={handleFilterName} />
                       <Scrollbar>
-                        <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
+                        <TableContainer sx={{ minWidth: "100%", position: 'relative' }}>
                           <Table size={dense ? 'small' : 'medium'}>
                             <TableHeadCustom
                               order={order}
@@ -284,25 +275,30 @@ export default function InvoiceCreate() {
                           </Table>
                         </TableContainer>
                       </Scrollbar>
+                      
+                      <div style = {{display: 'flex', justifyContent: 'flex-end'}}>
+                        <Button variant="text" size="large" onClick={() => setRowsData()}>Thêm sản phẩm</Button>
+                      </div>
+                      
+                      <div style={{ height: 300, width: '100%' }}>
+                        <DataGrid rows={rows} columns={columns} experimentalFeatures={{ newEditingApi: true }} pageSize={5}
+                        rowsPerPageOptions={[5]} />
+                      </div>
+                      <Stack alignItems="flex-end" spacing={3} sx={{ mt: 3 }}>
+                        <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
+                          Tạo mới toa thuốc
+                        </LoadingButton>
+                      </Stack>
                     </div>
                   </Stack>
                 </Card>
               </Grid>
-              <div style={{ height: 300, width: '100%' }}>
-                <DataGrid rows={rows} columns={columns} experimentalFeatures={{ newEditingApi: true }} pageSize={5}
-                rowsPerPageOptions={[5]} />
-              </div>
               <Grid item xs={12} md={12}>
-                <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-                  <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
-                    {'Tạo mới toa thuốc'}
-                  </LoadingButton>
-                </Stack>
+                <Stack alignItems="flex-end" spacing={3} sx={{ mt: 3 }}/>
               </Grid>
             </Grid>
           </Card>
         </FormProvider>
-        <button onClick={() => setRowsData()}>Thêm sản phẩm</button>
       </Container>
     </Page>
   ) : (

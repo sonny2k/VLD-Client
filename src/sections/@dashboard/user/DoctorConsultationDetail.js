@@ -39,7 +39,7 @@ export default function DoctorConsultationDetail({ consultation }) {
 
   const { date, hour, status, symptom, name, phone } = consultation[0];
 
-  const { fname, lname, profilepic } = consultation[0].user.account;
+  const { fname, lname, profilepic, gender } = consultation[0].user.account;
 
   const { bloodtype, height, weight, pastmedicalhistory, drughistory, familyhistory } = consultation[0].user;
 
@@ -62,9 +62,13 @@ export default function DoctorConsultationDetail({ consultation }) {
     handleClose();
   }
 
+  const createPrescription = () => {
+    navigate(PATH_DASHBOARD.prescription.new, {state: { name: name != null ? name : requestname, gender1: gender, weight1: weight, height1: height, symptom1: symptom, pastmedicalhistory1: pastmedicalhistory, drughistory1: drughistory, familyhistory1: familyhistory  } } );
+  }
+
   const defaultValues = useMemo(
     () => ({
-      username: name|| requestname,
+      username: name || requestname,
       phone: phone || '',
       date: format(new Date(date), 'dd/MM/yyyy') || '',
       hour: hour || '',
@@ -314,7 +318,7 @@ export default function DoctorConsultationDetail({ consultation }) {
                   display: 'grid',
                   columnGap: 1,
                   rowGap: 1,
-                  gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(3, 1fr)' },
+                  gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(4, 1fr)' },
                 }}
               >
 
@@ -326,7 +330,13 @@ export default function DoctorConsultationDetail({ consultation }) {
                   <LoadingButton variant="contained" color='error' loading={isSubmitting} onClick={handleClickOpen}>
                   Từ chối lịch hẹn
                   </LoadingButton>  
-                }       
+                }      
+
+                {status === 'chờ khám' &&
+                  <LoadingButton variant="contained" color='warning' loading={isSubmitting} onClick={createPrescription}>
+                  Tạo toa thuốc
+                  </LoadingButton>  
+                }        
 
                 {status === 'chờ xác nhận' ?
                   <LoadingButton variant="contained" color='error' loading={isSubmitting} onClick={handleClickOpen}>
