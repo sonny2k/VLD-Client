@@ -276,8 +276,8 @@ export default function InvoiceCreate({consultation}) {
                         </TableContainer>
                       </Scrollbar>
                       
-                      <div style = {{display: 'flex', justifyContent: 'flex-end'}}>
-                        <Button variant="text" size="large" onClick={() => setRowsData()}>Thêm sản phẩm</Button>
+                      <div style = {{display: 'flex', justifyContent: 'flex-end', }} spacing={3}>
+                        <Button variant="text" onClick={() => setRowsData()}>Thêm thuốc vào bảng dưới</Button>
                       </div>
                       
                       <div style={{ height: 300, width: '100%' }}>
