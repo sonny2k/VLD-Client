@@ -56,7 +56,7 @@ const DEPARTMENT_OPTIONS = [
 ]; 
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Người khám', align: 'left' },
+  { id: 'name', label: 'Người hẹn', align: 'left' },
   { id: 'date', label: 'Ngày', align: 'left' },
   { id: 'hour', label: 'Giờ', align: 'left' },
   { id: 'pastmedicalhistory', label: 'Tiền sử bệnh', align: 'center' },
@@ -131,7 +131,7 @@ export default function DoctorList() {
     consult = stabilizedThis.map((el) => el[0]);
   
     if (filterName) {
-      consult = consult.filter((item) => unorm.nfkd(item.user.lname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1 || unorm.nfkd(item.user.fname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1);
+      consult = consult.filter((item) => unorm.nfkd(item.user.account.lname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1 || unorm.nfkd(item.user.account.fname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1);
     }
   
     if (filterStatus !== 'Tất cả') {

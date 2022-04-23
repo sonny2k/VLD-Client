@@ -94,6 +94,7 @@ export default function ModalEditInformation() {
   };
 
   const md = new Date("01/01/2005");
+  const mid = new Date("01/01/1900");
 
   const {
     setValue,
@@ -229,7 +230,8 @@ export default function ModalEditInformation() {
                 name="birthday"
                 label="Ngày sinh"
                 inputFormat="dd/MM/yyyy"
-                minDate={md}
+                minDate={mid}
+                maxDate={md}
                 value={birth}
                 onChange={handleChange}
                 renderInput={(params) => <TextField {...params} />}

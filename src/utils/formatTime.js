@@ -1,4 +1,5 @@
-import { format, getTime, formatDistanceToNow } from 'date-fns';
+import { format, getTime, formatDistance } from 'date-fns';
+import vi from 'date-fns/locale/vi'
 
 // ----------------------------------------------------------------------
 
@@ -19,7 +20,5 @@ export function fDateTimeSuffix(date) {
 }
 
 export function fToNow(date) {
-  return formatDistanceToNow(new Date(date), {
-    addSuffix: true
-  });
+  return formatDistance(new Date(date), new Date(), { locale: vi });
 }
