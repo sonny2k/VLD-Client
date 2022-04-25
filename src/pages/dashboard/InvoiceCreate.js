@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import unorm from 'unorm';
+import * as Yup from 'yup';
 import { useSnackbar } from 'notistack';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { DataGrid } from '@mui/x-data-grid';
-
+import { DataGrid, GridActionsCellItem, useGridApiRef, viVN, GridPreProcessEditCellProps   } from '@mui/x-data-grid';
+import { format } from 'date-fns';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -20,11 +21,15 @@ import {
   Table,
   TableBody,
   TableContainer,
-  Button
+  Button,
+  Divider,
+  Avatar
 } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import { InvoiceTableRow, InvoiceTableToolbar } from '../../sections/@dashboard/user/list';
 // utils
 import axios from '../../utils/axios';
+import createAvatar from '../../utils/createAvatar';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
@@ -41,39 +46,9 @@ import { TableEmptyRows, TableHeadCustom, TableNoData, TableSelectedActions } fr
 import InvoiceNewEditForm from '../../sections/@dashboard/invoice/new-edit-form';
 import LoadingScreen from '../../components/LoadingScreen';
 // ----------------------------------------------------------------------
-const TABLE_HEAD = [
-  { id: 'title', label: 'Tên thuốc', align: 'left' },
-  { id: 'description', label: 'Mô tả', align: 'left' },
-];
-
-const LabelStyle = styled(Typography)(({ theme }) => ({
-  ...theme.typography.subtitle2,
-  color: theme.palette.text.secondary,
-  marginBottom: theme.spacing(1),
-}));
-
-const columns = [
-  { field: 'title', headerName: 'Tên thuốc', width: 130 },
-  {
-    field: 'quantity',
-    headerName: 'Số lượng',
-    type: 'number',
-    width: 90,
-    editable: true,
-  },
-  { field: 'morningrate', headerName: 'Liều lượng sáng', width: 150,editable: true,
-},
-  { field: 'noonrate', headerName: 'Liều lượng trưa', width: 150,editable: true,
-},
-  { field: 'everate', headerName: 'Liều lượng chiều', width: 160,editable: true,
-},
-
-];
-
 let rows = [];
-// ----------------------------------------------------------------------
 
-export default function InvoiceCreate({consultation}) {
+export default function InvoiceCreate() {
   const {
     dense,
     page,
@@ -94,11 +69,85 @@ export default function InvoiceCreate({consultation}) {
   } = useTable();
   const { themeStretch } = useSettings();
 
+  const cursor = true;
+
+  const CreatePrescriptionSchema = Yup.object().shape({
+    pname: Yup.string().required('Vui lòng điền tên toa thuốc'),
+    diagnosis: Yup.string().required('Vui lòng cung cấp chuẩn đoán')
+  });
+
+  const methods = useForm({
+    resolver: yupResolver(CreatePrescriptionSchema)
+  });
+
+  const TABLE_HEAD = [
+    { id: 'title', label: 'Tên thuốc', align: 'left' },
+    { id: 'description', label: 'Mô tả', align: 'left' },
+  ];
+  
+  const columns = [
+    {
+      field: "image",
+      headerName: "Hình ảnh",
+      width: 100,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (params) => {
+        return (
+          <>
+          <Avatar
+          src={params.row.image}
+          alt={params.row.title}
+          color={params.row.image ? 'default' : createAvatar(params.row.title).color}
+        >
+          {createAvatar(params.row.title).name}
+        </Avatar>
+          </>
+        );
+      }
+    },
+    { field: 'title', headerName: 'Tên thuốc', width: 150, headerAlign: 'center', align: 'center'},
+    {
+      field: 'quantity',
+      headerName: 'Số lượng',
+      type: 'number',
+      width: 90,
+      editable: true,
+      headerAlign: 'center',
+      align: 'center',
+    },
+    { field: 'morningrate', headerName: 'Liều lượng sáng', width: 150, editable: true, headerAlign: 'center', align: 'center'},
+    { field: 'noonrate', headerName: 'Liều lượng trưa', width: 150, editable: true, headerAlign: 'center', align: 'center'},
+    { field: 'everate', headerName: 'Liều lượng chiều', width: 150, editable: true, headerAlign: 'center', align: 'center'},
+    { field: 'specdes', headerName: 'Quy cách', width: 150, editable: true, headerAlign: 'center', align: 'center'},
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Thao tác',
+      width: 100,
+      cellClassName: 'actions',
+      getActions: ({ id }) => {
+        return [
+          <GridActionsCellItem
+            icon={<DeleteIcon />}
+            label="Delete"
+            onClick={handleDeleteClick}
+            color="inherit"
+          />,
+        ];
+      },
+    },
+  ];
+
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
 
+  const apiRef = useGridApiRef();
+
   const location = useLocation();
+
+  const [med, setMed] = useState([]);
 
   const [prod, setProd] = useState([]);
   useEffect(() => {
@@ -149,10 +198,6 @@ export default function InvoiceCreate({consultation}) {
 
   const isNotFound = !dataFiltered.length && !!filterName;
 
-  const methods = useForm({
-    resolver: yupResolver(),
-  });
-
   const {
     reset,
     watch,
@@ -165,12 +210,20 @@ export default function InvoiceCreate({consultation}) {
 
   const values = watch();
 
-  const onSubmit = async () => {
+  const onSubmit = async (data, params) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      // enqueueSnackbar(!isEdit ? 'Tạo toa thuốc thành công!' : 'Cập nhật thành công!');
-      navigate(PATH_DASHBOARD.prescription.list);
+      if (params) {
+        await axios.post('/api/doctor/prescription/createPrescription', {
+          consultation: location.state.id,
+          pname: data.pname,
+          diagnosis: data.diagnosis,
+          note: data.note
+        });
+      }
+      enqueueSnackbar('Vui lòng thêm thuốc vào toa!',
+      {
+        variant: "error"
+      });
     } catch (error) {
       console.error(error);
     }
@@ -181,12 +234,25 @@ export default function InvoiceCreate({consultation}) {
       const result = prod.filter((medicine) => selected.includes(medicine._id));
       result.forEach((obj) => {
         obj.id = obj._id;
-        delete obj._id;
       });
       console.log(result);
       rows = result;
     }
   };
+
+  const handleRowEditCommit = useCallback(
+    (params) => {
+      console.log(params.row)
+    },
+  );
+
+  const handleDeleteClick = useCallback(
+    (params) => {
+      const id = params.id;
+      const deletearray = [...rows];
+      deletearray.splice(id, 1);
+      rows = deletearray;
+  });
 
   return prod !== null ? (
     <Page title="Toa thuốc: Tạo toa thuốc mới">
@@ -194,8 +260,8 @@ export default function InvoiceCreate({consultation}) {
         <HeaderBreadcrumbs
           heading="Tạo toa thuốc mới"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Toa thuốc', href: PATH_DASHBOARD.prescription.list },
+            { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
+            { name: `Chi tiết lịch hẹn ngày ${format(new Date(location.state.date1), 'dd/MM/yyyy')} lúc ${location.state.hour1}`, href: PATH_DASHBOARD.user.edit(location.state.id) },
             { name: 'Toa thuốc mới' },
           ]}
         />
@@ -226,15 +292,18 @@ export default function InvoiceCreate({consultation}) {
               <Grid item xs={12} md={12}>
                 <Card sx={{ p: 3 }}>
                   <Stack spacing={3}>
-                    <RHFTextField name="pname" label="Tên toa thuốc" />
+                    <RHFTextField autoFocus={cursor} name="pname" label="Tên toa thuốc" />
 
                     <div>
                       <RHFTextField name="diagnosis" multiline rows={4} label="Chuẩn đoán" />
                     </div>
 
                     <div>
-                      <RHFTextField name="symptom" label="Ghi chú" />
+                      <RHFTextField name="note" label="Ghi chú" />
                     </div>
+
+                    <Divider sx={{ borderStyle: 'dashed' }} />
+
                     <div>
                       <InvoiceTableToolbar filterName={filterName} onFilterName={handleFilterName} />
                       <Scrollbar>
@@ -277,12 +346,27 @@ export default function InvoiceCreate({consultation}) {
                       </Scrollbar>
                       
                       <div style = {{display: 'flex', justifyContent: 'flex-end', }} spacing={3}>
-                        <Button variant="text" onClick={() => setRowsData()}>Thêm thuốc vào bảng dưới</Button>
+                        <Button variant="text" onClick={() => setRowsData()}>Thêm thuốc</Button>
                       </div>
+
+                      <Divider sx={{ borderStyle: 'dashed' }} />
                       
                       <div style={{ height: 300, width: '100%' }}>
-                        <DataGrid rows={rows} columns={columns} experimentalFeatures={{ newEditingApi: true }} pageSize={5}
-                        rowsPerPageOptions={[5]} />
+                        <DataGrid localeText={viVN} apiRef={apiRef} rows={rows} columns={columns} experimentalFeatures={{ newEditingApi: true }} pageSize={5}
+                        rowsPerPageOptions={[5]} onCellFocusOut={handleRowEditCommit} 
+                        components={{
+                          NoRowsOverlay: () => (
+                            <Stack height="100%" alignItems="center" justifyContent="center">
+                              Chưa có thuốc nào được chọn
+                            </Stack>
+                          ),
+                          NoResultsOverlay: () => (
+                            <Stack height="100%" alignItems="center" justifyContent="center">
+                              Không tìm thấy thuốc này
+                            </Stack>
+                          )
+                        }}
+                        />
                       </div>
                       <Stack alignItems="flex-end" spacing={3} sx={{ mt: 3 }}>
                         <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>

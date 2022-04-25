@@ -74,7 +74,7 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
   if (unorm.nfkd(account.role).toLowerCase().indexOf(unorm.nfkd("Người dùng").toLowerCase()) !== -1) {
     const role = "user";
     getNoti(role);
-  } else {
+  } else if (unorm.nfkd(account.role).toLowerCase().indexOf(unorm.nfkd("Bác sĩ").toLowerCase()) !== -1) {
     const role = "doctor";
     getNoti(role);
   }
@@ -87,7 +87,6 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
         console.log(error);
       }
     }
-    getNoti();
   }, [notis]);
 
   if (notis !== null) {

@@ -37,7 +37,7 @@ export default function DoctorConsultationDetail({ consultation }) {
 
   const navigate = useNavigate();
 
-  const { date, hour, status, symptom, name, phone } = consultation[0];
+  const { date, hour, status, symptom, name, phone, _id } = consultation[0];
 
   const { fname, lname, profilepic, gender } = consultation[0].user.account;
 
@@ -63,7 +63,7 @@ export default function DoctorConsultationDetail({ consultation }) {
   }
 
   const createPrescription = () => {
-    navigate(PATH_DASHBOARD.prescription.new, {state: { name: name != null ? name : requestname, gender1: gender, weight1: weight, height1: height, symptom1: symptom, pastmedicalhistory1: pastmedicalhistory, drughistory1: drughistory, familyhistory1: familyhistory  } } );
+    navigate(PATH_DASHBOARD.prescription.new, {state: { id: _id, name: name != null ? name : requestname, gender1: gender, weight1: weight, height1: height, symptom1: symptom, pastmedicalhistory1: pastmedicalhistory, drughistory1: drughistory, familyhistory1: familyhistory, date1: date, hour1: hour  } } );
   }
 
   const defaultValues = useMemo(

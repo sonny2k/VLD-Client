@@ -176,7 +176,10 @@ export default function ModalEditInformation() {
       });
     } catch (err) {
       console.error(err);
-      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!',
+      {
+        variant: "error"
+      });
     }
   };
 
