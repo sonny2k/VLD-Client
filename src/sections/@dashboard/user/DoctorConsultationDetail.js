@@ -336,7 +336,7 @@ export default function DoctorConsultationDetail({ consultation }) {
                   <LoadingButton variant="contained" color='warning' loading={isSubmitting} onClick={createPrescription}>
                   Tạo toa thuốc
                   </LoadingButton>  
-                }        
+                }
 
                 {status === 'chờ xác nhận' ?
                   <LoadingButton variant="contained" color='error' loading={isSubmitting} onClick={handleClickOpen}>

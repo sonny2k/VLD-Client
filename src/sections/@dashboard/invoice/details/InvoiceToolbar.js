@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { PDFDownloadLink, PDFViewer } from '@react-pdf/renderer';
 import unorm from 'unorm';
 // @mui
@@ -21,14 +21,31 @@ InvoiceToolbar.propTypes = {
 };
 
 export default function InvoiceToolbar({ pre }) {
+  
+  const { account } = useAuth();
+
   const navigate = useNavigate();
 
-  const { account } = useAuth();
+  const { _id } = pre.consultation.consultation;
+
+  const { fname, lname } = pre.docinfo.doctor.account;
+
+  const { gender } = pre.userinfo.user.account;
+
+  const { weight, height, pastmedicalhistory } = pre.userinfo.user;
+
+  const namedoc = `${lname} ${fname}`;
+
+  const { name } = pre.userinfo;
+
+  const { date, status, symptom, hour } = pre.consultation.consultation;
+
+  const { diagnosis, pname, note } = pre.consultation;
 
   const { toggle: open, onOpen, onClose } = useToggle();
 
   const handleEdit = () => {
-    navigate(PATH_DASHBOARD.pre.edit(pre.id));
+    // navigate(PATH_DASHBOARD.prescription.edit(pre.prescription.id), {state: { id: _id, name1: name , gender1: gender, weight1: weight, height1: height, symptom1: symptom, pastmedicalhistory1: pastmedicalhistory, date1: date, hour1: hour, pname1: pname, diagnosis1: diagnosis, note1: note,  } });
   };
 
   return (
@@ -42,13 +59,13 @@ export default function InvoiceToolbar({ pre }) {
       >
        <Stack direction="row" spacing={1}>
 
-       {unorm.nfd(account.role).toLowerCase().indexOf(unorm.nfd('Bác sĩ').toLowerCase()) !== -1 && <Tooltip title="Edit">
+       {unorm.nfd(account.role).toLowerCase().indexOf(unorm.nfd('Bác sĩ').toLowerCase()) !== -1 && <Tooltip title="Cập nhật toa">
             <IconButton onClick={handleEdit}>
               <Iconify icon={'eva:edit-fill'} />
             </IconButton>
           </Tooltip>}
 
-          <Tooltip title="View">
+          <Tooltip title="Xem chi tiết">
             <IconButton onClick={onOpen}>
               <Iconify icon={'eva:eye-fill'} />
             </IconButton>
@@ -56,11 +73,11 @@ export default function InvoiceToolbar({ pre }) {
 
           <PDFDownloadLink
             document={<InvoicePDF pre={pre} />}
-            fileName={pre.invoiceNumber}
+            fileName={pre.pname}
             style={{ textDecoration: 'none' }}
           >
             {({ loading }) => (
-              <Tooltip title="Download">
+              <Tooltip title="Tải về">
                 <IconButton>
                   {loading ? <CircularProgress size={24} color="inherit" /> : <Iconify icon={'eva:download-fill'} />}
                 </IconButton>
@@ -68,23 +85,23 @@ export default function InvoiceToolbar({ pre }) {
             )}
           </PDFDownloadLink>
 
-          <Tooltip title="Print">
-            <IconButton>
-              <Iconify icon={'eva:printer-fill'} />
+          {/* <Tooltip title="In">
+            <IconButton onClick={() => window.print()}>
+            <Iconify icon={'eva:printer-fill'} />
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
 
-          <Tooltip title="Send">
+          {/* <Tooltip title="Send">
             <IconButton>
               <Iconify icon={'ic:round-send'} />
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
 
-          <Tooltip title="Share">
+          {/* <Tooltip title="Share">
             <IconButton>
               <Iconify icon={'eva:share-fill'} />
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
         </Stack>
       </Stack>
 

@@ -81,7 +81,7 @@ export const PATH_DASHBOARD = {
     list: path(ROOTS_DASHBOARD, '/prescription/list'),
     new: path(ROOTS_DASHBOARD, '/prescription/new'),
     view: (idne) => path(ROOTS_DASHBOARD, `/prescription/${idne}`),
-    edit: (id) => path(ROOTS_DASHBOARD, `/prescription/${id}/edit`),
+    edit: (idne) => path(ROOTS_DASHBOARD, `/prescription/edit/${idne}`),
     demoEdit: path(ROOTS_DASHBOARD, '/prescription/e99f09a7-dd88-49d5-b1c8-1daf80c2d7b1/edit'),
     demoView: path(ROOTS_DASHBOARD, '/prescription/e99f09a7-dd88-49d5-b1c8-1daf80c2d7b5'),
   },

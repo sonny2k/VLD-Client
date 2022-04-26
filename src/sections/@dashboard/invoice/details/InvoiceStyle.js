@@ -55,9 +55,9 @@ const styles = StyleSheet.create({
     borderColor: '#DFE3E8',
   },
   noBorder: { paddingTop: 8, paddingBottom: 0, borderBottomWidth: 0 },
-  tableCell_1: { width: '5%' },
-  tableCell_2: { width: '50%', paddingRight: 16 },
-  tableCell_3: { width: '15%' },
+  tableCell_1: { width: '30%' },
+  tableCell_2: { width: '10%', paddingRight: 16 },
+  tableCell_3: { width: '50%' },
 });
 
 export default styles;
