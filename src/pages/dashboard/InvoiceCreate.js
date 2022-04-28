@@ -212,14 +212,14 @@ export default function InvoiceCreate() {
 
   const onSubmit = async (data, params) => {
     try {
-      if (params) {
+      // if (params) {
         await axios.post('/api/doctor/prescription/createPrescription', {
           consultation: location.state.id,
           pname: data.pname,
           diagnosis: data.diagnosis,
           note: data.note
         });
-      }
+      // }
       enqueueSnackbar('Vui lòng thêm thuốc vào toa!',
       {
         variant: "error"
