@@ -93,6 +93,7 @@ export default function InvoiceNewEditForm({
               ...medicine,
             })),
           });
+          navigate(PATH_DASHBOARD.user.doctorlist);
         } catch (error) {
           console.log(error);
         }

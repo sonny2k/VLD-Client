@@ -243,7 +243,11 @@ function NotificationItem({ notification }) {
       await axios.post('/api/user/consultation/isSeen', {
         _id,
       });
-      navigate(`${PATH_DASHBOARD.user.root}/detail/${paramCase(notification.path)}`);
+      if (notification.type === 'createprescription') {
+        navigate(`${PATH_DASHBOARD.prescription.root}/${paramCase(notification.path)}`);
+      } else {
+        navigate(`${PATH_DASHBOARD.user.root}/detail/${paramCase(notification.path)}`);
+      }
     } catch (err) {
       console.error(err);
       enqueueSnackbar('Có lỗi xảy ra với thông báo này!', { variant: 'error' });

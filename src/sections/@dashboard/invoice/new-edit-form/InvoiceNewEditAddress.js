@@ -69,13 +69,13 @@ export default function InvoiceNewEditAddress({
             Thông tin bệnh nhân
           </Typography>
 
-          <Button
+          {/* <Button
             size="small"
             startIcon={<Iconify icon={invoiceTo ? 'eva:edit-fill' : 'eva:plus-fill'} />}
             onClick={onOpenTo}
           >
             Nhập toa thuốc có sẵn
-          </Button>
+          </Button> */}
 
           <InvoiceAddressListDialog
             open={openTo}
