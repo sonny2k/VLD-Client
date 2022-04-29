@@ -60,7 +60,7 @@ export default function InvoiceDetails({ pre }) {
 
   const { name } = pre.userinfo;
 
-  const { title, image } = pre.prescription.medicines[0].product;
+  const { title, image, specdes } = pre.prescription.medicines[0].product;
 
   const { medicines } = pre.prescription;
 
@@ -160,7 +160,7 @@ export default function InvoiceDetails({ pre }) {
                     </TableCell>
                     <TableCell align="center">{pro.quantity}</TableCell>
                     <TableCell align="left" >{pro.rate}</TableCell>
-                    <TableCell align="left" >{pro.specdes}</TableCell>
+                    <TableCell align="left" >{specdes}</TableCell>
                     <TableCell align="left" >{pro.mednote}</TableCell>
                   </TableRow>
                 </TableBody>

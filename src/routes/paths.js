@@ -65,12 +65,12 @@ export const PATH_DASHBOARD = {
     department: path(ROOTS_DASHBOARD, '/user/department'),
     doctorlist: path(ROOTS_DASHBOARD, '/user/doctorlist'),
     doclist: path(ROOTS_DASHBOARD, '/user/doclist'),
+    productlist: path(ROOTS_DASHBOARD, '/user/productlist'),
 
   },
   eCommerce: {
     root: path(ROOTS_DASHBOARD, '/e-commerce'),
     shop: path(ROOTS_DASHBOARD, '/e-commerce/shop'),
-    list: path(ROOTS_DASHBOARD, '/e-commerce/list'),
     checkout: path(ROOTS_DASHBOARD, '/e-commerce/checkout'),
     new: path(ROOTS_DASHBOARD, '/e-commerce/product/new'),
     view: (name) => path(ROOTS_DASHBOARD, `/e-commerce/product/${name}`),

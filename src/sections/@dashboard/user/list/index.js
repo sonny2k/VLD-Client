@@ -6,6 +6,8 @@ export { default as InvoiceTableRow} from './InvoiceTableRow';
 export { default as InvoiceTableToolbar} from './InvoiceTableToolbar';
 export { default as DocTableToolbar} from './DocTableToolbar';
 export { default as DocTableRow} from './DocTableRow';
+export { default as ProductTableToolbar} from './ProductTableToolbar';
+export { default as ProductTableRow} from './ProductTableRow';
 
 
 

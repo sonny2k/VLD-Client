@@ -49,7 +49,7 @@ const navConfigAd = [
         children: [
           // { title: 'profile', path: PATH_DASHBOARD.user.profile },
           { title: 'Bác sĩ', path: PATH_DASHBOARD.user.doclist },
-          { title: 'Sản phẩm', path: PATH_DASHBOARD.eCommerce.list },
+          { title: 'Sản phẩm', path: PATH_DASHBOARD.user.productlist },
           { title: 'Chuyên khoa', path: PATH_DASHBOARD.user.department },
           // { title: 'create', path: PATH_DASHBOARD.user.newUser },
           // { title: 'edit', path: PATH_DASHBOARD.user.editById },

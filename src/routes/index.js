@@ -76,7 +76,6 @@ export default function Router() {
             { element: <Navigate to="/dashboard/e-commerce/shop" replace />, index: true },
             { path: 'shop', element: <EcommerceShop /> },
             { path: 'product/:name', element: <EcommerceProductDetails /> },
-            { path: 'list', element: <EcommerceProductList /> },
             { path: 'product/new', element: <EcommerceProductCreate /> },
             { path: 'product/:name/edit', element: <EcommerceProductCreate /> },
             { path: 'checkout', element: <EcommerceCheckout /> },
@@ -95,6 +94,7 @@ export default function Router() {
             { path: 'account', element: <UserAccount /> },
             { path: 'doctorlist', element: <DoctorList /> },
             { path: 'doclist', element: <DocList /> },
+            { path: 'productlist', element: <ProductList/> },
 
           ],
         },
@@ -186,7 +186,6 @@ const GeneralBooking = Loadable(lazy(() => import('../pages/dashboard/GeneralBoo
 // ECOMMERCE
 const EcommerceShop = Loadable(lazy(() => import('../pages/dashboard/EcommerceShop')));
 const EcommerceProductDetails = Loadable(lazy(() => import('../pages/dashboard/EcommerceProductDetails')));
-const EcommerceProductList = Loadable(lazy(() => import('../pages/dashboard/EcommerceProductList')));
 const EcommerceProductCreate = Loadable(lazy(() => import('../pages/dashboard/EcommerceProductCreate')));
 const EcommerceCheckout = Loadable(lazy(() => import('../pages/dashboard/EcommerceCheckout')));
 
@@ -210,8 +209,7 @@ const UserCreate = Loadable(lazy(() => import('../pages/dashboard/UserCreate')))
 const DoctorList = Loadable(lazy(() => import('../pages/dashboard/DoctorList')));
 const DepartmentList = Loadable(lazy(() => import('../pages/dashboard/DepartmentList')));
 const DocList = Loadable(lazy(() => import('../pages/dashboard/DocList')));
-
-
+const ProductList = Loadable(lazy(() => import('../pages/dashboard/ProductList')));
 // APP
 const Chat = Loadable(lazy(() => import('../pages/dashboard/Chat')));
 const Mail = Loadable(lazy(() => import('../pages/dashboard/Mail')));

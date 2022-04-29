@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { paramCase } from 'change-case';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import unorm from 'unorm';
+import { paramCase } from 'change-case';
+import { format } from 'date-fns';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import {
@@ -21,37 +22,41 @@ import {
   TablePagination,
   FormControlLabel,
 } from '@mui/material';
-import LoadingScreen from '../../components/LoadingScreen';
+// utils
+import axios from '../../utils/axios';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
-import useTabs from '../../hooks/useTabs';
 import useSettings from '../../hooks/useSettings';
 import useTable, { getComparator, emptyRows } from '../../hooks/useTable';
-// utils
-import axios from '../../utils/axios';
 // components
 import Page from '../../components/Page';
-import Iconify from '../../components/Iconify';
-import Scrollbar from '../../components/Scrollbar';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
+import { FormProvider, RHFTextField } from '../../components/hook-form';
+import Scrollbar from '../../components/Scrollbar';
 import { TableEmptyRows, TableHeadCustom, TableNoData, TableSelectedActions } from '../../components/table';
-// sections
-import { DepartmentTableToolbar, DepartmentTableRow } from '../../sections/@dashboard/user/department';
-// ----------------------------------------------------------------------
-const ROLE_OPTIONS = ['Tất cả', 'tim mạch', 'nhi'];
+import Iconify from '../../components/Iconify';
 
-const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'đã hủy', 'đã hoàn thành'];
+// sections
+import LoadingScreen from '../../components/LoadingScreen';
+import { ProductTableToolbar, ProductTableRow } from '../../sections/@dashboard/user/list';
+
+
+// ----------------------------------------------------------------------
+const ROLE_OPTIONS = ['Tất cả', 'giảm đau', 'nhức đầu', 'ho', 'nhỏ mắt'];
+
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Chuyên khoa', align: 'left' },
-  { id: 'description', label: 'Mô tả', align: 'center' },
+  { id: 'tile', label: 'Tên thuốc', align: 'left' },
+  { id: 'description', label: 'Mô tả', align: 'left' },
+  { id: 'category', label: 'Loại thuốc', align: 'left' },
+  { id: 'specdes', label: 'Quy cách', align: 'left' },
   { id: '' },
 ];
 
 // ----------------------------------------------------------------------
 
-export default function DepartmentList() {
+export default function ProductList() {
   const {
     dense,
     page,
@@ -71,23 +76,22 @@ export default function DepartmentList() {
     onChangeRowsPerPage,
   } = useTable();
 
-  const { themeStretch } = useSettings();
-
   const navigate = useNavigate();
 
-  const [departments, setDepartments] = useState([]);
+  const { themeStretch } = useSettings();
+
+  const [products, setProducts] = useState([]);
   useEffect(() => {
-    async function getDepartments() {
-      const URL = '/api/admin/department/viewListDepartment';
-      try {
-        const res = await axios.get(URL);
-        setDepartments(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getDepartments();
+    getProd();
   }, []);
+  const getProd = async () => {
+    try {
+      const res = await axios.get(`/api/admin/product/viewProduct`);
+      setProducts(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   const [filterName, setFilterName] = useState('');
 
@@ -95,8 +99,8 @@ export default function DepartmentList() {
 
   // const { currentTab: filterStatus, onChangeTab: onChangeFilterStatus } = useTabs('Tất cả');
 
-  function applySortFilter({ departments, comparator, filterName, filterStatus, filterRole }) {
-    const stabilizedThis = departments.map((el, index) => [el, index]);
+  function applySortFilter({ products, comparator, filterName, filterStatus, filterRole }) {
+    const stabilizedThis = products.map((el, index) => [el, index]);
 
     stabilizedThis.sort((a, b) => {
       const order = comparator(a[0], b[0]);
@@ -104,20 +108,19 @@ export default function DepartmentList() {
       return a[1] - b[1];
     });
 
-    departments = stabilizedThis.map((el) => el[0]);
+    products = stabilizedThis.map((el) => el[0]);
 
     if (filterName) {
-      departments = departments.filter(
-        (item) => unorm.nfd(item.name).toLowerCase().indexOf(unorm.nfd(filterName).toLowerCase()) !== -1
-      );
-    }
-    if (filterRole !== 'Tất cả') {
-      departments = departments.filter(
-        (item) => unorm.nfd(item.name).toLowerCase().indexOf(unorm.nfd(filterRole).toLowerCase()) !== -1
+      products = products.filter(
+        (item) => unorm.nfd(item.title).toLowerCase().indexOf(unorm.nfd(filterName).toLowerCase()) !== -1
       );
     }
 
-    return departments;
+    if (filterRole !== 'Tất cả') {
+      products = products.filter((item) => unorm.nfd(item.category).toLowerCase().indexOf(unorm.nfd(filterRole).toLowerCase()) !== -1);
+    }
+
+    return products;
   }
 
   const handleFilterName = (filterName) => {
@@ -130,15 +133,15 @@ export default function DepartmentList() {
   };
 
   const handleDeleteRow = (id) => {
-    const deleteRow = departments.filter((row) => row._id !== id);
+    const deleteRow = products.filter((row) => row._id !== id);
     setSelected([]);
-    setDepartments(deleteRow);
+    setProducts(deleteRow);
   };
 
   const handleDeleteRows = (selected) => {
-    const deleteRows = departments.filter((row) => !selected.includes(row._id));
+    const deleteRows = products.filter((row) => !selected.includes(row._id));
     setSelected([]);
-    setDepartments(deleteRows);
+    setProducts(deleteRows);
   };
 
   const handleEditRow = (id) => {
@@ -146,7 +149,7 @@ export default function DepartmentList() {
   };
 
   const dataFiltered = applySortFilter({
-    departments,
+    products,
     comparator: getComparator(order, orderBy),
     filterName,
     filterRole,
@@ -156,28 +159,21 @@ export default function DepartmentList() {
 
   const isNotFound = !dataFiltered.length && Boolean(filterName);
 
-  return departments !== null ? (
-    <Page title="Danh sách chuyên khoa">
+  return products !== null ? (
+    <Page title="Quản lý: Danh sách sản phẩm">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="Danh sách chuyên khoa"
-          links={[{ name: 'Bảng điều khiển', href: PATH_DASHBOARD.root }, { name: 'Danh sách chuyên khoa' }]}
-          // action={
-          //   <Button
-          //     variant="contained"
-          //     component={RouterLink}
-          //     to={PATH_DASHBOARD.user.department}
-          //     startIcon={<Iconify icon={'eva:plus-fill'} />}
-          //   >
-          //     Thêm chuyên khoa
-          //   </Button>
-          // }
+          heading="Danh sách sản phẩm"
+          links={[
+            { name: 'Dashboard', href: PATH_DASHBOARD.root },
+            { name: 'Danh sách' },
+          ]}
         />
 
         <Card>
           <Divider />
 
-          <DepartmentTableToolbar
+          <ProductTableToolbar
             filterName={filterName}
             filterRole={filterRole}
             onFilterName={handleFilterName}
@@ -191,11 +187,11 @@ export default function DepartmentList() {
                 <TableSelectedActions
                   dense={dense}
                   numSelected={selected.length}
-                  rowCount={departments.length}
+                  rowCount={products.length}
                   onSelectAllRows={(checked) =>
                     onSelectAllRows(
                       checked,
-                      departments.map((row) => row._id)
+                      products.map((row) => row._id)
                     )
                   }
                   actions={
@@ -213,20 +209,20 @@ export default function DepartmentList() {
                   order={order}
                   orderBy={orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={departments.length}
+                  rowCount={products.length}
                   numSelected={selected.length}
                   onSort={onSort}
                   onSelectAllRows={(checked) =>
                     onSelectAllRows(
                       checked,
-                      departments.map((row) => row._id)
+                      products.map((row) => row._id)
                     )
                   }
                 />
 
                 <TableBody>
                   {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-                    <DepartmentTableRow
+                    <ProductTableRow
                       key={row._id}
                       row={row}
                       selected={selected.includes(row._id)}
@@ -236,7 +232,7 @@ export default function DepartmentList() {
                     />
                   ))}
 
-                  <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, departments.length)} />
+                  <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, products.length)} />
 
                   <TableNoData isNotFound={isNotFound} />
                 </TableBody>
