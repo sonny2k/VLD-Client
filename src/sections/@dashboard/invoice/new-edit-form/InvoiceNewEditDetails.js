@@ -1,280 +1,172 @@
-import PropTypes from 'prop-types';
-import * as Yup from 'yup';
-import { useSnackbar } from 'notistack';
-import { useNavigate } from 'react-router-dom';
-import { useCallback, useEffect, useMemo } from 'react';
 // form
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useFormContext, useFieldArray, Controller } from 'react-hook-form';
 // @mui
-import { styled } from '@mui/material/styles';
-import { LoadingButton } from '@mui/lab';
-import { Card, Chip, Grid, Stack, TextField, Typography, Autocomplete, InputAdornment } from '@mui/material';
-// routes
-import { PATH_DASHBOARD } from '../../../../routes/paths';
-// components
 import {
-  FormProvider,
-  RHFSwitch,
-  RHFSelect,
-  RHFEditor,
-  RHFTextField,
-  RHFRadioGroup,
-  RHFUploadMultiFile,
-} from '../../../../components/hook-form';
+  Box,
+  Stack,
+  Button,
+  Divider,
+  Typography,
+  InputAdornment,
+  MenuItem,
+  Autocomplete,
+  TextField,
+} from '@mui/material';
+// utils
+import { fNumber } from '../../../../utils/formatNumber';
+// components
+import Iconify from '../../../../components/Iconify';
+import { RHFSelect, RHFTextField } from '../../../../components/hook-form';
 
 // ----------------------------------------------------------------------
 
-const GENDER_OPTION = ['Men', 'Women', 'Kids'];
+export default function InvoiceNewEditDetails({ medicines }) {
+  const { control, setValue, watch } = useFormContext();
 
-const CATEGORY_OPTION = [
-  { group: 'Clothing', classify: ['Shirts', 'T-shirts', 'Jeans', 'Leather'] },
-  { group: 'Tailored', classify: ['Suits', 'Blazers', 'Trousers', 'Waistcoats'] },
-  { group: 'Accessories', classify: ['Shoes', 'Backpacks and bags', 'Bracelets', 'Face masks'] },
-];
+  const meds = [...medicines];
 
-const TAGS_OPTION = [
-  'Toy Story 3',
-  'Logan',
-  'Full Metal Jacket',
-  'Dangal',
-  'The Sting',
-  '2001: A Space Odyssey',
-  "Singin' in the Rain",
-  'Toy Story',
-  'Bicycle Thieves',
-  'The Kid',
-  'Inglourious Basterds',
-  'Snatch',
-  '3 Idiots',
-];
-
-const LabelStyle = styled(Typography)(({ theme }) => ({
-  ...theme.typography.subtitle2,
-  color: theme.palette.text.secondary,
-  marginBottom: theme.spacing(1),
-}));
-
-// ----------------------------------------------------------------------
-
-InvoiceNewEditDetails.propTypes = {
-  isEdit: PropTypes.bool,
-  currentProduct: PropTypes.object,
-};
-
-export default function InvoiceNewEditDetails({ isEdit, currentProduct }) {
-  const navigate = useNavigate();
-
-  const { enqueueSnackbar } = useSnackbar();
-
-  const NewProductSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    description: Yup.string().required('Description is required'),
-    images: Yup.array().min(1, 'Images is required'),
-    price: Yup.number().moreThan(0, 'Price should not be $0.00'),
-  });
-
-  const defaultValues = useMemo(
-    () => ({
-      name: currentProduct?.name || '',
-      description: currentProduct?.description || '',
-      images: currentProduct?.images || [],
-      code: currentProduct?.code || '',
-      sku: currentProduct?.sku || '',
-      price: currentProduct?.price || 0,
-      priceSale: currentProduct?.priceSale || 0,
-      tags: currentProduct?.tags || [TAGS_OPTION[0]],
-      inStock: true,
-      taxes: true,
-      gender: currentProduct?.gender || GENDER_OPTION[2],
-      category: currentProduct?.category || CATEGORY_OPTION[0].classify[1],
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [currentProduct]
-  );
-
-  const methods = useForm({
-    resolver: yupResolver(NewProductSchema),
-    defaultValues,
-  });
-
-  const {
-    reset,
-    watch,
+  const { fields, append, remove } = useFieldArray({
     control,
-    setValue,
-    getValues,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = methods;
+    name: 'items',
+  });
 
   const values = watch();
 
-  useEffect(() => {
-    if (isEdit && currentProduct) {
-      reset(defaultValues);
-    }
-    if (!isEdit) {
-      reset(defaultValues);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isEdit, currentProduct]);
-
-  const onSubmit = async () => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
-      navigate(PATH_DASHBOARD.eCommerce.list);
-    } catch (error) {
-      console.error(error);
-    }
+  const handleAdd = () => {
+    append({
+      title: '',
+      quantity: '',
+      rate: '',
+      specdes: '',
+      mednote: '',
+    });
   };
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      setValue(
-        'images',
-        acceptedFiles.map((file) =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          })
-        )
-      );
-    },
-    [setValue]
-  );
-
-  const handleRemoveAll = () => {
-    setValue('images', []);
-  };
-
-  const handleRemove = (file) => {
-    const filteredItems = values.images?.filter((_file) => _file !== file);
-    setValue('images', filteredItems);
+  const handleRemove = (index) => {
+    remove(index);
   };
 
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={8}>
-          <Card sx={{ p: 3 }}>
-            <Stack spacing={3}>
-              <RHFTextField name="name" label="Product Name" />
+    <Box sx={{ p: 3 }}>
+      <Typography variant="h6" sx={{ color: 'text.disabled', mb: 3 }}>
+        Chi tiết toa thuốc:
+      </Typography>
 
-              <div>
-                <LabelStyle>Description</LabelStyle>
-                <RHFEditor simple name="description" />
-              </div>
-
-              <div>
-                <LabelStyle>Images</LabelStyle>
-                <RHFUploadMultiFile
-                  name="images"
-                  showPreview
-                  accept="image/*"
-                  maxSize={3145728}
-                  onDrop={handleDrop}
-                  onRemove={handleRemove}
-                  onRemoveAll={handleRemoveAll}
-                />
-              </div>
-            </Stack>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={4}>
-          <Stack spacing={3}>
-            <Card sx={{ p: 3 }}>
-              <RHFSwitch name="inStock" label="In stock" />
-
-              <Stack spacing={3} mt={2}>
-                <RHFTextField name="code" label="Product Code" />
-                <RHFTextField name="sku" label="Product SKU" />
-
-                <div>
-                  <LabelStyle>Gender</LabelStyle>
-                  <RHFRadioGroup
-                    name="gender"
-                    options={GENDER_OPTION}
-                    sx={{
-                      '& .MuiFormControlLabel-root': { mr: 4 },
-                    }}
+      <Stack divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />} spacing={3}>
+        {fields.map((item, index) => (
+          <Stack key={item.id} alignItems="flex-end" spacing={1.5}>
+            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: 1 }}>
+              <Controller
+                name="createDate"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <Autocomplete
+                    size="small"
+                    fullWidth
+                    name={`items[${index}].title`}
+                    loading={!medicines.length}
+                    onChange={(event) => setValue(`items[${index}].title`, event.target.value)}
+                    options={meds.sort((a, b) => -b.category.localeCompare(a.category))}
+                    groupBy={(option) => option.category}
+                    autoHighlight
+                    getOptionLabel={(option) => option.title}
+                    renderOption={(props, option) => (
+                      <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+                        <img loading="lazy" width="50" src={option.image} alt={option.title} />
+                        {option.title}
+                      </Box>
+                    )}
+                    renderInput={(params) => <TextField {...params} label="Chọn thuốc" />}
                   />
-                </div>
+                )}
+              />
+              <Controller
+                name="createDate"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <RHFTextField
+                    size="small"
+                    name={`items[${index}].quantity`}
+                    label="Số lượng"
+                    onChange={(event) => setValue(`items[${index}].quantity`, event.target.value)}
+                    sx={{ maxWidth: { md: 120 } }}
+                  />
+                )}
+              />
+              <Controller
+                name="createDate"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <RHFTextField
+                    size="small"
+                    name={`items[${index}].rate`}
+                    label="Liều lượng"
+                    onChange={(event) => setValue(`items[${index}].rate`, event.target.value)}
+                    sx={{ maxWidth: { md: 120 } }}
+                  />
+                )}
+              />
+              <Controller
+                name="createDate"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <RHFTextField
+                    size="small"
+                    name={`items[${index}].specdes`}
+                    label="Quy cách"
+                    onChange={(event) => setValue(`items[${index}].specdes`, event.target.value)}
+                    sx={{ maxWidth: { md: 120 } }}
+                  />
+                )}
+              />
+              <Controller
+                name="createDate"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <RHFTextField
+                    size="small"
+                    name={`items[${index}].mednote`}
+                    label="Ghi chú"
+                    onChange={(event) => setValue(`items[${index}].mednote`, event.target.value)}
+                    sx={{ maxWidth: { md: 120 } }}
+                  />
+                )}
+              />
+            </Stack>
 
-                <RHFSelect name="category" label="Category">
-                  {CATEGORY_OPTION.map((category) => (
-                    <optgroup key={category.group} label={category.group}>
-                      {category.classify.map((classify) => (
-                        <option key={classify} value={classify}>
-                          {classify}
-                        </option>
-                      ))}
-                    </optgroup>
-                  ))}
-                </RHFSelect>
-
-                <Controller
-                  name="tags"
-                  control={control}
-                  render={({ field }) => (
-                    <Autocomplete
-                      {...field}
-                      multiple
-                      freeSolo
-                      onChange={(event, newValue) => field.onChange(newValue)}
-                      options={TAGS_OPTION.map((option) => option)}
-                      renderTags={(value, getTagProps) =>
-                        value.map((option, index) => (
-                          <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
-                        ))
-                      }
-                      renderInput={(params) => <TextField label="Tags" {...params} />}
-                    />
-                  )}
-                />
-              </Stack>
-            </Card>
-
-            <Card sx={{ p: 3 }}>
-              <Stack spacing={3} mb={2}>
-                <RHFTextField
-                  name="price"
-                  label="Regular Price"
-                  placeholder="0.00"
-                  value={getValues('price') === 0 ? '' : getValues('price')}
-                  onChange={(event) => setValue('price', Number(event.target.value))}
-                  InputLabelProps={{ shrink: true }}
-                  InputProps={{
-                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                    type: 'number',
-                  }}
-                />
-
-                <RHFTextField
-                  name="priceSale"
-                  label="Sale Price"
-                  placeholder="0.00"
-                  value={getValues('priceSale') === 0 ? '' : getValues('priceSale')}
-                  onChange={(event) => setValue('price', Number(event.target.value))}
-                  InputLabelProps={{ shrink: true }}
-                  InputProps={{
-                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                    type: 'number',
-                  }}
-                />
-              </Stack>
-
-              <RHFSwitch name="taxes" label="Price includes taxes" />
-            </Card>
-
-            <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
-              {!isEdit ? 'Create Product' : 'Save Changes'}
-            </LoadingButton>
+            <Button
+              size="small"
+              color="error"
+              startIcon={<Iconify icon="eva:trash-2-outline" />}
+              onClick={() => handleRemove(index)}
+            >
+              Xóa thuốc
+            </Button>
           </Stack>
-        </Grid>
-      </Grid>
-    </FormProvider>
+        ))}
+      </Stack>
+
+      <Divider sx={{ my: 3, borderStyle: 'dashed' }} />
+
+      <Stack
+        spacing={2}
+        direction={{ xs: 'column-reverse', md: 'row' }}
+        alignItems={{ xs: 'flex-start', md: 'center' }}
+      >
+        <Button size="small" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleAdd} sx={{ flexShrink: 0 }}>
+          Thêm thuốc mới
+        </Button>
+
+        <Stack spacing={2} justifyContent="flex-end" direction={{ xs: 'column', md: 'row' }} sx={{ width: 1 }}>
+          <RHFTextField
+            size="small"
+            label="Ghi chú chung"
+            name="note"
+            onChange={(event) => setValue('note', event.target.value)}
+            sx={{ maxWidth: { md: 400 } }}
+          />
+        </Stack>
+      </Stack>
+    </Box>
   );
 }

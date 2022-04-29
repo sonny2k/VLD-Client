@@ -1,7 +1,8 @@
 import * as Yup from 'yup';
 import 'yup-phone';
 import { useState } from 'react';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import unorm from 'unorm';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -9,7 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Link, Stack, Alert, IconButton, InputAdornment } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // routes
-import { PATH_AUTH } from '../../../routes/paths';
+import { PATH_AUTH, PATH_DASHBOARD } from '../../../routes/paths';
 // hooks
 import useAuth from '../../../hooks/useAuth';
 import useIsMountedRef from '../../../hooks/useIsMountedRef';
@@ -23,6 +24,8 @@ export default function LoginForm() {
   const { login } = useAuth();
 
   const isMountedRef = useIsMountedRef();
+
+  const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -51,8 +54,11 @@ export default function LoginForm() {
 
   const onSubmit = async (data) => {
     try {
-      const phonenum = `+84${data.phone.slice(1)}`
-      await login(phonenum, data.password);
+      const phonenum = `+84${data.phone.slice(1)}`;
+      login(phonenum, data.password);
+      // if (unorm.nfkd(response.data.account.role).toLowerCase().indexOf(unorm.nfkd('Bác sĩ').toLowerCase()) !== -1) {
+      //   navigate(PATH_DASHBOARD.user.account);
+      // }
     } catch (error) {
       console.error(error);
       if (isMountedRef.current) {

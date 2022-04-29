@@ -100,7 +100,7 @@ export default function Router() {
           path: 'prescription',
           children: [
             { element: <Navigate to="/dashboard/prescription/list" replace />, index: true },
-            { path: 'prescription', element: <InvoiceList /> },
+            { path: 'list', element: <InvoiceList /> },
             { path: ':idne', element: <InvoiceDetails /> },
             { path: 'edit/:idne', element: <InvoiceEdit /> },
             { path: 'new', element: <InvoiceCreate /> },

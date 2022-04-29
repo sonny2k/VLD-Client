@@ -52,7 +52,7 @@ const handlers = {
     return {
       ...state,
       isAuthenticated: true,
-      account
+      account,
     };
   },
   CHANGEPASS: (state, action) => {
@@ -152,14 +152,22 @@ function AuthProvider({ children }) {
     dispatch({
       type: 'LOGIN',
       payload: {
-        account,  
+        account,
       },
     });
   };
 
   const updateinfo = async (fname, lname, email, birthday, gender, city, district, ward, street) => {
     const response = await axios.put('/api/user/account/info', {
-      fname, lname, email, birthday, gender, city, ward, district, street
+      fname,
+      lname,
+      email,
+      birthday,
+      gender,
+      city,
+      ward,
+      district,
+      street,
     });
     const { account } = response.data;
     dispatch({
@@ -172,7 +180,8 @@ function AuthProvider({ children }) {
 
   const changepass = async (password, newpass) => {
     const response = await axios.post('/api/user/changepassword', {
-      password, newpass
+      password,
+      newpass,
     });
     const { message } = response.data;
     setSession(null);
@@ -184,17 +193,31 @@ function AuthProvider({ children }) {
     });
   };
 
-  const register = async (profilepic, birthday, gender, email, phone, password, fname, lname, city, district, ward, street, role) => {
+  const register = async (
+    profilepic,
+    birthday,
+    gender,
+    email,
+    phone,
+    password,
+    fname,
+    lname,
+    city,
+    district,
+    ward,
+    street,
+    role
+  ) => {
     const response = await axios.post('/api/user/auth/register', {
-      profilepic, 
-      birthday, 
-      gender, 
+      profilepic,
+      birthday,
+      gender,
       email,
       phone,
       password,
-      city, 
-      district, 
-      ward, 
+      city,
+      district,
+      ward,
       street,
       fname,
       lname,
@@ -216,7 +239,7 @@ function AuthProvider({ children }) {
     dispatch({ type: 'LOGOUT' });
   };
 
-  const resetpassword = async ( phone, newpassword ) => {
+  const resetpassword = async (phone, newpassword) => {
     const response = await axios.post('/api/user/auth/resetpassword', {
       phone,
       newpassword,
@@ -247,6 +270,6 @@ function AuthProvider({ children }) {
       {children}
     </AuthContext.Provider>
   );
-  }
+}
 
 export { AuthContext, AuthProvider };

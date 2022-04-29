@@ -8,7 +8,22 @@ import { useForm } from 'react-hook-form';
 // @mui
 import { LoadingButton } from '@mui/lab';
 import { styled } from '@mui/material/styles';
-import { Box, Card, Grid, Stack, Typography, Button, Tooltip, Link, CardHeader, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import {
+  Box,
+  Card,
+  Grid,
+  Stack,
+  Typography,
+  Button,
+  Tooltip,
+  Link,
+  CardHeader,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from '@mui/material';
 // utils
 import createAvatar from '../../../utils/createAvatar';
 import axios from '../../../utils/axios';
@@ -41,11 +56,12 @@ export default function UserNewForm({ consultation }) {
 
   const { fname, lname, profilepic } = consultation[0].doctor.account;
 
-  const { department, description, workcertificate, level, educationplace, degree, workhistory } = consultation[0].doctor;
+  const { department, description, workcertificate, level, educationplace, degree, workhistory } =
+    consultation[0].doctor;
 
   const doctorname = `${level} ${lname} ${fname}`;
 
-  const { enqueueSnackbar } = useSnackbar();  
+  const { enqueueSnackbar } = useSnackbar();
 
   const [open, setOpen] = useState(false);
 
@@ -60,18 +76,18 @@ export default function UserNewForm({ consultation }) {
   const cancelAndClose = () => {
     cancel();
     handleClose();
-  }
+  };
 
   const defaultValues = useMemo(
     () => ({
-      name: doctorname|| '',
+      name: doctorname || '',
       username: name || '',
       phone: phone || '',
       date: format(new Date(date), 'dd/MM/yyyy') || '',
       hour: hour || '',
       symptom: symptom || '',
       profilepic: profilepic || '',
-      status: status || ''
+      status: status || '',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [consultation]
@@ -100,7 +116,7 @@ export default function UserNewForm({ consultation }) {
         _id: consultation[0]._id,
         doctor: consultation[0].doctor,
         date: consultation[0].date,
-        hour: consultation[0].hour
+        hour: consultation[0].hour,
       });
       enqueueSnackbar('Hủy lịch thành công');
       navigate(PATH_DASHBOARD.user.list);
@@ -114,7 +130,7 @@ export default function UserNewForm({ consultation }) {
     try {
       await axios.put('/api/user/consultation/consultsymptom', {
         _id: consultation[0]._id,
-        symptom: data.symptom
+        symptom: data.symptom,
       });
       enqueueSnackbar('Thay đổi triệu chứng thành công');
     } catch (err) {
@@ -129,7 +145,12 @@ export default function UserNewForm({ consultation }) {
         <Grid item xs={12} md={4}>
           <Card sx={{ py: 10, px: 3 }}>
             <Label
-              color={(status === "chờ xác nhận" && 'warning') || (status === "chờ khám" && 'info') || (status === 'bị từ chối' && 'error') || (status === 'đã hoàn thành' && 'success')}
+              color={
+                (status === 'chờ xác nhận' && 'warning') ||
+                (status === 'chờ khám' && 'info') ||
+                (status === 'bị từ chối' && 'error') ||
+                (status === 'đã hoàn thành' && 'success')
+              }
               sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
             >
               {status}
@@ -157,56 +178,56 @@ export default function UserNewForm({ consultation }) {
 
             <Stack spacing={2} sx={{ p: 3 }}>
               <Typography variant="body2">{description}</Typography>
-              
-        <Stack direction="row">
-          <IconStyle icon={'carbon:certificate'} />
-          <Typography variant="body2">
-            Chứng chỉ hành nghề:&nbsp;
-            <Link component="span" variant="subtitle2" color="text.primary">
-              {workcertificate}
-            </Link>
-          </Typography>
-        </Stack>
 
-        <Stack direction="row">
-          <IconStyle icon={'fa6-solid:ranking-star'} />
-          <Typography variant="body2">
-            Trình độ:&nbsp;
-            <Link component="span" variant="subtitle2" color="text.primary">
-              {degree}
-            </Link>
-          </Typography>
-        </Stack>
+              <Stack direction="row">
+                <IconStyle icon={'carbon:certificate'} />
+                <Typography variant="body2">
+                  Chứng chỉ hành nghề:&nbsp;
+                  <Link component="span" variant="subtitle2" color="text.primary">
+                    {workcertificate}
+                  </Link>
+                </Typography>
+              </Stack>
 
-        <Stack direction="row">
-          <IconStyle icon={'healthicons:outpatient-department'} />
-          <Typography variant="body2">
-            Phòng ban:&nbsp;
-            <Link component="span" variant="subtitle2" color="text.primary">
-              {department}
-            </Link>
-          </Typography>
-        </Stack>
+              <Stack direction="row">
+                <IconStyle icon={'fa6-solid:ranking-star'} />
+                <Typography variant="body2">
+                  Trình độ:&nbsp;
+                  <Link component="span" variant="subtitle2" color="text.primary">
+                    {degree}
+                  </Link>
+                </Typography>
+              </Stack>
 
-        <Stack direction="row">
-          <IconStyle icon={'fa-solid:user-graduate'} />
-          <Typography variant="body2">
-            Tốt nghiệp&nbsp;
-            <Link component="span" variant="subtitle2" color="text.primary">
-              {educationplace}
-            </Link>
-          </Typography>
-        </Stack>
+              <Stack direction="row">
+                <IconStyle icon={'healthicons:outpatient-department'} />
+                <Typography variant="body2">
+                  Phòng ban:&nbsp;
+                  <Link component="span" variant="subtitle2" color="text.primary">
+                    {department}
+                  </Link>
+                </Typography>
+              </Stack>
 
-        <Stack direction="row">
-          <IconStyle icon={'ic:twotone-timeline'} />
-          <Typography variant="body2">
-            Quá trình công tác |&nbsp;
-            <Link component="span" variant="subtitle2" color="text.primary">
-              {workhistory}
-            </Link>
-          </Typography>
-        </Stack>
+              <Stack direction="row">
+                <IconStyle icon={'fa-solid:user-graduate'} />
+                <Typography variant="body2">
+                  Tốt nghiệp&nbsp;
+                  <Link component="span" variant="subtitle2" color="text.primary">
+                    {educationplace}
+                  </Link>
+                </Typography>
+              </Stack>
+
+              <Stack direction="row">
+                <IconStyle icon={'ic:twotone-timeline'} />
+                <Typography variant="body2">
+                  Quá trình công tác |&nbsp;
+                  <Link component="span" variant="subtitle2" color="text.primary">
+                    {workhistory}
+                  </Link>
+                </Typography>
+              </Stack>
             </Stack>
           </Card>
         </Grid>
@@ -221,14 +242,14 @@ export default function UserNewForm({ consultation }) {
                 gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
               }}
             >
-              <RHFTextField name="username" label="Họ tên người hẹn" disabled/>
-              <RHFTextField name="phone" label="Số điện thoại người hẹn" disabled/>
-              <RHFTextField name="date" label="Ngày hẹn" disabled/>
-              <RHFTextField name="hour" label="Giờ hẹn" disabled/>
+              <RHFTextField name="username" label="Họ tên người hẹn" disabled />
+              <RHFTextField name="phone" label="Số điện thoại người hẹn" disabled />
+              <RHFTextField name="date" label="Ngày hẹn" disabled />
+              <RHFTextField name="hour" label="Giờ hẹn" disabled />
             </Box>
 
             <Stack sx={{ mt: 3 }}>
-              <Box 
+              <Box
                 sx={{
                   display: 'grid',
                   columnGap: 2,
@@ -236,89 +257,81 @@ export default function UserNewForm({ consultation }) {
                   gridTemplateColumns: { xs: 'repeat(1, 2fr)', sm: 'repeat(1, 2fr)' },
                 }}
               >
-                <RHFTextField name="symptom" multiline rows={3} label="Triệu chứng" disabled/>
+                <RHFTextField name="symptom" multiline rows={3} label="Triệu chứng" disabled />
               </Box>
             </Stack>
-            
-            {status === 'bị từ chối' || status === 'đã hoàn thành' ?
-            <Stack alignItems="flex-end"  sx={{ mt: 3 }}>
-              <Box
-                sx={{
-                  display: 'grid',
-                  columnGap: 1,
-                  rowGap: 1,
-                  gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(1, 1fr)' },
-                }}
-              >
-                <Button onClick={handleSubmit(back)} variant="contained">
-                  Trở về
-                </Button>
-              </Box> 
-            </Stack>
-            :
-            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              {status === 'chờ xác nhận' ?
+
+            {status === 'bị từ chối' || status === 'đã hoàn thành' ? (
+              <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                 <Box
-                sx={{
-                  display: 'grid',
-                  columnGap: 1,
-                  rowGap: 1,
-                  gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
-                }}
-              > 
+                  sx={{
+                    display: 'grid',
+                    columnGap: 1,
+                    rowGap: 1,
+                    gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(1, 1fr)' },
+                  }}
+                >
+                  <Button onClick={handleSubmit(back)} variant="contained">
+                    Trở về
+                  </Button>
+                </Box>
+              </Stack>
+            ) : (
+              <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+                {status === 'chờ xác nhận' ? (
+                  <Box
+                    sx={{
+                      display: 'grid',
+                      columnGap: 1,
+                      rowGap: 1,
+                      gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
+                    }}
+                  >
+                    <Button onClick={handleSubmit(back)} variant="outlined">
+                      Trở về
+                    </Button>
 
-                <Button onClick={handleSubmit(back)} variant="outlined">
-                  Trở về
-                </Button>       
+                    <LoadingButton variant="contained" color="error" loading={isSubmitting} onClick={handleClickOpen}>
+                      Hủy lịch hẹn
+                    </LoadingButton>
+                  </Box>
+                ) : (
+                  <Box
+                    sx={{
+                      display: 'grid',
+                      columnGap: 1,
+                      rowGap: 1,
+                      gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(3, 1fr)' },
+                    }}
+                  >
+                    <Button onClick={handleSubmit(back)} variant="outlined">
+                      Trở về
+                    </Button>
 
-                <LoadingButton variant="contained" color='error' loading={isSubmitting} onClick={handleClickOpen}>
-                  Hủy lịch hẹn
-                </LoadingButton>   
-              </Box> 
-              :
-              <Box
-                sx={{
-                  display: 'grid',
-                  columnGap: 1,
-                  rowGap: 1,
-                  gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(3, 1fr)' },
-                }}
-              > 
+                    <LoadingButton variant="contained" color="error" loading={isSubmitting} onClick={handleClickOpen}>
+                      Hủy lịch hẹn
+                    </LoadingButton>
 
-                <Button onClick={handleSubmit(back)} variant="outlined">
-                  Trở về
-                </Button>       
-
-                <LoadingButton variant="contained" color='error' loading={isSubmitting} onClick={handleClickOpen}>
-                  Hủy lịch hẹn
-                </LoadingButton>        
-
-                <LoadingButton variant="contained" color='info' loading={isSubmitting}>
-                  Tham gia buổi hẹn
-                </LoadingButton>  
-              </Box> 
-              }
-              
-            </Stack>
-            }
-            <Dialog
-              open={open}
-              onClose={handleClose}
-            >
-            <DialogTitle sx={{ m: 1, p: 2 }}>
-              {"Bạn muốn hủy lịch hẹn?"}
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                Buổi hẹn sẽ bị xóa khỏi hệ thống sau khi nhấp đồng ý, bạn có muốn tiếp tục?
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose}>Trở về</Button>
-              <Button variant='contained' onClick={cancelAndClose} autoFocus>
-                Đồng ý
-              </Button>
-            </DialogActions>
+                    <LoadingButton variant="contained" color="info" loading={isSubmitting}>
+                      Tham gia buổi hẹn
+                    </LoadingButton>
+                  </Box>
+                )}
+              </Stack>
+            )}
+            <Dialog open={open} onClose={handleClose}>
+              <DialogTitle sx={{ m: 1, p: 2 }}>{'Bạn muốn hủy lịch hẹn?'}</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Buổi hẹn sẽ bị xóa khỏi hệ thống sau khi nhấp đồng ý, bạn có muốn tiếp tục?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Trở về</Button>
+                <Button variant="contained" onClick={cancelAndClose} autoFocus>
+                  Đồng ý
+                </Button>
+              </DialogActions>
             </Dialog>
           </Card>
         </Grid>

@@ -91,7 +91,7 @@ const navConfigDoc = [
   // APP
   // ----------------------------------------------------------------------
   {
-    subheader: 'Yêu cầu',
+    subheader: 'Tư vấn',
     items: [
       // {
       //   title: 'mail',
@@ -104,7 +104,7 @@ const navConfigDoc = [
       //   ),
       // },
       // { title: 'chat', path: PATH_DASHBOARD.chat.root, icon: ICONS.chat },
-      // { title: 'Quản lý yêu cầu', path: PATH_DASHBOARD.user.request, icon: ICONS.calendar },
+      { title: 'Tư vấn trực tuyến', path: PATH_DASHBOARD.calendar, icon: ICONS.calendar },
       // {
       //   title: 'kanban',
       //   path: PATH_DASHBOARD.kanban,

@@ -8,7 +8,22 @@ import { useForm } from 'react-hook-form';
 // @mui
 import { LoadingButton } from '@mui/lab';
 import { styled } from '@mui/material/styles';
-import { Box, Card, Grid, Stack, Typography, Button, Tooltip, Link, CardHeader, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import {
+  Box,
+  Card,
+  Grid,
+  Stack,
+  Typography,
+  Button,
+  Tooltip,
+  Link,
+  CardHeader,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from '@mui/material';
 // utils
 import createAvatar from '../../../utils/createAvatar';
 import axios from '../../../utils/axios';
@@ -45,7 +60,7 @@ export default function DoctorConsultationDetail({ consultation }) {
 
   const requestname = `${lname} ${fname}`;
 
-  const { enqueueSnackbar } = useSnackbar();  
+  const { enqueueSnackbar } = useSnackbar();
 
   const [open, setOpen] = useState(false);
 
@@ -60,11 +75,25 @@ export default function DoctorConsultationDetail({ consultation }) {
   const cancelAndClose = () => {
     cancel();
     handleClose();
-  }
+  };
 
   const createPrescription = () => {
-    navigate(PATH_DASHBOARD.prescription.new, {state: { id: _id, name: name != null ? name : requestname, gender1: gender, weight1: weight, height1: height, symptom1: symptom, pastmedicalhistory1: pastmedicalhistory, drughistory1: drughistory, familyhistory1: familyhistory, date1: date, hour1: hour  } } );
-  }
+    navigate(PATH_DASHBOARD.prescription.new, {
+      state: {
+        id: _id,
+        name: name != null ? name : requestname,
+        gender1: gender,
+        weight1: weight,
+        height1: height,
+        symptom1: symptom,
+        pastmedicalhistory1: pastmedicalhistory,
+        drughistory1: drughistory,
+        familyhistory1: familyhistory,
+        date1: date,
+        hour1: hour,
+      },
+    });
+  };
 
   const defaultValues = useMemo(
     () => ({
@@ -74,7 +103,7 @@ export default function DoctorConsultationDetail({ consultation }) {
       hour: hour || '',
       symptom: symptom || '',
       profilepic: profilepic || '',
-      status: status || ''
+      status: status || '',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [consultation]
@@ -103,7 +132,7 @@ export default function DoctorConsultationDetail({ consultation }) {
         _id: consultation[0]._id,
         doctor: consultation[0].doctor,
         date: consultation[0].date,
-        hour: consultation[0].hour
+        hour: consultation[0].hour,
       });
       enqueueSnackbar('Từ chối lịch hẹn thành công');
       navigate(PATH_DASHBOARD.user.doctorlist);
@@ -117,7 +146,7 @@ export default function DoctorConsultationDetail({ consultation }) {
     try {
       await axios.put('/api/user/consultation/consultsymptom', {
         _id: consultation[0]._id,
-        symptom: data.symptom
+        symptom: data.symptom,
       });
       enqueueSnackbar('Thay đổi triệu chứng thành công');
     } catch (err) {
@@ -145,7 +174,12 @@ export default function DoctorConsultationDetail({ consultation }) {
         <Grid item xs={12} md={4}>
           <Card sx={{ py: 10, px: 3 }}>
             <Label
-              color={(status === "chờ xác nhận" && 'warning') || (status === "chờ khám" && 'info') || (status === 'bị từ chối' && 'error') || (status === 'đã hoàn thành' && 'success')}
+              color={
+                (status === 'chờ xác nhận' && 'warning') ||
+                (status === 'chờ khám' && 'info') ||
+                (status === 'bị từ chối' && 'error') ||
+                (status === 'đã hoàn thành' && 'success')
+              }
               sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
             >
               {status}
@@ -170,66 +204,65 @@ export default function DoctorConsultationDetail({ consultation }) {
             </Box>
 
             <Stack spacing={2} sx={{ p: 3 }}>
-              
-        <Stack direction="row">
-          <IconStyle icon={'ic:outline-bloodtype'} />
-          <Typography variant="body2">
-            Nhóm máu:&nbsp;
-            <Link component="span" variant="subtitle2" color="text.primary">
-              {bloodtype}
-            </Link>
-          </Typography>
-        </Stack>
+              <Stack direction="row">
+                <IconStyle icon={'ic:outline-bloodtype'} />
+                <Typography variant="body2">
+                  Nhóm máu:&nbsp;
+                  <Link component="span" variant="subtitle2" color="text.primary">
+                    {bloodtype}
+                  </Link>
+                </Typography>
+              </Stack>
 
-        <Stack direction="row">
-          <IconStyle icon={'mdi:human-male-height'} />
-          <Typography variant="body2">
-            Chiều cao:&nbsp;
-            <Link component="span" variant="subtitle2" color="text.primary">
-              {height}
-            </Link>
-          </Typography>
-        </Stack>
+              <Stack direction="row">
+                <IconStyle icon={'mdi:human-male-height'} />
+                <Typography variant="body2">
+                  Chiều cao:&nbsp;
+                  <Link component="span" variant="subtitle2" color="text.primary">
+                    {height}
+                  </Link>
+                </Typography>
+              </Stack>
 
-        <Stack direction="row">
-          <IconStyle icon={'icon-park-outline:weight'} />
-          <Typography variant="body2">
-            Cân nặng:&nbsp;
-            <Link component="span" variant="subtitle2" color="text.primary">
-              {weight}
-            </Link>
-          </Typography>
-        </Stack>
+              <Stack direction="row">
+                <IconStyle icon={'icon-park-outline:weight'} />
+                <Typography variant="body2">
+                  Cân nặng:&nbsp;
+                  <Link component="span" variant="subtitle2" color="text.primary">
+                    {weight}
+                  </Link>
+                </Typography>
+              </Stack>
 
-        <Stack direction="row">
-          <IconStyle icon={'bi:file-earmark-medical'} />
-          <Typography variant="body2">
-            Tiền sử bệnh lý:&nbsp;
-            <Link component="span" variant="subtitle2" color="text.primary">
-              {pastmedicalhistory}
-            </Link>
-          </Typography>
-        </Stack>
+              <Stack direction="row">
+                <IconStyle icon={'bi:file-earmark-medical'} />
+                <Typography variant="body2">
+                  Tiền sử bệnh lý:&nbsp;
+                  <Link component="span" variant="subtitle2" color="text.primary">
+                    {pastmedicalhistory}
+                  </Link>
+                </Typography>
+              </Stack>
 
-        <Stack direction="row">
-          <IconStyle icon={'healthicons:medicines'} />
-          <Typography variant="body2">
-            Tiền sử dị ứng:&nbsp;
-            <Link component="span" variant="subtitle2" color="text.primary">
-              {drughistory}
-            </Link>
-          </Typography>
-        </Stack>
+              <Stack direction="row">
+                <IconStyle icon={'healthicons:medicines'} />
+                <Typography variant="body2">
+                  Tiền sử dị ứng:&nbsp;
+                  <Link component="span" variant="subtitle2" color="text.primary">
+                    {drughistory}
+                  </Link>
+                </Typography>
+              </Stack>
 
-        <Stack direction="row">
-          <IconStyle icon={'carbon:pedestrian-family'} />
-          <Typography variant="body2">
-            Tiền sử gia đình:&nbsp;
-            <Link component="span" variant="subtitle2" color="text.primary">
-              {familyhistory}
-            </Link>
-          </Typography>
-        </Stack>
+              <Stack direction="row">
+                <IconStyle icon={'carbon:pedestrian-family'} />
+                <Typography variant="body2">
+                  Tiền sử gia đình:&nbsp;
+                  <Link component="span" variant="subtitle2" color="text.primary">
+                    {familyhistory}
+                  </Link>
+                </Typography>
+              </Stack>
             </Stack>
           </Card>
         </Grid>
@@ -244,14 +277,14 @@ export default function DoctorConsultationDetail({ consultation }) {
                 gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
               }}
             >
-              <RHFTextField name="username" label="Họ tên người hẹn" disabled/>
-              <RHFTextField name="phone" label="Số điện thoại người hẹn" disabled/>
-              <RHFTextField name="date" label="Ngày hẹn" disabled/>
-              <RHFTextField name="hour" label="Giờ hẹn" disabled/>
+              <RHFTextField name="username" label="Họ tên người hẹn" disabled />
+              <RHFTextField name="phone" label="Số điện thoại người hẹn" disabled />
+              <RHFTextField name="date" label="Ngày hẹn" disabled />
+              <RHFTextField name="hour" label="Giờ hẹn" disabled />
             </Box>
 
             <Stack sx={{ mt: 3 }}>
-              <Box 
+              <Box
                 sx={{
                   display: 'grid',
                   columnGap: 2,
@@ -259,118 +292,118 @@ export default function DoctorConsultationDetail({ consultation }) {
                   gridTemplateColumns: { xs: 'repeat(1, 2fr)', sm: 'repeat(1, 2fr)' },
                 }}
               >
-                <RHFTextField name="symptom" multiline rows={3} label="Triệu chứng" disabled/>
-                
+                <RHFTextField name="symptom" multiline rows={3} label="Triệu chứng" disabled />
               </Box>
             </Stack>
-            
-            {status === 'bị từ chối' || status === 'đã hoàn thành' ?
-            <Stack alignItems="flex-end"  sx={{ mt: 3 }}>
-              <Box
-                sx={{
-                  display: 'grid',
-                  columnGap: 1,
-                  rowGap: 1,
-                  gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(1, 1fr)' },
-                }}
-              >
-                <Button onClick={handleSubmit(back)} variant="contained">
-                  Trở về
-                </Button>
-              </Box> 
-            </Stack>
-            :
-            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              {status === 'chờ xác nhận' ? 
+
+            {status === 'bị từ chối' || status === 'đã hoàn thành' ? (
+              <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                 <Box
-                sx={{
-                  display: 'grid',
-                  columnGap: 1,
-                  rowGap: 1,
-                  gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(3, 1fr)' },
-                }}
-              >
+                  sx={{
+                    display: 'grid',
+                    columnGap: 1,
+                    rowGap: 1,
+                    gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(1, 1fr)' },
+                  }}
+                >
+                  <Button onClick={handleSubmit(back)} variant="contained">
+                    Trở về
+                  </Button>
+                </Box>
+              </Stack>
+            ) : (
+              <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+                {status === 'chờ xác nhận' ? (
+                  <Box
+                    sx={{
+                      display: 'grid',
+                      columnGap: 1,
+                      rowGap: 1,
+                      gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(3, 1fr)' },
+                    }}
+                  >
+                    <Button onClick={handleSubmit(back)} variant="outlined">
+                      Trở về
+                    </Button>
 
+                    {status === 'chờ xác nhận' ? (
+                      <LoadingButton variant="contained" color="error" loading={isSubmitting} onClick={handleClickOpen}>
+                        Từ chối lịch hẹn
+                      </LoadingButton>
+                    ) : (
+                      <LoadingButton variant="contained" loading={isSubmitting}>
+                        Tham gia buổi hẹn
+                      </LoadingButton>
+                    )}
 
-                <Button onClick={handleSubmit(back)} variant="outlined">
-                  Trở về
-                </Button>                
+                    {status === 'chờ xác nhận' && (
+                      <LoadingButton
+                        variant="contained"
+                        color="info"
+                        loading={isSubmitting}
+                        onClick={handleSubmit(confirm)}
+                      >
+                        Xác nhận lịch hẹn
+                      </LoadingButton>
+                    )}
+                  </Box>
+                ) : (
+                  <Box
+                    sx={{
+                      display: 'grid',
+                      columnGap: 1,
+                      rowGap: 1,
+                      gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(4, 1fr)' },
+                    }}
+                  >
+                    <Button onClick={handleSubmit(back)} variant="outlined">
+                      Trở về
+                    </Button>
 
-                {status === 'chờ xác nhận' ?
-                  <LoadingButton variant="contained" color='error' loading={isSubmitting} onClick={handleClickOpen}>
-                    Từ chối lịch hẹn
-                  </LoadingButton>        
-                  :
-                  <LoadingButton variant="contained" loading={isSubmitting}>
-                    Tham gia buổi hẹn
-                  </LoadingButton>  
-                }
-                
-                {status === 'chờ xác nhận' &&
-                  <LoadingButton variant="contained" color='info' loading={isSubmitting} onClick={handleSubmit(confirm)}>
-                    Xác nhận lịch hẹn
-                  </LoadingButton>        
-                } 
-              </Box>
-              :
-              <Box
-                sx={{
-                  display: 'grid',
-                  columnGap: 1,
-                  rowGap: 1,
-                  gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(4, 1fr)' },
-                }}
-              >
+                    {status === 'chờ khám' && (
+                      <LoadingButton variant="contained" color="error" loading={isSubmitting} onClick={handleClickOpen}>
+                        Từ chối lịch hẹn
+                      </LoadingButton>
+                    )}
 
-                <Button onClick={handleSubmit(back)} variant="outlined">
-                  Trở về
-                </Button>         
+                    {status === 'chờ khám' && (
+                      <LoadingButton
+                        variant="contained"
+                        color="warning"
+                        loading={isSubmitting}
+                        onClick={createPrescription}
+                      >
+                        Tạo toa thuốc
+                      </LoadingButton>
+                    )}
 
-                {status === 'chờ khám' &&
-                  <LoadingButton variant="contained" color='error' loading={isSubmitting} onClick={handleClickOpen}>
-                  Từ chối lịch hẹn
-                  </LoadingButton>  
-                }      
-
-                {status === 'chờ khám' &&
-                  <LoadingButton variant="contained" color='warning' loading={isSubmitting} onClick={createPrescription}>
-                  Tạo toa thuốc
-                  </LoadingButton>  
-                }
-
-                {status === 'chờ xác nhận' ?
-                  <LoadingButton variant="contained" color='error' loading={isSubmitting} onClick={handleClickOpen}>
-                    Từ chối lịch hẹn
-                  </LoadingButton>        
-                  :
-                  <LoadingButton variant="contained" color='info' loading={isSubmitting}>
-                    Tham gia buổi hẹn
-                  </LoadingButton>  
-                }
-          
-              </Box>
-              
-              }
-            </Stack>
-            }
-            <Dialog
-              open={open}
-              onClose={handleClose}
-            >
-            <DialogTitle sx={{ m: 1, p: 2 }}>
-              {"Bạn muốn từ chối lịch hẹn?"}
-            </DialogTitle>
-            <DialogContent>
-              <DialogContentText>
-                Buổi hẹn sẽ hiển thị ở trạng thái bị từ chối ở phía người dùng sau khi nhấp đồng ý, bạn có muốn tiếp tục?
-              </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose}>Trở về</Button>
-              <Button variant='contained' onClick={cancelAndClose} autoFocus>
-                Đồng ý
-              </Button>
-            </DialogActions>
+                    {status === 'chờ xác nhận' ? (
+                      <LoadingButton variant="contained" color="error" loading={isSubmitting} onClick={handleClickOpen}>
+                        Từ chối lịch hẹn
+                      </LoadingButton>
+                    ) : (
+                      <LoadingButton variant="contained" color="info" loading={isSubmitting}>
+                        Tham gia buổi hẹn
+                      </LoadingButton>
+                    )}
+                  </Box>
+                )}
+              </Stack>
+            )}
+            <Dialog open={open} onClose={handleClose}>
+              <DialogTitle sx={{ m: 1, p: 2 }}>{'Bạn muốn từ chối lịch hẹn?'}</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Buổi hẹn sẽ hiển thị ở trạng thái bị từ chối ở phía người dùng sau khi nhấp đồng ý, bạn có muốn tiếp
+                  tục?
+                </DialogContentText>
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose}>Trở về</Button>
+                <Button variant="contained" onClick={cancelAndClose} autoFocus>
+                  Đồng ý
+                </Button>
+              </DialogActions>
             </Dialog>
           </Card>
         </Grid>
