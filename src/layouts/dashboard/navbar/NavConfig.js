@@ -106,7 +106,8 @@ const navConfig = [
       // },
       // { title: 'chat', path: PATH_DASHBOARD.chat.root, icon: ICONS.chat },
       // { title: 'Lịch thăm khám', path: PATH_DASHBOARD.calendar, icon: ICONS.calendar },
-      { title: 'Trò chuyện với bác sĩ', path: PATH_DASHBOARD.chat.root, icon: ICONS.chat },
+      // { title: 'Trò chuyện với bác sĩ', path: PATH_DASHBOARD.chat.root, icon: ICONS.chat },
+      { title: 'Tư vấn trực tuyến', path: PATH_DASHBOARD.calendar, icon: ICONS.calendar },
       // {
       //   title: 'kanban',
       //   path: PATH_DASHBOARD.kanban,

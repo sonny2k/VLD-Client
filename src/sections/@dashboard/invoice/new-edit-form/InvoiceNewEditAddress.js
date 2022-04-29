@@ -15,7 +15,16 @@ import InvoiceAddressListDialog from './InvoiceAddressListDialog';
 
 // ----------------------------------------------------------------------
 
-export default function InvoiceNewEditAddress() {
+export default function InvoiceNewEditAddress({
+  name,
+  gender,
+  weight,
+  height,
+  symptom,
+  pastmedicalhistory,
+  drughistory,
+  familyhistory,
+}) {
   const {
     watch,
     setValue,
@@ -42,29 +51,22 @@ export default function InvoiceNewEditAddress() {
       <Stack sx={{ width: 1 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 1 }}>
           <Typography variant="h6" sx={{ color: 'text.disabled' }}>
-            From:
+            Hồ sơ bệnh lý
           </Typography>
-
-          <Button size="small" startIcon={<Iconify icon="eva:edit-fill" />} onClick={onOpenFrom}>
-            Change
-          </Button>
-
-          <InvoiceAddressListDialog
-            open={openFrom}
-            onClose={onCloseFrom}
-            selected={(selectedId) => invoiceFrom?.id === selectedId}
-            onSelect={(address) => setValue('invoiceFrom', address)}
-            addressOptions={_invoiceAddressFrom}
-          />
         </Stack>
 
-        <AddressInfo name={invoiceFrom.name} address={invoiceFrom.address} phone={invoiceFrom.phone} />
+        <MedicalInfo
+          symptom={symptom}
+          pastmedicalhistory={pastmedicalhistory}
+          drughistory={drughistory}
+          familyhistory={familyhistory}
+        />
       </Stack>
 
       <Stack sx={{ width: 1 }}>
         <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mb: 1 }}>
           <Typography variant="h6" sx={{ color: 'text.disabled' }}>
-            To:
+            Thông tin bệnh nhân
           </Typography>
 
           <Button
@@ -72,7 +74,7 @@ export default function InvoiceNewEditAddress() {
             startIcon={<Iconify icon={invoiceTo ? 'eva:edit-fill' : 'eva:plus-fill'} />}
             onClick={onOpenTo}
           >
-            {invoiceTo ? 'Change' : 'Add'}
+            Nhập toa thuốc có sẵn
           </Button>
 
           <InvoiceAddressListDialog
@@ -84,13 +86,7 @@ export default function InvoiceNewEditAddress() {
           />
         </Stack>
 
-        {invoiceTo ? (
-          <AddressInfo name={invoiceTo.name} address={invoiceTo.address} phone={invoiceTo.phone} />
-        ) : (
-          <Typography typography="caption" sx={{ color: 'error.main' }}>
-            {errors.invoiceTo ? errors.invoiceTo.message : null}
-          </Typography>
-        )}
+        <Info name={name} gender={gender} weight={weight} height={height} />
       </Stack>
     </Stack>
   );
@@ -98,20 +94,67 @@ export default function InvoiceNewEditAddress() {
 
 // ----------------------------------------------------------------------
 
-AddressInfo.propTypes = {
-  address: PropTypes.string,
-  name: PropTypes.string,
-  phone: PropTypes.string,
-};
-
-function AddressInfo({ name, address, phone }) {
+function Info({ name, gender, weight, height }) {
   return (
     <>
-      <Typography variant="subtitle2">{name}</Typography>
-      <Typography variant="body2" sx={{ mt: 1, mb: 0.5 }}>
-        {address}
+      <Typography variant="body2">
+        Họ tên:&nbsp;
+        <Typography component="span" variant="subtitle2" color="text.primary">
+          {name}
+        </Typography>
       </Typography>
-      <Typography variant="body2">Phone: {phone}</Typography>
+      <Typography variant="body2">
+        Giới tính:&nbsp;
+        <Typography component="span" variant="subtitle2" color="text.primary">
+          {(gender === 1 && 'Nam') ||
+            (gender === 2 && 'Nữ') ||
+            (gender === 3 && 'Không xác định') ||
+            (gender === null && 'Không xác định')}
+        </Typography>
+      </Typography>
+      <Typography variant="body2">
+        Chiều cao:&nbsp;
+        <Typography component="span" variant="subtitle2" color="text.primary">
+          {height}
+        </Typography>
+      </Typography>
+      <Typography variant="body2">
+        Cân nặng:&nbsp;
+        <Typography component="span" variant="subtitle2" color="text.primary">
+          {weight}
+        </Typography>
+      </Typography>
+    </>
+  );
+}
+
+function MedicalInfo({ symptom, pastmedicalhistory, drughistory, familyhistory }) {
+  return (
+    <>
+      <Typography variant="body2">
+        Triệu chứng:&nbsp;
+        <Typography component="span" variant="subtitle2" color="text.primary">
+          {symptom}
+        </Typography>
+      </Typography>
+      <Typography variant="body2">
+        Tiền sử bệnh:&nbsp;
+        <Typography component="span" variant="subtitle2" color="text.primary">
+          {pastmedicalhistory}
+        </Typography>
+      </Typography>
+      <Typography variant="body2">
+        Tiền sử dị ứng thuốc:&nbsp;
+        <Typography component="span" variant="subtitle2" color="text.primary">
+          {drughistory}
+        </Typography>
+      </Typography>
+      <Typography variant="body2">
+        Tiền sử gia đình:&nbsp;
+        <Typography component="span" variant="subtitle2" color="text.primary">
+          {familyhistory}
+        </Typography>
+      </Typography>
     </>
   );
 }

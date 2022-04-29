@@ -12,10 +12,10 @@ import Iconify from '../../../components/Iconify';
 // ----------------------------------------------------------------------
 
 const VIEW_OPTIONS = [
-  { value: 'dayGridMonth', label: 'Month', icon: 'ic:round-view-module' },
-  { value: 'timeGridWeek', label: 'Week', icon: 'ic:round-view-week' },
-  { value: 'timeGridDay', label: 'Day', icon: 'ic:round-view-day' },
-  { value: 'listWeek', label: 'Agenda', icon: 'ic:round-view-agenda' },
+  { value: 'dayGridMonth', label: 'Tháng', icon: 'ic:round-view-module' },
+  { value: 'timeGridWeek', label: 'Tuần', icon: 'ic:round-view-week' },
+  { value: 'timeGridDay', label: 'Ngày', icon: 'ic:round-view-day' },
+  { value: 'listWeek', label: 'Chủ đề', icon: 'ic:round-view-agenda' },
 ];
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -76,7 +76,7 @@ export default function CalendarToolbar({ date, view, onToday, onNextDate, onPre
 
       {isDesktop && (
         <Button size="small" color="error" variant="contained" onClick={onToday}>
-          Today
+          Hôm nay
         </Button>
       )}
     </RootStyle>

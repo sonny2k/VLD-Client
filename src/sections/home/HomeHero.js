@@ -70,17 +70,9 @@ export default function HomeHero() {
   return (
     <MotionContainer>
       <RootStyle>
-        <HeroOverlayStyle
-          alt="overlay"
-          src="https://minimals.cc/assets/overlay.svg"
-          variants={varFade().in}
-        />
+        <HeroOverlayStyle alt="overlay" src="https://minimals.cc/assets/overlay.svg" variants={varFade().in} />
 
-        <HeroImgStyle
-          alt="hero"
-          src="https://i.imgur.com/cE0w9pE.png"
-          variants={varFade().inUp}
-        />
+        <HeroImgStyle alt="hero" src="https://i.imgur.com/cE0w9pE.png" variants={varFade().inUp} />
 
         <Container>
           <ContentStyle>
