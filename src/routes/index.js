@@ -94,6 +94,8 @@ export default function Router() {
             { path: 'department', element: <DepartmentList /> },
             { path: 'account', element: <UserAccount /> },
             { path: 'doctorlist', element: <DoctorList /> },
+            { path: 'doclist', element: <DocList /> },
+
           ],
         },
         {
@@ -207,6 +209,8 @@ const UserAccount = Loadable(lazy(() => import('../pages/dashboard/UserAccount')
 const UserCreate = Loadable(lazy(() => import('../pages/dashboard/UserCreate')));
 const DoctorList = Loadable(lazy(() => import('../pages/dashboard/DoctorList')));
 const DepartmentList = Loadable(lazy(() => import('../pages/dashboard/DepartmentList')));
+const DocList = Loadable(lazy(() => import('../pages/dashboard/DocList')));
+
 
 // APP
 const Chat = Loadable(lazy(() => import('../pages/dashboard/Chat')));

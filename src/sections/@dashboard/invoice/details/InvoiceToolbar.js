@@ -45,7 +45,7 @@ export default function InvoiceToolbar({ pre }) {
   const { toggle: open, onOpen, onClose } = useToggle();
 
   const handleEdit = () => {
-    // navigate(PATH_DASHBOARD.prescription.edit(pre.prescription.id), {state: { id: _id, name1: name , gender1: gender, weight1: weight, height1: height, symptom1: symptom, pastmedicalhistory1: pastmedicalhistory, date1: date, hour1: hour, pname1: pname, diagnosis1: diagnosis, note1: note,  } });
+    navigate(PATH_DASHBOARD.prescription.edit(pre.prescription.id), {state: { id: _id, name1: name , gender1: gender, weight1: weight, height1: height, symptom1: symptom, pastmedicalhistory1: pastmedicalhistory, date1: date, hour1: hour, pname1: pname, diagnosis1: diagnosis, note1: note,  } });
   };
 
   return (

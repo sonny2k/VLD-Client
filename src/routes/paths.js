@@ -64,6 +64,8 @@ export const PATH_DASHBOARD = {
     registercalendar: path(ROOTS_DASHBOARD, '/user/registercalendar'),
     department: path(ROOTS_DASHBOARD, '/user/department'),
     doctorlist: path(ROOTS_DASHBOARD, '/user/doctorlist'),
+    doclist: path(ROOTS_DASHBOARD, '/user/doclist'),
+
   },
   eCommerce: {
     root: path(ROOTS_DASHBOARD, '/e-commerce'),

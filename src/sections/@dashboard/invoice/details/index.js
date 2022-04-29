@@ -60,8 +60,6 @@ export default function InvoiceDetails({ pre }) {
 
   const { name } = pre.userinfo;
 
-  const { quantity,everate,morningrate,noonrate } = pre.prescription.medicines[0];
-
   const { title, image } = pre.prescription.medicines[0].product;
 
   const { medicines } = pre.prescription;
@@ -140,7 +138,9 @@ export default function InvoiceDetails({ pre }) {
                 <TableRow>
                   <TableCell align="left">Sản phẩm</TableCell>
                   <TableCell align="center">Số lượng</TableCell>
-                  <TableCell align="left">Liều lượng buổi</TableCell>
+                  <TableCell align="left">Liều lượng</TableCell>
+                  <TableCell align="left">Quy cách</TableCell>
+                  <TableCell align="left">Ghi chú</TableCell>
                 </TableRow>
               </TableHead>
               {medicines.map((pro,index) => (
@@ -159,11 +159,9 @@ export default function InvoiceDetails({ pre }) {
                       </Typography>
                     </TableCell>
                     <TableCell align="center">{pro.quantity}</TableCell>
-                    <TableCell align="left" >
-                      Buổi sáng: {pro.morningrate},
-                      Buổi trưa: {pro.noonrate},
-                      Buổi chiều: {pro.everate}
-                    </TableCell>
+                    <TableCell align="left" >{pro.rate}</TableCell>
+                    <TableCell align="left" >{pro.specdes}</TableCell>
+                    <TableCell align="left" >{pro.mednote}</TableCell>
                   </TableRow>
                 </TableBody>
                        ))}
