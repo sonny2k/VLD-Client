@@ -58,7 +58,7 @@ export default function InvoiceCreate() {
         />
 
         <InvoiceNewEditForm
-          medicines={medicines}
+          products={medicines}
           name={name}
           id={id}
           gender={gender}

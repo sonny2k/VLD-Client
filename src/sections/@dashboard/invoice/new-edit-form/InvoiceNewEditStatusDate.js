@@ -8,36 +8,37 @@ import { RHFSelect, RHFTextField } from '../../../../components/hook-form';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = ['đã hoàn thành'];
-
-// ----------------------------------------------------------------------
-
 export default function InvoiceNewEditStatusDate() {
-  const { control } = useFormContext();
+  const { control, setValue } = useFormContext();
 
   return (
     <Stack>
       <Stack direction={{ xs: 'column', sm: 'row' }} sx={{ p: 3, bgcolor: 'background.neutral' }}>
         <Controller
-          name="createDate"
+          name="pname"
           control={control}
           render={({ field, fieldState: { error } }) => (
-            <RHFTextField size="small" name="pname" label="Tên toa thuốc" InputLabelProps={{ shrink: true }} />
+            <RHFTextField
+              onChange={(event) => setValue('pname', event.target.value)}
+              size="small"
+              name="pname"
+              label="Tên toa thuốc"
+            />
           )}
         />
       </Stack>
       <Stack direction={{ xs: 'column', sm: 'row' }} sx={{ p: 3, bgcolor: 'background.neutral' }}>
         <Controller
-          name="createDate"
+          name="diagnosis"
           control={control}
           render={({ field, fieldState: { error } }) => (
             <RHFTextField
+              onChange={(event) => setValue('diagnosis', event.target.value)}
               size="small"
               name="diagnosis"
               label="Chẩn đoán"
               multiline
               rows={3}
-              InputLabelProps={{ shrink: true }}
             />
           )}
         />

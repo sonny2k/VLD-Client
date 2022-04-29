@@ -20,24 +20,21 @@ import { RHFSelect, RHFTextField } from '../../../../components/hook-form';
 
 // ----------------------------------------------------------------------
 
-export default function InvoiceNewEditDetails({ medicines }) {
-  const { control, setValue, watch } = useFormContext();
+export default function InvoiceNewEditDetails({ products }) {
+  const { control, setValue } = useFormContext();
 
-  const meds = [...medicines];
+  const meds = [...products];
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'items',
+    name: 'medicines',
   });
-
-  const values = watch();
 
   const handleAdd = () => {
     append({
-      title: '',
+      product: '',
       quantity: '',
       rate: '',
-      specdes: '',
       mednote: '',
     });
   };
@@ -56,81 +53,52 @@ export default function InvoiceNewEditDetails({ medicines }) {
         {fields.map((item, index) => (
           <Stack key={item.id} alignItems="flex-end" spacing={1.5}>
             <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: 1 }}>
-              <Controller
-                name="createDate"
-                control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <Autocomplete
-                    size="small"
-                    fullWidth
-                    name={`items[${index}].title`}
-                    loading={!medicines.length}
-                    onChange={(event) => setValue(`items[${index}].title`, event.target.value)}
-                    options={meds.sort((a, b) => -b.category.localeCompare(a.category))}
-                    groupBy={(option) => option.category}
-                    autoHighlight
-                    getOptionLabel={(option) => option.title}
-                    renderOption={(props, option) => (
-                      <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-                        <img loading="lazy" width="50" src={option.image} alt={option.title} />
-                        {option.title}
-                      </Box>
-                    )}
-                    renderInput={(params) => <TextField {...params} label="Chọn thuốc" />}
-                  />
+              <Autocomplete
+                size="small"
+                fullWidth
+                name={`medicines[${index}].product`}
+                loading={!products.length}
+                onChange={(event, value) => setValue(`medicines[${index}].product`, value ? value._id : '')}
+                options={meds.sort((a, b) => -b.category.localeCompare(a.category))}
+                groupBy={(option) => option.category}
+                autoHighlight
+                getOptionLabel={(option) => option.title}
+                renderOption={(props, option) => (
+                  <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+                    <img loading="lazy" width="50" src={option.image} alt={option.title} />
+                    {option.title}
+                  </Box>
+                )}
+                renderInput={(params) => (
+                  <TextField required helperText="Vui lòng chọn thuốc" {...params} label="Chọn thuốc" />
                 )}
               />
-              <Controller
-                name="createDate"
-                control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <RHFTextField
-                    size="small"
-                    name={`items[${index}].quantity`}
-                    label="Số lượng"
-                    onChange={(event) => setValue(`items[${index}].quantity`, event.target.value)}
-                    sx={{ maxWidth: { md: 120 } }}
-                  />
-                )}
+              <RHFTextField
+                required
+                helperText="Vui lòng nhập số lượng"
+                size="small"
+                name={`medicines[${index}].quantity`}
+                label="Số lượng"
+                onChange={(event) => setValue(`medicines[${index}].quantity`, event.target.value)}
+                sx={{ maxWidth: { md: 150 } }}
               />
-              <Controller
-                name="createDate"
-                control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <RHFTextField
-                    size="small"
-                    name={`items[${index}].rate`}
-                    label="Liều lượng"
-                    onChange={(event) => setValue(`items[${index}].rate`, event.target.value)}
-                    sx={{ maxWidth: { md: 120 } }}
-                  />
-                )}
+
+              <RHFTextField
+                required
+                helperText="Vui lòng nhập liều lượng"
+                size="small"
+                name={`medicines[${index}].rate`}
+                label="Liều lượng"
+                onChange={(event) => setValue(`medicines[${index}].rate`, event.target.value)}
+                sx={{ maxWidth: { md: 150 } }}
               />
-              <Controller
-                name="createDate"
-                control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <RHFTextField
-                    size="small"
-                    name={`items[${index}].specdes`}
-                    label="Quy cách"
-                    onChange={(event) => setValue(`items[${index}].specdes`, event.target.value)}
-                    sx={{ maxWidth: { md: 120 } }}
-                  />
-                )}
-              />
-              <Controller
-                name="createDate"
-                control={control}
-                render={({ field, fieldState: { error } }) => (
-                  <RHFTextField
-                    size="small"
-                    name={`items[${index}].mednote`}
-                    label="Ghi chú"
-                    onChange={(event) => setValue(`items[${index}].mednote`, event.target.value)}
-                    sx={{ maxWidth: { md: 120 } }}
-                  />
-                )}
+
+              <RHFTextField
+                size="small"
+                name={`medicines[${index}].mednote`}
+                label="Ghi chú"
+                onChange={(event) => setValue(`medicines[${index}].mednote`, event.target.value)}
+                sx={{ maxWidth: { md: 150 } }}
               />
             </Stack>
 

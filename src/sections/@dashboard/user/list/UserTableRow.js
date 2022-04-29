@@ -56,7 +56,10 @@ export default function UserTableRow({
 
   const { date, hour, status, _id } = row;
 
-  const linkTo = status === "đã hoàn thành" ? `${PATH_DASHBOARD.prescription.root}/${paramCase(_id)}` : `${PATH_DASHBOARD.user.root}/detail/${paramCase(_id)}`;
+  const linkTo =
+    status === 'đã hoàn thành'
+      ? `${PATH_DASHBOARD.prescription.root}/${paramCase(_id)}`
+      : `${PATH_DASHBOARD.user.root}/detail/${paramCase(_id)}`;
 
   const name = `${lname} ${fname}`;
 
@@ -144,7 +147,7 @@ export default function UserTableRow({
           onClose={handleCloseMenu}
           actions={
             <>
-              {status === 'đã hoàn thành'  ? (
+              {status === 'đã hoàn thành' ? (
                 <MenuItem
                   onClick={() => {
                     onViewPrescription();

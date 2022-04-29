@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { useMemo, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -10,8 +11,8 @@ import { LoadingButton } from '@mui/lab';
 import { Card, Stack } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
-// mock
-
+// utils
+import axios from '../../../../utils/axios';
 // components
 import { FormProvider } from '../../../../components/hook-form';
 //
@@ -22,11 +23,11 @@ import InvoiceNewEditStatusDate from './InvoiceNewEditStatusDate';
 // ----------------------------------------------------------------------
 
 InvoiceNewEditForm.propTypes = {
-  medicines: PropTypes.array,
+  products: PropTypes.array,
 };
 
 export default function InvoiceNewEditForm({
-  medicines,
+  products,
   id,
   name,
   gender,
@@ -39,35 +40,22 @@ export default function InvoiceNewEditForm({
 }) {
   const navigate = useNavigate();
 
-  const [loadingSave, setLoadingSave] = useState(false);
+  const [check, setCheck] = useState(true);
 
-  const [loadingSend, setLoadingSend] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
     pname: Yup.string().required('Vui lòng nhập tên toa thuốc'),
     diagnosis: Yup.string().required('Vui lòng nhập chẩn đoán'),
-    createDate: Yup.object().shape({
-      title: Yup.string().required('Vui lòng nhập chẩn đoán'),
-      rate: Yup.string().required('Vui lòng nhập chẩn đoán'),
-      specdes: Yup.string().required('Vui lòng nhập chẩn đoán'),
-    }),
   });
 
-  const defaultValues = useMemo(
-    () => ({
-      invoiceNumber: medicines?.invoiceNumber || '17099',
-      createDate: medicines?.createDate || null,
-      dueDate: medicines?.dueDate || null,
-      taxes: medicines?.taxes || '',
-      status: medicines?.status || 'draft',
-      discount: medicines?.discount || '',
-      invoiceFrom: medicines?.invoiceFrom || '',
-      invoiceTo: medicines?.invoiceTo || null,
-      items: medicines?.items || [{ title: '', quantity: '', price: '', total: '' }],
-    }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [medicines]
-  );
+  const defaultValues = useMemo(() => ({
+    consultation: `${id}` || '',
+    pname: '',
+    diagnosis: '',
+    note: '',
+    medicines: [{ product: '', quantity: '', rate: '', mednote: '' }],
+  }));
 
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),
@@ -83,44 +71,32 @@ export default function InvoiceNewEditForm({
 
   const values = watch();
 
-  useEffect(() => {
-    if (medicines) {
-      reset(defaultValues);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [medicines]);
-
-  const newInvoice = {
+  const newPrescription = {
     ...values,
-    items: values.items.map((item) => ({
-      ...item,
-      total: item.quantity * item.price,
+    medicines: values.medicines.map((medicine) => ({
+      ...medicine,
     })),
   };
 
-  const handleSaveAsDraft = async () => {
-    setLoadingSave(true);
-
+  const handleCreate = async () => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      setLoadingSave(true);
-      navigate(PATH_DASHBOARD.invoice.list);
-      console.log(JSON.stringify(newInvoice, null, 2));
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleCreateAndSend = async () => {
-    setLoadingSend(true);
-
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      setLoadingSend(false);
-      navigate(PATH_DASHBOARD.invoice.list);
-      console.log(JSON.stringify(newInvoice, null, 2));
+      console.log(newPrescription);
+      if (values.medicines.some((el) => el.product === '' || el.quantity === '' || el.rate === '')) {
+        enqueueSnackbar('Vui lòng chọn thuốc và điền đầy đủ thông tin!', {
+          variant: 'error',
+        });
+      } else {
+        try {
+          await axios.post('/api/doctor/prescription/createPrescription', {
+            ...values,
+            medicines: values.medicines.map((medicine) => ({
+              ...medicine,
+            })),
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
     } catch (error) {
       console.error(error);
     }
@@ -140,16 +116,11 @@ export default function InvoiceNewEditForm({
           familyhistory={familyhistory}
         />
         <InvoiceNewEditStatusDate />
-        <InvoiceNewEditDetails medicines={medicines} />
+        <InvoiceNewEditDetails products={products} />
       </Card>
 
       <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>
-        <LoadingButton
-          size="large"
-          variant="contained"
-          loading={loadingSend && isSubmitting}
-          onClick={handleSubmit(handleCreateAndSend)}
-        >
+        <LoadingButton size="large" variant="contained" loading={isSubmitting} onClick={handleSubmit(handleCreate)}>
           Tạo toa thuốc
         </LoadingButton>
       </Stack>
