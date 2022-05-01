@@ -23,12 +23,13 @@ const handlers = {
     };
   },
   LOGIN: (state, action) => {
-    const { account } = action.payload;
+    const { account, role } = action.payload;
 
     return {
       ...state,
       isAuthenticated: true,
       account,
+      role,
     };
   },
   UPDATEINFO: (state, action) => {
@@ -147,12 +148,13 @@ function AuthProvider({ children }) {
       phone,
       password,
     });
-    const { accessToken, account } = response.data;
+    const { accessToken, account, role } = response.data;
     setSession(accessToken);
     dispatch({
       type: 'LOGIN',
       payload: {
         account,
+        role,
       },
     });
   };

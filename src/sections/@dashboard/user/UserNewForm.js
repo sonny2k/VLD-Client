@@ -23,6 +23,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  TextField,
 } from '@mui/material';
 // utils
 import createAvatar from '../../../utils/createAvatar';
@@ -322,9 +323,16 @@ export default function UserNewForm({ consultation }) {
             <Dialog open={open} onClose={handleClose}>
               <DialogTitle sx={{ m: 1, p: 2 }}>{'Bạn muốn hủy lịch hẹn?'}</DialogTitle>
               <DialogContent>
-                <DialogContentText>
-                  Buổi hẹn sẽ bị xóa khỏi hệ thống sau khi nhấp đồng ý, bạn có muốn tiếp tục?
-                </DialogContentText>
+                <DialogContentText>Buổi hẹn sẽ bị từ chối sau khi nhấp đồng ý, bạn có muốn tiếp tục?</DialogContentText>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="excuse"
+                  label="Vui lòng điền lý do từ chối buổi hẹn"
+                  type="string"
+                  fullWidth
+                  variant="standard"
+                />
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose}>Trở về</Button>

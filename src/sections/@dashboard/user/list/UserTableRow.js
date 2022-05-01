@@ -19,6 +19,7 @@ import {
   DialogTitle,
   Button,
   Link,
+  TextField,
 } from '@mui/material';
 // components
 import Label from '../../../../components/Label';
@@ -213,9 +214,16 @@ export default function UserTableRow({
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle sx={{ m: 1, p: 2 }}>{'Bạn muốn hủy lịch hẹn?'}</DialogTitle>
           <DialogContent>
-            <DialogContentText>
-              Buổi hẹn sẽ bị xóa khỏi hệ thống sau khi nhấp đồng ý, bạn có muốn tiếp tục?
-            </DialogContentText>
+            <DialogContentText>Buổi hẹn sẽ bị từ chối sau khi nhấp đồng ý, bạn có muốn tiếp tục?</DialogContentText>
+            <TextField
+              autoFocus
+              margin="dense"
+              id="excuse"
+              label="Vui lòng điền lý do từ chối buổi hẹn"
+              type="string"
+              fullWidth
+              variant="standard"
+            />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleClose}>Trở về</Button>

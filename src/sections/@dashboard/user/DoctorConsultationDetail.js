@@ -23,6 +23,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  TextField,
 } from '@mui/material';
 // utils
 import createAvatar from '../../../utils/createAvatar';
@@ -397,6 +398,15 @@ export default function DoctorConsultationDetail({ consultation }) {
                   Buổi hẹn sẽ hiển thị ở trạng thái bị từ chối ở phía người dùng sau khi nhấp đồng ý, bạn có muốn tiếp
                   tục?
                 </DialogContentText>
+                <TextField
+                  autoFocus
+                  margin="dense"
+                  id="excuse"
+                  label="Vui lòng điền lý do từ chối buổi hẹn"
+                  type="string"
+                  fullWidth
+                  variant="standard"
+                />
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose}>Trở về</Button>

@@ -21,7 +21,6 @@ import MenuMobile from './MenuMobile';
 import navConfig from './MenuConfig';
 import AccountPopover from '../dashboard/header/AccountPopover';
 
-
 // ----------------------------------------------------------------------
 
 const ToolbarStyle = styled(Toolbar)(({ theme }) => ({
@@ -83,22 +82,22 @@ export default function MainHeader() {
             }}
           >
             <Logo />
-  
+
             <Label color="info" sx={{ ml: 1 }}>
-              v1.5
+              v1.6
             </Label>
             <Box sx={{ flexGrow: 1 }} />
-  
+
             {isDesktop && <MenuDesktop isOffset={isOffset} isHome={isHome} navConfig={navConfig} />}
-  
+
             <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
               <AccountPopover />
             </Stack>
-  
+
             {!isDesktop && <MenuMobile isOffset={isOffset} isHome={isHome} navConfig={navConfig} />}
           </Container>
         </ToolbarStyle>
-  
+
         {isOffset && <ToolbarShadowStyle />}
       </AppBar>
     );
@@ -124,36 +123,28 @@ export default function MainHeader() {
             }}
           >
             <Logo />
-  
+
             <Label color="info" sx={{ ml: 1 }}>
-              v1.5
+              v1.6
             </Label>
             <Box sx={{ flexGrow: 1 }} />
-  
+
             {isDesktop && <MenuDesktop isOffset={isOffset} isHome={isHome} navConfig={navConfig} />}
-            
-            <Stack direction={{xs: 'row'}} spacing = {2}>
-              <Button
-                variant="text"
-                rel="noopener"
-                href={PATH_AUTH.register}
-              >
+
+            <Stack direction={{ xs: 'row' }} spacing={2}>
+              <Button variant="text" rel="noopener" href={PATH_AUTH.register}>
                 Đăng ký
               </Button>
-            
-              <Button
-                variant="contained"
-                rel="noopener"
-                href={PATH_AUTH.login}
-              >
+
+              <Button variant="contained" rel="noopener" href={PATH_AUTH.login}>
                 Đăng nhập
               </Button>
             </Stack>
-  
+
             {!isDesktop && <MenuMobile isOffset={isOffset} isHome={isHome} navConfig={navConfig} />}
           </Container>
         </ToolbarStyle>
-  
+
         {isOffset && <ToolbarShadowStyle />}
       </AppBar>
     );

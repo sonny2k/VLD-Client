@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
-import { Card, Stack } from '@mui/material';
+import { Card, Stack, Button } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 // utils
@@ -77,21 +77,12 @@ export default function InvoiceNewEditForm({
 
   const values = watch();
 
-  const newPrescription = {
-    ...values,
-    medicines: values.medicines.map((medicine) => ({
-      ...medicine,
-    })),
-  };
-
-  const updatePrescription = {
-    ...values,
-    medicines: values.medicines.map((medicine) => ({
-      quantity: medicine.quantity,
-      product: medicine.product._id,
-      rate: medicine.rate,
-      mednote: medicine.mednote,
-    })),
+  const back = async () => {
+    if (isEdit === true) {
+      navigate(PATH_DASHBOARD.prescription.view(id));
+    } else {
+      navigate(PATH_DASHBOARD.user.edit(id));
+    }
   };
 
   const handleCreate = async () => {
@@ -146,6 +137,9 @@ export default function InvoiceNewEditForm({
       </Card>
 
       <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>
+        <Button size="large" variant="contained" color="inherit" onClick={back}>
+          Trở về
+        </Button>
         <LoadingButton size="large" variant="contained" loading={isSubmitting} onClick={handleSubmit(handleCreate)}>
           {isEdit === true ? `Lưu thay đổi` : `Tạo toa thuốc`}
         </LoadingButton>

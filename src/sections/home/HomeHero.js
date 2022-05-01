@@ -77,17 +77,18 @@ export default function HomeHero() {
         <Container>
           <ContentStyle>
             <m.div variants={varFade().inRight}>
+              <Typography component="span" variant="h2" sx={{ color: 'primary.main' }}>
+                VĂN LANG DOCTOR
+              </Typography>
               <Typography variant="h2" sx={{ color: 'common.white' }}>
-                Nhận tư vấn từ bác sĩ mọi lúc mọi nơi thông qua&nbsp;
-                <Typography component="span" variant="h2" sx={{ color: 'primary.main' }}>
-                  cuộc gọi video và tin nhắn trực tuyến
-                </Typography>
+                "Sáng Y Đức - Vững Chuyên Môn - Vuông Tròn Hạnh Phúc"
               </Typography>
             </m.div>
 
             <m.div variants={varFade().inRight}>
               <Typography sx={{ color: 'common.white' }}>
-                Nói chuyện với bác sĩ thông qua dịch vụ tin nhắn và video mã hóa công nghệ cao của chúng tôi.
+                Nhận tư vấn từ bác sĩ mọi lúc mọi nơi thông qua dịch vụ tin nhắn và video mã hóa công nghệ cao của chúng
+                tôi.
               </Typography>
             </m.div>
 

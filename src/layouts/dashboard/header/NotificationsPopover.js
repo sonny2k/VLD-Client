@@ -243,7 +243,7 @@ function NotificationItem({ notification }) {
       await axios.post('/api/user/consultation/isSeen', {
         _id,
       });
-      if (notification.type === 'createprescription') {
+      if (notification.type === 'createprescription' || notification.type === 'updateprescription') {
         navigate(`${PATH_DASHBOARD.prescription.root}/${paramCase(notification.path)}`);
       } else {
         navigate(`${PATH_DASHBOARD.user.root}/detail/${paramCase(notification.path)}`);
@@ -259,7 +259,8 @@ function NotificationItem({ notification }) {
       onClick={
         notification.type === 'canceldoc' ||
         notification.type === 'confirm' ||
-        notification.type === 'createprescription'
+        notification.type === 'createprescription' ||
+        notification.type === 'updateprescription'
           ? () => seenUser(notification._id)
           : () => seenDoc(notification._id)
       }
@@ -302,7 +303,8 @@ function renderContent(notification) {
   const title =
     notification.type === 'confirm' ||
     notification.type === 'canceldoc' ||
-    notification.type === 'createprescription' ? (
+    notification.type === 'createprescription' ||
+    notification.type === 'updateprescription' ? (
       <Typography variant="subtitle2">
         {`Bác sĩ ${notification.creator.account.fname} ${notification.title}`}
         <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}>
@@ -363,6 +365,17 @@ function renderContent(notification) {
     };
   }
   if (notification.type === 'createprescription') {
+    return {
+      avatar: (
+        <img
+          alt={notification.title}
+          src="https://minimal-assets-api.vercel.app/assets/icons/ic_notification_chat.svg"
+        />
+      ),
+      title,
+    };
+  }
+  if (notification.type === 'updateprescription') {
     return {
       avatar: (
         <img

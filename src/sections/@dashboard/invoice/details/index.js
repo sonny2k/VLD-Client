@@ -141,7 +141,7 @@ export default function InvoiceDetails({ pre }) {
                 }}
               >
                 <TableRow>
-                  <TableCell align="left">Sản phẩm</TableCell>
+                  <TableCell align="left">Tên thuốc</TableCell>
                   <TableCell align="center">Số lượng</TableCell>
                   <TableCell align="left">Liều lượng</TableCell>
                   <TableCell align="left">Quy cách</TableCell>
@@ -176,7 +176,7 @@ export default function InvoiceDetails({ pre }) {
 
         <Grid container>
           <Grid item xs={12} md={9} sx={{ py: 3 }}>
-            <Typography variant="subtitle2">Ghi chú</Typography>
+            <Typography variant="subtitle2">Ghi chú chung</Typography>
             <Typography variant="body2">{note}</Typography>
           </Grid>
           <Grid item xs={12} md={3} sx={{ py: 3, textAlign: 'right' }}>
