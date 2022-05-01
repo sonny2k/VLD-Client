@@ -1,5 +1,6 @@
 // form
 import { useFormContext, useFieldArray, Controller } from 'react-hook-form';
+import { useState } from 'react';
 // @mui
 import {
   Box,
@@ -20,10 +21,12 @@ import { RHFSelect, RHFTextField } from '../../../../components/hook-form';
 
 // ----------------------------------------------------------------------
 
-export default function InvoiceNewEditDetails({ products }) {
+export default function InvoiceNewEditDetails({ products, loadedmeds, isEdit }) {
   const { control, setValue } = useFormContext();
 
   const meds = [...products];
+
+  const [df, setDf] = useState(false);
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -31,6 +34,8 @@ export default function InvoiceNewEditDetails({ products }) {
   });
 
   const handleAdd = () => {
+    isEdit = false;
+    setDf(true);
     append({
       product: '',
       quantity: '',
@@ -55,8 +60,10 @@ export default function InvoiceNewEditDetails({ products }) {
             <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: 1 }}>
               <Autocomplete
                 size="small"
+                disabled={isEdit}
                 fullWidth
                 name={`medicines[${index}].product`}
+                defaultValue={isEdit === true && df === false ? loadedmeds[`${index}`].product : null}
                 loading={!products.length}
                 onChange={(event, value) => setValue(`medicines[${index}].product`, value ? value._id : '')}
                 options={meds.sort((a, b) => -b.category.localeCompare(a.category))}
@@ -121,9 +128,9 @@ export default function InvoiceNewEditDetails({ products }) {
         direction={{ xs: 'column-reverse', md: 'row' }}
         alignItems={{ xs: 'flex-start', md: 'center' }}
       >
-        <Button size="small" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleAdd} sx={{ flexShrink: 0 }}>
+        {isEdit !== true && <Button size="small" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleAdd} sx={{ flexShrink: 0 }}>
           Thêm thuốc mới
-        </Button>
+        </Button>}
 
         <Stack spacing={2} justifyContent="flex-end" direction={{ xs: 'column', md: 'row' }} sx={{ width: 1 }}>
           <RHFTextField

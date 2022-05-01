@@ -87,7 +87,7 @@ export default function InvoiceDetails({ pre }) {
                   (status === 'overdue' && 'error') ||
                   'default'
                 }
-                sx={{ textTransform: 'uppercase', color:'Green', mb: 1 }}
+                sx={{ textTransform: 'uppercase', color: 'Green', mb: 1 }}
               >
                 {status}
               </Label>
@@ -109,21 +109,26 @@ export default function InvoiceDetails({ pre }) {
               Thông tin bệnh nhân
             </Typography>
             <Typography variant="body2">Tên: {name}</Typography>
-            <Typography variant="body2">Giới tính: {gender === 1 && 'Nam' || gender === 2 && 'Nữ' || gender === 3 && 'Không xác định' || gender === null && 'Không xác định'} </Typography>
+            <Typography variant="body2">
+              Giới tính:{' '}
+              {(gender === 1 && 'Nam') ||
+                (gender === 2 && 'Nữ') ||
+                (gender === 3 && 'Không xác định') ||
+                (gender === null && 'Không xác định')}{' '}
+            </Typography>
             <Typography variant="body2">Cân nặng: {weight} </Typography>
             <Typography variant="body2">Chiều cao: {height} </Typography>
           </Grid>
 
           <Grid item xs={4} sm={4} sx={{ mb: 4 }}>
             <Typography paragraph variant="overline" sx={{ color: 'text.disabled' }}>
-              Thông tin bác sĩ  
+              Thông tin bác sĩ
             </Typography>
             <Typography variant="body2">Tên: {namedoc}</Typography>
             <Typography variant="body2">Chuyên khoa: {department}</Typography>
             <Typography variant="body2">Ngày tạo: {format(new Date(date), 'dd/MM/yyyy')}</Typography>
             <Typography variant="body2">Đơn vị: VLang Doctor</Typography>
           </Grid>
-
         </Grid>
 
         <Scrollbar>
@@ -143,10 +148,10 @@ export default function InvoiceDetails({ pre }) {
                   <TableCell align="left">Ghi chú</TableCell>
                 </TableRow>
               </TableHead>
-              {medicines.map((pro,index) => (
-              <TableBody>
+              {medicines.map((pro, index) => (
+                <TableBody>
                   <TableRow
-                    key={index}
+                    key={pro._id}
                     sx={{
                       borderBottom: (theme) => `solid 1px ${theme.palette.divider}`,
                     }}
@@ -159,12 +164,12 @@ export default function InvoiceDetails({ pre }) {
                       </Typography>
                     </TableCell>
                     <TableCell align="center">{pro.quantity}</TableCell>
-                    <TableCell align="left" >{pro.rate}</TableCell>
-                    <TableCell align="left" >{specdes}</TableCell>
-                    <TableCell align="left" >{pro.mednote}</TableCell>
+                    <TableCell align="left">{pro.rate}</TableCell>
+                    <TableCell align="left">{specdes}</TableCell>
+                    <TableCell align="left">{pro.mednote}</TableCell>
                   </TableRow>
                 </TableBody>
-                       ))}
+              ))}
             </Table>
           </TableContainer>
         </Scrollbar>
@@ -175,13 +180,11 @@ export default function InvoiceDetails({ pre }) {
             <Typography variant="body2">{note}</Typography>
           </Grid>
           <Grid item xs={12} md={3} sx={{ py: 3, textAlign: 'right' }}>
-          <Typography variant="subtitle2">Chữ kí bác sĩ</Typography>
-          <Image alt="signature" src={signature}/>            
+            <Typography variant="subtitle2">Chữ kí bác sĩ</Typography>
+            <Image alt="signature" src={signature} />
           </Grid>
         </Grid>
-
       </Card>
-
     </>
   );
 }

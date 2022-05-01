@@ -37,6 +37,12 @@ export default function InvoiceNewEditForm({
   pastmedicalhistory,
   drughistory,
   familyhistory,
+  pname,
+  diagnosis,
+  note,
+  loadedmeds,
+  isEdit,
+  idPre,
 }) {
   const navigate = useNavigate();
 
@@ -50,11 +56,11 @@ export default function InvoiceNewEditForm({
   });
 
   const defaultValues = useMemo(() => ({
-    consultation: `${id}` || '',
-    pname: '',
-    diagnosis: '',
-    note: '',
-    medicines: [{ product: '', quantity: '', rate: '', mednote: '' }],
+    consultation: `${id}`,
+    pname: pname || '',
+    diagnosis: diagnosis || '',
+    note: note || '',
+    medicines: loadedmeds || [{ product: '', quantity: '', rate: '', mednote: '' }],
   }));
 
   const methods = useForm({
@@ -78,24 +84,44 @@ export default function InvoiceNewEditForm({
     })),
   };
 
+  const updatePrescription = {
+    ...values,
+    medicines: values.medicines.map((medicine) => ({
+      quantity: medicine.quantity,
+      product: medicine.product._id,
+      rate: medicine.rate,
+      mednote: medicine.mednote,
+    })),
+  };
+
   const handleCreate = async () => {
     try {
-      console.log(newPrescription);
       if (values.medicines.some((el) => el.product === '' || el.quantity === '' || el.rate === '')) {
         enqueueSnackbar('Vui lòng chọn thuốc và điền đầy đủ thông tin!', {
           variant: 'error',
         });
+      }
+      if (isEdit === true) {
+        await axios.put(`/api/doctor/prescription/updatePrescription/${idPre}`, {
+          ...values,
+          medicines: values.medicines.map((medicine) => ({
+            quantity: medicine.quantity,
+            product: medicine.product._id,
+            rate: medicine.rate,
+            mednote: medicine.mednote,
+          })),
+        });
+        enqueueSnackbar('Cập nhật toa thuốc thành công');
+        navigate(PATH_DASHBOARD.prescription.view(id));
       } else {
-        try {
-          await axios.post('/api/doctor/prescription/createPrescription', {
-            ...values,
-            medicines: values.medicines.map((medicine) => ({
-              ...medicine,
-            })),
-          });
-        } catch (error) {
-          console.log(error);
-        }
+        await axios.post('/api/doctor/prescription/createPrescription', {
+          ...values,
+          medicines: values.medicines.map((medicine) => ({
+            ...medicine,
+          })),
+        });
+        enqueueSnackbar('Tạo toa thuốc thành công');
+        navigate(PATH_DASHBOARD.user.doctorlist);
       }
     } catch (error) {
       console.error(error);
@@ -115,13 +141,13 @@ export default function InvoiceNewEditForm({
           drughistory={drughistory}
           familyhistory={familyhistory}
         />
-        <InvoiceNewEditStatusDate />
-        <InvoiceNewEditDetails products={products} />
+        <InvoiceNewEditStatusDate isEdit={isEdit} />
+        <InvoiceNewEditDetails isEdit={isEdit} loadedmeds={loadedmeds} products={products} />
       </Card>
 
       <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>
         <LoadingButton size="large" variant="contained" loading={isSubmitting} onClick={handleSubmit(handleCreate)}>
-          Tạo toa thuốc
+          {isEdit === true ? `Lưu thay đổi` : `Tạo toa thuốc`}
         </LoadingButton>
       </Stack>
     </FormProvider>

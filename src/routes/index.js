@@ -94,8 +94,7 @@ export default function Router() {
             { path: 'account', element: <UserAccount /> },
             { path: 'doctorlist', element: <DoctorList /> },
             { path: 'doclist', element: <DocList /> },
-            { path: 'productlist', element: <ProductList/> },
-
+            { path: 'productlist', element: <ProductList /> },
           ],
         },
         {

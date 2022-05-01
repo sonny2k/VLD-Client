@@ -8,7 +8,7 @@ import { RHFSelect, RHFTextField } from '../../../../components/hook-form';
 
 // ----------------------------------------------------------------------
 
-export default function InvoiceNewEditStatusDate() {
+export default function InvoiceNewEditStatusDate({ isEdit }) {
   const { control, setValue } = useFormContext();
 
   return (
@@ -19,6 +19,7 @@ export default function InvoiceNewEditStatusDate() {
           control={control}
           render={({ field, fieldState: { error } }) => (
             <RHFTextField
+              disabled={isEdit}
               onChange={(event) => setValue('pname', event.target.value)}
               size="small"
               name="pname"
