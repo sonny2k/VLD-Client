@@ -93,7 +93,9 @@ const Room = ({ roomName, token }) => {
 
   return (
     <div>
-      <h2>VĂN LANG DOCTOR</h2>
+      <Typography variant="h2" sx={{ color: 'text.disabled', mb: 3 }}>
+        VĂN LANG DOCTOR
+      </Typography>
       <div>{remoteParticipants}</div>
       <div>{room ? <Participant key={room.localParticipant.sid} participant={room.localParticipant} /> : ''}</div>
     </div>
