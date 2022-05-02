@@ -28,6 +28,8 @@ import {
 // utils
 import createAvatar from '../../../utils/createAvatar';
 import axios from '../../../utils/axios';
+// hooks
+import useAuth from '../../../hooks/useAuth';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
@@ -53,7 +55,11 @@ export default function UserNewForm({ consultation }) {
 
   const navigate = useNavigate();
 
-  const { date, hour, status, symptom, roomname, name, phone } = consultation[0];
+  const { account } = useAuth();
+
+  const identity = `${account.lname} ${account.fname}`;
+
+  const { date, hour, status, symptom, roomname, name, phone, _id } = consultation[0];
 
   const { fname, lname, profilepic } = consultation[0].doctor.account;
 
@@ -125,6 +131,18 @@ export default function UserNewForm({ consultation }) {
       console.error(err);
       enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
     }
+  };
+
+  const handleCreateNameAndRoomName = () => {
+    navigate(PATH_DASHBOARD.video, {
+      state: {
+        username1: identity,
+        roomname1: roomname,
+        date1: date,
+        hour1: hour,
+        id1: _id,
+      },
+    });
   };
 
   const changesymptom = async (data) => {
@@ -313,7 +331,12 @@ export default function UserNewForm({ consultation }) {
                       Hủy lịch hẹn
                     </LoadingButton>
 
-                    <LoadingButton variant="contained" color="info" loading={isSubmitting}>
+                    <LoadingButton
+                      onClick={handleCreateNameAndRoomName}
+                      variant="contained"
+                      color="info"
+                      loading={isSubmitting}
+                    >
                       Tham gia buổi hẹn
                     </LoadingButton>
                   </Box>

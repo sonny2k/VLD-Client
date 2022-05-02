@@ -52,6 +52,7 @@ export const PATH_DASHBOARD = {
   },
   calendar: path(ROOTS_DASHBOARD, '/calendar'),
   kanban: path(ROOTS_DASHBOARD, '/kanban'),
+  video: path(ROOTS_DASHBOARD, '/video'),
   user: {
     root: path(ROOTS_DASHBOARD, '/user'),
     new: path(ROOTS_DASHBOARD, '/user/new'),
@@ -66,7 +67,6 @@ export const PATH_DASHBOARD = {
     doctorlist: path(ROOTS_DASHBOARD, '/user/doctorlist'),
     doclist: path(ROOTS_DASHBOARD, '/user/doclist'),
     productlist: path(ROOTS_DASHBOARD, '/user/productlist'),
-
   },
   eCommerce: {
     root: path(ROOTS_DASHBOARD, '/e-commerce'),

@@ -23,7 +23,6 @@ const ICONS = {
   booking: getIcon('ic_booking'),
 };
 
-
 const navConfigDoc = [
   // GENERAL
   // ----------------------------------------------------------------------
@@ -50,7 +49,7 @@ const navConfigDoc = [
         children: [
           // { title: 'profile', path: PATH_DASHBOARD.user.profile },
           { title: 'Danh sách lịch hẹn', path: PATH_DASHBOARD.user.doctorlist },
-        //   { title: 'Danh sách chờ duyệt', path: PATH_DASHBOARD.user.list },
+          //   { title: 'Danh sách chờ duyệt', path: PATH_DASHBOARD.user.list },
           // { title: 'create', path: PATH_DASHBOARD.user.newUser },
           // { title: 'edit', path: PATH_DASHBOARD.user.editById },
           { title: 'Tài khoản', path: PATH_DASHBOARD.user.account },
@@ -73,7 +72,7 @@ const navConfigDoc = [
       //   ],
       // },
 
-    //   { title: 'Lịch sử thăm khám', path: PATH_DASHBOARD.general.booking, icon: ICONS.booking },
+      //   { title: 'Lịch sử thăm khám', path: PATH_DASHBOARD.general.booking, icon: ICONS.booking },
       // MANAGEMENT : BLOG
       // {
       //   title: 'blog',
@@ -103,7 +102,6 @@ const navConfigDoc = [
       //     </Label>
       //   ),
       // },
-      // { title: 'chat', path: PATH_DASHBOARD.chat.root, icon: ICONS.chat },
       { title: 'Tư vấn trực tuyến', path: PATH_DASHBOARD.calendar, icon: ICONS.calendar },
       // {
       //   title: 'kanban',

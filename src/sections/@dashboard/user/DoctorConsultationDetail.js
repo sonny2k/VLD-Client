@@ -28,6 +28,8 @@ import {
 // utils
 import createAvatar from '../../../utils/createAvatar';
 import axios from '../../../utils/axios';
+// hooks
+import useAuth from '../../../hooks/useAuth';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
@@ -51,9 +53,13 @@ export default function DoctorConsultationDetail({ consultation }) {
     marginRight: theme.spacing(2),
   }));
 
+  const { account } = useAuth();
+
+  const identity = `${account.lname} ${account.fname}`;
+
   const navigate = useNavigate();
 
-  const { date, hour, status, symptom, name, phone, _id } = consultation[0];
+  const { date, hour, status, symptom, name, phone, _id, roomname } = consultation[0];
 
   const { fname, lname, profilepic, gender } = consultation[0].user.account;
 
@@ -92,6 +98,18 @@ export default function DoctorConsultationDetail({ consultation }) {
         familyhistory1: familyhistory,
         date1: date,
         hour1: hour,
+      },
+    });
+  };
+
+  const handleCreateNameAndRoomName = () => {
+    navigate(PATH_DASHBOARD.video, {
+      state: {
+        username1: identity,
+        roomname1: roomname,
+        date1: date,
+        hour1: hour,
+        id1: _id,
       },
     });
   };
@@ -332,7 +350,7 @@ export default function DoctorConsultationDetail({ consultation }) {
                         Từ chối lịch hẹn
                       </LoadingButton>
                     ) : (
-                      <LoadingButton variant="contained" loading={isSubmitting}>
+                      <LoadingButton onClick={handleCreateNameAndRoomName} variant="contained" loading={isSubmitting}>
                         Tham gia buổi hẹn
                       </LoadingButton>
                     )}
@@ -353,8 +371,8 @@ export default function DoctorConsultationDetail({ consultation }) {
                     sx={{
                       display: 'grid',
                       columnGap: 1,
-                      rowGap: 1,
-                      gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(4, 1fr)' },
+                      rowGap: 0.5,
+                      gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
                     }}
                   >
                     <Button onClick={handleSubmit(back)} variant="outlined">
@@ -383,7 +401,12 @@ export default function DoctorConsultationDetail({ consultation }) {
                         Từ chối lịch hẹn
                       </LoadingButton>
                     ) : (
-                      <LoadingButton variant="contained" color="info" loading={isSubmitting}>
+                      <LoadingButton
+                        onClick={handleCreateNameAndRoomName}
+                        variant="contained"
+                        color="info"
+                        loading={isSubmitting}
+                      >
                         Tham gia buổi hẹn
                       </LoadingButton>
                     )}
