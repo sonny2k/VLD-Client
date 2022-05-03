@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
+import * as Yup from 'yup';
 import { useMemo, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 // form
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
 import { styled } from '@mui/material/styles';
@@ -24,7 +26,13 @@ import {
   DialogContentText,
   DialogTitle,
   TextField,
+  IconButton,
 } from '@mui/material';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import CancelIcon from '@mui/icons-material/Cancel';
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import DuoIcon from '@mui/icons-material/Duo';
+import CheckIcon from '@mui/icons-material/Check';
 // utils
 import createAvatar from '../../../utils/createAvatar';
 import axios from '../../../utils/axios';
@@ -59,7 +67,11 @@ export default function DoctorConsultationDetail({ consultation }) {
 
   const navigate = useNavigate();
 
-  const { date, hour, status, symptom, name, phone, _id, roomname } = consultation[0];
+  const ExcuseSchema = Yup.object().shape({
+    excuse: Yup.string().required('Vui lòng nhập lý do từ chối buổi hẹn'),
+  });
+
+  const { date, hour, status, symptom, name, phone, _id, roomname, excuse } = consultation[0];
 
   const { fname, lname, profilepic, gender } = consultation[0].user.account;
 
@@ -79,8 +91,8 @@ export default function DoctorConsultationDetail({ consultation }) {
     setOpen(false);
   };
 
-  const cancelAndClose = () => {
-    cancel();
+  const cancelAndClose = (data) => {
+    cancel(data);
     handleClose();
   };
 
@@ -123,12 +135,14 @@ export default function DoctorConsultationDetail({ consultation }) {
       symptom: symptom || '',
       profilepic: profilepic || '',
       status: status || '',
+      excusetext: excuse || '',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [consultation]
   );
 
   const methods = useForm({
+    resolver: yupResolver(ExcuseSchema),
     defaultValues,
   });
 
@@ -145,13 +159,14 @@ export default function DoctorConsultationDetail({ consultation }) {
     navigate(PATH_DASHBOARD.user.doctorlist);
   };
 
-  const cancel = async () => {
+  const cancel = async (data) => {
     try {
       await axios.post('/api/doctor/consultation/cancelconsultation', {
         _id: consultation[0]._id,
         doctor: consultation[0].doctor,
         date: consultation[0].date,
         hour: consultation[0].hour,
+        excuse: data.excuse,
       });
       enqueueSnackbar('Từ chối lịch hẹn thành công');
       navigate(PATH_DASHBOARD.user.doctorlist);
@@ -312,6 +327,7 @@ export default function DoctorConsultationDetail({ consultation }) {
                 }}
               >
                 <RHFTextField name="symptom" multiline rows={3} label="Triệu chứng" disabled />
+                {status === 'bị từ chối' && <RHFTextField name="excusetext" label="Lý do từ chối" disabled />}
               </Box>
             </Stack>
 
@@ -325,9 +341,11 @@ export default function DoctorConsultationDetail({ consultation }) {
                     gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(1, 1fr)' },
                   }}
                 >
-                  <Button onClick={handleSubmit(back)} variant="contained">
-                    Trở về
-                  </Button>
+                  <Tooltip title="Trở về">
+                    <IconButton onClick={back}>
+                      <ArrowBackIosNewIcon />
+                    </IconButton>
+                  </Tooltip>
                 </Box>
               </Stack>
             ) : (
@@ -338,32 +356,35 @@ export default function DoctorConsultationDetail({ consultation }) {
                       display: 'grid',
                       columnGap: 1,
                       rowGap: 1,
-                      gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(3, 1fr)' },
+                      gridTemplateColumns: { xs: 'repeat(3, 1fr)', sm: 'repeat(3, 1fr)' },
                     }}
                   >
-                    <Button onClick={handleSubmit(back)} variant="outlined">
-                      Trở về
-                    </Button>
+                    <Tooltip title="Trở về">
+                      <IconButton onClick={back}>
+                        <ArrowBackIosNewIcon />
+                      </IconButton>
+                    </Tooltip>
 
                     {status === 'chờ xác nhận' ? (
-                      <LoadingButton variant="contained" color="error" loading={isSubmitting} onClick={handleClickOpen}>
-                        Từ chối lịch hẹn
-                      </LoadingButton>
+                      <Tooltip title="Từ chối lịch hẹn">
+                        <IconButton onClick={handleClickOpen}>
+                          <CancelIcon />
+                        </IconButton>
+                      </Tooltip>
                     ) : (
-                      <LoadingButton onClick={handleCreateNameAndRoomName} variant="contained" loading={isSubmitting}>
-                        Tham gia buổi hẹn
-                      </LoadingButton>
+                      <Tooltip title="Tham gia buổi tư vấn">
+                        <IconButton onClick={handleCreateNameAndRoomName}>
+                          <DuoIcon />
+                        </IconButton>
+                      </Tooltip>
                     )}
 
                     {status === 'chờ xác nhận' && (
-                      <LoadingButton
-                        variant="contained"
-                        color="info"
-                        loading={isSubmitting}
-                        onClick={handleSubmit(confirm)}
-                      >
-                        Xác nhận lịch hẹn
-                      </LoadingButton>
+                      <Tooltip title="Xác nhận lịch hẹn">
+                        <IconButton onClick={confirm}>
+                          <CheckIcon />
+                        </IconButton>
+                      </Tooltip>
                     )}
                   </Box>
                 ) : (
@@ -372,43 +393,43 @@ export default function DoctorConsultationDetail({ consultation }) {
                       display: 'grid',
                       columnGap: 1,
                       rowGap: 0.5,
-                      gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
+                      gridTemplateColumns: { xs: 'repeat(4, 1fr)', sm: 'repeat(4, 1fr)' },
                     }}
                   >
-                    <Button onClick={handleSubmit(back)} variant="outlined">
-                      Trở về
-                    </Button>
+                    <Tooltip title="Trở về">
+                      <IconButton onClick={back}>
+                        <ArrowBackIosNewIcon />
+                      </IconButton>
+                    </Tooltip>
 
                     {status === 'chờ khám' && (
-                      <LoadingButton variant="contained" color="error" loading={isSubmitting} onClick={handleClickOpen}>
-                        Từ chối lịch hẹn
-                      </LoadingButton>
+                      <Tooltip title="Từ chối lịch hẹn">
+                        <IconButton onClick={handleClickOpen}>
+                          <CancelIcon />
+                        </IconButton>
+                      </Tooltip>
                     )}
 
                     {status === 'chờ khám' && (
-                      <LoadingButton
-                        variant="contained"
-                        color="warning"
-                        loading={isSubmitting}
-                        onClick={createPrescription}
-                      >
-                        Tạo toa thuốc
-                      </LoadingButton>
+                      <Tooltip title="Tạo toa thuốc">
+                        <IconButton onClick={createPrescription}>
+                          <NoteAddIcon />
+                        </IconButton>
+                      </Tooltip>
                     )}
 
                     {status === 'chờ xác nhận' ? (
-                      <LoadingButton variant="contained" color="error" loading={isSubmitting} onClick={handleClickOpen}>
-                        Từ chối lịch hẹn
-                      </LoadingButton>
+                      <Tooltip title="Từ chối lịch hẹn">
+                        <IconButton onClick={handleClickOpen}>
+                          <CancelIcon />
+                        </IconButton>
+                      </Tooltip>
                     ) : (
-                      <LoadingButton
-                        onClick={handleCreateNameAndRoomName}
-                        variant="contained"
-                        color="info"
-                        loading={isSubmitting}
-                      >
-                        Tham gia buổi hẹn
-                      </LoadingButton>
+                      <Tooltip title="Tham gia buổi tư vấn">
+                        <IconButton onClick={handleCreateNameAndRoomName}>
+                          <DuoIcon />
+                        </IconButton>
+                      </Tooltip>
                     )}
                   </Box>
                 )}
@@ -421,19 +442,11 @@ export default function DoctorConsultationDetail({ consultation }) {
                   Buổi hẹn sẽ hiển thị ở trạng thái bị từ chối ở phía người dùng sau khi nhấp đồng ý, bạn có muốn tiếp
                   tục?
                 </DialogContentText>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  id="excuse"
-                  label="Vui lòng điền lý do từ chối buổi hẹn"
-                  type="string"
-                  fullWidth
-                  variant="standard"
-                />
+                <RHFTextField autoFocus name="excuse" label="Lý do từ chối" fullWidth variant="standard" />
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose}>Trở về</Button>
-                <Button variant="contained" onClick={cancelAndClose} autoFocus>
+                <Button onClick={handleSubmit(cancelAndClose)} variant="contained" autoFocus>
                   Đồng ý
                 </Button>
               </DialogActions>

@@ -1,8 +1,12 @@
 import PropTypes from 'prop-types';
+import * as Yup from 'yup';
 import { useState } from 'react';
 import { paramCase } from 'change-case';
 import { format } from 'date-fns';
 import { Link as RouterLink } from 'react-router-dom';
+// form
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import {
@@ -25,6 +29,7 @@ import {
 import Label from '../../../../components/Label';
 import Iconify from '../../../../components/Iconify';
 import { TableMoreMenu } from '../../../../components/table';
+import { FormProvider, RHFTextField } from '../../../../components/hook-form';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 
@@ -58,6 +63,10 @@ export default function DoctorTableRow({
 
   const { date, hour, status, _id } = row;
 
+  const ExcuseSchema = Yup.object().shape({
+    excuse: Yup.string().required('Vui lòng nhập lý do từ chối buổi hẹn'),
+  });
+
   const linkTo =
     status === 'đã hoàn thành'
       ? `${PATH_DASHBOARD.prescription.root}/${paramCase(_id)}`
@@ -85,10 +94,23 @@ export default function DoctorTableRow({
     setOpenMenuActions(null);
   };
 
-  const cancelAndClose = () => {
-    onCancel();
+  const cancelAndClose = (data) => {
+    onCancel(data.excuse);
     handleClose();
   };
+
+  const methods = useForm({
+    resolver: yupResolver(ExcuseSchema),
+  });
+
+  const {
+    reset,
+    watch,
+    control,
+    setValue,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods;
 
   return (
     <TableRow hover selected={selected}>
@@ -225,29 +247,21 @@ export default function DoctorTableRow({
             </>
           }
         />
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle sx={{ m: 1, p: 2 }}>{'Bạn muốn từ chối lịch hẹn?'}</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Buổi hẹn sẽ hiển thị ở trạng thái bị từ chối ở phía người dùng sau khi nhấp đồng ý, bạn có muốn tiếp tục?
-            </DialogContentText>
-            <TextField
-              autoFocus
-              margin="dense"
-              id="excuse"
-              label="Vui lòng điền lý do từ chối buổi hẹn"
-              type="string"
-              fullWidth
-              variant="standard"
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>Trở về</Button>
-            <Button variant="contained" onClick={cancelAndClose} autoFocus>
-              Đồng ý
-            </Button>
-          </DialogActions>
-        </Dialog>
+        <FormProvider methods={methods}>
+          <Dialog open={open} onClose={handleClose}>
+            <DialogTitle sx={{ m: 1, p: 2 }}>{'Bạn muốn hủy lịch hẹn?'}</DialogTitle>
+            <DialogContent>
+              <DialogContentText>Buổi hẹn sẽ bị từ chối sau khi nhấp đồng ý, bạn có muốn tiếp tục?</DialogContentText>
+              <RHFTextField autoFocus name="excuse" label="Lý do từ chối" fullWidth variant="standard" />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose}>Trở về</Button>
+              <Button variant="contained" onClick={handleSubmit(cancelAndClose)} autoFocus>
+                Đồng ý
+              </Button>
+            </DialogActions>
+          </Dialog>
+        </FormProvider>
       </TableCell>
     </TableRow>
   );

@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
+import * as Yup from 'yup';
 import { useMemo, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 // form
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
 import { styled } from '@mui/material/styles';
@@ -23,9 +25,12 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  TextField,
+  IconButton,
 } from '@mui/material';
 // utils
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import CancelIcon from '@mui/icons-material/Cancel';
+import DuoIcon from '@mui/icons-material/Duo';
 import createAvatar from '../../../utils/createAvatar';
 import axios from '../../../utils/axios';
 // hooks
@@ -59,7 +64,11 @@ export default function UserNewForm({ consultation }) {
 
   const identity = `${account.lname} ${account.fname}`;
 
-  const { date, hour, status, symptom, roomname, name, phone, _id } = consultation[0];
+  const ExcuseSchema = Yup.object().shape({
+    excuse: Yup.string().required('Vui lòng nhập lý do từ chối buổi hẹn'),
+  });
+
+  const { date, hour, status, symptom, roomname, name, phone, _id, excuse } = consultation[0];
 
   const { fname, lname, profilepic } = consultation[0].doctor.account;
 
@@ -80,8 +89,8 @@ export default function UserNewForm({ consultation }) {
     setOpen(false);
   };
 
-  const cancelAndClose = () => {
-    cancel();
+  const cancelAndClose = (data) => {
+    cancel(data);
     handleClose();
   };
 
@@ -95,12 +104,14 @@ export default function UserNewForm({ consultation }) {
       symptom: symptom || '',
       profilepic: profilepic || '',
       status: status || '',
+      excusetext: excuse || '',
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [consultation]
   );
 
   const methods = useForm({
+    resolver: yupResolver(ExcuseSchema),
     defaultValues,
   });
 
@@ -117,13 +128,14 @@ export default function UserNewForm({ consultation }) {
     navigate(PATH_DASHBOARD.user.list);
   };
 
-  const cancel = async () => {
+  const cancel = async (data) => {
     try {
       await axios.post('/api/user/consultation/cancelconsult', {
         _id: consultation[0]._id,
         doctor: consultation[0].doctor,
         date: consultation[0].date,
         hour: consultation[0].hour,
+        excuse: data.excuse,
       });
       enqueueSnackbar('Hủy lịch thành công');
       navigate(PATH_DASHBOARD.user.list);
@@ -277,6 +289,7 @@ export default function UserNewForm({ consultation }) {
                 }}
               >
                 <RHFTextField name="symptom" multiline rows={3} label="Triệu chứng" disabled />
+                {status === 'bị từ chối' && <RHFTextField name="excusetext" label="Lý do từ chối" disabled />}
               </Box>
             </Stack>
 
@@ -290,9 +303,11 @@ export default function UserNewForm({ consultation }) {
                     gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(1, 1fr)' },
                   }}
                 >
-                  <Button onClick={handleSubmit(back)} variant="contained">
-                    Trở về
-                  </Button>
+                  <Tooltip title="Trở về">
+                    <IconButton onClick={back}>
+                      <ArrowBackIosNewIcon />
+                    </IconButton>
+                  </Tooltip>
                 </Box>
               </Stack>
             ) : (
@@ -303,16 +318,20 @@ export default function UserNewForm({ consultation }) {
                       display: 'grid',
                       columnGap: 1,
                       rowGap: 1,
-                      gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
+                      gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(2, 1fr)' },
                     }}
                   >
-                    <Button onClick={handleSubmit(back)} variant="outlined">
-                      Trở về
-                    </Button>
+                    <Tooltip title="Trở về">
+                      <IconButton onClick={back}>
+                        <ArrowBackIosNewIcon />
+                      </IconButton>
+                    </Tooltip>
 
-                    <LoadingButton variant="contained" color="error" loading={isSubmitting} onClick={handleClickOpen}>
-                      Hủy lịch hẹn
-                    </LoadingButton>
+                    <Tooltip title="Từ chối lịch hẹn">
+                      <IconButton onClick={handleClickOpen}>
+                        <CancelIcon />
+                      </IconButton>
+                    </Tooltip>
                   </Box>
                 ) : (
                   <Box
@@ -320,25 +339,26 @@ export default function UserNewForm({ consultation }) {
                       display: 'grid',
                       columnGap: 1,
                       rowGap: 1,
-                      gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(3, 1fr)' },
+                      gridTemplateColumns: { xs: 'repeat(3, 1fr)', sm: 'repeat(3, 1fr)' },
                     }}
                   >
-                    <Button onClick={handleSubmit(back)} variant="outlined">
-                      Trở về
-                    </Button>
+                    <Tooltip title="Trở về">
+                      <IconButton onClick={back}>
+                        <ArrowBackIosNewIcon />
+                      </IconButton>
+                    </Tooltip>
 
-                    <LoadingButton variant="contained" color="error" loading={isSubmitting} onClick={handleClickOpen}>
-                      Hủy lịch hẹn
-                    </LoadingButton>
+                    <Tooltip title="Từ chối lịch hẹn">
+                      <IconButton onClick={handleClickOpen}>
+                        <CancelIcon />
+                      </IconButton>
+                    </Tooltip>
 
-                    <LoadingButton
-                      onClick={handleCreateNameAndRoomName}
-                      variant="contained"
-                      color="info"
-                      loading={isSubmitting}
-                    >
-                      Tham gia buổi hẹn
-                    </LoadingButton>
+                    <Tooltip title="Tham gia buổi tư vấn">
+                      <IconButton onClick={handleCreateNameAndRoomName}>
+                        <DuoIcon />
+                      </IconButton>
+                    </Tooltip>
                   </Box>
                 )}
               </Stack>
@@ -347,19 +367,11 @@ export default function UserNewForm({ consultation }) {
               <DialogTitle sx={{ m: 1, p: 2 }}>{'Bạn muốn hủy lịch hẹn?'}</DialogTitle>
               <DialogContent>
                 <DialogContentText>Buổi hẹn sẽ bị từ chối sau khi nhấp đồng ý, bạn có muốn tiếp tục?</DialogContentText>
-                <TextField
-                  autoFocus
-                  margin="dense"
-                  id="excuse"
-                  label="Vui lòng điền lý do từ chối buổi hẹn"
-                  type="string"
-                  fullWidth
-                  variant="standard"
-                />
+                <RHFTextField autoFocus name="excuse" label="Lý do từ chối" fullWidth variant="standard" />
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose}>Trở về</Button>
-                <Button variant="contained" onClick={cancelAndClose} autoFocus>
+                <Button variant="contained" onClick={handleSubmit(cancelAndClose)} autoFocus>
                   Đồng ý
                 </Button>
               </DialogActions>
