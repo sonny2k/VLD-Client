@@ -225,8 +225,8 @@ export default function DoctorList() {
     (!dataFiltered.length && !!filterDepartment) ||
     (!dataFiltered.length && !!filterStatus);
 
-  if (consult.length > 0) {
-    return (
+  return (
+    loaded === true && (
       <Page title="Lịch hẹn thăm khám">
         <Container maxWidth={themeStretch ? false : 'lg'}>
           <HeaderBreadcrumbs
@@ -341,126 +341,6 @@ export default function DoctorList() {
           </Card>
         </Container>
       </Page>
-    );
-  }
-
-  if (consult.length === 0 && loaded === false) {
-    return <LoadingScreen />;
-  }
-
-  if (consult.length === 0 && loaded === true) {
-    return (
-      <Page title="Danh sách lịch hẹn">
-        <Container maxWidth={themeStretch ? false : 'lg'}>
-          <HeaderBreadcrumbs
-            heading="Lịch hẹn"
-            links={[{ name: 'Bảng điều khiển', href: PATH_DASHBOARD.root }, { name: 'Lịch hẹn' }]}
-          />
-
-          <Card>
-            <Tabs
-              allowScrollButtonsMobile
-              variant="scrollable"
-              scrollButtons="auto"
-              value={filterStatus}
-              onChange={onChangeFilterStatus}
-              sx={{ px: 2, bgcolor: 'background.neutral' }}
-            >
-              {STATUS_OPTIONS.map((tab) => (
-                <Tab disableRipple key={tab} label={tab} value={tab} />
-              ))}
-            </Tabs>
-
-            <Divider />
-
-            <DoctorTableToolbar
-              filterName={filterName}
-              filterDepartment={filterDepartment}
-              onFilterName={handleFilterName}
-              onFilterDepartment={handleFilterDepartment}
-              optionsDepartment={DEPARTMENT_OPTIONS}
-            />
-
-            <Scrollbar>
-              <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
-                {selected.length > 0 && (
-                  <TableSelectedActions
-                    dense={dense}
-                    numSelected={selected.length}
-                    rowCount={consult.length}
-                    onSelectAllRows={(checked) =>
-                      onSelectAllRows(
-                        checked,
-                        consult.map((row) => row._id)
-                      )
-                    }
-                    actions={
-                      <Tooltip title="Delete">
-                        <IconButton color="primary" onClick={() => handleDeleteRows(selected)}>
-                          <Iconify icon={'eva:trash-2-outline'} />
-                        </IconButton>
-                      </Tooltip>
-                    }
-                  />
-                )}
-
-                <Table size={dense ? 'small' : 'medium'}>
-                  <TableHeadCustom
-                    order={order}
-                    orderBy={orderBy}
-                    headLabel={TABLE_HEAD}
-                    rowCount={consult.length}
-                    numSelected={selected.length}
-                    onSort={onSort}
-                    onSelectAllRows={(checked) =>
-                      onSelectAllRows(
-                        checked,
-                        consult.map((row) => row._id)
-                      )
-                    }
-                  />
-
-                  <TableBody>
-                    {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-                      <DoctorTableRow
-                        key={row._id}
-                        row={row}
-                        selected={selected.includes(row._id)}
-                        onSelectRow={() => onSelectRow(row._id)}
-                        onDeleteRow={() => handleDeleteRow(row._id)}
-                        onEditRow={() => handleEditRow(row._id)}
-                      />
-                    ))}
-
-                    <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, consult.length)} />
-
-                    <TableNoData isNotFound={isNotFound} />
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Scrollbar>
-
-            <Box sx={{ position: 'relative' }}>
-              <TablePagination
-                labelRowsPerPage="Số dòng mỗi trang:"
-                rowsPerPageOptions={[5, 10, 25]}
-                component="div"
-                count={dataFiltered.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={onChangePage}
-                onRowsPerPageChange={onChangeRowsPerPage}
-              />
-
-              <FormControlLabel
-                control={<Switch checked={dense} onChange={onChangeDense} />}
-                label="Thu gọn"
-                sx={{ px: 3, py: 1.5, top: 0, position: { md: 'absolute' } }}
-              />
-            </Box>
-          </Card>
-        </Container>
-      </Page>
-    );
-  }
+    )
+  );
 }

@@ -105,7 +105,7 @@ export default function InvoiceNewEditDetails({ products, loadedmeds, isEdit }) 
                 name={`medicines[${index}].mednote`}
                 label="Ghi chú"
                 onChange={(event) => setValue(`medicines[${index}].mednote`, event.target.value)}
-                sx={{ maxWidth: { md: 150 } }}
+                sx={{ maxWidth: { md: 250 } }}
               />
             </Stack>
 
@@ -128,12 +128,16 @@ export default function InvoiceNewEditDetails({ products, loadedmeds, isEdit }) 
         direction={{ xs: 'column-reverse', md: 'row' }}
         alignItems={{ xs: 'flex-start', md: 'center' }}
       >
-        {isEdit !== true && <Button size="small" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleAdd} sx={{ flexShrink: 0 }}>
-          Thêm thuốc mới
-        </Button>}
+        {isEdit !== true && (
+          <Button size="small" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleAdd} sx={{ flexShrink: 0 }}>
+            Thêm thuốc mới
+          </Button>
+        )}
 
         <Stack spacing={2} justifyContent="flex-end" direction={{ xs: 'column', md: 'row' }} sx={{ width: 1 }}>
           <RHFTextField
+            multiline
+            rows={4}
             size="small"
             label="Ghi chú chung"
             name="note"

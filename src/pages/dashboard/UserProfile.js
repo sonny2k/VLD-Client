@@ -27,9 +27,7 @@ import {
   ProfileFollowers,
 } from '../../sections/@dashboard/user/profile';
 
-import {
-  ProductDetailsReview
-} from '../../sections/@dashboard/e-commerce/product-details'
+import { ProductDetailsReview } from '../../sections/@dashboard/e-commerce/product-details';
 
 // ----------------------------------------------------------------------
 
@@ -65,7 +63,6 @@ export default function UserProfile() {
   const navigate = useNavigate();
 
   useEffect(() => {
-
     async function fetchDoctor() {
       const URL = `/api/home/doctor/${id}`;
       try {
@@ -75,8 +72,8 @@ export default function UserProfile() {
         navigate('/404');
       }
     }
-    fetchDoctor()
-  }, [id, dispatch])
+    fetchDoctor();
+  }, [id, dispatch]);
 
   const [currentTab, setCurrentTab] = useState('Cá nhân');
   const [findFriends, setFindFriends] = useState('');
@@ -116,8 +113,8 @@ export default function UserProfile() {
     ];
   }
 
-  if (doctor) {
-    return (
+  return (
+    doctor && (
       <Page title="Chi tiết bác sĩ">
         <Container maxWidth={themeStretch ? false : 'lg'}>
           <HeaderBreadcrumbs
@@ -135,8 +132,8 @@ export default function UserProfile() {
               position: 'relative',
             }}
           >
-            <ProfileCover doctor={ doctor } />
-  
+            <ProfileCover doctor={doctor} />
+
             <TabsWrapperStyle>
               <Tabs
                 value={currentTab}
@@ -151,17 +148,13 @@ export default function UserProfile() {
               </Tabs>
             </TabsWrapperStyle>
           </Card>
-  
+
           {PROFILE_TABS.map((tab) => {
             const isMatched = tab.value === currentTab;
             return isMatched && <Box key={tab.value}>{tab.component}</Box>;
           })}
         </Container>
-      </Page>  
-    );
-  }
-
-  return (
-    <LoadingScreen/>
+      </Page>
+    )
   );
 }

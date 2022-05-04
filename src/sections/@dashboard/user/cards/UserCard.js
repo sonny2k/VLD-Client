@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { paramCase } from 'change-case';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import * as React from 'react';
 
 // @mui
@@ -19,8 +19,6 @@ import { PATH_DASHBOARD } from '../../../../routes/paths';
 import Image from '../../../../components/Image';
 import SocialsButton from '../../../../components/SocialsButton';
 import SvgIconStyle from '../../../../components/SvgIconStyle';
-
-
 
 // ----------------------------------------------------------------------
 
@@ -45,6 +43,8 @@ export default function UserCard({ doctor }) {
 
   const { department, degree, workcertificate, _id, level } = doctor;
 
+  const navigate = useNavigate();
+
   const linkTo = `${PATH_DASHBOARD.user.root}/profile/${paramCase(_id)}`;
 
   const name = `${level} ${lname} ${fname}`;
@@ -53,6 +53,9 @@ export default function UserCard({ doctor }) {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const detaildoc = () => {
+    navigate(`${PATH_DASHBOARD.user.root}/profile/${paramCase(_id)}`);
+  };
 
   const style = {
     display: 'block',
@@ -60,7 +63,7 @@ export default function UserCard({ doctor }) {
     columnGap: 2,
     gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
     position: 'absolute',
-    width: "800px",
+    width: '800px',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
@@ -68,7 +71,6 @@ export default function UserCard({ doctor }) {
     boxShadow: 24,
     p: 4,
   };
-
 
   return (
     <Card sx={{ textAlign: 'center' }}>
@@ -103,7 +105,7 @@ export default function UserCard({ doctor }) {
             }}
           />
         </Link>
-        
+
         <OverlayStyle />
         <Image src={'https://i.imgur.com/ubQBnT3.jpg'} alt={name} ratio="16/9" />
       </Box>
@@ -113,40 +115,40 @@ export default function UserCard({ doctor }) {
           {name}
         </Typography>
       </Link>
-      
+
       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
         {department}
       </Typography>
 
-      <Box sx={{position: 'relative'}}>
+      <Box sx={{ position: 'relative' }}>
         <Tooltip title="Xem chi tiết">
-          <IconButton aria-label="Xem chi tiết" href={`${PATH_DASHBOARD.user.root}/profile/${paramCase(_id)}`}>
+          <IconButton aria-label="Xem chi tiết" onClick={detaildoc}>
             <InfoIcon />
           </IconButton>
         </Tooltip>
         <Tooltip title="Hẹn khám">
-          <IconButton className="openModalBtn" onClick={handleOpen}> 
+          <IconButton className="openModalBtn" onClick={handleOpen}>
             <EventAvailableIcon />
           </IconButton>
         </Tooltip>
         <Modal
-            open={open}
-            onClose={handleClose}
-            aria-labelledby="modal-modal-title"
-            aria-describedby="modal-modal-description"
-          >
-            <Box sx={style}>
-              <ModalCreateConsultation doctor={doctor} />
-            </Box>
-          </Modal>
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box sx={style}>
+            <ModalCreateConsultation doctor={doctor} />
+          </Box>
+        </Modal>
       </Box>
-      
+
       <Divider sx={{ borderStyle: 'dashed' }} />
 
       <Box sx={{ py: 3, display: 'grid', gridTemplateColumns: '1fr 1.5fr' }}>
         <div>
           <Typography variant="caption" component="div" sx={{ mb: 0.75, color: 'text.disabled' }}>
-            Trình độ 
+            Trình độ
           </Typography>
           <Typography variant="subtitle1">{degree}</Typography>
         </div>

@@ -46,7 +46,7 @@ import Iconify from '../../../components/Iconify';
 // ----------------------------------------------------------------------
 
 UserNewForm.propTypes = {
-  consultation: PropTypes.array,
+  consultation: PropTypes.object,
 };
 
 export default function UserNewForm({ consultation }) {
@@ -68,12 +68,11 @@ export default function UserNewForm({ consultation }) {
     excuse: Yup.string().required('Vui lòng nhập lý do từ chối buổi hẹn'),
   });
 
-  const { date, hour, status, symptom, roomname, name, phone, _id, excuse } = consultation[0];
+  const { date, hour, status, symptom, roomname, name, phone, _id, excuse } = consultation;
 
-  const { fname, lname, profilepic } = consultation[0].doctor.account;
+  const { fname, lname, profilepic } = consultation.doctor.account;
 
-  const { department, description, workcertificate, level, educationplace, degree, workhistory } =
-    consultation[0].doctor;
+  const { department, description, workcertificate, level, educationplace, degree, workhistory } = consultation.doctor;
 
   const doctorname = `${level} ${lname} ${fname}`;
 
@@ -328,7 +327,7 @@ export default function UserNewForm({ consultation }) {
                     </Tooltip>
 
                     <Tooltip title="Từ chối lịch hẹn">
-                      <IconButton onClick={handleClickOpen}>
+                      <IconButton color="error" onClick={handleClickOpen}>
                         <CancelIcon />
                       </IconButton>
                     </Tooltip>
@@ -349,13 +348,13 @@ export default function UserNewForm({ consultation }) {
                     </Tooltip>
 
                     <Tooltip title="Từ chối lịch hẹn">
-                      <IconButton onClick={handleClickOpen}>
+                      <IconButton color="error" onClick={handleClickOpen}>
                         <CancelIcon />
                       </IconButton>
                     </Tooltip>
 
                     <Tooltip title="Tham gia buổi tư vấn">
-                      <IconButton onClick={handleCreateNameAndRoomName}>
+                      <IconButton color="info" onClick={handleCreateNameAndRoomName}>
                         <DuoIcon />
                       </IconButton>
                     </Tooltip>

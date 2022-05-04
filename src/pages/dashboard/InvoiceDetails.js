@@ -43,39 +43,39 @@ export default function InvoiceDetails() {
     }
   };
 
-  return pre !== null ? (
-    <Page title="Toa thuốc: Xem chi tiết">
-      <Container maxWidth={themeStretch ? false : 'lg'}>
-        {unorm.nfkd(account.role).toLowerCase().indexOf(unorm.nfkd('Người dùng').toLowerCase()) !== -1 ? (
-          <HeaderBreadcrumbs
-            heading="Chi tiết toa thuốc"
-            links={[
-              { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
-              {
-                name: 'Danh sách lịch hẹn',
-                href: PATH_DASHBOARD.user.list,
-              },
-              { name: `Toa thuốc của buổi hẹn ngày ${pre.consultation.consultation.date}` || '' },
-            ]}
-          />
-        ) : (
-          <HeaderBreadcrumbs
-            heading="Chi tiết toa thuốc"
-            links={[
-              { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
-              {
-                name: 'Danh sách lịch hẹn',
-                href: PATH_DASHBOARD.user.doctorlist,
-              },
-              { name: `Toa thuốc của buổi hẹn ngày ${pre.consultation.consultation.date}` || '' },
-            ]}
-          />
-        )}
+  return (
+    pre !== null && (
+      <Page title="Toa thuốc: Xem chi tiết">
+        <Container maxWidth={themeStretch ? false : 'lg'}>
+          {unorm.nfkd(account.role).toLowerCase().indexOf(unorm.nfkd('Người dùng').toLowerCase()) !== -1 ? (
+            <HeaderBreadcrumbs
+              heading="Chi tiết toa thuốc"
+              links={[
+                { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
+                {
+                  name: 'Danh sách lịch hẹn',
+                  href: PATH_DASHBOARD.user.list,
+                },
+                { name: `Toa thuốc của buổi hẹn ngày ${pre.consultation.consultation.date}` || '' },
+              ]}
+            />
+          ) : (
+            <HeaderBreadcrumbs
+              heading="Chi tiết toa thuốc"
+              links={[
+                { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
+                {
+                  name: 'Danh sách lịch hẹn',
+                  href: PATH_DASHBOARD.user.doctorlist,
+                },
+                { name: `Toa thuốc của buổi hẹn ngày ${pre.consultation.consultation.date}` || '' },
+              ]}
+            />
+          )}
 
-        <Invoice pre={pre} />
-      </Container>
-    </Page>
-  ) : (
-    <LoadingScreen />
+          <Invoice pre={pre} />
+        </Container>
+      </Page>
+    )
   );
 }

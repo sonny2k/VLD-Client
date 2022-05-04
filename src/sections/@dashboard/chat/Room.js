@@ -97,7 +97,7 @@ const Room = ({ roomName, token }) => {
         VĂN LANG DOCTOR
       </Typography>
       <div>{remoteParticipants}</div>
-      <div>{room ? <Participant key={room.localParticipant.sid} participant={room.localParticipant} /> : ''}</div>
+      <div>{room && <Participant key={room.localParticipant.sid} participant={room.localParticipant} />}</div>
     </div>
   );
 };

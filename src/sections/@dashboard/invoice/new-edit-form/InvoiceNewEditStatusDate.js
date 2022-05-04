@@ -39,7 +39,7 @@ export default function InvoiceNewEditStatusDate({ isEdit }) {
               name="diagnosis"
               label="Chẩn đoán"
               multiline
-              rows={3}
+              rows={4}
             />
           )}
         />

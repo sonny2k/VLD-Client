@@ -49,7 +49,7 @@ import Iconify from '../../../components/Iconify';
 // ----------------------------------------------------------------------
 
 DoctorConsultationDetail.propTypes = {
-  consultation: PropTypes.array,
+  consultation: PropTypes.object,
 };
 
 export default function DoctorConsultationDetail({ consultation }) {
@@ -71,11 +71,11 @@ export default function DoctorConsultationDetail({ consultation }) {
     excuse: Yup.string().required('Vui lòng nhập lý do từ chối buổi hẹn'),
   });
 
-  const { date, hour, status, symptom, name, phone, _id, roomname, excuse } = consultation[0];
+  const { date, hour, status, symptom, name, phone, _id, roomname, excuse } = consultation;
 
-  const { fname, lname, profilepic, gender } = consultation[0].user.account;
+  const { fname, lname, profilepic, gender } = consultation.user.account;
 
-  const { bloodtype, height, weight, pastmedicalhistory, drughistory, familyhistory } = consultation[0].user;
+  const { bloodtype, height, weight, pastmedicalhistory, drughistory, familyhistory } = consultation.user;
 
   const requestname = `${lname} ${fname}`;
 
@@ -367,13 +367,13 @@ export default function DoctorConsultationDetail({ consultation }) {
 
                     {status === 'chờ xác nhận' ? (
                       <Tooltip title="Từ chối lịch hẹn">
-                        <IconButton onClick={handleClickOpen}>
+                        <IconButton color="error" onClick={handleClickOpen}>
                           <CancelIcon />
                         </IconButton>
                       </Tooltip>
                     ) : (
                       <Tooltip title="Tham gia buổi tư vấn">
-                        <IconButton onClick={handleCreateNameAndRoomName}>
+                        <IconButton color="info" onClick={handleCreateNameAndRoomName}>
                           <DuoIcon />
                         </IconButton>
                       </Tooltip>
@@ -381,7 +381,7 @@ export default function DoctorConsultationDetail({ consultation }) {
 
                     {status === 'chờ xác nhận' && (
                       <Tooltip title="Xác nhận lịch hẹn">
-                        <IconButton onClick={confirm}>
+                        <IconButton color="success" onClick={confirm}>
                           <CheckIcon />
                         </IconButton>
                       </Tooltip>
@@ -404,7 +404,7 @@ export default function DoctorConsultationDetail({ consultation }) {
 
                     {status === 'chờ khám' && (
                       <Tooltip title="Từ chối lịch hẹn">
-                        <IconButton onClick={handleClickOpen}>
+                        <IconButton color="error" onClick={handleClickOpen}>
                           <CancelIcon />
                         </IconButton>
                       </Tooltip>
@@ -412,7 +412,7 @@ export default function DoctorConsultationDetail({ consultation }) {
 
                     {status === 'chờ khám' && (
                       <Tooltip title="Tạo toa thuốc">
-                        <IconButton onClick={createPrescription}>
+                        <IconButton color="primary" onClick={createPrescription}>
                           <NoteAddIcon />
                         </IconButton>
                       </Tooltip>
@@ -420,13 +420,13 @@ export default function DoctorConsultationDetail({ consultation }) {
 
                     {status === 'chờ xác nhận' ? (
                       <Tooltip title="Từ chối lịch hẹn">
-                        <IconButton onClick={handleClickOpen}>
+                        <IconButton color="error" onClick={handleClickOpen}>
                           <CancelIcon />
                         </IconButton>
                       </Tooltip>
                     ) : (
                       <Tooltip title="Tham gia buổi tư vấn">
-                        <IconButton onClick={handleCreateNameAndRoomName}>
+                        <IconButton color="info" onClick={handleCreateNameAndRoomName}>
                           <DuoIcon />
                         </IconButton>
                       </Tooltip>
