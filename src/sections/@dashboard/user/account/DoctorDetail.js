@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { format } from 'date-fns';
 import { useSnackbar } from 'notistack';
 import * as Yup from 'yup';
@@ -36,8 +36,19 @@ export default function DoctorDetail() {
   const { enqueueSnackbar } = useSnackbar();
   const cursor = true;
 
+  const UpdateUserSchema = Yup.object().shape({
+    educationplace: Yup.string().required('Vui lòng điền nơi tốt nghiệp'),
+    workcertificate: Yup.string().required('Vui lòng điền chứng chỉ'),
+    level: Yup.string().required('Vui lòng điền cấp bậc'),
+    degree: Yup.string().required('Vui lòng điền bằng cấp'),
+    description: Yup.string().required('Vui lòng điền mô tả'),
+    excellence: Yup.string().required('Vui lòng điền chuyên môn'),
+    workhistory: Yup.string().required('Vui lòng điền lịch sử làm việc'),
+    education: Yup.string().required('Vui lòng điền quá trình đào tạo'),
+  });
+
   const methods = useForm({
-    resolver: yupResolver(),
+    // resolver: yupResolver(UpdateUserSchema),
   });
 
   const {
@@ -46,6 +57,27 @@ export default function DoctorDetail() {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+
+  useEffect(() => {
+    async function getInfo() {
+      const result = await axios.get('/api/doctor/account/info');
+      setDoctor(result.data);
+      // if (doc) {
+      //   setValue([
+      //     { name: doc.department },
+      //     { educationplace: doc.educationplace },
+      //     { workcertificate: doc.workcertificate },
+      //     { level: doc.level },
+      //     { degree: doc.degree },
+      //     { description: doc.description },
+      //     { excellence: doc.excellence },
+      //     { workhistory: doc.workhistory },
+      //     { education: doc.education },
+      //   ]);
+      // }
+    }
+    getInfo();
+  }, []);
 
   const handleDrop = useCallback(
     async (acceptedFiles) => {
@@ -59,7 +91,7 @@ export default function DoctorDetail() {
         setValue(
           'signature',
           Object.assign(file, {
-            preview: URL.createObjectURL(file),   
+            preview: URL.createObjectURL(file),
           })
         );
       }
@@ -70,8 +102,8 @@ export default function DoctorDetail() {
   const uploadImage = async (base64EncodedImage) => {
     const pic = base64EncodedImage.toString();
     try {
-      await axios.post('/api/user/account/profilepic', {
-        pic
+      await axios.post('/api/doctor/account/signature', {
+        pic,
       });
     } catch (err) {
       console.error(err);
@@ -79,63 +111,57 @@ export default function DoctorDetail() {
     }
   };
 
-  useEffect(() => {
-    async function getInfo() {
-      const URL = '/api/doctor/account/info';
-      try {
-        const res = await axios.get(URL);
-        setDoctor(res.data);
-      } catch (error) {
-        console.log(error);
-      }
+  const onSubmit = async (data) => {
+    try {
+      await axios.put('/api/doctor/account/detailinfo', {
+        educationplace: data.educationplace,
+        workcertificate: data.workcertificate,
+        level: data.level,
+        degree: data.degree,
+        description: data.description,
+        excellence: data.excellence,
+        workhistory: data.workhistory,
+        education: data.education,
+      });
+      enqueueSnackbar('Cập nhật thông tin tài khoản thành công!');
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại', { variant: 'error' });
     }
-    getInfo();
-  }, []);
-
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 800,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
   };
 
-  
-
-  if (doc !== null) {
-    return (
-      <FormProvider methods={methods}>
+  return (
+    doc !== null && (
+      <FormProvider onSubmit={handleSubmit(onSubmit)} methods={methods}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
             <Card sx={{ py: 10, px: 3, textAlign: 'center' }}>
-            <UploadAvatar 
+              <UploadAvatar
                 name="signature"
                 accept="image/*"
                 maxSize={3145728}
                 onDrop={handleDrop}
-                type='file'
+                type="file"
                 file={doc.signature}
                 helperText={
-                    <Typography
+                  <Typography
                     variant="caption"
                     sx={{
-                    mt: 2,
-                    mx: 'auto',
-                    display: 'block',
-                    textAlign: 'center',
-                    color: 'text.secondary',
-                  }}
-                  disabled>
+                      mt: 2,
+                      mx: 'auto',
+                      display: 'block',
+                      textAlign: 'center',
+                      color: 'text.secondary',
+                    }}
+                    disabled
+                  >
                     Cập nhật ảnh chữ ký
                     <br /> Chỉ cho phép *.jpeg, *.jpg, *.png, *.gif
                     <br /> Dung lượng tối đa {fData(3145728)}
-                </Typography>
-              }
-            />
+                  </Typography>
+                }
+              />
 
               {/* <RHFSwitch name="isPublic" labelPlacement="start" label="Thông tin cá nhân" sx={{ mt: 5 }} /> */}
             </Card>
@@ -143,10 +169,10 @@ export default function DoctorDetail() {
 
           <Grid item xs={12} md={8}>
             <Card sx={{ p: 3 }}>
-            <Stack alignItems="flex-end">
-              <RHFTextField name="department" label="Chuyên khoa" defaultValue={doc.department} disabled />
-            </Stack>
-            <Stack  alignItems="flex-end" sx={{ mt: 3 }}/>
+              <Stack alignItems="flex-end">
+                <RHFTextField name="department" label="Chuyên khoa" defaultValue={doc.department} disabled />
+              </Stack>
+              <Stack alignItems="flex-end" sx={{ mt: 3 }} />
 
               <Box
                 sx={{
@@ -160,21 +186,35 @@ export default function DoctorDetail() {
                 <RHFTextField name="workcertificate" label="Chứng chỉ" defaultValue={doc.workcertificate} />
                 <RHFTextField name="level" label="Cấp bậc" defaultValue={doc.level} />
                 <RHFTextField name="degree" label="Bằng cấp" defaultValue={doc.degree} />
-                <RHFTextField multiline rows={4} name="description" label="Mô tả" defaultValue={doc.description}/>
-                <RHFTextField multiline rows={4} name="excellence" label="Chuyên môn" defaultValue={doc.excellence} />
-                <RHFTextField multiline rows={4} name="workhistory" label="Lịch sử làm việc" defaultValue={doc.workhistory} />
-                <RHFTextField multiline rows={4} name="education" label="Đào tạo" defaultValue={doc.education} />
               </Box>
+              <Stack alignItems="flex-end" sx={{ mt: 3 }} />
+              <Stack spacing={3} alignItems="flex-end">
+                <RHFTextField multiline rows={4} name="description" label="Mô tả" defaultValue={doc.description} />
+                <RHFTextField multiline rows={4} name="excellence" label="Chuyên môn" defaultValue={doc.excellence} />
+                <RHFTextField
+                  multiline
+                  rows={4}
+                  name="workhistory"
+                  label="Lịch sử làm việc"
+                  defaultValue={doc.workhistory}
+                />
+                <RHFTextField
+                  multiline
+                  rows={4}
+                  name="education"
+                  label="Quá trình đào tạo"
+                  defaultValue={doc.education}
+                />
+              </Stack>
               <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting} >
-                Lưu thay đổi
-              </LoadingButton>
+                <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                  Lưu thay đổi
+                </LoadingButton>
               </Stack>
             </Card>
           </Grid>
         </Grid>
       </FormProvider>
-    );
-  }
-  return <LoadingScreen />;
+    )
+  );
 }

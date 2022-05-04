@@ -70,14 +70,13 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
   const { account } = useAuth();
 
   useEffect(() => {
-    
-  if (unorm.nfkd(account.role).toLowerCase().indexOf(unorm.nfkd("Người dùng").toLowerCase()) !== -1) {
-    const role = "user";
-    getNoti(role);
-  } else if (unorm.nfkd(account.role).toLowerCase().indexOf(unorm.nfkd("Bác sĩ").toLowerCase()) !== -1) {
-    const role = "doctor";
-    getNoti(role);
-  }
+    if (unorm.nfkd(account.role).toLowerCase().indexOf(unorm.nfkd('Người dùng').toLowerCase()) !== -1) {
+      const role = 'user';
+      getNoti(role);
+    } else if (unorm.nfkd(account.role).toLowerCase().indexOf(unorm.nfkd('Bác sĩ').toLowerCase()) !== -1) {
+      const role = 'doctor';
+      getNoti(role);
+    }
     async function getNoti(role) {
       const URL = `/api/admin/notification/notice/${role}`;
       try {
@@ -99,31 +98,28 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
           }}
         >
           {isDesktop && verticalLayout && <Logo sx={{ mr: 2.5 }} />}
-  
+
           {!isDesktop && (
             <IconButtonAnimate onClick={onOpenSidebar} sx={{ mr: 1, color: 'text.primary' }}>
               <Iconify icon="eva:menu-2-fill" />
             </IconButtonAnimate>
           )}
-  
-          <Searchbar />
+
           <Box sx={{ flexGrow: 1 }} />
-  
-          { unorm.nfkd(account.role).toLowerCase().indexOf(unorm.nfkd("Admin").toLowerCase()) !== -1 ?
-          <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
-            <AccountPopover />
-          </Stack> 
-          :
-          <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
-            <NotificationsPopover notis={notis}/>
-            <AccountPopover />
-          </Stack> 
-          }
+
+          {unorm.nfkd(account.role).toLowerCase().indexOf(unorm.nfkd('Admin').toLowerCase()) !== -1 ? (
+            <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
+              <AccountPopover />
+            </Stack>
+          ) : (
+            <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
+              <NotificationsPopover notis={notis} />
+              <AccountPopover />
+            </Stack>
+          )}
         </Toolbar>
       </RootStyle>
     );
   }
-  return (
-    <LoadingScreen />
-  );
+  return <LoadingScreen />;
 }

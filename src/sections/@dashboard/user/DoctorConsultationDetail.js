@@ -162,37 +162,37 @@ export default function DoctorConsultationDetail({ consultation }) {
   const cancel = async (data) => {
     try {
       await axios.post('/api/doctor/consultation/cancelconsultation', {
-        _id: consultation[0]._id,
-        doctor: consultation[0].doctor,
-        date: consultation[0].date,
-        hour: consultation[0].hour,
+        _id: consultation._id,
+        doctor: consultation.doctor,
+        date: consultation.date,
+        hour: consultation.hour,
         excuse: data.excuse,
       });
       enqueueSnackbar('Từ chối lịch hẹn thành công');
       navigate(PATH_DASHBOARD.user.doctorlist);
     } catch (err) {
       console.error(err);
-      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', { variant: 'error' });
     }
   };
 
   const changesymptom = async (data) => {
     try {
       await axios.put('/api/user/consultation/consultsymptom', {
-        _id: consultation[0]._id,
+        _id: consultation._id,
         symptom: data.symptom,
       });
       enqueueSnackbar('Thay đổi triệu chứng thành công');
     } catch (err) {
       console.error(err);
-      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', { variant: 'error' });
     }
   };
 
   const confirm = async () => {
     try {
       await axios.post('/api/doctor/consultation/confirmconsultation', {
-        _id: consultation[0]._id,
+        _id: consultation._id,
       });
       enqueueSnackbar('Xác nhận buổi hẹn thành công');
       navigate(PATH_DASHBOARD.user.doctorlist);

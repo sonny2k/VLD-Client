@@ -31,16 +31,7 @@ export default function AccountUser() {
 
   const { lname, fname, profilepic } = account;
 
-
-  const UserSchema = Yup.object().shape({
-    height: Yup.string().required('Chiều cao là bắt buộc'),
-    weight: Yup.string().required('Cân nặng là bắt buộc'),
-  });
-
-  const methods = useForm({
-    resolver: yupResolver(UserSchema),
-    
-  });
+  const methods = useForm({});
 
   const {
     setValue,
@@ -79,83 +70,68 @@ export default function AccountUser() {
     getInfo();
   }, []);
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
-
-      if (file) {
-        setValue(
-          'photoURL',
-          Object.assign(file, {
-            preview: URL.createObjectURL(file),
-          })
-        );
-      }
-    },
-    [setValue]
-  );
-  if (user !== null) {
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          <Card sx={{ py: 10, px: 3, textAlign: 'center' }}>
-          <Avatar
-              src={profilepic}
-              alt={`${lname} ${fname}`}
-              color={profilepic ? 'default' : createAvatar(`${lname} ${fname}`).color}
-            
-              sx={{
-                mx: 'auto',
-                borderWidth: 2,
-                borderStyle: 'solid',
-                borderColor: 'common.white',
-                width: { xs: 80, md: 128 },
-                height: { xs: 80, md: 128 },
-              }}
-            >
-              {createAvatar(`${lname} ${fname}`).name}
-            </Avatar>
+    user !== null && (
+      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={4}>
+            <Card sx={{ py: 10, px: 3, textAlign: 'center' }}>
+              <Avatar
+                src={profilepic}
+                alt={`${lname} ${fname}`}
+                color={profilepic ? 'default' : createAvatar(`${lname} ${fname}`).color}
+                sx={{
+                  mx: 'auto',
+                  borderWidth: 2,
+                  borderStyle: 'solid',
+                  borderColor: 'common.white',
+                  width: { xs: 80, md: 128 },
+                  height: { xs: 80, md: 128 },
+                }}
+              >
+                {createAvatar(`${lname} ${fname}`).name}
+              </Avatar>
 
-            {/* <RHFSwitch name="isPublic" labelPlacement="start" label="Hồ sơ bệnh án" sx={{ mt: 5 }} /> */}
-          </Card>
-        </Grid>
+              {/* <RHFSwitch name="isPublic" labelPlacement="start" label="Hồ sơ bệnh án" sx={{ mt: 5 }} /> */}
+            </Card>
+          </Grid>
 
-        <Grid item xs={12} md={8}>
-          <Card sx={{ p: 3 }}>
-            <Box
-              sx={{
-                display: 'grid',
-                rowGap: 3,
-                columnGap: 2,
-                gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
-              }}
-            >
-              <RHFTextField name="height" label="Chiều cao" defaultValue={user.height} />
-              <RHFTextField name="weight" label="Cân nặng" defaultValue={user.weight} />
-              <RHFTextField name="pastmedicalhistory" label="Tiền sử bệnh lý" defaultValue={user.pastmedicalhistory} />
-              <RHFTextField name="drughistory" label="Tiền sử dị ứng" defaultValue={user.drughistory} />
-              <RHFTextField name="familyhistory" label="Tiền sử gia đình" defaultValue={user.familyhistory} />
+          <Grid item xs={12} md={8}>
+            <Card sx={{ p: 3 }}>
+              <Box
+                sx={{
+                  display: 'grid',
+                  rowGap: 3,
+                  columnGap: 2,
+                  gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
+                }}
+              >
+                <RHFTextField name="height" label="Chiều cao" defaultValue={user.height} />
+                <RHFTextField name="weight" label="Cân nặng" defaultValue={user.weight} />
+                <RHFTextField
+                  name="pastmedicalhistory"
+                  label="Tiền sử bệnh lý"
+                  defaultValue={user.pastmedicalhistory}
+                />
+                <RHFTextField name="drughistory" label="Tiền sử dị ứng" defaultValue={user.drughistory} />
+                <RHFTextField name="familyhistory" label="Tiền sử gia đình" defaultValue={user.familyhistory} />
 
-                 <RHFSelect name="bloodtype" label="Nhóm máu" placeholder="Nhóm máu" defaultValue={user.bloodtype}>
-                {bloodtypes.map((option) => (
-                  <option key={option.code} >
-                    {option.label}
-                  </option>
-                ))}
+                <RHFSelect name="bloodtype" label="Nhóm máu" placeholder="Nhóm máu" defaultValue={user.bloodtype}>
+                  {bloodtypes.map((option) => (
+                    <option key={option.code}>{option.label}</option>
+                  ))}
                 </RHFSelect>
-            </Box>
+              </Box>
 
-            <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                Lưu thay đổi
-              </LoadingButton>
-            </Stack>
-          </Card>
+              <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
+                <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                  Lưu thay đổi
+                </LoadingButton>
+              </Stack>
+            </Card>
+          </Grid>
         </Grid>
-      </Grid>
-    </FormProvider>
+      </FormProvider>
+    )
   );
- }
-  return <LoadingScreen />;
 }

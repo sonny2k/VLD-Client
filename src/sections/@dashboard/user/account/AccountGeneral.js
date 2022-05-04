@@ -7,10 +7,10 @@ import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { Box, Grid, Card, Stack, Typography, TextField } from '@mui/material';
 import { LoadingButton, DesktopDatePicker } from '@mui/lab';
-import LoadingScreen from "../../../../components/LoadingScreen";
+import LoadingScreen from '../../../../components/LoadingScreen';
 // hooks
 import useAuth from '../../../../hooks/useAuth';
-import useLocationForm from '../../../../hooks/useLocationForm'
+import useLocationForm from '../../../../hooks/useLocationForm';
 // utils
 import { fData } from '../../../../utils/formatNumber';
 // _mock
@@ -20,21 +20,12 @@ import axios from '../../../../utils/axios';
 // components
 import { FormProvider, RHFSwitch, RHFSelect, RHFTextField, RHFUploadAvatar } from '../../../../components/hook-form';
 
-
 // ----------------------------------------------------------------------
 
 export default function ModalEditInformation() {
-  
   const { state, onCitySelect, onDistrictSelect, onWardSelect } = useLocationForm();
 
-  const {
-    cityOptions,
-    districtOptions,
-    wardOptions,
-    selectedCity,
-    selectedDistrict,
-    selectedWard,
-  } = state;
+  const { cityOptions, districtOptions, wardOptions, selectedCity, selectedDistrict, selectedWard } = state;
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -44,21 +35,24 @@ export default function ModalEditInformation() {
 
   const UpdateUserSchema = Yup.object().shape({
     fname: Yup.string().required('Vui lòng điền tên chính xác'),
-    lname: Yup.string().matches(/^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/, 'Vui lòng điền họ chính xác'),
+    lname: Yup.string().matches(
+      /^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/,
+      'Vui lòng điền họ chính xác'
+    ),
     email: Yup.string().email('Vui lòng nhập đúng định dạng Email').max(255),
   });
 
   const gender = account.gender;
-  let genderview = "";
+  let genderview = '';
   if (gender === 1) {
-    genderview = "Nam"
-  } 
+    genderview = 'Nam';
+  }
   if (gender === 2) {
-    genderview = "Nữ"
-  } 
+    genderview = 'Nữ';
+  }
   if (gender === 3) {
-    genderview = "Không xác định"
-  } 
+    genderview = 'Không xác định';
+  }
 
   const name = `${account?.fname} ${account?.lname}`;
 
@@ -80,11 +74,11 @@ export default function ModalEditInformation() {
 
   let birthcheck;
   if (account?.birthday === null) {
-    birthcheck = null
+    birthcheck = null;
   }
-  
+
   if (account?.birthday != null) {
-    birthcheck = new Date(account?.birthday)
+    birthcheck = new Date(account?.birthday);
   }
 
   const [birth, setBirth] = useState(birthcheck);
@@ -93,8 +87,8 @@ export default function ModalEditInformation() {
     setBirth(newDate);
   };
 
-  const md = new Date("01/01/2005");
-  const mid = new Date("01/01/1900");
+  const md = new Date('01/01/2005');
+  const mid = new Date('01/01/1900');
 
   const {
     setValue,
@@ -106,19 +100,23 @@ export default function ModalEditInformation() {
   const onSubmit = async (data) => {
     try {
       let newgender;
-      if (data.gender === "Nam") {
+      if (data.gender === 'Nam') {
         newgender = 1;
       }
-      if (data.gender === "Nữ") {
+      if (data.gender === 'Nữ') {
         newgender = 2;
       }
-      if (data.gender === "Không xác định") {
+      if (data.gender === 'Không xác định') {
         newgender = 3;
       }
-      const cityId = document.getElementById("cityId");
-      const districtId = document.getElementById("districtId");
-      const wardId = document.getElementById("wardId");
-      if (cityId.options[cityId.selectedIndex] !== null && districtId.options[districtId.selectedIndex] !== null && wardId.options[wardId.selectedIndex] !== null)  {
+      const cityId = document.getElementById('cityId');
+      const districtId = document.getElementById('districtId');
+      const wardId = document.getElementById('wardId');
+      if (
+        cityId.options[cityId.selectedIndex] !== null &&
+        districtId.options[districtId.selectedIndex] !== null &&
+        wardId.options[wardId.selectedIndex] !== null
+      ) {
         const city = cityId.options[cityId.selectedIndex].value;
         const district = districtId.options[districtId.selectedIndex].value;
         const ward = wardId.options[wardId.selectedIndex].value;
@@ -134,7 +132,11 @@ export default function ModalEditInformation() {
       //   const ward = wardId.options[wardId.selectedIndex].value;
       //   await updateinfo(data.fname, data.lname, data.email, birth, newgender, data.city, data.district, ward, data.street);
       // }
-      if (cityId.options[cityId.selectedIndex] === null || districtId.options[districtId.selectedIndex] === null || wardId.options[wardId.selectedIndex] === null) {
+      if (
+        cityId.options[cityId.selectedIndex] === null ||
+        districtId.options[districtId.selectedIndex] === null ||
+        wardId.options[wardId.selectedIndex] === null
+      ) {
         const c = account?.address.city;
         const d = account?.address.district;
         const w = account?.address.ward;
@@ -160,7 +162,7 @@ export default function ModalEditInformation() {
         setValue(
           'photoURL',
           Object.assign(file, {
-            preview: URL.createObjectURL(file),   
+            preview: URL.createObjectURL(file),
           })
         );
       }
@@ -172,13 +174,12 @@ export default function ModalEditInformation() {
     const pic = base64EncodedImage.toString();
     try {
       await axios.post('/api/user/account/profilepic', {
-        pic
+        pic,
       });
     } catch (err) {
       console.error(err);
-      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!',
-      {
-        variant: "error"
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', {
+        variant: 'error',
       });
     }
   };
@@ -188,12 +189,12 @@ export default function ModalEditInformation() {
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <Card sx={{ py: 10, px: 3, textAlign: 'center' }}>
-          <RHFUploadAvatar 
+            <RHFUploadAvatar
               name="photoURL"
               accept="image/*"
               maxSize={3145728}
               onDrop={handleDrop}
-              type='file'
+              type="file"
               helperText={
                 <Typography
                   variant="caption"
@@ -204,7 +205,8 @@ export default function ModalEditInformation() {
                     textAlign: 'center',
                     color: 'text.secondary',
                   }}
-                  disabled>
+                  disabled
+                >
                   Cập nhật ảnh đại diện
                   <br /> Chỉ cho phép *.jpeg, *.jpg, *.png, *.gif
                   <br /> Dung lượng tối đa {fData(3145728)}
@@ -228,7 +230,7 @@ export default function ModalEditInformation() {
               <RHFTextField autoFocus={cursor} name="lname" label="Họ" />
               <RHFTextField name="fname" label="Tên" />
               <RHFTextField name="email" label="Địa chỉ email" />
-              <RHFTextField name="phone" label="Số điện thoại" disabled/>
+              <RHFTextField name="phone" label="Số điện thoại" disabled />
               <DesktopDatePicker
                 name="birthday"
                 label="Ngày sinh"
@@ -240,46 +242,79 @@ export default function ModalEditInformation() {
                 renderInput={(params) => <TextField {...params} />}
               />
 
-              <RHFSelect name="gender" label="Giới tính" >
+              <RHFSelect name="gender" label="Giới tính">
                 {genders.map((option) => (
-                  <option key={option.code}>
-                    {option.label}
-                  </option>
+                  <option key={option.code}>{option.label}</option>
                 ))}
-              </RHFSelect>   
+              </RHFSelect>
 
-              {cityOptions.length > 0 && <RHFSelect name="city" id="cityId" label="Tỉnh/Thành phố" onChange={e => onCitySelect(e.target.value)} value={selectedCity}>
-                <option disabled selected value> -- Vui lòng chọn tỉnh/thành phố -- </option>
-                {cityOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
+              {cityOptions.length > 0 && (
+                <RHFSelect
+                  name="city"
+                  id="cityId"
+                  label="Tỉnh/Thành phố"
+                  onChange={(e) => onCitySelect(e.target.value)}
+                  value={selectedCity}
+                >
+                  <option disabled selected value>
+                    {' '}
+                    -- Vui lòng chọn tỉnh/thành phố --{' '}
                   </option>
-                ))}
-              </RHFSelect> }
+                  {cityOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </RHFSelect>
+              )}
 
-              {districtOptions.length > 0 && <RHFSelect name="district" id="districtId" label="Quận/Huyện" disabled={districtOptions.length === 0} onChange={e => onDistrictSelect(e.target.value)} value={selectedDistrict}>
-                <option disabled selected value> -- Vui lòng chọn quận/huyện -- </option>
-                {districtOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
+              {districtOptions.length > 0 && (
+                <RHFSelect
+                  name="district"
+                  id="districtId"
+                  label="Quận/Huyện"
+                  disabled={districtOptions.length === 0}
+                  onChange={(e) => onDistrictSelect(e.target.value)}
+                  value={selectedDistrict}
+                >
+                  <option disabled selected value>
+                    {' '}
+                    -- Vui lòng chọn quận/huyện --{' '}
                   </option>
-                ))}
-              </RHFSelect> }
+                  {districtOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </RHFSelect>
+              )}
 
-              {wardOptions.length > 0 && <RHFSelect name="ward" id="wardId" label="Phường/Xã" disabled={wardOptions.length === 0} onChange={e => onWardSelect(e.target.value)} value={selectedWard}>
-                <option disabled selected value> -- Vui lòng chọn phường/xã -- </option>
-                {wardOptions.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {option.label}
+              {wardOptions.length > 0 && (
+                <RHFSelect
+                  name="ward"
+                  id="wardId"
+                  label="Phường/Xã"
+                  disabled={wardOptions.length === 0}
+                  onChange={(e) => onWardSelect(e.target.value)}
+                  value={selectedWard}
+                >
+                  <option disabled selected value>
+                    {' '}
+                    -- Vui lòng chọn phường/xã --{' '}
                   </option>
-                ))}
-              </RHFSelect> }
+                  {wardOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </RHFSelect>
+              )}
 
               <RHFTextField name="street" label="Địa chỉ" />
             </Box>
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting} >
+              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                 Lưu thay đổi
               </LoadingButton>
             </Stack>
@@ -289,4 +324,3 @@ export default function ModalEditInformation() {
     </FormProvider>
   );
 }
-    

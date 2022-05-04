@@ -130,17 +130,17 @@ export default function UserNewForm({ consultation }) {
   const cancel = async (data) => {
     try {
       await axios.post('/api/user/consultation/cancelconsult', {
-        _id: consultation[0]._id,
-        doctor: consultation[0].doctor,
-        date: consultation[0].date,
-        hour: consultation[0].hour,
+        _id: consultation._id,
+        doctor: consultation.doctor,
+        date: consultation.date,
+        hour: consultation.hour,
         excuse: data.excuse,
       });
       enqueueSnackbar('Hủy lịch thành công');
       navigate(PATH_DASHBOARD.user.list);
     } catch (err) {
       console.error(err);
-      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', { variant: 'error' });
     }
   };
 
@@ -159,13 +159,13 @@ export default function UserNewForm({ consultation }) {
   const changesymptom = async (data) => {
     try {
       await axios.put('/api/user/consultation/consultsymptom', {
-        _id: consultation[0]._id,
+        _id: consultation._id,
         symptom: data.symptom,
       });
       enqueueSnackbar('Thay đổi triệu chứng thành công');
     } catch (err) {
       console.error(err);
-      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', { variant: 'error' });
     }
   };
 

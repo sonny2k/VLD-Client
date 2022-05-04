@@ -9,6 +9,9 @@ import unorm from 'unorm';
 import { styled } from '@mui/material/styles';
 import InfoIcon from '@mui/icons-material/Info';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import MicIcon from '@mui/icons-material/Mic';
+import VideoCameraFrontIcon from '@mui/icons-material/VideoCameraFront';
+import ScreenShareIcon from '@mui/icons-material/ScreenShare';
 import {
   Box,
   Card,
@@ -21,6 +24,7 @@ import {
   Link,
   Container,
   Button,
+  Grid,
 } from '@mui/material';
 // utils
 import cssStyles from '../../../utils/cssStyles';
@@ -96,8 +100,44 @@ const Room = ({ roomName, token }) => {
       <Typography variant="h2" sx={{ color: 'text.disabled', mb: 3 }}>
         VĂN LANG DOCTOR
       </Typography>
-      <div>{remoteParticipants}</div>
-      <div>{room && <Participant key={room.localParticipant.sid} participant={room.localParticipant} />}</div>
+      <Card md={12} mt={3} ml={3} mr={3} mb={3}>
+        <Grid container>
+          <Grid item xs={12} md={6}>
+            <Card>{remoteParticipants}</Card>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <Card>{room && <Participant key={room.localParticipant.sid} participant={room.localParticipant} />}</Card>
+          </Grid>
+        </Grid>
+
+        <Stack alignItems="center" sx={{ mt: 1 }}>
+          <Box
+            sx={{
+              display: 'grid',
+              columnGap: 1,
+              rowGap: 1,
+              gridTemplateColumns: { xs: 'repeat(3, 1fr)', sm: 'repeat(3, 1fr)' },
+            }}
+          >
+            <Tooltip title="Tắt mic">
+              <IconButton>
+                <MicIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Tắt camera">
+              <IconButton>
+                <VideoCameraFrontIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Chia sẻ màn hình">
+              <IconButton>
+                <ScreenShareIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        </Stack>
+      </Card>
     </div>
   );
 };

@@ -20,6 +20,7 @@ import {
   Link,
   Container,
   Button,
+  Grid,
 } from '@mui/material';
 // utils
 import cssStyles from '../../../utils/cssStyles';
@@ -120,6 +121,7 @@ const Participant = ({ participant }) => {
           : `Bác sĩ ${participant.identity}`} */}
         {participant.identity}
       </h3>
+
       <video ref={videoRef} autoPlay={bool} />
       <audio ref={audioRef} autoPlay={bool} />
     </div>
