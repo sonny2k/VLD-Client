@@ -141,8 +141,14 @@ export default function DepartmentList() {
     setDepartments(deleteRows);
   };
 
-  const handleEditRow = (id) => {
-    navigate(`${PATH_DASHBOARD.user.root}/detail/${paramCase(id)}`);
+  const handleEditRow = (_id, name, description) => {
+    navigate(PATH_DASHBOARD.user.departmentcreate, {
+      state: {
+        id1:_id,
+        name1: name,
+        description1: description,
+      }
+    });
   };
 
   const dataFiltered = applySortFilter({
@@ -162,16 +168,16 @@ export default function DepartmentList() {
         <HeaderBreadcrumbs
           heading="Danh sách chuyên khoa"
           links={[{ name: 'Bảng điều khiển', href: PATH_DASHBOARD.root }, { name: 'Danh sách chuyên khoa' }]}
-          // action={
-          //   <Button
-          //     variant="contained"
-          //     component={RouterLink}
-          //     to={PATH_DASHBOARD.user.department}
-          //     startIcon={<Iconify icon={'eva:plus-fill'} />}
-          //   >
-          //     Thêm chuyên khoa
-          //   </Button>
-          // }
+          action={
+            <Button
+              variant="contained"
+              component={RouterLink}
+              to={PATH_DASHBOARD.user.departmentedit}
+              startIcon={<Iconify icon={'eva:plus-fill'} />}
+            >
+              Thêm chuyên khoa
+            </Button>
+          }
         />
 
         <Card>
@@ -232,7 +238,7 @@ export default function DepartmentList() {
                       selected={selected.includes(row._id)}
                       onSelectRow={() => onSelectRow(row._id)}
                       onDeleteRow={() => handleDeleteRow(row._id)}
-                      onEditRow={() => handleEditRow(row._id)}
+                      onEditRow={(_id, name, description) => handleEditRow(row._id, row.name, row.description)}
                     />
                   ))}
 

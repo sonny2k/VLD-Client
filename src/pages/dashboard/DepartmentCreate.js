@@ -17,51 +17,30 @@ import useSettings from '../../hooks/useSettings';
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import ProductNewForm from '../../sections/@dashboard/e-commerce/ProductNewForm';
+import { EditDepartment } from '../../sections/@dashboard/user/account';
 
 // ----------------------------------------------------------------------
 
-export default function EcommerceProductCreate() {
+export default function DepartmentCreate() {
   const { themeStretch } = useSettings();
-  const dispatch = useDispatch();
-  const { pathname } = useLocation();
-  const { name } = useParams();
-  const { products } = useSelector((state) => state.product);
-  const isEdit = pathname.includes('edit');
-  const currentProduct = products.find((product) => paramCase(product.name) === name);
-  const [prod, setProd] = useState(null);
-  useEffect(() => {
-    getProd();
-  }, []);
-  const getProd = async () => {
-    try {
-      const res = await axios.get(`/api/admin/product/viewProduct`)
-      setProd(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-
-  useEffect(() => {
-    dispatch(getProducts());
-  }, [dispatch]);
-
+  const isEdit = false
+ 
   return (
-    <Page title="Sản phẩm: Thêm sản phẩm mới">
+    <Page title="Chuyên khoa: Thêm mới chuyên khoa">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading={!isEdit ? 'Thêm sản phẩm' : 'Cập nhật sản phẩm'}
+          heading={!isEdit ? 'Thêm mới chuyên khoa' : 'Sửa chuyên khoa'}
           links={[
             { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
             {
-              name: 'Danh sách sản phẩm',
-              href: PATH_DASHBOARD.user.productlist,
+              name: 'Danh sách',
+              href: PATH_DASHBOARD.user.department,
             },
-            { name: !isEdit ? 'Thêm sản phẩm' : name },
+            { name: !isEdit ? 'Thêm chuyên khoa' : 'Chỉnh sửa chuyên khoa' },
           ]}
         />
-
-        <ProductNewForm isEdit={isEdit} currentProduct={currentProduct} />
+        <EditDepartment  isEdit={isEdit}  />
+        
       </Container>
     </Page>
   );

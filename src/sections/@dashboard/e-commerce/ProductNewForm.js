@@ -157,53 +157,17 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={12}>
           <Card sx={{ p: 3 }}>
             <Stack spacing={3}>
-              <RHFTextField name="name" label="Product Name" />
+              <RHFTextField name="name" label="Tên sản phẩm" />
 
               <div>
-                <LabelStyle>Description</LabelStyle>
-                <RHFEditor simple name="description" />
+                <RHFTextField multiline rows={4} name="description" label="Mô tả sản phẩm" />
               </div>
 
               <div>
-                <LabelStyle>Images</LabelStyle>
-                <RHFUploadMultiFile
-                  name="images"
-                  showPreview
-                  accept="image/*"
-                  maxSize={3145728}
-                  onDrop={handleDrop}
-                  onRemove={handleRemove}
-                  onRemoveAll={handleRemoveAll}
-                />
-              </div>
-            </Stack>
-          </Card>
-        </Grid>
-
-        <Grid item xs={12} md={4}>
-          <Stack spacing={3}>
-            <Card sx={{ p: 3 }}>
-              <RHFSwitch name="inStock" label="In stock" />
-
-              <Stack spacing={3} mt={2}>
-                <RHFTextField name="code" label="Product Code" />
-                <RHFTextField name="sku" label="Product SKU" />
-
-                <div>
-                  <LabelStyle>Gender</LabelStyle>
-                  <RHFRadioGroup
-                    name="gender"
-                    options={GENDER_OPTION}
-                    sx={{
-                      '& .MuiFormControlLabel-root': { mr: 4 },
-                    }}
-                  />
-                </div>
-
-                <RHFSelect name="category" label="Category">
+              <RHFSelect name="category" label="Loại thuốc">
                   {CATEGORY_OPTION.map((category) => (
                     <optgroup key={category.group} label={category.group}>
                       {category.classify.map((classify) => (
@@ -214,65 +178,34 @@ export default function ProductNewForm({ isEdit, currentProduct }) {
                     </optgroup>
                   ))}
                 </RHFSelect>
+              </div>
 
-                <Controller
-                  name="tags"
-                  control={control}
-                  render={({ field }) => (
-                    <Autocomplete
-                      {...field}
-                      multiple
-                      freeSolo
-                      onChange={(event, newValue) => field.onChange(newValue)}
-                      options={TAGS_OPTION.map((option) => option)}
-                      renderTags={(value, getTagProps) =>
-                        value.map((option, index) => (
-                          <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
-                        ))
-                      }
-                      renderInput={(params) => <TextField label="Tags" {...params} />}
-                    />
-                  )}
+              <div>
+                <RHFTextField name="specdes" label="Quy cách thuốc" />
+              </div>
+
+              <div>
+                <LabelStyle>Hình ảnh</LabelStyle>
+                <RHFUploadMultiFile
+                  name="images"
+                  showPreview
+                  accept="image/*"
+                  maxSize={3145728}
+                  onDrop={handleDrop}
+                  onRemove={handleRemove}
+                  onRemoveAll={handleRemoveAll}
                 />
-              </Stack>
-            </Card>
-
-            <Card sx={{ p: 3 }}>
-              <Stack spacing={3} mb={2}>
-                <RHFTextField
-                  name="price"
-                  label="Regular Price"
-                  placeholder="0.00"
-                  value={getValues('price') === 0 ? '' : getValues('price')}
-                  onChange={(event) => setValue('price', Number(event.target.value))}
-                  InputLabelProps={{ shrink: true }}
-                  InputProps={{
-                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                    type: 'number',
-                  }}
-                />
-
-                <RHFTextField
-                  name="priceSale"
-                  label="Sale Price"
-                  placeholder="0.00"
-                  value={getValues('priceSale') === 0 ? '' : getValues('priceSale')}
-                  onChange={(event) => setValue('price', Number(event.target.value))}
-                  InputLabelProps={{ shrink: true }}
-                  InputProps={{
-                    startAdornment: <InputAdornment position="start">$</InputAdornment>,
-                    type: 'number',
-                  }}
-                />
-              </Stack>
-
-              <RHFSwitch name="taxes" label="Price includes taxes" />
-            </Card>
-
-            <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
-              {!isEdit ? 'Create Product' : 'Save Changes'}
-            </LoadingButton>
-          </Stack>
+              </div>
+              <div>
+                <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>           
+                  <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
+                    {!isEdit ? 'Tạo sản phẩm' : 'Lưu thay đổi'}
+                  </LoadingButton>
+                </Stack>
+              </div>         
+             
+            </Stack>
+          </Card>
         </Grid>
       </Grid>
     </FormProvider>

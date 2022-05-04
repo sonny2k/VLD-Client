@@ -165,16 +165,16 @@ export default function DocList() {
         <HeaderBreadcrumbs
           heading="Danh sách bác sĩ"
           links={[{ name: 'Bảng điều khiển', href: PATH_DASHBOARD.root }, { name: 'Danh sách chờ duyệt' }]}
-        //   action={
-        //     // <Button
-        //     //   variant="contained"
-        //     //   component={RouterLink}
-        //     //    to={PATH_DASHBOARD.user.newUser}
-        //     //   startIcon={<Iconify icon={'eva:plus-fill'} />}
-        //     // >
-        //     //   Thêm bác sĩ
-        //     // </Button>
-        //   }
+          action={
+            <Button
+              variant="contained"
+              component={RouterLink}
+               to={PATH_DASHBOARD.user}
+              startIcon={<Iconify icon={'eva:plus-fill'} />}
+            >
+              Thêm bác sĩ
+            </Button>
+          }
         />
 
         <Card>
