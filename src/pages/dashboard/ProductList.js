@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link as RouterLink } from 'react-router-dom';
 import unorm from 'unorm';
 import { paramCase } from 'change-case';
 import { format } from 'date-fns';
@@ -168,6 +168,16 @@ export default function ProductList() {
             { name: 'Dashboard', href: PATH_DASHBOARD.root },
             { name: 'Danh sách' },
           ]}
+          action={
+            <Button
+              variant="contained"
+              component={RouterLink}
+               to={PATH_DASHBOARD.eCommerce.new}
+              startIcon={<Iconify icon={'eva:plus-fill'} />}
+            >
+              Thêm sản phẩm
+            </Button>
+          }
         />
 
         <Card>

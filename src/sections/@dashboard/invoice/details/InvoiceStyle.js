@@ -56,8 +56,8 @@ const styles = StyleSheet.create({
   },
   noBorder: { paddingTop: 8, paddingBottom: 0, borderBottomWidth: 0 },
   tableCell_1: { width: '30%' },
-  tableCell_2: { width: '10%', paddingRight: 16 },
-  tableCell_3: { width: '50%' },
+  tableCell_2: { width: '15%', paddingRight: 16 },
+  tableCell_3: { width: '45%' },
 });
 
 export default styles;

@@ -30,7 +30,7 @@ export default function InvoicePDF({ pre }) {
 
   const { quantity,everate,morningrate,noonrate } = pre.prescription.medicines[0];
 
-  const { title, image } = pre.prescription.medicines[0].product;
+  const { title, image, specdes } = pre.prescription.medicines[0].product;
 
   const { medicines } = pre.prescription;
 
@@ -90,7 +90,15 @@ export default function InvoicePDF({ pre }) {
               </View>
 
               <View style={styles.tableCell_3}>
-                <Text style={styles.subtitle2}>Liều lượng buổi</Text>
+                <Text style={styles.subtitle2}>Liều lượng </Text>
+              </View>
+
+              <View style={styles.tableCell_3}>
+                <Text style={styles.subtitle2}>Quy cách </Text>
+              </View>
+
+              <View style={styles.tableCell_2}>
+                <Text style={styles.subtitle2}>Ghi chú </Text>
               </View>
 
             </View>
@@ -109,10 +117,22 @@ export default function InvoicePDF({ pre }) {
 
                 <View style={styles.tableCell_3}>
                   <Text>
-                    Buổi sáng: {pro.morningrate},
-                    Buổi trưa: {pro.noonrate},
-                    Buổi chiều: {pro.everate}</Text>
+                    {pro.rate}
+                  </Text>
                 </View>
+
+                <View style={styles.tableCell_3}>
+                  <Text>
+                    {specdes}
+                  </Text>
+                </View>
+
+                <View style={styles.tableCell_2}>
+                  <Text>
+                    {pro.mednote}
+                  </Text>
+                </View>
+
               </View>
             ))}
 

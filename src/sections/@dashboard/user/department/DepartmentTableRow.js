@@ -24,7 +24,7 @@ export default function DepartmentTableRow({ row, selected, onEditRow, onSelectR
 
   // const { fname, profilepic, lname } = row.doctor.account;
 
-  const { name, description } = row;
+  const {_id, name, description } = row;
 
   const [openMenu, setOpenMenuActions] = useState(null);
 
@@ -91,12 +91,12 @@ export default function DepartmentTableRow({ row, selected, onEditRow, onSelectR
               </MenuItem> */}
               <MenuItem
                 onClick={() => {
-                  onEditRow();
+                  onEditRow(_id, name, description);
                   handleCloseMenu();
                 }}
               >
                 <Iconify icon={'openmoji:details'} />
-                Xem chi tiết
+                Sửa chuyên khoa
               </MenuItem>
             </>
           }
