@@ -18,12 +18,12 @@ import axios from '../../../../utils/axios';
 import { genders } from '../../../../_mock/_gender';
 // components
 import { FormProvider, RHFSelect, RHFTextField } from '../../../../components/hook-form';
-
+import PickerDate from './PickerDate';
 
 // ----------------------------------------------------------------------
 
 export default function RegisterCalendar() {
-  const [ disableInput, setDisableInput ] = useState(false);
+  const [disableInput, setDisableInput] = useState(false);
 
   const [doc, setDoctor] = useState(null);
 
@@ -66,7 +66,6 @@ export default function RegisterCalendar() {
       setD6(doc.availables[5].date);
       setD7(doc.availables[6].date);
     }
-    
   }, [doc]);
 
   const md2 = new Date(d1);
@@ -87,8 +86,7 @@ export default function RegisterCalendar() {
   const md7 = new Date(d6);
   md7.setDate(md7.getDate() + 1);
 
-  const defaultValues = {
-  };
+  const defaultValues = {};
 
   const methods = useForm({
     defaultValues,
@@ -128,6 +126,7 @@ export default function RegisterCalendar() {
   };
 
   const workinghours = [
+    { time: '07:00' },
     { time: '08:00' },
     { time: '09:00' },
     { time: '10:00' },
@@ -137,62 +136,47 @@ export default function RegisterCalendar() {
     { time: '15:00' },
     { time: '16:00' },
     { time: '17:00' },
+    { time: '18:00' },
+    { time: '19:00' },
+    { time: '20:00' },
+    { time: '21:00' },
+    { time: '22:00' },
+    { time: '23:00' },
   ];
 
   if (doc !== null) {
-    const hourswork = [
-      { time: doc.availables[0].hours[0].time },
-      { time: doc.availables[0].hours[1].time },
-      { time: doc.availables[0].hours[2].time }
-    ]
-    const hourswork1 = [
-      { time: doc.availables[1].hours[0].time },
-      { time: doc.availables[1].hours[1].time },
-      { time: doc.availables[1].hours[2].time }
-    ]
-    const hourswork2 = [
-      { time: doc.availables[2].hours[0].time },
-      { time: doc.availables[2].hours[1].time },
-      { time: doc.availables[2].hours[2].time }
-    ]
-    const hourswork3 = [
-      { time: doc.availables[3].hours[0].time },
-      { time: doc.availables[3].hours[1].time },
-      { time: doc.availables[3].hours[2].time }
-    ]
-    const hourswork4 = [
-      { time: doc.availables[4].hours[0].time },
-      { time: doc.availables[4].hours[1].time },
-      { time: doc.availables[4].hours[2].time }
-    ]
-    const hourswork5 = [
-      { time: doc.availables[5].hours[0].time },
-      { time: doc.availables[5].hours[1].time },
-      { time: doc.availables[5].hours[2].time }
-    ]
-    const hourswork6 = [
-      { time: doc.availables[6].hours[0].time },
-      { time: doc.availables[6].hours[1].time },
-      { time: doc.availables[6].hours[2].time }
-    ]
-
+    const hourswork = [{ time: doc.availables[0].hours[0].time }];
     const onSubmit = async (data) => {
       try {
-        await axios.post("/api/doctor/account/workingtime", {
-          date1: data.day1,
-          date2: data.day1,
-          date3: data.day1,
-          date4: data.day1,
-          date5: data.day1,
-          date6: data.day1,
-          date7: data.day1,
-          hour11: data.day1, hour12: data.day1, hour13: data.day1,
-          hour21: data.day1, hour22: data.day1, hour23: data.day1,
-          hour31: data.day1, hour32: data.day1, hour33: data.day1,
-          hour41: data.day1, hour42: data.day1, hour43: data.day1,
-          hour51: data.day1, hour52: data.day1, hour53: data.day1,
-          hour61: data.day1, hour62: data.day1, hour63: data.day1,
-          hour71: data.day1, hour72: data.day1, hour73: data.day1
+        await axios.post('/api/doctor/account/workingtime', {
+          // date1: data.day1,
+          // date2: data.day1,
+          // date3: data.day1,
+          // date4: data.day1,
+          // date5: data.day1,
+          // date6: data.day1,
+          // date7: data.day1,
+          // hour11: data.day1,
+          // hour12: data.day1,
+          // hour13: data.day1,
+          // hour21: data.day1,
+          // hour22: data.day1,
+          // hour23: data.day1,
+          // hour31: data.day1,
+          // hour32: data.day1,
+          // hour33: data.day1,
+          // hour41: data.day1,
+          // hour42: data.day1,
+          // hour43: data.day1,
+          // hour51: data.day1,
+          // hour52: data.day1,
+          // hour53: data.day1,
+          // hour61: data.day1,
+          // hour62: data.day1,
+          // hour63: data.day1,
+          // hour71: data.day1,
+          // hour72: data.day1,
+          // hour73: data.day1,
         });
         enqueueSnackbar('Lưu thời gian làm việc thành công');
       } catch (error) {
@@ -201,45 +185,26 @@ export default function RegisterCalendar() {
       }
     };
 
+    const handleOnSelect = (value) => {};
+
     return (
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={10}>
             <Card sx={{ p: 3 }}>
-              <Box
+              {/* <Box
                 sx={{
                   display: 'grid',
                   rowGap: 3,
                   columnGap: 2,
                   gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
                 }}
-              >
-                <DesktopDatePicker
-                  name="day1"
-                  label="Ngày 1"
-                  inputFormat="dd/MM/yyyy"
-                  minDate={md1}
-                  value={d1}
-                  onChange={handleChange1}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-                <Autocomplete
-                  multiple
-                  id="checkboxes-tags-demo"
-                  options={workinghours}
-                  defaultValue={hourswork}
-                  disableCloseOnSelect
-                  getOptionLabel={(option) => option.time}
-                  renderOption={(props, option, { selected }) => (
-                    <li {...props}>
-                      <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
-                      {option.time}
-                    </li>
-                  )}
-                  renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 1" placeholder="Chọn giờ" />}
-                  onChange={(e, value) => value.length === 3 ? setDisableInput(true) : console.log(value.length)}
-                />
-                <DesktopDatePicker
+              > */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {doc?.availables?.map((avaiableDate, index) => (
+                  <PickerDate avaiableDates={avaiableDate} workinghours={workinghours} numOfDay={index + 1} />
+                ))}
+                {/* <DesktopDatePicker
                   name="day2"
                   label="Ngày 2"
                   inputFormat="dd/MM/yyyy"
@@ -253,6 +218,7 @@ export default function RegisterCalendar() {
                   id="checkboxes-tags-demo"
                   options={workinghours}
                   defaultValue={hourswork1}
+                  onSelect={(value) => console.log(value)}
                   disableCloseOnSelect
                   getOptionLabel={(option) => option.time}
                   renderOption={(props, option, { selected }) => (
@@ -262,7 +228,7 @@ export default function RegisterCalendar() {
                     </li>
                   )}
                   renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 2" placeholder="Chọn giờ" />}
-                />              
+                />
                 <DesktopDatePicker
                   name="day3"
                   label="Ngày 3"
@@ -383,21 +349,19 @@ export default function RegisterCalendar() {
                     </li>
                   )}
                   renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 7" placeholder="Chọn giờ" />}
-                />
-              </Box>
-              <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
+                /> */}
+              </div>
+              {/* </Box> */}
+              {/* <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                   Lưu thay đổi
                 </LoadingButton>
-              </Stack>
+              </Stack> */}
             </Card>
           </Grid>
         </Grid>
       </FormProvider>
     );
   }
-  return (
-    <LoadingScreen />
-  );
-  
+  return <LoadingScreen />;
 }

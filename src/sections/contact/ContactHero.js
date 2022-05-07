@@ -9,8 +9,8 @@ import { TextAnimate, MotionContainer, varFade } from '../../components/animate'
 
 const CONTACTS = [
   {
-    country: 'Bali',
-    address: '508 Bridle Avenue Newnan, GA 30263',
+    country: 'VietNam',
+    address: '45 Nguyễn Khắc Nhu, Phường Cô Giang, Quận 1, Thành phố Hồ Chí Minh',
     phoneNumber: '(239) 555-0108',
   },
   {

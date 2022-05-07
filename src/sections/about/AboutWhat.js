@@ -44,7 +44,7 @@ export default function AboutWhat() {
                 <Grid item xs={6}>
                   <MotionInView variants={varFade().inUp}>
                     <Image
-                      src="https://minimal-assets-api.vercel.app/assets/images/about/what-1.jpg"
+                      src="https://www.1mg.com/articles/wp-content/uploads/2017/09/Online-Consult.jpg"
                       ratio="3/4"
                       sx={{
                         borderRadius: 2,
@@ -56,7 +56,7 @@ export default function AboutWhat() {
                 <Grid item xs={6}>
                   <MotionInView variants={varFade().inUp}>
                     <Image
-                      src="https://minimal-assets-api.vercel.app/assets/images/about/what-2.jpg"
+                      src="https://images.herzindagi.info/image/2020/Apr/digital-india.jpg"
                       ratio="1/1"
                       sx={{ borderRadius: 2 }}
                     />
@@ -69,7 +69,7 @@ export default function AboutWhat() {
           <Grid item xs={12} md={6} lg={5}>
             <MotionInView variants={varFade().inRight}>
               <Typography variant="h2" sx={{ mb: 3 }}>
-                What is minimal?
+                Chúng tôi là ai?
               </Typography>
             </MotionInView>
 
@@ -79,22 +79,29 @@ export default function AboutWhat() {
                   color: (theme) => (theme.palette.mode === 'light' ? 'text.secondary' : 'common.white'),
                 }}
               >
-                Our theme is the most advanced and user-friendly theme you will find on the market, we have
-                documentation and video to help set your site really easily, pre-installed demos you can import in one
-                click and everything from the theme options to page content can be edited from the front-end. This is
-                the theme you are looking for.
+                Văn Lang Doctor là một nền tảng công nghệ trực tuyến cung cấp cho người dùng những dịch vụ chăm sóc sức
+                khỏe với những tính năng:
+                <br />
+                + Xem hồ sơ sức khỏe điện tử
+                <br />
+                + Đặt lịch khám
+                <br />
+                + Bác sĩ riêng
+                <br />
+                + Khám bệnh trực tiếp với bác sĩ qua video call
+                <br />+ kê đơn thuốc tận tình, chu đáo
               </Typography>
             </MotionInView>
 
-            <Box sx={{ my: 5 }}>
+            {/* <Box sx={{ my: 5 }}>
               {_skills.map((progress) => (
                 <MotionInView key={progress.label} variants={varFade().inRight}>
                   <ProgressItem progress={progress} />
                 </MotionInView>
               ))}
-            </Box>
+            </Box> */}
 
-            <MotionInView variants={varFade().inRight}>
+            {/* <MotionInView variants={varFade().inRight}>
               <Button
                 variant="outlined"
                 color="inherit"
@@ -103,7 +110,7 @@ export default function AboutWhat() {
               >
                 Check out our work
               </Button>
-            </MotionInView>
+            </MotionInView> */}
           </Grid>
         </Grid>
       </Container>
