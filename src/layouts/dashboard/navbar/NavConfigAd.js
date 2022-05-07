@@ -51,6 +51,7 @@ const navConfigAd = [
           { title: 'Bác sĩ', path: PATH_DASHBOARD.user.doclist },
           { title: 'Sản phẩm', path: PATH_DASHBOARD.user.productlist },
           { title: 'Chuyên khoa', path: PATH_DASHBOARD.user.department },
+          { title: 'Tin tức', path: PATH_DASHBOARD.user.articlelist },
           // { title: 'create', path: PATH_DASHBOARD.user.newUser },
           // { title: 'edit', path: PATH_DASHBOARD.user.editById },
           { title: 'Tài khoản', path: PATH_DASHBOARD.user.account },

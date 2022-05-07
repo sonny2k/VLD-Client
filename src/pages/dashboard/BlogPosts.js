@@ -54,7 +54,7 @@ export default function BlogPosts() {
 
   const getAllPosts = useCallback(async () => {
     try {
-      const response = await axios.get('/api/blog/posts/all');
+      const response = await axios.get('/api/admim/article/viewListArticle');
 
       if (isMountedRef.current) {
         setPosts(response.data.posts);
@@ -75,14 +75,14 @@ export default function BlogPosts() {
   };
 
   return (
-    <Page title="Blog: Posts">
+    <Page title="Tin tức: Các bài đăng">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="Blog"
+          heading="Tin tức"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Blog', href: PATH_DASHBOARD.blog.root },
-            { name: 'Posts' },
+            { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
+            { name: 'Tin tức', href: PATH_DASHBOARD.blog.root },
+            { name: 'Các bài đăng' },
           ]}
           action={
             <Button
@@ -91,7 +91,7 @@ export default function BlogPosts() {
               to={PATH_DASHBOARD.blog.new}
               startIcon={<Iconify icon={'eva:plus-fill'} />}
             >
-              New Post
+              Tin tức mới
             </Button>
           }
         />

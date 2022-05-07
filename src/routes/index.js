@@ -97,6 +97,7 @@ export default function Router() {
             { path: 'productlist', element: <ProductList /> },
             { path: 'departmentcreate', element: <DepartmentCreate/>},
             { path: 'departmentedit', element: <DepartmentEdit/>},
+            { path: 'articlelist', element: <ArticleList/>},
 
           ],
         },
@@ -215,6 +216,7 @@ const DocList = Loadable(lazy(() => import('../pages/dashboard/DocList')));
 const ProductList = Loadable(lazy(() => import('../pages/dashboard/ProductList')));
 const DepartmentCreate = Loadable(lazy(() => import('../pages/dashboard/DepartmentEdit')));
 const DepartmentEdit = Loadable(lazy(() => import('../pages/dashboard/DepartmentCreate')));
+const ArticleList = Loadable(lazy(() => import('../pages/dashboard/ArticleList')));
 
 // APP
 const Chat = Loadable(lazy(() => import('../pages/dashboard/Chat')));

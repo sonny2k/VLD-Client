@@ -5,7 +5,7 @@ import { useSnackbar } from 'notistack';
 import * as Yup from 'yup';
 
 // form
-import { useForm } from 'react-hook-form';
+import { useForm, useFormContext, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { Box, Grid, Card, Stack, Button, Typography } from '@mui/material';
@@ -48,10 +48,12 @@ export default function DoctorDetail() {
   });
 
   const methods = useForm({
-    // resolver: yupResolver(UpdateUserSchema),
+    resolver: yupResolver(UpdateUserSchema),
   });
 
   const {
+    reset,
+    control,
     setValue,
     getValues,
     handleSubmit,
@@ -78,6 +80,17 @@ export default function DoctorDetail() {
     }
     getInfo();
   }, []);
+
+  const defaultValues = {
+    educationplace: doc?.educationplace || '',
+    workcertificate: doc?.workcertificate || '',
+    level: doc?.level || '',
+    description: doc?.description || '',
+    excellence: doc?.excellence || '',
+    degree: doc?.degree || '',
+    workhistory: doc?.workhistory || '',
+    education: doc?.education || '',
+  };
 
   const handleDrop = useCallback(
     async (acceptedFiles) => {
@@ -182,27 +195,81 @@ export default function DoctorDetail() {
                 }}
               >
                 <RHFTextField name="educationplace" label="Nơi tốt nghiệp" defaultValue={doc.educationplace} />
-                <RHFTextField name="workcertificate" label="Chứng chỉ" defaultValue={doc.workcertificate} />
-                <RHFTextField name="level" label="Cấp bậc" defaultValue={doc.level} />
-                <RHFTextField name="degree" label="Bằng cấp" defaultValue={doc.degree} />
+
+                <Controller
+                  name="workcertificate"
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <RHFTextField name="workcertificate" label="Chứng chỉ" defaultValue={doc.workcertificate} />
+                  )}
+                />
+
+                <Controller
+                  name="level"
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <RHFTextField name="level" label="Cấp bậc" defaultValue={doc.level} />
+                  )}
+                />
+
+                <Controller
+                  name="degree"
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <RHFTextField name="degree" label="Bằng cấp" defaultValue={doc.degree} />
+                  )}
+                />
               </Box>
               <Stack alignItems="flex-end" sx={{ mt: 3 }} />
               <Stack spacing={3} alignItems="flex-end">
-                <RHFTextField multiline rows={4} name="description" label="Mô tả" defaultValue={doc.description} />
-                <RHFTextField multiline rows={4} name="excellence" label="Chuyên môn" defaultValue={doc.excellence} />
-                <RHFTextField
-                  multiline
-                  rows={4}
-                  name="workhistory"
-                  label="Lịch sử làm việc"
-                  defaultValue={doc.workhistory}
+                <Controller
+                  name="description"
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <RHFTextField multiline rows={4} name="description" label="Mô tả" defaultValue={doc.description} />
+                  )}
                 />
-                <RHFTextField
-                  multiline
-                  rows={4}
+
+                <Controller
+                  name="excellence"
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <RHFTextField
+                      multiline
+                      rows={4}
+                      name="excellence"
+                      label="Chuyên môn"
+                      defaultValue={doc.excellence}
+                    />
+                  )}
+                />
+
+                <Controller
+                  name="workhistory"
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <RHFTextField
+                      multiline
+                      rows={4}
+                      name="workhistory"
+                      label="Lịch sử làm việc"
+                      defaultValue={doc.workhistory}
+                    />
+                  )}
+                />
+
+                <Controller
                   name="education"
-                  label="Quá trình đào tạo"
-                  defaultValue={doc.education}
+                  control={control}
+                  render={({ field, fieldState: { error } }) => (
+                    <RHFTextField
+                      multiline
+                      rows={4}
+                      name="education"
+                      label="Quá trình đào tạo"
+                      defaultValue={doc.education}
+                    />
+                  )}
                 />
               </Stack>
               <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
