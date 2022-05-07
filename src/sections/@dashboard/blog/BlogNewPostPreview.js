@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import isString from 'lodash/isString';
 // @mui
 import { LoadingButton } from '@mui/lab';
 import { alpha } from '@mui/material/styles';
@@ -25,7 +24,7 @@ BlogNewPostPreview.propTypes = {
 export default function BlogNewPostPreview({ values, isValid, isSubmitting, isOpen, onClose, onSubmit }) {
   const { title, content, description } = values;
 
-  const cover = isString(values.cover) ? values.cover : values.cover?.preview;
+  const cover = typeof values.cover === 'string' ? values.cover : values.cover?.preview;
 
   const hasContent = title || description || content || cover;
 

@@ -53,7 +53,7 @@ export default function BlogPostsSearch() {
   };
 
   const handleClick = (title) => {
-    navigate(`${PATH_DASHBOARD.blog.root}/post/${paramCase(title)}`);
+    navigate(PATH_DASHBOARD.blog.view(paramCase(title)));
   };
 
   const handleKeyUp = (event) => {

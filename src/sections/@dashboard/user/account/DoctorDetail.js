@@ -124,7 +124,6 @@ export default function DoctorDetail() {
         education: data.education,
       });
       enqueueSnackbar('Cập nhật thông tin tài khoản thành công!');
-      window.location.reload();
     } catch (error) {
       console.error(error);
       enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại', { variant: 'error' });

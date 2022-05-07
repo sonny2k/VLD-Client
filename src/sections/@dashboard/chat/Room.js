@@ -70,6 +70,9 @@ const Room = ({ roomName, token }) => {
 
     Video.connect(token, {
       name: roomName,
+      audio: true,
+      maxAudioBitrate: 16000,
+      video: { height: 720, frameRate: 24, width: 1280 },
     }).then((room) => {
       setRoom(room);
       room.on('participantConnected', participantConnected);
@@ -101,12 +104,12 @@ const Room = ({ roomName, token }) => {
         VĂN LANG DOCTOR
       </Typography>
       <Card md={12} mt={3} ml={3} mr={3} mb={3}>
-        <Grid container>
-          <Grid item xs={12} md={6}>
+        <Grid container spacing={2}>
+          <Grid>
             <Card>{remoteParticipants}</Card>
           </Grid>
 
-          <Grid item xs={12} md={6}>
+          <Grid>
             <Card>{room && <Participant key={room.localParticipant.sid} participant={room.localParticipant} />}</Card>
           </Grid>
         </Grid>

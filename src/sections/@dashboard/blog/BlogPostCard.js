@@ -69,7 +69,7 @@ export default function BlogPostCard({ post, index }) {
     <Card>
       <Box sx={{ position: 'relative' }}>
         <SvgIconStyle
-          src="https://minimal-assets-api.vercel.app/assets/icons/shape-avatar.svg"
+          src="https://minimal-assets-api-dev.vercel.app/assets/icons/shape-avatar.svg"
           sx={{
             width: 80,
             height: 36,
@@ -113,7 +113,7 @@ PostContent.propTypes = {
 export function PostContent({ title, view, comment, share, createdAt, index }) {
   const isDesktop = useResponsive('up', 'md');
 
-  const linkTo = `${PATH_DASHBOARD.blog.root}/post/${paramCase(title)}`;
+  const linkTo = PATH_DASHBOARD.blog.view(paramCase(title));
 
   const latestPostLarge = index === 0;
   const latestPostSmall = index === 1 || index === 2;
