@@ -5,27 +5,21 @@ import { LoadingButton, DesktopDatePicker } from '@mui/lab';
 import { Box, Grid, Card, Stack, Button, TextField, Checkbox, Autocomplete } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { format, getDate } from 'date-fns';
 import axios from '../../../../utils/axios';
 
-export default function PickerDate({ avaiableDates, workinghours, numOfDay, index }) {
+export default function PickerDate({ avaiableDates, workinghours, numOfDay }) {
   const [date, setDate] = React.useState(avaiableDates);
   const [hoursWork, setHoursWork] = React.useState([]);
   const [isDisable, setIsDisable] = React.useState(hoursWork?.length >= 0);
   const [isChange, setIsChange] = React.useState(false);
   const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
   const checkedIcon = <CheckBoxIcon fontSize="small" />;
-  let minDate = new Date(date).setDate(new Date(date).getDate() + 1);
 
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    setDate(avaiableDates);
-    setHoursWork([{ time: avaiableDates?.hours[0]?.time }]);
-  }, [avaiableDates]);
-
-  useEffect(() => {
     setIsDisable(hoursWork?.length >= 0);
-    minDate = new Date(date).setDate(new Date(date).getDate() + 1);
   }, [hoursWork, date]);
 
   const submitChange = async () => {
@@ -52,12 +46,11 @@ export default function PickerDate({ avaiableDates, workinghours, numOfDay, inde
         name={numOfDay}
         label={`Ngày ${numOfDay}`}
         inputFormat="dd/MM/yyyy"
-        minDate={index === 0 ? new Date().setDate(new Date().getDate() + 1) : minDate}
         value={date?.date}
         onChange={(value) => {
-          console.log(value);
+          console.log(`${format(new Date(value), 'yyyy-MM-dd')}T00:00:00.000+00:00`);
           setIsChange(!_?.isEqual(value, avaiableDates?.date));
-          setDate({ ...date, date: value });
+          setDate({ ...date, date: `${format(new Date(value), 'yyyy-MM-dd')}T00:00:00.000+00:00` });
         }}
         renderInput={(params) => <TextField {...params} />}
       />
