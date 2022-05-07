@@ -8,6 +8,10 @@ export { default as DocTableToolbar} from './DocTableToolbar';
 export { default as DocTableRow} from './DocTableRow';
 export { default as ProductTableToolbar} from './ProductTableToolbar';
 export { default as ProductTableRow} from './ProductTableRow';
+export { default as ArticleTableRow} from './ArticleTableRow';
+export { default as ArticleTableToolbar} from './ArticleTableToolbar';
+
+
 
 
 
