@@ -18,6 +18,7 @@ import axios from '../../../../utils/axios';
 import { genders } from '../../../../_mock/_gender';
 // components
 import { FormProvider, RHFSelect, RHFTextField } from '../../../../components/hook-form';
+import PickerDate from './PickerDate';
 
 // ----------------------------------------------------------------------
 
@@ -141,238 +142,24 @@ export default function RegisterCalendar() {
     '21:00',
   ];
 
-  const onSubmit = async (data) => {
-    try {
-      await axios.post('/api/doctor/account/workingtime', {
-        date1: data.day1,
-        date2: data.day1,
-        date3: data.day1,
-        date4: data.day1,
-        date5: data.day1,
-        date6: data.day1,
-        date7: data.day1,
-        hour11: data.day1,
-        hour12: data.day1,
-        hour13: data.day1,
-        hour21: data.day1,
-        hour22: data.day1,
-        hour23: data.day1,
-        hour31: data.day1,
-        hour32: data.day1,
-        hour33: data.day1,
-        hour41: data.day1,
-        hour42: data.day1,
-        hour43: data.day1,
-        hour51: data.day1,
-        hour52: data.day1,
-        hour53: data.day1,
-        hour61: data.day1,
-        hour62: data.day1,
-        hour63: data.day1,
-        hour71: data.day1,
-        hour72: data.day1,
-        hour73: data.day1,
-      });
-      enqueueSnackbar('Lưu thời gian làm việc thành công');
-    } catch (error) {
-      console.error(error);
-      enqueueSnackbar('Đã xảy ra lỗi, vui lòng thử lại', { variant: 'error' });
-    }
-  };
-
   return (
     doc !== null && (
-      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={10}>
-            <Card sx={{ p: 3 }}>
-              <Box
-                sx={{
-                  display: 'grid',
-                  rowGap: 3,
-                  columnGap: 2,
-                  gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
-                }}
-              >
-                <DesktopDatePicker
-                  name="day1"
-                  label="Ngày 1"
-                  inputFormat="dd/MM/yyyy"
-                  minDate={md1}
-                  value={d1}
-                  onChange={handleChange1}
-                  renderInput={(params) => <TextField {...params} />}
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={12}>
+          <Card sx={{ p: 3 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '30px' }}>
+              {doc?.availables?.map((avaiableDate, index) => (
+                <PickerDate
+                  avaiableDates={avaiableDate}
+                  workinghours={workinghours}
+                  numOfDay={index + 1}
+                  index={index}
                 />
-                <Autocomplete
-                  multiple
-                  id="checkboxes-tags-demo"
-                  options={workinghours}
-                  defaultValue={doc.availables[0].hours.map((item) => item.time)}
-                  disableCloseOnSelect
-                  getOptionLabel={(option) => option}
-                  renderOption={(props, option, { selected }) => (
-                    <li {...props}>
-                      <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
-                      {option}
-                    </li>
-                  )}
-                  renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 1" placeholder="Chọn giờ" />}
-                />
-                <DesktopDatePicker
-                  name="day2"
-                  label="Ngày 2"
-                  inputFormat="dd/MM/yyyy"
-                  minDate={md2}
-                  value={d2}
-                  onChange={handleChange2}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-                <Autocomplete
-                  multiple
-                  id="checkboxes-tags-demo"
-                  options={workinghours}
-                  defaultValue={doc.availables[1].hours.map((item) => item.time)}
-                  disableCloseOnSelect
-                  getOptionLabel={(option) => option}
-                  renderOption={(props, option, { selected }) => (
-                    <li {...props}>
-                      <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
-                      {option}
-                    </li>
-                  )}
-                  renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 2" placeholder="Chọn giờ" />}
-                />
-                <DesktopDatePicker
-                  name="day3"
-                  label="Ngày 3"
-                  inputFormat="dd/MM/yyyy"
-                  minDate={md3}
-                  value={d3}
-                  onChange={handleChange3}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-                <Autocomplete
-                  onChange={(event, value) => console.log(value)}
-                  multiple
-                  id="checkboxes-tags-demo"
-                  options={workinghours}
-                  defaultValue={doc.availables[2].hours.map((item) => item.time)}
-                  disableCloseOnSelect
-                  getOptionLabel={(option) => option}
-                  renderOption={(props, option, { selected }) => (
-                    <li {...props}>
-                      <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
-                      {option}
-                    </li>
-                  )}
-                  renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 3" placeholder="Chọn giờ" />}
-                />
-                <DesktopDatePicker
-                  name="day4"
-                  label="Ngày 4"
-                  inputFormat="dd/MM/yyyy"
-                  minDate={md4}
-                  value={d4}
-                  onChange={handleChange4}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-                <Autocomplete
-                  multiple
-                  id="checkboxes-tags-demo"
-                  options={workinghours}
-                  defaultValue={doc.availables[3].hours.map((item) => item.time)}
-                  disableCloseOnSelect
-                  getOptionLabel={(option) => option}
-                  renderOption={(props, option, { selected }) => (
-                    <li {...props}>
-                      <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
-                      {option}
-                    </li>
-                  )}
-                  renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 4" placeholder="Chọn giờ" />}
-                />
-                <DesktopDatePicker
-                  name="day5"
-                  label="Ngày 5"
-                  inputFormat="dd/MM/yyyy"
-                  minDate={md5}
-                  value={d5}
-                  onChange={handleChange5}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-                <Autocomplete
-                  multiple
-                  id="checkboxes-tags-demo"
-                  options={workinghours}
-                  defaultValue={doc.availables[4].hours.map((item) => item.time)}
-                  disableCloseOnSelect
-                  getOptionLabel={(option) => option}
-                  renderOption={(props, option, { selected }) => (
-                    <li {...props}>
-                      <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
-                      {option}
-                    </li>
-                  )}
-                  renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 5" placeholder="Chọn giờ" />}
-                />
-                <DesktopDatePicker
-                  name="day6"
-                  label="Ngày 6"
-                  inputFormat="dd/MM/yyyy"
-                  minDate={md6}
-                  value={d6}
-                  onChange={handleChange6}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-                <Autocomplete
-                  multiple
-                  id="checkboxes-tags-demo"
-                  options={workinghours}
-                  defaultValue={doc.availables[5].hours.map((item) => item.time)}
-                  disableCloseOnSelect
-                  getOptionLabel={(option) => option}
-                  renderOption={(props, option, { selected }) => (
-                    <li {...props}>
-                      <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
-                      {option}
-                    </li>
-                  )}
-                  renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 6" placeholder="Chọn giờ" />}
-                />
-                <DesktopDatePicker
-                  name="day7"
-                  label="Ngày 7"
-                  inputFormat="dd/MM/yyyy"
-                  minDate={md7}
-                  value={d7}
-                  onChange={handleChange7}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-                <Autocomplete
-                  multiple
-                  id="checkboxes-tags-demo"
-                  options={workinghours}
-                  defaultValue={doc.availables[6].hours.map((item) => item.time)}
-                  disableCloseOnSelect
-                  getOptionLabel={(option) => option}
-                  renderOption={(props, option, { selected }) => (
-                    <li {...props}>
-                      <Checkbox icon={icon} checkedIcon={checkedIcon} checked={selected} />
-                      {option}
-                    </li>
-                  )}
-                  renderInput={(params) => <TextField {...params} label="Giờ làm việc ngày 7" placeholder="Chọn giờ" />}
-                />
-              </Box>
-              <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-                <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  Lưu thay đổi
-                </LoadingButton>
-              </Stack>
-            </Card>
-          </Grid>
+              ))}
+            </div>
+          </Card>
         </Grid>
-      </FormProvider>
+      </Grid>
     )
   );
 }
