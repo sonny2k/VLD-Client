@@ -128,11 +128,9 @@ export default function InvoiceNewEditDetails({ products, loadedmeds, isEdit }) 
         direction={{ xs: 'column-reverse', md: 'row' }}
         alignItems={{ xs: 'flex-start', md: 'center' }}
       >
-        {isEdit !== true && (
-          <Button size="small" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleAdd} sx={{ flexShrink: 0 }}>
-            Thêm thuốc mới
-          </Button>
-        )}
+        <Button size="small" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleAdd} sx={{ flexShrink: 0 }}>
+          Thêm thuốc mới
+        </Button>
 
         <Stack spacing={2} justifyContent="flex-end" direction={{ xs: 'column', md: 'row' }} sx={{ width: 1 }}>
           <RHFTextField

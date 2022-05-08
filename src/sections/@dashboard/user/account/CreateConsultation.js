@@ -42,6 +42,12 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
     doctor: PropTypes.object,
   };
 
+  const sorted = availables.sort((a, b) => {
+    const dateA = new Date(a.date);
+    const dateB = new Date(b.date);
+    return dateA - dateB;
+  });
+
   const [datec, setDateC] = useState(null);
 
   const [position, setPosition] = useState(null);
@@ -169,7 +175,7 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
                 <option disabled selected>
                   Vui lòng chọn ngày
                 </option>
-                {availables.map((option, index) => (
+                {sorted.map((option, index) => (
                   <option key={index} value={format(new Date(option.date), 'yyyy-MM-dd')}>
                     {format(new Date(option.date), 'dd-MM-yyyy')}
                   </option>
