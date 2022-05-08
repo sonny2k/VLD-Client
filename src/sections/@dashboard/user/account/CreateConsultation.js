@@ -25,7 +25,6 @@ import { datearray } from '../../../../_mock/_date';
 import { FormProvider, RHFSelect, RHFTextField } from '../../../../components/hook-form';
 import Avatar from '../../../../components/Avatar';
 
-
 // ----------------------------------------------------------------------
 
 export default function ModalCreateConsultation({ doctor, ...other }) {
@@ -43,18 +42,18 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
     doctor: PropTypes.object,
   };
 
-  const [ datec, setDateC ] = useState(null);
-  
-  const [ position, setPosition ] = useState(null);
+  const [datec, setDateC] = useState(null);
 
-  const [ hourc, setHourC ] = useState(null);
+  const [position, setPosition] = useState(null);
+
+  const [hourc, setHourC] = useState(null);
 
   const createConsultSchema = Yup.object().shape({
-    name: Yup.string()
-    .min(2, "Tối thiểu 2 kí tự")
-    .max(30, "Tối đa 30 kí tự")
-    .required("Vui lòng nhập họ tên hợp lệ!"),
-    phone: Yup.string().min(10, "Vui lòng nhập số điện thoại có 10 chữ số").max(10, "Vui lòng nhập số điện thoại có 10 chữ số").phone('VN', true, 'Số điện thoại không hợp lệ'),
+    name: Yup.string().min(2, 'Tối thiểu 2 kí tự').max(30, 'Tối đa 30 kí tự').required('Vui lòng nhập họ tên hợp lệ!'),
+    phone: Yup.string()
+      .min(10, 'Vui lòng nhập số điện thoại có 10 chữ số')
+      .max(10, 'Vui lòng nhập số điện thoại có 10 chữ số')
+      .phone('VN', true, 'Số điện thoại không hợp lệ'),
   });
 
   const defaultValues = {
@@ -75,7 +74,6 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
   } = methods;
 
   const onSubmit = async (data) => {
-    
     try {
       if (datec !== null && hourc !== null) {
         await axios.post('/api/user/consultation/createconsult', {
@@ -90,30 +88,19 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
         navigate(PATH_DASHBOARD.user.list);
       }
 
-      if (hourc === null && datec !== null) {
-        const hourId = document.getElementById('hourid');
-        const hournew = hourId.options[hourId.selectedIndex].value;
-        await axios.post('/api/user/consultation/createconsult', {
-          symptom: data.symptom,
-          name: data.name,
-          phone: data.phone,
-          dateconsult: datec,
-          hour: hournew,
-          doctor: doctor._id,
-        });
-        enqueueSnackbar('Bạn đã đăng kí lịch thăm khám thành công');
-        navigate(PATH_DASHBOARD.user.list);
+      if (datec === null && hourc === null) {
+        enqueueSnackbar('Vui lòng chọn ngày hẹn', { variant: 'error' });
       }
 
-      if (datec === null && hourc === null) {
-        enqueueSnackbar('Vui lòng chọn ngày', { variant: 'error' } );
+      if (datec !== null && hourc === null) {
+        enqueueSnackbar('Vui lòng chọn giờ hẹn', { variant: 'error' });
       }
     } catch (err) {
       console.error(err);
       enqueueSnackbar('Các giờ trong ngày đã được đặt trước, vui lòng chọn ngày khác', { variant: 'error' });
     }
   };
-  
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
@@ -135,7 +122,7 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
             >
               {createAvatar(`${lname} ${fname}`).name}
             </Avatar>
-           
+
             <Typography
               variant="caption"
               sx={{
@@ -146,12 +133,11 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
                 color: 'text.secondary',
               }}
             >
-                {level} {lname} {fname}
-                <br /> {department}
-                <br /> {workcertificate}
-
+              {level} {lname} {fname}
+              <br /> {department}
+              <br /> {workcertificate}
             </Typography>
-        
+
             {/* <RHFSwitch name="isPublic" labelPlacement="start" label="Hồ sơ bệnh án" sx={{ mt: 5 }} /> */}
           </Card>
         </Grid>
@@ -166,13 +152,23 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
                 gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
               }}
             >
-
               <RHFTextField name="name" label="Họ và tên" />
 
               <RHFTextField name="phone" label="Số điện thoại" />
 
-              <RHFSelect id="dateid" name="date" label="Ngày" placeholder="Ngày" onChange={(e) => {setPosition(e.target.selectedIndex - 1); setDateC(e.target.value);}}>
-                <option disabled selected> -- Vui lòng chọn ngày -- </option>
+              <RHFSelect
+                id="dateid"
+                name="date"
+                label="Ngày"
+                placeholder="Ngày"
+                onChange={(e) => {
+                  setPosition(e.target.selectedIndex - 1);
+                  setDateC(e.target.value);
+                }}
+              >
+                <option disabled selected>
+                  Vui lòng chọn ngày
+                </option>
                 {availables.map((option, index) => (
                   <option key={index} value={format(new Date(option.date), 'yyyy-MM-dd')}>
                     {format(new Date(option.date), 'dd-MM-yyyy')}
@@ -180,18 +176,28 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
                 ))}
               </RHFSelect>
 
-              { position !== null && <RHFSelect id="hourid" name="hour" label="Giờ" placeholder="Giờ" onChange={(e) => setHourC(e.target.value)}>
-                {availables[position].hours.map((option, index) => (
-                  option.status === false ? 
-                  <option key={index} value={option.time}>
-                    {option.time}
+              {position !== null && (
+                <RHFSelect
+                  id="hourid"
+                  name="hour"
+                  label="Giờ"
+                  placeholder="Giờ"
+                  onChange={(e) => setHourC(e.target.value)}
+                >
+                  <option disabled selected>
+                    Vui lòng chọn giờ
                   </option>
-                  :
-                  <option disabled>
-                    khung giờ {option.time} đã được đặt
-                  </option>
-                ))}
-              </RHFSelect> }
+                  {availables[position].hours.map((option, index) =>
+                    option.status === false ? (
+                      <option key={index} value={option.time}>
+                        {option.time}
+                      </option>
+                    ) : (
+                      <option disabled>khung giờ {option.time} đã được đặt</option>
+                    )
+                  )}
+                </RHFSelect>
+              )}
             </Box>
 
             <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
