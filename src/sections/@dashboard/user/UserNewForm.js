@@ -145,15 +145,16 @@ export default function UserNewForm({ consultation }) {
   };
 
   const handleCreateNameAndRoomName = () => {
-    navigate(PATH_DASHBOARD.video, {
-      state: {
-        username1: identity,
-        roomname1: roomname,
-        date1: date,
-        hour1: hour,
-        id1: _id,
-      },
-    });
+    // navigate(PATH_DASHBOARD.video, {
+    //   state: {
+    //     username1: identity,
+    //     roomname1: roomname,
+    //     date1: date,
+    //     hour1: hour,
+    //     id1: _id,
+    //   },
+    // });
+    window.open(`http://localhost:3000/room/${_id}/${identity}`);
   };
 
   const changesymptom = async (data) => {

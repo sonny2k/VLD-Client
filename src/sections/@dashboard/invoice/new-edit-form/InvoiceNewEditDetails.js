@@ -60,12 +60,11 @@ export default function InvoiceNewEditDetails({ products, loadedmeds, isEdit }) 
             <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: 1 }}>
               <Autocomplete
                 size="small"
-                disabled={isEdit}
                 fullWidth
                 name={`medicines[${index}].product`}
                 defaultValue={isEdit === true && df === false ? loadedmeds[`${index}`].product : null}
                 loading={!products.length}
-                onChange={(event, value) => setValue(`medicines[${index}].product`, value ? value._id : '')}
+                onChange={(event, value) => setValue(`medicines[${index}].product`, value !== '' ? value : '')}
                 options={meds.sort((a, b) => -b.category.localeCompare(a.category))}
                 groupBy={(option) => option.category}
                 autoHighlight
@@ -101,6 +100,8 @@ export default function InvoiceNewEditDetails({ products, loadedmeds, isEdit }) 
               />
 
               <RHFTextField
+                multiline
+                rows={3}
                 size="small"
                 name={`medicines[${index}].mednote`}
                 label="Ghi chú"

@@ -77,6 +77,8 @@ export default function InvoiceNewEditForm({
 
   const values = watch();
 
+  console.log(values);
+
   const back = async () => {
     if (isEdit === true) {
       navigate(PATH_DASHBOARD.prescription.view(id));
@@ -87,12 +89,49 @@ export default function InvoiceNewEditForm({
 
   const handleCreate = async () => {
     try {
-      if (values.medicines.some((el) => el.product === '' || el.quantity === '' || el.rate === '')) {
+      if (values.medicines.length === 0) {
         enqueueSnackbar('Vui lòng chọn thuốc và điền đầy đủ thông tin!', {
           variant: 'error',
         });
       }
-      if (isEdit === true) {
+
+      if (!isEdit && values.medicines.some((el) => el.product === '' || el.quantity === '' || el.rate === '')) {
+        enqueueSnackbar('Vui lòng chọn thuốc và điền đầy đủ thông tin!', {
+          variant: 'error',
+        });
+      } else if (
+        !isEdit &&
+        values.medicines.some((el) => el.product === null || el.quantity === '' || el.rate === '')
+      ) {
+        enqueueSnackbar('Vui lòng chọn thuốc và điền đầy đủ thông tin!', {
+          variant: 'error',
+        });
+      } else if (!isEdit && values.medicines.length > 0) {
+        await axios.post('/api/doctor/prescription/createPrescription', {
+          ...values,
+          medicines: values.medicines.map((medicine) => ({
+            quantity: medicine.quantity,
+            product: medicine.product._id,
+            rate: medicine.rate,
+            mednote: medicine.mednote,
+          })),
+        });
+        enqueueSnackbar('Tạo toa thuốc thành công');
+        navigate(PATH_DASHBOARD.prescription.view(id));
+      }
+
+      if (isEdit === true && values.medicines.some((el) => el.product === '' || el.quantity === '' || el.rate === '')) {
+        enqueueSnackbar('Vui lòng chọn thuốc và điền đầy đủ thông tin!', {
+          variant: 'error',
+        });
+      } else if (
+        isEdit === true &&
+        values.medicines.some((el) => el.product === null || el.quantity === '' || el.rate === '')
+      ) {
+        enqueueSnackbar('Vui lòng chọn thuốc và điền đầy đủ thông tin!', {
+          variant: 'error',
+        });
+      } else if (isEdit === true && values.medicines.length > 0) {
         await axios.put(`/api/doctor/prescription/updatePrescription/${idPre}`, {
           ...values,
           medicines: values.medicines.map((medicine) => ({
@@ -104,15 +143,6 @@ export default function InvoiceNewEditForm({
         });
         enqueueSnackbar('Cập nhật toa thuốc thành công');
         navigate(PATH_DASHBOARD.prescription.view(id));
-      } else {
-        await axios.post('/api/doctor/prescription/createPrescription', {
-          ...values,
-          medicines: values.medicines.map((medicine) => ({
-            ...medicine,
-          })),
-        });
-        enqueueSnackbar('Tạo toa thuốc thành công');
-        navigate(PATH_DASHBOARD.user.doctorlist);
       }
     } catch (error) {
       console.error(error);

@@ -46,7 +46,14 @@ export default function PickerDate({ avaiableDates, workinghours, numOfDay, inde
       if (uniqueValues.size < check.length) {
         enqueueSnackbar('Bạn đang bị trùng ngày, vui lòng kiểm tra lại', { variant: 'error' });
       }
-      if (date?.hours.length > 0 && uniqueValues.size === check.length) {
+      if (date?.date === '1970-01-01T00:00:00.000+00:00') {
+        enqueueSnackbar('Vui lòng chọn ngày làm việc', { variant: 'error' });
+      }
+      if (
+        date?.date !== '1970-01-01T00:00:00.000+00:00' &&
+        date?.hours.length > 0 &&
+        uniqueValues.size === check.length
+      ) {
         await axios.post('/api/doctor/account/workingtime', {
           numOfDay: numOfDay - 1,
           data: {

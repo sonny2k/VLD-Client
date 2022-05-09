@@ -2,7 +2,7 @@ import { useSnackbar } from 'notistack';
 import * as Yup from 'yup';
 import { useCallback, useState, useEffect } from 'react';
 // form
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { Box, Grid, Card, Stack, Typography, TextField } from '@mui/material';
@@ -40,6 +40,7 @@ export default function ModalEditInformation() {
       'Vui lòng điền họ chính xác'
     ),
     email: Yup.string().email('Vui lòng nhập đúng định dạng Email').max(255),
+    bd: Yup.string().nullable().required('Ngày sinh là bắt buộc'),
   });
 
   const gender = account.gender;
@@ -64,28 +65,13 @@ export default function ModalEditInformation() {
     email: account?.email || '',
     gender: genderview || '',
     street: account?.address.street || '',
-    birthday: new Date(account?.birthday) || '',
+    bd: new Date(account?.birthday) || '',
   };
 
   const methods = useForm({
     resolver: yupResolver(UpdateUserSchema),
     defaultValues,
   });
-
-  let birthcheck;
-  if (account?.birthday === null) {
-    birthcheck = null;
-  }
-
-  if (account?.birthday != null) {
-    birthcheck = new Date(account?.birthday);
-  }
-
-  const [birth, setBirth] = useState(birthcheck);
-
-  const handleChange = (newDate) => {
-    setBirth(newDate);
-  };
 
   const md = new Date('01/01/2005');
   const mid = new Date('01/01/1900');
@@ -95,7 +81,11 @@ export default function ModalEditInformation() {
     getValues,
     handleSubmit,
     formState: { isSubmitting },
+    control,
+    watch,
   } = methods;
+
+  const values = watch();
 
   const onSubmit = async (data) => {
     try {
@@ -120,7 +110,7 @@ export default function ModalEditInformation() {
         const city = cityId.options[cityId.selectedIndex].value;
         const district = districtId.options[districtId.selectedIndex].value;
         const ward = wardId.options[wardId.selectedIndex].value;
-        await updateinfo(data.fname, data.lname, data.email, birth, newgender, city, district, ward, data.street);
+        await updateinfo(data.fname, data.lname, data.email, data.bd, newgender, city, district, ward, data.street);
       }
       // if (cityId.options[cityId.selectedIndex] !== null && districtId.options[districtId.selectedIndex] === null && wardId.options[wardId.selectedIndex] === null)  {
       //   const city = cityId.options[cityId.selectedIndex].value;
@@ -140,7 +130,7 @@ export default function ModalEditInformation() {
         const c = account?.address.city;
         const d = account?.address.district;
         const w = account?.address.ward;
-        await updateinfo(data.fname, data.lname, data.email, birth, newgender, c, d, w, data.street);
+        await updateinfo(data.fname, data.lname, data.email, data.bd, newgender, c, d, w, data.street);
       }
       enqueueSnackbar('Cập nhật thông tin tài khoản thành công!');
     } catch (error) {
@@ -230,15 +220,24 @@ export default function ModalEditInformation() {
               <RHFTextField name="fname" label="Tên" />
               <RHFTextField name="email" label="Địa chỉ email" />
               <RHFTextField name="phone" label="Số điện thoại" disabled />
-              <DesktopDatePicker
-                name="birthday"
-                label="Ngày sinh"
-                inputFormat="dd/MM/yyyy"
-                minDate={mid}
-                maxDate={md}
-                value={birth}
-                onChange={handleChange}
-                renderInput={(params) => <TextField {...params} />}
+              <Controller
+                name="bd"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <DesktopDatePicker
+                    label="Ngày sinh"
+                    inputFormat="dd/MM/yyyy"
+                    minDate={mid}
+                    maxDate={md}
+                    value={field.value}
+                    onChange={(newValue) => {
+                      field.onChange(newValue);
+                    }}
+                    renderInput={(params) => (
+                      <TextField {...params} fullWidth error={!!error} helperText={error?.message} />
+                    )}
+                  />
+                )}
               />
 
               <RHFSelect name="gender" label="Giới tính">
@@ -246,7 +245,6 @@ export default function ModalEditInformation() {
                   <option key={option.code}>{option.label}</option>
                 ))}
               </RHFSelect>
-
               {cityOptions.length > 0 && (
                 <RHFSelect
                   name="city"
@@ -266,7 +264,6 @@ export default function ModalEditInformation() {
                   ))}
                 </RHFSelect>
               )}
-
               {districtOptions.length > 0 && (
                 <RHFSelect
                   name="district"
@@ -287,7 +284,6 @@ export default function ModalEditInformation() {
                   ))}
                 </RHFSelect>
               )}
-
               {wardOptions.length > 0 && (
                 <RHFSelect
                   name="ward"
@@ -308,7 +304,6 @@ export default function ModalEditInformation() {
                   ))}
                 </RHFSelect>
               )}
-
               <RHFTextField name="street" label="Địa chỉ" />
             </Box>
 
