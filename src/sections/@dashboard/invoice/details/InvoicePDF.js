@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { Page, View, Text, Image, Document } from '@react-pdf/renderer';
 import { format } from 'date-fns';
 // @mui
-import { Avatar } from '@mui/material';
+import { Avatar, Divider } from '@mui/material';
 // utils
 import { fCurrency } from '../../../../utils/formatNumber';
 import { fDate } from '../../../../utils/formatTime';
@@ -43,9 +43,8 @@ export default function InvoicePDF({ pre }) {
       <Page size="A4" style={styles.page}>
         <View style={[styles.gridContainer, styles.mb40]}>
           <Image source="/logo/logo_full.png" style={{ height: 32 }} />
-          <View style={{ alignItems: 'flex-end', flexDirection: 'column' }}>
-            <Text style={styles.h3}>{status}</Text>
-            <Text> {pname} </Text>
+          <View style={styles.col7}>
+            <Text style={styles.subtitle3}> Đơn Thuốc </Text>
           </View>
         </View>
 
@@ -68,9 +67,8 @@ export default function InvoicePDF({ pre }) {
 
           <View style={styles.col6}>
             <Text style={[styles.overline, styles.mb8]}>Thông tin bác sĩ</Text>
-            <Text style={styles.body1}>Tên: {namedoc}</Text>
+            <Text style={styles.body1}>Tên: {namedoc}</Text>          
             <Text style={styles.body1}>Chuyên khoa: {department}</Text>
-            <Text style={styles.body1}>Ngày tạo: {format(new Date(date), 'dd/MM/yyyy')}</Text>
             <Text style={styles.body1}>Đơn vị: VLang Doctor</Text>
           </View>
         </View>
@@ -81,7 +79,6 @@ export default function InvoicePDF({ pre }) {
           <View style={styles.tableHeader}>
             <View style={styles.tableRow}>
               <View style={styles.tableCell_1}>
-                
                 <Text style={styles.subtitle2}>Sản phẩm</Text>
               </View>
 
@@ -89,16 +86,12 @@ export default function InvoicePDF({ pre }) {
                 <Text style={styles.subtitle2}>Số lượng</Text>
               </View>
 
+              <View style={styles.tableCell_2}>
+                <Text style={styles.subtitle2}>Đơn vị tính</Text>
+              </View>
+
               <View style={styles.tableCell_3}>
                 <Text style={styles.subtitle2}>Liều lượng </Text>
-              </View>
-
-              <View style={styles.tableCell_3}>
-                <Text style={styles.subtitle2}>Quy cách </Text>
-              </View>
-
-              <View style={styles.tableCell_2}>
-                <Text style={styles.subtitle2}>Ghi chú </Text>
               </View>
 
             </View>
@@ -115,21 +108,15 @@ export default function InvoicePDF({ pre }) {
                   <Text>{pro.quantity}</Text>
                 </View>
 
-                <View style={styles.tableCell_3}>
-                  <Text>
-                    {pro.rate}
-                  </Text>
-                </View>
-
-                <View style={styles.tableCell_3}>
+                <View style={styles.tableCell_2}>
                   <Text>
                     {specdes}
                   </Text>
                 </View>
 
-                <View style={styles.tableCell_2}>
+                <View style={styles.tableCell_1}>
                   <Text>
-                    {pro.mednote}
+                    {pro.rate}
                   </Text>
                 </View>
 
@@ -138,15 +125,16 @@ export default function InvoicePDF({ pre }) {
 
            </View>
         </View>
-
-        <View style={[styles.gridContainer, styles.footer]}>
+        <View style={[styles.gridContainer, styles.mb40]}>
           <View style={styles.col8}>
-            <Text style={styles.subtitle2}>Ghi chú</Text>
+            <Text style={styles.subtitle2}>Lời dặn</Text>
             <Text>{note}</Text>
           </View>
           <View style={[styles.col4, styles.alignRight]}>
-            <Text style={styles.subtitle2}>Chữ kí bác sĩ</Text>
-            <Image alt="signature" src={signature}/>            
+            <Text style={styles.subtitle2}>Ngày kê đơn: {format(new Date(date), 'dd/MM/yyyy')}</Text>
+            <Text style={styles.subtitle2}>Bác sĩ điều trị</Text>
+            <Image alt="signature" src={signature}/>  
+            <Text style={styles.subtitle2}>{namedoc}</Text>          
           </View>
         </View>
       </Page>

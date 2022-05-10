@@ -8,9 +8,10 @@ Font.register({
 });
 
 const styles = StyleSheet.create({
-  col4: { width: '25%' },
+  col4: { width: '30%' },
   col8: { width: '75%' },
   col6: { width: '50%' },
+  col7: { width: '60%'},
   mb8: { marginBottom: 8 },
   mb40: { marginBottom: 40 },
   overline: {
@@ -23,6 +24,7 @@ const styles = StyleSheet.create({
   h4: { fontSize: 13, fontWeight: 700 },
   body1: { fontSize: 10 },
   subtitle2: { fontSize: 9, fontWeight: 700 },
+  subtitle3: { fontSize: 20, fontWeight: 700 },
   alignRight: { textAlign: 'right' },
   page: {
     padding: '40px 24px 0 24px',
@@ -57,7 +59,7 @@ const styles = StyleSheet.create({
   noBorder: { paddingTop: 8, paddingBottom: 0, borderBottomWidth: 0 },
   tableCell_1: { width: '30%' },
   tableCell_2: { width: '15%', paddingRight: 16 },
-  tableCell_3: { width: '45%' },
+  tableCell_3: { width: '20%' },
 });
 
 export default styles;

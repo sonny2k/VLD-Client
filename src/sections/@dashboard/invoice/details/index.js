@@ -4,6 +4,7 @@ import { format } from 'date-fns';
 import { styled, useTheme } from '@mui/material/styles';
 import {
   Avatar,
+  Stack,
   Box,
   Card,
   Grid,
@@ -126,7 +127,6 @@ export default function InvoiceDetails({ pre }) {
             </Typography>
             <Typography variant="body2">Tên: {namedoc}</Typography>
             <Typography variant="body2">Chuyên khoa: {department}</Typography>
-            <Typography variant="body2">Ngày tạo: {format(new Date(date), 'dd/MM/yyyy')}</Typography>
             <Typography variant="body2">Đơn vị: VLang Doctor</Typography>
           </Grid>
         </Grid>
@@ -143,9 +143,9 @@ export default function InvoiceDetails({ pre }) {
                 <TableRow>
                   <TableCell align="left">Tên thuốc</TableCell>
                   <TableCell align="center">Số lượng</TableCell>
+                  <TableCell align="left">Đơn vị tính</TableCell>
+                  {/* <TableCell align="left">Quy cách</TableCell> */}
                   <TableCell align="left">Liều lượng</TableCell>
-                  <TableCell align="left">Quy cách</TableCell>
-                  <TableCell align="left">Ghi chú</TableCell>
                 </TableRow>
               </TableHead>
               {medicines.map((pro, index) => (
@@ -164,9 +164,8 @@ export default function InvoiceDetails({ pre }) {
                       </Typography>
                     </TableCell>
                     <TableCell align="center">{pro.quantity}</TableCell>
-                    <TableCell align="left">{pro.rate}</TableCell>
                     <TableCell align="left">{specdes}</TableCell>
-                    <TableCell align="left">{pro.mednote}</TableCell>
+                    <TableCell align="left">{pro.rate}</TableCell>
                   </TableRow>
                 </TableBody>
               ))}
@@ -176,12 +175,14 @@ export default function InvoiceDetails({ pre }) {
 
         <Grid container>
           <Grid item xs={12} md={9} sx={{ py: 3 }}>
-            <Typography variant="subtitle2">Ghi chú chung</Typography>
+            <Typography variant="subtitle2">Lời dặn</Typography>
             <Typography variant="body2">{note}</Typography>
           </Grid>
           <Grid item xs={12} md={3} sx={{ py: 3, textAlign: 'right' }}>
-            <Typography variant="subtitle2">Chữ kí bác sĩ</Typography>
+            <Typography variant="body2">Ngày kê đơn: {format(new Date(date), 'dd/MM/yyyy')}</Typography>
+            <Typography variant="body2">Bác sĩ điều trị</Typography>
             <Image alt="signature" src={signature} />
+            <Typography variant="body2">{namedoc}</Typography>
           </Grid>
         </Grid>
       </Card>
