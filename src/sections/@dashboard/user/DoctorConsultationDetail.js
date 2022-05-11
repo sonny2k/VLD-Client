@@ -413,7 +413,7 @@ export default function DoctorConsultationDetail({ consultation }) {
 
                     {status === 'chờ khám' && (
                       <Tooltip title="Tạo toa thuốc">
-                        <IconButton color="primary" onClick={createPrescription}>
+                        <IconButton disabled={roomname === null} color="primary" onClick={createPrescription}>
                           <NoteAddIcon />
                         </IconButton>
                       </Tooltip>
