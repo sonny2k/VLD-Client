@@ -83,6 +83,12 @@ export default function DoctorConsultationDetail({ consultation }) {
 
   const [open, setOpen] = useState(false);
 
+  let noRoomName = false;
+
+  if (!roomname) {
+    noRoomName = true;
+  }
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -413,7 +419,7 @@ export default function DoctorConsultationDetail({ consultation }) {
 
                     {status === 'chờ khám' && (
                       <Tooltip title="Tạo toa thuốc">
-                        <IconButton disabled={roomname === null} color="primary" onClick={createPrescription}>
+                        <IconButton disabled={noRoomName} color="primary" onClick={createPrescription}>
                           <NoteAddIcon />
                         </IconButton>
                       </Tooltip>
