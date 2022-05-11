@@ -70,6 +70,12 @@ export const PATH_DASHBOARD = {
     departmentcreate: path(ROOTS_DASHBOARD, '/user/departmentcreate'),
     departmentedit: path(ROOTS_DASHBOARD, '/user/departmentedit'),
     articlelist: path(ROOTS_DASHBOARD, '/user/articlelist'),
+    categorylist: path(ROOTS_DASHBOARD, '/user/categorylist'),
+    supplierlist: path(ROOTS_DASHBOARD, '/user/supplierlist'),
+    categorycreate: path(ROOTS_DASHBOARD, '/user/categorycreate'),
+    categoryedit: path(ROOTS_DASHBOARD, '/user/categoryedit'),
+    suppliercreate: path(ROOTS_DASHBOARD, '/user/suppliercreate'),
+    supplieredit: path(ROOTS_DASHBOARD, '/user/supplieredit'),
 
   },
   eCommerce: {

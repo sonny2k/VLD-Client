@@ -30,7 +30,7 @@ export default function InvoicePDF({ pre }) {
 
   const { quantity,everate,morningrate,noonrate } = pre.prescription.medicines[0];
 
-  const { title, image, specdes } = pre.prescription.medicines[0].product;
+  const { title, image, specdes, unit } = pre.prescription.medicines[0].product;
 
   const { medicines } = pre.prescription;
 
@@ -53,13 +53,13 @@ export default function InvoicePDF({ pre }) {
             <Text style={[styles.overline, styles.mb8]}>Thông tin cơ bản</Text>
             <Text style={styles.body1}>Triệu chứng: {symptom}</Text>
             <Text style={styles.body1}>Tiền sử bệnh: {pastmedicalhistory}</Text>
-            <Text style={styles.body1}>Chẩn đoán: {diagnosis}</Text>
+            <Text style={styles.body1}>Chẩn đoán:{diagnosis}...</Text>
           </View>
 
-          <View style={styles.col6}>
+          <View style={styles.col5}>
             <Text style={[styles.overline, styles.mb8]}>Thông tin bệnh nhân</Text>
             <Text style={styles.body1}>Tên: {name}</Text>
-            <Text style={styles.body1}>Giới tính: {gender === 1 && 'Nam' || gender === 2 && 'Nữ' || gender === 3 && 'Không xác định' || gender === null && 'Không xác định'}</Text>
+            <Text style={styles.body1}>Giới tính: {gender === 1 && 'Nam' || gender === 2 && 'Nữ' || gender === 3 && 'Không xác định' || gender === null && 'Không xác định'}.</Text>
             <Text style={styles.body1}>Cân nặng: {weight}</Text>
             <Text style={styles.body1}>Chiều cao: {height}</Text>
 
@@ -79,7 +79,7 @@ export default function InvoicePDF({ pre }) {
           <View style={styles.tableHeader}>
             <View style={styles.tableRow}>
               <View style={styles.tableCell_1}>
-                <Text style={styles.subtitle2}>Sản phẩm</Text>
+                <Text style={styles.subtitle2}>Tên thuốc</Text>
               </View>
 
               <View style={styles.tableCell_2}>
@@ -104,13 +104,13 @@ export default function InvoicePDF({ pre }) {
                   <Text>{pro.product.title}</Text>
                 </View>
 
-                <View style={styles.tableCell_2}>
-                  <Text>{pro.quantity}</Text>
+                <View style={styles.tableCell_4}>
+                  <Text >{pro.quantity}</Text>
                 </View>
 
-                <View style={styles.tableCell_2}>
-                  <Text>
-                    {specdes}
+                <View style={[styles.tableCell_2]}>
+                  <Text style={[styles.alignCenter]}>
+                    {unit}
                   </Text>
                 </View>
 
@@ -123,18 +123,21 @@ export default function InvoicePDF({ pre }) {
               </View>
             ))}
 
-           </View>
-        </View>
-        <View style={[styles.gridContainer, styles.mb40]}>
+            </View>
+          </View>
+        
+        <View style={[styles.gridContainer, styles.mt20]}>
           <View style={styles.col8}>
             <Text style={styles.subtitle2}>Lời dặn</Text>
             <Text>{note}</Text>
           </View>
-          <View style={[styles.col4, styles.alignRight]}>
-            <Text style={styles.subtitle2}>Ngày kê đơn: {format(new Date(date), 'dd/MM/yyyy')}</Text>
-            <Text style={styles.subtitle2}>Bác sĩ điều trị</Text>
-            <Image alt="signature" src={signature}/>  
-            <Text style={styles.subtitle2}>{namedoc}</Text>          
+          <View style={[styles.col4, styles.alignCenter]}>
+            <View style={styles.col8}>
+              <Text style={styles.subtitle2}>Ngày kê đơn: {format(new Date(date), 'dd/MM/yyyy')}</Text>
+              <Text style={styles.subtitle2}>Bác sĩ điều trị</Text>
+              <Image alt="signature" src={signature}/>  
+              <Text style={styles.subtitle2}>{namedoc}.</Text>    
+            </View>      
           </View>
         </View>
       </Page>

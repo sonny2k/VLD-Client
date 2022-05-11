@@ -52,6 +52,8 @@ const navConfigAd = [
           { title: 'Sản phẩm', path: PATH_DASHBOARD.user.productlist },
           { title: 'Chuyên khoa', path: PATH_DASHBOARD.user.department },
           { title: 'Tin tức', path: PATH_DASHBOARD.user.articlelist },
+          { title: 'Danh mục sản phẩm', path: PATH_DASHBOARD.user.categorylist},
+          { title: 'Nhà sản xuất', path: PATH_DASHBOARD.user.supplierlist},
           // { title: 'create', path: PATH_DASHBOARD.user.newUser },
           // { title: 'edit', path: PATH_DASHBOARD.user.editById },
           { title: 'Tài khoản', path: PATH_DASHBOARD.user.account },

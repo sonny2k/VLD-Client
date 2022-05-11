@@ -15,3 +15,7 @@ export { default as RegisterCalendar} from './RegisterCalendar';
 export { default as DoctorDetail} from './DoctorDetail';
 export { default as CreateDepartment} from './CreateDepartment';
 export { default as EditDepartment} from './EditDepartment';
+export { default as EditCategory} from './EditCaregory';
+export { default as CreateCategory} from './CreateCategory';
+export { default as CreateSupplier} from './CreateSupplier';
+export { default as EditSupplier} from './EditSupplier';

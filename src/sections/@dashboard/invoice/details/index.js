@@ -61,7 +61,7 @@ export default function InvoiceDetails({ pre }) {
 
   const { name } = pre.userinfo;
 
-  const { title, image, specdes } = pre.prescription.medicines[0].product;
+  const { title, image, specdes, unit } = pre.prescription.medicines[0].product;
 
   const { medicines } = pre.prescription;
 
@@ -143,7 +143,7 @@ export default function InvoiceDetails({ pre }) {
                 <TableRow>
                   <TableCell align="left">Tên thuốc</TableCell>
                   <TableCell align="center">Số lượng</TableCell>
-                  <TableCell align="left">Đơn vị tính</TableCell>
+                  <TableCell align="center">Đơn vị tính</TableCell>
                   {/* <TableCell align="left">Quy cách</TableCell> */}
                   <TableCell align="left">Liều lượng</TableCell>
                 </TableRow>
@@ -164,7 +164,7 @@ export default function InvoiceDetails({ pre }) {
                       </Typography>
                     </TableCell>
                     <TableCell align="center">{pro.quantity}</TableCell>
-                    <TableCell align="left">{specdes}</TableCell>
+                    <TableCell align="center">{unit}</TableCell>
                     <TableCell align="left">{pro.rate}</TableCell>
                   </TableRow>
                 </TableBody>
@@ -178,7 +178,7 @@ export default function InvoiceDetails({ pre }) {
             <Typography variant="subtitle2">Lời dặn</Typography>
             <Typography variant="body2">{note}</Typography>
           </Grid>
-          <Grid item xs={12} md={3} sx={{ py: 3, textAlign: 'right' }}>
+          <Grid item xs={12} md={3} sx={{ py: 3, textAlign: 'center' }}>
             <Typography variant="body2">Ngày kê đơn: {format(new Date(date), 'dd/MM/yyyy')}</Typography>
             <Typography variant="body2">Bác sĩ điều trị</Typography>
             <Image alt="signature" src={signature} />

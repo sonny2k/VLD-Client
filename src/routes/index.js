@@ -98,6 +98,12 @@ export default function Router() {
             { path: 'departmentcreate', element: <DepartmentCreate/>},
             { path: 'departmentedit', element: <DepartmentEdit/>},
             { path: 'articlelist', element: <ArticleList/>},
+            { path: 'categorylist', element: <CategoryList/>},
+            { path: 'supplierlist', element: <SupplierList/>},
+            { path: 'categorycreate', element: <CategoryCreate/>},
+            { path: 'categoryedit', element: <CategoryEdit/>},
+            { path: 'suppliercreate', element: <SupplierCreate/>},
+            { path: 'supplieredit', element: <SupplierEdit/>},
 
           ],
         },
@@ -217,6 +223,14 @@ const ProductList = Loadable(lazy(() => import('../pages/dashboard/ProductList')
 const DepartmentCreate = Loadable(lazy(() => import('../pages/dashboard/DepartmentEdit')));
 const DepartmentEdit = Loadable(lazy(() => import('../pages/dashboard/DepartmentCreate')));
 const ArticleList = Loadable(lazy(() => import('../pages/dashboard/ArticleList')));
+const CategoryList = Loadable(lazy(() => import('../pages/dashboard/CategoryList')));
+const SupplierList = Loadable(lazy(() => import('../pages/dashboard/SupplierList')));
+const CategoryCreate = Loadable(lazy(() => import('../pages/dashboard/CategoryEdit')));
+const CategoryEdit = Loadable(lazy(() => import('../pages/dashboard/CategoryCreate')));
+const SupplierCreate = Loadable(lazy(() => import('../pages/dashboard/SupplierEdit')));
+const SupplierEdit = Loadable(lazy(() => import('../pages/dashboard/SupplierCreate')));
+
+
 
 // APP
 const Chat = Loadable(lazy(() => import('../pages/dashboard/Chat')));
