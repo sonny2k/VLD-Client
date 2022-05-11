@@ -154,7 +154,7 @@ export default function UserNewForm({ consultation }) {
     //     id1: _id,
     //   },
     // });
-    window.open(`http://localhost:3000/room/${_id}/${identity}`);
+    window.open(`https://vldchatroom.herokuapp.com/room/${_id}/${identity}`);
   };
 
   const changesymptom = async (data) => {
