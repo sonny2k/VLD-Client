@@ -63,7 +63,7 @@ export default function DoctorConsultationDetail({ consultation }) {
 
   const { account } = useAuth();
 
-  const identity = `${account.lname} ${account.fname}`;
+  const identity = `Bác sĩ ${account.lname} ${account.fname}`;
 
   const navigate = useNavigate();
 
@@ -82,6 +82,12 @@ export default function DoctorConsultationDetail({ consultation }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const [open, setOpen] = useState(false);
+
+  let noRoomName = false;
+
+  if (!roomname) {
+    noRoomName = true;
+  }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -124,7 +130,7 @@ export default function DoctorConsultationDetail({ consultation }) {
     //     id1: _id,
     //   },
     // });
-    window.open(`http://localhost:3000/room/${_id}/${identity}`);
+    window.open(`https://vldchatroom.herokuapp.com/room/${_id}/${identity}`);
   };
 
   const defaultValues = useMemo(
@@ -413,7 +419,7 @@ export default function DoctorConsultationDetail({ consultation }) {
 
                     {status === 'chờ khám' && (
                       <Tooltip title="Tạo toa thuốc">
-                        <IconButton color="primary" onClick={createPrescription}>
+                        <IconButton disabled={noRoomName} color="primary" onClick={createPrescription}>
                           <NoteAddIcon />
                         </IconButton>
                       </Tooltip>

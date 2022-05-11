@@ -25,6 +25,8 @@ import {
   Link,
   TextField,
 } from '@mui/material';
+// hooks
+import useAuth from '../../../../hooks/useAuth';
 // components
 import Label from '../../../../components/Label';
 import Iconify from '../../../../components/Iconify';
@@ -62,6 +64,10 @@ export default function DoctorTableRow({
   const { pastmedicalhistory } = row.user;
 
   const { date, hour, status, _id } = row;
+
+  const { account } = useAuth();
+
+  const identity = `Bác sĩ ${account.lname} ${account.fname}`;
 
   const ExcuseSchema = Yup.object().shape({
     excuse: Yup.string().required('Vui lòng nhập lý do từ chối buổi hẹn'),
@@ -111,6 +117,19 @@ export default function DoctorTableRow({
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+
+  const handleCreateNameAndRoomName = () => {
+    // navigate(PATH_DASHBOARD.video, {
+    //   state: {
+    //     username1: identity,
+    //     roomname1: roomname,
+    //     date1: date,
+    //     hour1: hour,
+    //     id1: _id,
+    //   },
+    // });
+    window.open(`https://vldchatroom.herokuapp.com/room/${_id}/${identity}`);
+  };
 
   return (
     <TableRow hover selected={selected}>
@@ -196,8 +215,7 @@ export default function DoctorTableRow({
               {status === 'chờ khám' && (
                 <MenuItem
                   onClick={() => {
-                    onEditRow();
-                    handleCloseMenu();
+                    handleCreateNameAndRoomName();
                   }}
                   sx={{ color: 'info.main' }}
                 >

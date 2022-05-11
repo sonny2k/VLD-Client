@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { format } from 'date-fns';
 import unorm from 'unorm';
@@ -28,6 +28,8 @@ export default function UserCreate() {
   const [consultation, setConsultation] = useState(null);
 
   const { account } = useAuth();
+
+  useEffect(() => {}, [consultation]);
 
   async function getConsultation(role) {
     const URL = `/api/${role}/consultation/viewconsult/${id}`;
@@ -68,14 +70,12 @@ export default function UserCreate() {
             ]}
           />
 
-          {consultation &&
-            unorm.nfkd(account.role).toLowerCase().indexOf(unorm.nfkd('Người dùng').toLowerCase()) !== -1 && (
-              <UserNewForm consultation={consultation} />
-            )}
-          {consultation &&
-            unorm.nfkd(account.role).toLowerCase().indexOf(unorm.nfkd('Bác sĩ').toLowerCase()) !== -1 && (
-              <DoctorConsultationDetail consultation={consultation} />
-            )}
+          {unorm.nfkd(account.role).toLowerCase().indexOf(unorm.nfkd('Người dùng').toLowerCase()) !== -1 && (
+            <UserNewForm key={consultation._id} consultation={consultation} />
+          )}
+          {unorm.nfkd(account.role).toLowerCase().indexOf(unorm.nfkd('Bác sĩ').toLowerCase()) !== -1 && (
+            <DoctorConsultationDetail key={consultation._id} consultation={consultation} />
+          )}
         </Container>
       </Page>
     )

@@ -60,7 +60,7 @@ export default function InvoiceNewEditForm({
     pname: pname || '',
     diagnosis: diagnosis || '',
     note: note || '',
-    medicines: loadedmeds || [{ product: '', quantity: '', rate: '', mednote: '' }],
+    medicines: loadedmeds || [{ product: '', quantity: '', rate: '' }],
   }));
 
   const methods = useForm({
@@ -88,6 +88,7 @@ export default function InvoiceNewEditForm({
   };
 
   const handleCreate = async () => {
+    const uniqueValues = new Set(values.medicines.map((v) => v.product._id));
     try {
       if (values.medicines.length === 0) {
         enqueueSnackbar('Vui lòng chọn thuốc và điền đầy đủ thông tin!', {
@@ -106,6 +107,8 @@ export default function InvoiceNewEditForm({
         enqueueSnackbar('Vui lòng chọn thuốc và điền đầy đủ thông tin!', {
           variant: 'error',
         });
+      } else if (uniqueValues.size < values.medicines.length) {
+        enqueueSnackbar('Sản phẩm thuốc trùng lặp, vui lòng kiểm tra lại', { variant: 'error' });
       } else if (!isEdit && values.medicines.length > 0) {
         await axios.post('/api/doctor/prescription/createPrescription', {
           ...values,
@@ -113,7 +116,6 @@ export default function InvoiceNewEditForm({
             quantity: medicine.quantity,
             product: medicine.product._id,
             rate: medicine.rate,
-            mednote: medicine.mednote,
           })),
         });
         enqueueSnackbar('Tạo toa thuốc thành công');
@@ -131,6 +133,8 @@ export default function InvoiceNewEditForm({
         enqueueSnackbar('Vui lòng chọn thuốc và điền đầy đủ thông tin!', {
           variant: 'error',
         });
+      } else if (uniqueValues.size < values.medicines.length) {
+        enqueueSnackbar('Sản phẩm thuốc trùng lặp, vui lòng kiểm tra lại', { variant: 'error' });
       } else if (isEdit === true && values.medicines.length > 0) {
         await axios.put(`/api/doctor/prescription/updatePrescription/${idPre}`, {
           ...values,
@@ -138,7 +142,6 @@ export default function InvoiceNewEditForm({
             quantity: medicine.quantity,
             product: medicine.product._id,
             rate: medicine.rate,
-            mednote: medicine.mednote,
           })),
         });
         enqueueSnackbar('Cập nhật toa thuốc thành công');

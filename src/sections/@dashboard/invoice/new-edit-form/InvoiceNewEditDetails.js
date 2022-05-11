@@ -12,7 +12,10 @@ import {
   MenuItem,
   Autocomplete,
   TextField,
+  IconButton,
+  Tooltip,
 } from '@mui/material';
+import InfoIcon from '@mui/icons-material/Info';
 // utils
 import { fNumber } from '../../../../utils/formatNumber';
 // components
@@ -22,7 +25,7 @@ import { RHFSelect, RHFTextField } from '../../../../components/hook-form';
 // ----------------------------------------------------------------------
 
 export default function InvoiceNewEditDetails({ products, loadedmeds, isEdit }) {
-  const { control, setValue } = useFormContext();
+  const { control, setValue, watch } = useFormContext();
 
   const meds = [...products];
 
@@ -33,6 +36,8 @@ export default function InvoiceNewEditDetails({ products, loadedmeds, isEdit }) 
     name: 'medicines',
   });
 
+  const values = watch();
+
   const handleAdd = () => {
     isEdit = false;
     setDf(true);
@@ -40,7 +45,6 @@ export default function InvoiceNewEditDetails({ products, loadedmeds, isEdit }) 
       product: '',
       quantity: '',
       rate: '',
-      mednote: '',
     });
   };
 
@@ -57,14 +61,16 @@ export default function InvoiceNewEditDetails({ products, loadedmeds, isEdit }) 
       <Stack divider={<Divider flexItem sx={{ borderStyle: 'dashed' }} />} spacing={3}>
         {fields.map((item, index) => (
           <Stack key={item.id} alignItems="flex-end" spacing={1.5}>
-            <Stack direction={{ xs: 'column', md: 'row' }} spacing={2} sx={{ width: 1 }}>
+            <Stack direction={{ xs: 'column', md: 'row' }} spacing={1.5} sx={{ width: 1 }}>
               <Autocomplete
                 size="small"
                 fullWidth
                 name={`medicines[${index}].product`}
                 defaultValue={isEdit === true && df === false ? loadedmeds[`${index}`].product : null}
                 loading={!products.length}
-                onChange={(event, value) => setValue(`medicines[${index}].product`, value !== '' ? value : '')}
+                onChange={(event, value) => {
+                  setValue(`medicines[${index}].product`, value !== '' ? value : '');
+                }}
                 options={meds.sort((a, b) => -b.category.localeCompare(a.category))}
                 groupBy={(option) => option.category}
                 autoHighlight
@@ -81,33 +87,49 @@ export default function InvoiceNewEditDetails({ products, loadedmeds, isEdit }) 
               />
               <RHFTextField
                 required
-                helperText="Vui lòng nhập số lượng"
+                helperText="Vui lòng nhập số lượng (dạng chữ số)"
+                type="number"
                 size="small"
                 name={`medicines[${index}].quantity`}
                 label="Số lượng"
-                onChange={(event) => setValue(`medicines[${index}].quantity`, event.target.value)}
-                sx={{ maxWidth: { md: 150 } }}
+                onChange={(event) => setValue(`medicines[${index}].quantity`, Number(event.target.value))}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      {values.medicines[index].product !== '' && values.medicines[index].product !== null
+                        ? values.medicines[index].product.unit
+                        : ''}
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{ maxWidth: { md: 140 } }}
               />
 
               <RHFTextField
                 required
-                helperText="Vui lòng nhập liều lượng"
+                multiline
+                rows={3}
+                helperText="Vui lòng nhập liều lượng (và ghi chú nếu có)"
                 size="small"
                 name={`medicines[${index}].rate`}
                 label="Liều lượng"
                 onChange={(event) => setValue(`medicines[${index}].rate`, event.target.value)}
-                sx={{ maxWidth: { md: 150 } }}
+                sx={{ maxWidth: { md: 410 } }}
               />
 
-              <RHFTextField
-                multiline
-                rows={3}
-                size="small"
-                name={`medicines[${index}].mednote`}
-                label="Ghi chú"
-                onChange={(event) => setValue(`medicines[${index}].mednote`, event.target.value)}
-                sx={{ maxWidth: { md: 250 } }}
-              />
+              <Stack>
+                <Tooltip
+                  title={
+                    values.medicines[index].product !== '' && values.medicines[index].product !== null
+                      ? values.medicines[index].product.specdes
+                      : ''
+                  }
+                >
+                  <IconButton>
+                    <InfoIcon />
+                  </IconButton>
+                </Tooltip>
+              </Stack>
             </Stack>
 
             <Button
@@ -138,7 +160,7 @@ export default function InvoiceNewEditDetails({ products, loadedmeds, isEdit }) 
             multiline
             rows={4}
             size="small"
-            label="Ghi chú chung"
+            label="Lời dặn"
             name="note"
             onChange={(event) => setValue('note', event.target.value)}
             sx={{ maxWidth: { md: 400 } }}
