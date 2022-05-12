@@ -51,6 +51,9 @@ const TABLE_HEAD = [
   { id: 'description', label: 'Mô tả', align: 'left' },
   { id: 'category', label: 'Loại thuốc', align: 'left' },
   { id: 'specdes', label: 'Quy cách', align: 'left' },
+  { id: 'unit', label: 'Đơn vị tính', align: 'left' },
+  { id: 'components', label: 'Thành phần thuốc', align: 'left' },
+  { id: 'origin', label: 'Nhà sản xuất', align: 'left' },
   { id: '' },
 ];
 
@@ -144,8 +147,19 @@ export default function ProductList() {
     setProducts(deleteRows);
   };
 
-  const handleEditRow = (id) => {
-    navigate(`${PATH_DASHBOARD.user.root}/detail/${paramCase(id)}`);
+  const handleEditRow = (_id, title, description, specdes, unit, components, origin, image) => {
+    navigate(PATH_DASHBOARD.user.productedit, {
+      state: {
+        id1:_id,
+        title1: title,
+        description1: description,
+        specdes1: specdes,
+        unit1: unit,
+        components1: components,
+        origin1: origin,
+        image1: image,
+      }
+    });
   };
 
   const dataFiltered = applySortFilter({
@@ -172,7 +186,7 @@ export default function ProductList() {
             <Button
               variant="contained"
               component={RouterLink}
-               to={PATH_DASHBOARD.eCommerce.new}
+               to={PATH_DASHBOARD.user.productcreate}
               startIcon={<Iconify icon={'eva:plus-fill'} />}
             >
               Thêm sản phẩm
@@ -238,7 +252,7 @@ export default function ProductList() {
                       selected={selected.includes(row._id)}
                       onSelectRow={() => onSelectRow(row._id)}
                       onDeleteRow={() => handleDeleteRow(row._id)}
-                      onEditRow={() => handleEditRow(row._id)}
+                      onEditRow={() => handleEditRow(row._id, row.title, row.description, row.specdes, row.unit, row.components, row.origin, row.image)}
                     />
                   ))}
 

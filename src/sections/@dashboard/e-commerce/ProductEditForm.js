@@ -40,14 +40,14 @@ ProductNewForm.propTypes = {
   categories: PropTypes.array,
 };
 
-export default function ProductNewForm({ categories, title, description, specdes, unit, components, origin, category }) {
+export default function ProductNewForm({ categories, id, title, description, specdes, unit, components, origin, image }) {
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
 
   const NewProductSchema = Yup.object().shape({
-    title: Yup.string().required('Vui lòng điền tên'),
-    unit: Yup.string().required('Vui lòng điền đơn vị tính'),
+    title: Yup.string().required('Vui lòng điền tên thuốc'),
+    unit: Yup.string().required('Đơn vị tính là cần thiết'),
   });
 
   const defaultValues = useMemo(
@@ -58,9 +58,11 @@ export default function ProductNewForm({ categories, title, description, specdes
       unit: unit || '',
       components: components || '',
       origin: origin || '',
-      category: category || '',
+      image: image || '',
     }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   );
+
 
   const methods = useForm({
     resolver: yupResolver(NewProductSchema),
@@ -81,24 +83,58 @@ export default function ProductNewForm({ categories, title, description, specdes
 
   const onSubmit = async (data) => {
     try {
-      await axios.post('/api/admin/product/createProduct', {
+      await axios.put(`/api/admin/product/updateProduct/${id}`, {
         title: data.title,
         description: data.description,
         specdes: data.specdes,
         unit: data.unit,
-        category: data.category,
         components: data.components,
         origin: data.origin,
+        image: data.image,
       });
-      enqueueSnackbar('Tạo sản phẩm thành công');
+      enqueueSnackbar('Cập nhật sản phẩm thành công');
       navigate(PATH_DASHBOARD.user.productlist);
     } catch (error) {
       console.error(error);
     }
   };
 
+  const handleDrop = useCallback(
+    async (acceptedFiles) => {
+      const file = acceptedFiles[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+          uploadImage(reader.result);
+        };
+        setValue(
+          'image',
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          })
+        );
+      }
+    },
+    [setValue]
+  );
+
+  const uploadImage = async (base64EncodedImage) => {
+    const pic = base64EncodedImage.toString();
+    try {
+      await axios.post(`/api/admin/product/image`, {
+        pic,
+      });
+    } catch (err) {
+      console.error(err);
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', {
+        variant: 'error',
+      });
+    }
+  };
+
   return (
-    <FormProvider methods={methods} >
+    <FormProvider methods={methods}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={12}>
           <Card sx={{ p: 3 }}>
@@ -110,7 +146,7 @@ export default function ProductNewForm({ categories, title, description, specdes
               </div>
 
               <div>
-                <RHFSelect name="category" label="Loại thuốc">
+                <RHFSelect loading={!categories.length} name="category" label="Loại thuốc">
                   {categories.map((option) => (
                     <option key={option._id}>{option.name}</option>
                   ))}
@@ -134,6 +170,10 @@ export default function ProductNewForm({ categories, title, description, specdes
               </div>
 
               <div>
+                <LabelStyle>Hình ảnh</LabelStyle>
+                <RHFUploadAvatar name="image" accept="image/*" maxSize={3145728} onDrop={handleDrop} type="file" />
+              </div>
+              <div>
                 <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
                   <LoadingButton
                     type="submit"
@@ -142,7 +182,7 @@ export default function ProductNewForm({ categories, title, description, specdes
                     loading={isSubmitting}
                     onClick={handleSubmit(onSubmit)}
                   >
-                    Tạo sản phẩm
+                    Lưu thay đổi
                   </LoadingButton>
                 </Stack>
               </div>

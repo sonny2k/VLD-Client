@@ -104,6 +104,8 @@ export default function Router() {
             { path: 'categoryedit', element: <CategoryEdit/>},
             { path: 'suppliercreate', element: <SupplierCreate/>},
             { path: 'supplieredit', element: <SupplierEdit/>},
+            { path: 'productcreate', element: <ProductCreate/>},
+            { path: 'productedit', element: <ProductEdit/>},
 
           ],
         },
@@ -229,6 +231,8 @@ const CategoryCreate = Loadable(lazy(() => import('../pages/dashboard/CategoryEd
 const CategoryEdit = Loadable(lazy(() => import('../pages/dashboard/CategoryCreate')));
 const SupplierCreate = Loadable(lazy(() => import('../pages/dashboard/SupplierEdit')));
 const SupplierEdit = Loadable(lazy(() => import('../pages/dashboard/SupplierCreate')));
+const ProductCreate = Loadable(lazy(() => import('../pages/dashboard/ProductCreate')));
+const ProductEdit = Loadable(lazy(() => import('../pages/dashboard/ProductEdit')));
 
 
 

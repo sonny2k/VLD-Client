@@ -22,9 +22,7 @@ ProductTableRow.propTypes = {
 export default function ProductTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
   const theme = useTheme();
 
-  // const { fname, profilepic, lname } = row.doctor.account;
-
-  const { title, description, createAt, category, specdes, image } = row;
+  const { title, description, category, specdes, image, unit, components, origin, _id } = row;
 
   const [openMenu, setOpenMenuActions] = useState(null);
 
@@ -61,27 +59,17 @@ export default function ProductTableRow({ row, selected, onEditRow, onSelectRow,
         {specdes}
       </TableCell>
 
-      {/* <TableCell align="center">
-        <Iconify
-          icon={roomname ? 'eva:checkmark-circle-fill' : 'eva:clock-outline'}
-          sx={{
-            width: 20,
-            height: 20,
-            color: 'success.main',
-            ...(!roomname && { color: 'warning.main' }),
-          }}
-        />
-      </TableCell> */}
+      <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+        {unit}
+      </TableCell>
 
-      {/* <TableCell align="center">
-        <Label
-          variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-          color={(status === "chờ xác nhận" && 'warning') || (status === "chờ khám" && 'info') || (status === 'đã hủy' && 'error') || (status === 'đã hoàn thành' && 'success')}
-          sx={{ textTransform: 'capitalize' }}
-        >
-          {status}
-        </Label>
-      </TableCell> */}
+      <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+        {components}
+      </TableCell>
+
+      <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+        {origin}
+      </TableCell>
 
       <TableCell align="right">
         <TableMoreMenu
@@ -102,12 +90,12 @@ export default function ProductTableRow({ row, selected, onEditRow, onSelectRow,
               </MenuItem> */}
               <MenuItem
                 onClick={() => {
-                  onEditRow();
+                  onEditRow(_id, title, description, specdes, unit, components, origin, image);
                   handleCloseMenu();
                 }}
               >
                 <Iconify icon={'openmoji:details'} />
-                Xem chi tiết
+                Sửa sản phẩm
               </MenuItem>
             </>
           }
