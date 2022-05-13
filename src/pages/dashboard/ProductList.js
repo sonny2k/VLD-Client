@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation, Link as RouterLink } from 'react-router-dom';
 import unorm from 'unorm';
 import { paramCase } from 'change-case';
@@ -24,6 +25,7 @@ import {
 } from '@mui/material';
 // utils
 import axios from '../../utils/axios';
+import { getMedicines } from '../../redux/slices/medicine';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
@@ -81,18 +83,16 @@ export default function ProductList() {
 
   const { themeStretch } = useSettings();
 
+  const dispatch = useDispatch();
+
   const [products, setProducts] = useState([]);
+
+  const { medicines } = useSelector((state) => state.medicine);
+
   useEffect(() => {
-    getProd();
-  }, []);
-  const getProd = async () => {
-    try {
-      const res = await axios.get(`/api/admin/product/viewProduct`);
-      setProducts(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
+    dispatch(getMedicines());
+    setProducts(medicines);
+  }, [dispatch, medicines]);
 
   const [filterName, setFilterName] = useState('');
 
