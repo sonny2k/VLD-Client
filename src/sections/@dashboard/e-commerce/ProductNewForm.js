@@ -41,16 +41,7 @@ ProductNewForm.propTypes = {
   origins: PropTypes.array,
 };
 
-export default function ProductNewForm({
-  categories,
-  title,
-  description,
-  specdes,
-  unit,
-  components,
-  origins,
-  category,
-}) {
+export default function ProductNewForm({ categories, origins }) {
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -62,19 +53,8 @@ export default function ProductNewForm({
     unit: Yup.string().required('Vui lòng điền đơn vị tính'),
   });
 
-  const defaultValues = useMemo(() => ({
-    title: title || '',
-    description: description || '',
-    specdes: specdes || '',
-    unit: unit || '',
-    components: components || '',
-    origin: origin || '',
-    category: category || '',
-  }));
-
   const methods = useForm({
     resolver: yupResolver(NewProductSchema),
-    defaultValues,
   });
 
   const {
@@ -96,9 +76,9 @@ export default function ProductNewForm({
         description: data.description,
         specdes: data.specdes,
         unit: data.unit,
-        category: data.category,
+        category: data.categoryne !== '' ? data.categoryne : categories[0].name,
         components: data.components,
-        origin: data.origin,
+        origin: data.origin !== '' ? data.origin : origins[0].name,
         image: imageUrl,
       });
       enqueueSnackbar('Tạo sản phẩm thành công');
@@ -176,7 +156,7 @@ export default function ProductNewForm({
               </div>
 
               <div>
-              <RHFSelect name="origin" label="Nhà sản xuất">
+                <RHFSelect name="origin" label="Nhà sản xuất">
                   {origins.map((option) => (
                     <option key={option._id}>{option.name}</option>
                   ))}

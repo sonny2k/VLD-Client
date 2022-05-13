@@ -36,15 +36,17 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
-ProductNewForm.propTypes = {
+ProductEditForm.propTypes = {
   categories: PropTypes.array,
   origins: PropTypes.array,
 };
 
-export default function ProductNewForm({
+export default function ProductEditForm({
   categories,
   id,
   title,
+  category,
+  origin,
   description,
   specdes,
   unit,
@@ -64,6 +66,7 @@ export default function ProductNewForm({
   const defaultValues = useMemo(
     () => ({
       title: title || '',
+      categoryne: category || '',
       description: description || '',
       specdes: specdes || '',
       unit: unit || '',
@@ -96,10 +99,11 @@ export default function ProductNewForm({
       await axios.put(`/api/admin/product/updateProduct/${id}`, {
         title: data.title,
         description: data.description,
+        category: data.categoryne !== '' ? data.category : categories[0].name,
         specdes: data.specdes,
         unit: data.unit,
         components: data.components,
-        origin: data.origin,
+        origin: data.origin !== '' ? data.origin : origins[0].name,
         image: data.image,
       });
       enqueueSnackbar('Cập nhật sản phẩm thành công');
@@ -156,7 +160,7 @@ export default function ProductNewForm({
               </div>
 
               <div>
-                <RHFSelect loading={!categories.length} name="category" label="Loại thuốc">
+                <RHFSelect loading={!categories.length} name="categoryne" label="Loại thuốc">
                   {categories.map((option) => (
                     <option key={option._id}>{option.name}</option>
                   ))}
@@ -176,7 +180,7 @@ export default function ProductNewForm({
               </div>
 
               <div>
-              <RHFSelect loading={!origins.length} name="origin" label="Nhà sản xuất">
+                <RHFSelect loading={!origins.length} name="origin" label="Nhà sản xuất">
                   {origins.map((option) => (
                     <option key={option._id}>{option.name}</option>
                   ))}

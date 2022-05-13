@@ -41,10 +41,8 @@ import Iconify from '../../components/Iconify';
 import LoadingScreen from '../../components/LoadingScreen';
 import { ProductTableToolbar, ProductTableRow } from '../../sections/@dashboard/user/list';
 
-
 // ----------------------------------------------------------------------
 const ROLE_OPTIONS = ['Tất cả', 'giảm đau', 'nhức đầu', 'ho', 'nhỏ mắt'];
-
 
 const TABLE_HEAD = [
   { id: 'tile', label: 'Tên thuốc', align: 'left' },
@@ -120,7 +118,9 @@ export default function ProductList() {
     }
 
     if (filterRole !== 'Tất cả') {
-      products = products.filter((item) => unorm.nfd(item.category).toLowerCase().indexOf(unorm.nfd(filterRole).toLowerCase()) !== -1);
+      products = products.filter(
+        (item) => unorm.nfd(item.category).toLowerCase().indexOf(unorm.nfd(filterRole).toLowerCase()) !== -1
+      );
     }
 
     return products;
@@ -147,18 +147,19 @@ export default function ProductList() {
     setProducts(deleteRows);
   };
 
-  const handleEditRow = (_id, title, description, specdes, unit, components, origin, image) => {
+  const handleEditRow = (_id, title, description, specdes, unit, components, category, origin, image) => {
     navigate(PATH_DASHBOARD.user.productedit, {
       state: {
-        id1:_id,
+        id1: _id,
         title1: title,
         description1: description,
+        category1: category,
         specdes1: specdes,
         unit1: unit,
         components1: components,
         origin1: origin,
         image1: image,
-      }
+      },
     });
   };
 
@@ -178,15 +179,12 @@ export default function ProductList() {
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Danh sách sản phẩm"
-          links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Danh sách' },
-          ]}
+          links={[{ name: 'Dashboard', href: PATH_DASHBOARD.root }, { name: 'Danh sách' }]}
           action={
             <Button
               variant="contained"
               component={RouterLink}
-               to={PATH_DASHBOARD.user.productcreate}
+              to={PATH_DASHBOARD.user.productcreate}
               startIcon={<Iconify icon={'eva:plus-fill'} />}
             >
               Thêm sản phẩm
@@ -252,7 +250,19 @@ export default function ProductList() {
                       selected={selected.includes(row._id)}
                       onSelectRow={() => onSelectRow(row._id)}
                       onDeleteRow={() => handleDeleteRow(row._id)}
-                      onEditRow={() => handleEditRow(row._id, row.title, row.description, row.specdes, row.unit, row.components, row.origin, row.image)}
+                      onEditRow={() =>
+                        handleEditRow(
+                          row._id,
+                          row.title,
+                          row.description,
+                          row.specdes,
+                          row.unit,
+                          row.components,
+                          row.category,
+                          row.origin,
+                          row.image
+                        )
+                      }
                     />
                   ))}
 

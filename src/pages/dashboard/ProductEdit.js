@@ -23,10 +23,6 @@ export default function ProductCreate() {
   const { themeStretch } = useSettings();
 
   const Location = useLocation();
-  let isEdit = false
-  if ( Location.state.id1 && Location.state.title1 && Location.state.description1 && Location.state.specdes1 && Location.state.unit1 && Location.state.components1 && Location.state.origin1 && Location.state.image1 !== null) {
-    isEdit=true
-  }
 
   const [medCate, setMedCate] = useState(null);
 
@@ -59,7 +55,8 @@ export default function ProductCreate() {
   };
 
   return (
-    medCate !== null && medOrigin !== null && (
+    medCate !== null &&
+    medOrigin !== null && (
       <Page title="Sửa sản phẩm ">
         <Container maxWidth={themeStretch ? false : 'lg'}>
           <HeaderBreadcrumbs
@@ -73,8 +70,20 @@ export default function ProductCreate() {
               { name: 'Sửa sản phẩm' },
             ]}
           />
-            {isEdit === true &&
-          <ProductEditForm id={Location.state.id1} title={Location.state.title1} description={Location.state.description1} specdes={Location.state.specdes1} unit={Location.state.unit1} components={Location.state.components1} origin={Location.state.origin1} image={Location.state.image1} categories={medCate} origins={medOrigin} isEdit={isEdit}  /> }
+
+          <ProductEditForm
+            id={Location.state.id1}
+            title={Location.state.title1}
+            description={Location.state.description1}
+            specdes={Location.state.specdes1}
+            unit={Location.state.unit1}
+            components={Location.state.components1}
+            origin={Location.state.origin1}
+            image={Location.state.image1}
+            categories={medCate}
+            origins={medOrigin}
+            category={Location.state.category1}
+          />
         </Container>
       </Page>
     )

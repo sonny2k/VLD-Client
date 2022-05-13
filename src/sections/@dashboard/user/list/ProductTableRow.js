@@ -90,7 +90,7 @@ export default function ProductTableRow({ row, selected, onEditRow, onSelectRow,
               </MenuItem> */}
               <MenuItem
                 onClick={() => {
-                  onEditRow(_id, title, description, specdes, unit, components, origin, image);
+                  onEditRow(_id, title, description, specdes, unit, components, origin, image, category);
                   handleCloseMenu();
                 }}
               >
