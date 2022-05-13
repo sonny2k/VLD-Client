@@ -30,9 +30,15 @@ export default function ProductCreate() {
 
   const [medCate, setMedCate] = useState(null);
 
+  const [medOrigin, setMedOrigin] = useState(null);
+
   useEffect(() => {
     getMedCates();
   }, [medCate]);
+
+  useEffect(() => {
+    getMedOrigins();
+  }, [medOrigin]);
 
   const getMedCates = async () => {
     try {
@@ -43,8 +49,17 @@ export default function ProductCreate() {
     }
   };
 
+  const getMedOrigins = async () => {
+    try {
+      const res = await axios.get('/api/admin/supplier/viewSupplier');
+      setMedOrigin(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
-    medCate !== null && (
+    medCate !== null && medOrigin !== null && (
       <Page title="Sửa sản phẩm ">
         <Container maxWidth={themeStretch ? false : 'lg'}>
           <HeaderBreadcrumbs
@@ -59,7 +74,7 @@ export default function ProductCreate() {
             ]}
           />
             {isEdit === true &&
-          <ProductEditForm id={Location.state.id1} title={Location.state.title1} description={Location.state.description1} specdes={Location.state.specdes1} unit={Location.state.unit1} components={Location.state.components1} origin={Location.state.origin1} image={Location.state.image1} categories={medCate} isEdit={isEdit}  /> }
+          <ProductEditForm id={Location.state.id1} title={Location.state.title1} description={Location.state.description1} specdes={Location.state.specdes1} unit={Location.state.unit1} components={Location.state.components1} origin={Location.state.origin1} image={Location.state.image1} categories={medCate} origins={medOrigin} isEdit={isEdit}  /> }
         </Container>
       </Page>
     )

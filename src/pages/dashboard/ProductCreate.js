@@ -24,9 +24,15 @@ export default function ProductCreate() {
 
   const [medCate, setMedCate] = useState(null);
 
+  const [medOrigin, setMedOrigin] = useState(null);
+
   useEffect(() => {
     getMedCates();
   }, [medCate]);
+
+  useEffect(() => {
+    getMedOrigins();
+  }, [medOrigin]);
 
   const getMedCates = async () => {
     try {
@@ -37,8 +43,17 @@ export default function ProductCreate() {
     }
   };
 
+  const getMedOrigins = async () => {
+    try {
+      const res = await axios.get('/api/admin/supplier/viewSupplier');
+      setMedOrigin(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
-    medCate !== null && (
+    medCate !== null && medOrigin !== null && (
       <Page title="Tạo sản phẩm ">
         <Container maxWidth={themeStretch ? false : 'lg'}>
           <HeaderBreadcrumbs
@@ -53,7 +68,7 @@ export default function ProductCreate() {
             ]}
           />
 
-          <ProductNewForm categories={medCate}  />
+          <ProductNewForm categories={medCate} origins={medOrigin}  />
         </Container>
       </Page>
     )

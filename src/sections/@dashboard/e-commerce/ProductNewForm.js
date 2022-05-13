@@ -38,6 +38,7 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 
 ProductNewForm.propTypes = {
   categories: PropTypes.array,
+  origins: PropTypes.array,
 };
 
 export default function ProductNewForm({
@@ -47,7 +48,7 @@ export default function ProductNewForm({
   specdes,
   unit,
   components,
-  origin,
+  origins,
   category,
 }) {
   const navigate = useNavigate();
@@ -175,7 +176,11 @@ export default function ProductNewForm({
               </div>
 
               <div>
-                <RHFTextField name="origin" label="Nhà sản xuất" />
+              <RHFSelect name="origin" label="Nhà sản xuất">
+                  {origins.map((option) => (
+                    <option key={option._id}>{option.name}</option>
+                  ))}
+                </RHFSelect>
               </div>
 
               <div>
