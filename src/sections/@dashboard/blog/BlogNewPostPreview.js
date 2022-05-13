@@ -22,40 +22,40 @@ BlogNewPostPreview.propTypes = {
 };
 
 export default function BlogNewPostPreview({ values, isValid, isSubmitting, isOpen, onClose, onSubmit }) {
-  const { title, content, description } = values;
+  const { title, content, briefdescription } = values;
 
-  const cover = typeof values.cover === 'string' ? values.cover : values.cover?.preview;
+  const banner = typeof values.banner === 'string' ? values.banner : values.banner?.preview;
 
-  const hasContent = title || description || content || cover;
+  const hasContent = title || briefdescription || content || banner;
 
-  const hasHero = title || cover;
+  const hasHero = title || banner;
 
   return (
     <DialogAnimate fullScreen open={isOpen} onClose={onClose}>
       <DialogActions sx={{ py: 2, px: 3 }}>
         <Typography variant="subtitle1" sx={{ flexGrow: 1 }}>
-          Preview Post
+          Xem trước bài đăng
         </Typography>
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={onClose}>Hủy bỏ</Button>
         <LoadingButton type="submit" variant="contained" disabled={!isValid} loading={isSubmitting} onClick={onSubmit}>
-          Post
+          Đăng tin tức
         </LoadingButton>
       </DialogActions>
 
       {hasContent ? (
         <Scrollbar>
-          {hasHero && <PreviewHero title={title || ''} cover={cover} />}
+          {hasHero && <PreviewHero title={title || ''} banner={banner} />}
           <Container>
             <Box sx={{ mt: 5, mb: 10 }}>
               <Typography variant="h6" sx={{ mb: 5 }}>
-                {description}
+                {briefdescription}
               </Typography>
               <Markdown children={content || ''} />
             </Box>
           </Container>
         </Scrollbar>
       ) : (
-        <EmptyContent title="Empty content" />
+        <EmptyContent title="Nội dung trống" />
       )}
     </DialogAnimate>
   );
@@ -64,11 +64,11 @@ export default function BlogNewPostPreview({ values, isValid, isSubmitting, isOp
 // ----------------------------------------------------------------------
 
 PreviewHero.propTypes = {
-  cover: PropTypes.string,
+  banner: PropTypes.string,
   title: PropTypes.string,
 };
 
-function PreviewHero({ title, cover }) {
+function PreviewHero({ title, banner }) {
   return (
     <Box sx={{ position: 'relative' }}>
       <Container
@@ -98,7 +98,7 @@ function PreviewHero({ title, cover }) {
           bgcolor: (theme) => alpha(theme.palette.grey[900], 0.8),
         }}
       />
-      <Image alt="cover" src={cover} ratio="16/9" />
+      <Image alt="banner" src={banner} />
     </Box>
   );
 }

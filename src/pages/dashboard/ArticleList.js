@@ -44,10 +44,8 @@ const ROLE_OPTIONS = ['Tất cả', 'Đã đăng', 'Chưa đăng'];
 const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'đã hủy', 'đã hoàn thành'];
 
 const TABLE_HEAD = [
-  { id: 'title', label: 'Tiêu đề', align: 'center' },
+  { id: 'title', label: 'Tiêu đề', align: 'left' },
   { id: 'author', label: 'Tác giả', align: 'center' },
-  { id: 'createdat', label: 'Ngày tạo', align: 'center' },
-  { id: 'hourofpublish', label: 'Giờ đăng', align: 'center' },
   { id: 'articlecategory', label: 'Loại', align: 'center' },
   { id: 'status', label: 'Trạng thái', align: 'center' },
   { id: '' },
@@ -174,7 +172,7 @@ export default function ArticleList() {
               <Button
                 variant="contained"
                 component={RouterLink}
-                to={PATH_DASHBOARD.user}
+                to={PATH_DASHBOARD.blog.new}
                 startIcon={<Iconify icon={'eva:plus-fill'} />}
               >
                 Thêm tin tức

@@ -135,7 +135,7 @@ export default function ProductNewForm({ categories, origins }) {
               <RHFTextField name="title" label="Tên sản phẩm" />
 
               <div>
-                <RHFTextField multiline rows={4} name="description" label="Mô tả sản phẩm" />
+                <RHFTextField multiline rows={6} name="description" label="Mô tả sản phẩm" />
               </div>
 
               <div>

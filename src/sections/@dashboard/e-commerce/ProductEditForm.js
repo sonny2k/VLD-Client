@@ -9,7 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { styled } from '@mui/material/styles';
 import { LoadingButton } from '@mui/lab';
-import { Card, Chip, Grid, Stack, TextField, Typography, Autocomplete, InputAdornment } from '@mui/material';
+import { Card, Chip, Grid, Stack, TextField, Typography, Autocomplete, InputAdornment, Button } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // utils
@@ -116,6 +116,10 @@ export default function ProductEditForm({
     }
   };
 
+  const back = async () => {
+      navigate(PATH_DASHBOARD.user.productlist);
+  };
+
   const handleDrop = useCallback(
     async (acceptedFiles) => {
       const file = acceptedFiles[0];
@@ -159,7 +163,7 @@ export default function ProductEditForm({
               <RHFTextField name="title" label="Tên sản phẩm" />
 
               <div>
-                <RHFTextField multiline rows={4} name="description" label="Mô tả sản phẩm" />
+                <RHFTextField multiline rows={6} name="description" label="Mô tả sản phẩm" />
               </div>
 
               <div>
@@ -195,7 +199,10 @@ export default function ProductEditForm({
                 <RHFUploadAvatar name="image" accept="image/*" maxSize={3145728} onDrop={handleDrop} type="file" />
               </div>
               <div>
-                <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
+                <Stack justifyContent="flex-end" direction="row" spacing={2} sx={{ mt: 3 }}>
+                <Button size="large" variant="contained" color="inherit" onClick={back}>
+                    Trở về
+                </Button>
                   <LoadingButton
                     type="submit"
                     variant="contained"

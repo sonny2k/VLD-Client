@@ -111,7 +111,7 @@ export default function BlogNewPostForm() {
 
       if (file) {
         setValue(
-          'cover',
+          'banner',
           Object.assign(file, {
             preview: URL.createObjectURL(file),
           })
@@ -128,18 +128,20 @@ export default function BlogNewPostForm() {
           <Grid item xs={12} md={8}>
             <Card sx={{ p: 3 }}>
               <Stack spacing={3}>
-                <RHFTextField name="title" label="Post Title" />
+                <RHFTextField name="title" label="Tiêu đề" />
 
-                <RHFTextField name="description" label="Description" multiline rows={3} />
+                <RHFTextField name="author" label="Tác giả" />
+
+                <RHFTextField name="briefdescription" label="Mô tả ngắn" multiline rows={3} />
 
                 <div>
-                  <LabelStyle>Content</LabelStyle>
-                  <RHFEditor simple name="content" />
+                  <LabelStyle>Nội dung tin tức</LabelStyle>
+                  <RHFEditor name="content" placeholder="Điền nôi dung cho tin tức" />
                 </div>
 
                 <div>
-                  <LabelStyle>Cover</LabelStyle>
-                  <RHFUploadSingleFile name="cover" accept="image/*" maxSize={3145728} onDrop={handleDrop} />
+                  <LabelStyle>Hình ảnh</LabelStyle>
+                  <RHFUploadSingleFile name="banner" accept="image/*" maxSize={3145728} onDrop={handleDrop} />
                 </div>
               </Stack>
             </Card>
@@ -151,69 +153,20 @@ export default function BlogNewPostForm() {
                 <div>
                   <RHFSwitch
                     name="publish"
-                    label="Publish"
+                    label="Công khai"
                     labelPlacement="start"
                     sx={{ mb: 1, mx: 0, width: 1, justifyContent: 'space-between' }}
                   />
-
-                  <RHFSwitch
-                    name="comments"
-                    label="Enable comments"
-                    labelPlacement="start"
-                    sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-                  />
                 </div>
-
-                <Controller
-                  name="tags"
-                  control={control}
-                  render={({ field }) => (
-                    <Autocomplete
-                      multiple
-                      freeSolo
-                      onChange={(event, newValue) => field.onChange(newValue)}
-                      options={TAGS_OPTION.map((option) => option)}
-                      renderTags={(value, getTagProps) =>
-                        value.map((option, index) => (
-                          <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
-                        ))
-                      }
-                      renderInput={(params) => <TextField label="Tags" {...params} />}
-                    />
-                  )}
-                />
-
-                <RHFTextField name="metaTitle" label="Meta title" />
-
-                <RHFTextField name="metaDescription" label="Meta description" fullWidth multiline rows={3} />
-
-                <Controller
-                  name="metaKeywords"
-                  control={control}
-                  render={({ field }) => (
-                    <Autocomplete
-                      multiple
-                      freeSolo
-                      onChange={(event, newValue) => field.onChange(newValue)}
-                      options={TAGS_OPTION.map((option) => option)}
-                      renderTags={(value, getTagProps) =>
-                        value.map((option, index) => (
-                          <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
-                        ))
-                      }
-                      renderInput={(params) => <TextField label="Meta keywords" {...params} />}
-                    />
-                  )}
-                />
               </Stack>
             </Card>
 
             <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
               <Button fullWidth color="inherit" variant="outlined" size="large" onClick={handleOpenPreview}>
-                Preview
+                Xem trước
               </Button>
               <LoadingButton fullWidth type="submit" variant="contained" size="large" loading={isSubmitting}>
-                Post
+                Đăng tin tức
               </LoadingButton>
             </Stack>
           </Grid>

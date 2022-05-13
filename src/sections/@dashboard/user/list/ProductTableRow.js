@@ -48,19 +48,11 @@ export default function ProductTableRow({ row, selected, onEditRow, onSelectRow,
       </TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {description}
-      </TableCell>
-
-      <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
         {category}
       </TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
         {specdes}
-      </TableCell>
-
-      <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {unit}
       </TableCell>
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>

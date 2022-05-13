@@ -16,14 +16,14 @@ export default function BlogNewPost() {
   const { themeStretch } = useSettings();
 
   return (
-    <Page title="Blog: New Post">
+    <Page title="Tin tức: Tin tức mới">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="Create a new post"
+          heading="Tạo tin tức mới"
           links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Blog', href: PATH_DASHBOARD.blog.root },
-            { name: 'New Post' },
+            { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
+            { name: 'Tin tức', href: PATH_DASHBOARD.blog.root },
+            { name: 'Tin tức mới' },
           ]}
         />
 

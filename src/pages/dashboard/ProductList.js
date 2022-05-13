@@ -44,14 +44,12 @@ import LoadingScreen from '../../components/LoadingScreen';
 import { ProductTableToolbar, ProductTableRow } from '../../sections/@dashboard/user/list';
 
 // ----------------------------------------------------------------------
-const ROLE_OPTIONS = ['Tất cả', 'giảm đau', 'nhức đầu', 'ho', 'nhỏ mắt'];
+const ROLE_OPTIONS = ['Tất cả', 'giảm đau', 'đau họng', 'ho', 'viêm họng', 'cảm', 'viêm xoang', 'nhỏ mắt', 'ung bướu', 'thần kinh'];
 
 const TABLE_HEAD = [
   { id: 'tile', label: 'Tên thuốc', align: 'left' },
-  { id: 'description', label: 'Mô tả', align: 'left' },
   { id: 'category', label: 'Loại thuốc', align: 'left' },
   { id: 'specdes', label: 'Quy cách', align: 'left' },
-  { id: 'unit', label: 'Đơn vị tính', align: 'left' },
   { id: 'components', label: 'Thành phần thuốc', align: 'left' },
   { id: 'origin', label: 'Nhà sản xuất', align: 'left' },
   { id: '' },
@@ -179,7 +177,7 @@ export default function ProductList() {
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Danh sách sản phẩm"
-          links={[{ name: 'Dashboard', href: PATH_DASHBOARD.root }, { name: 'Danh sách' }]}
+          links={[{ name: 'Bảng điều khiển', href: PATH_DASHBOARD.root }, { name: 'Danh sách' }]}
           action={
             <Button
               variant="contained"
