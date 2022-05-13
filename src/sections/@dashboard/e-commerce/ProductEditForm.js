@@ -61,6 +61,9 @@ export default function ProductEditForm({
   const NewProductSchema = Yup.object().shape({
     title: Yup.string().required('Vui lòng điền tên thuốc'),
     unit: Yup.string().required('Đơn vị tính là cần thiết'),
+    description: Yup.string().required('Mô tả là cần thiết'),
+    specdes: Yup.string().required('Quy cách là cần thiết'),
+    components: Yup.string().required('Thành phần là cần thiết'),
   });
 
   const defaultValues = useMemo(
