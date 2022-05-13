@@ -62,11 +62,17 @@ export default function UserTableRow({
 
   const { department } = row.doctor;
 
-  const { date, hour, status, _id } = row;
+  const { date, hour, status, _id, roomname } = row;
 
   const { account } = useAuth();
 
   const identity = `${account.lname} ${account.fname}`;
+
+  let noRoomName = false;
+
+  if (!roomname) {
+    noRoomName = true;
+  }
 
   const ExcuseSchema = Yup.object().shape({
     excuse: Yup.string().required('Vui lòng nhập lý do từ chối buổi hẹn'),
@@ -210,8 +216,7 @@ export default function UserTableRow({
                   Xem chi tiết
                 </MenuItem>
               )}
-
-              {status === 'chờ khám' && (
+              {status === 'chờ khám' && noRoomName === false && (
                 <MenuItem
                   onClick={() => {
                     handleCreateNameAndRoomName();
@@ -222,7 +227,6 @@ export default function UserTableRow({
                   Tham gia buổi tư vấn
                 </MenuItem>
               )}
-
               {status === 'chờ khám' && (
                 <MenuItem
                   onClick={() => {
@@ -235,7 +239,6 @@ export default function UserTableRow({
                   Hủy lịch hẹn
                 </MenuItem>
               )}
-
               {status === 'chờ xác nhận' && (
                 <MenuItem
                   onClick={() => {

@@ -40,7 +40,17 @@ ProductNewForm.propTypes = {
   categories: PropTypes.array,
 };
 
-export default function ProductNewForm({ categories, id, title, description, specdes, unit, components, origin, image }) {
+export default function ProductNewForm({
+  categories,
+  id,
+  title,
+  description,
+  specdes,
+  unit,
+  components,
+  origin,
+  image,
+}) {
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -59,10 +69,9 @@ export default function ProductNewForm({ categories, id, title, description, spe
       components: components || '',
       origin: origin || '',
       image: image || '',
-    }),
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   );
-
 
   const methods = useForm({
     resolver: yupResolver(NewProductSchema),
@@ -122,7 +131,7 @@ export default function ProductNewForm({ categories, id, title, description, spe
   const uploadImage = async (base64EncodedImage) => {
     const pic = base64EncodedImage.toString();
     try {
-      await axios.post(`/api/admin/product/image`, {
+      await axios.post(`/api/admin/product/image/${id}`, {
         pic,
       });
     } catch (err) {

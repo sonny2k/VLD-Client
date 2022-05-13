@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { useState } from 'react';
 import { paramCase } from 'change-case';
+import { useSnackbar } from 'notistack';
 import { format } from 'date-fns';
 import { Link as RouterLink } from 'react-router-dom';
 // form
@@ -25,6 +26,8 @@ import {
   Link,
   TextField,
 } from '@mui/material';
+// utils
+import axios from '../../../../utils/axios';
 // hooks
 import useAuth from '../../../../hooks/useAuth';
 // components
@@ -68,6 +71,8 @@ export default function DoctorTableRow({
   const { account } = useAuth();
 
   const identity = `Bác sĩ ${account.lname} ${account.fname}`;
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const ExcuseSchema = Yup.object().shape({
     excuse: Yup.string().required('Vui lòng nhập lý do từ chối buổi hẹn'),
@@ -118,16 +123,15 @@ export default function DoctorTableRow({
     formState: { isSubmitting },
   } = methods;
 
-  const handleCreateNameAndRoomName = () => {
-    // navigate(PATH_DASHBOARD.video, {
-    //   state: {
-    //     username1: identity,
-    //     roomname1: roomname,
-    //     date1: date,
-    //     hour1: hour,
-    //     id1: _id,
-    //   },
-    // });
+  const handleCreateNameAndRoomName = async () => {
+    try {
+      await axios.post('/api/doctor/consultation/createRoomName', {
+        _id: row._id,
+      });
+    } catch (err) {
+      console.error(err);
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', { variant: 'error' });
+    }
     window.open(`https://vldchatroom.herokuapp.com/room/${_id}/${identity}`);
   };
 

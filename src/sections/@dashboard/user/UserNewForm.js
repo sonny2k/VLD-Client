@@ -74,6 +74,12 @@ export default function UserNewForm({ consultation }) {
 
   const { department, description, workcertificate, level, educationplace, degree, workhistory } = consultation.doctor;
 
+  let noRoomName = false;
+
+  if (!roomname) {
+    noRoomName = true;
+  }
+
   const doctorname = `${level} ${lname} ${fname}`;
 
   const { enqueueSnackbar } = useSnackbar();
@@ -355,7 +361,7 @@ export default function UserNewForm({ consultation }) {
                     </Tooltip>
 
                     <Tooltip title="Tham gia buổi tư vấn">
-                      <IconButton color="info" onClick={handleCreateNameAndRoomName}>
+                      <IconButton disabled={noRoomName} color="info" onClick={handleCreateNameAndRoomName}>
                         <DuoIcon />
                       </IconButton>
                     </Tooltip>

@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import { useMemo, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
-import { format } from 'date-fns';
+import { addYears, format } from 'date-fns';
 // form
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -120,16 +120,15 @@ export default function DoctorConsultationDetail({ consultation }) {
     });
   };
 
-  const handleCreateNameAndRoomName = () => {
-    // navigate(PATH_DASHBOARD.video, {
-    //   state: {
-    //     username1: identity,
-    //     roomname1: roomname,
-    //     date1: date,
-    //     hour1: hour,
-    //     id1: _id,
-    //   },
-    // });
+  const handleCreateNameAndRoomName = async () => {
+    try {
+      await axios.post('/api/doctor/consultation/createRoomName', {
+        _id: consultation._id,
+      });
+    } catch (err) {
+      console.error(err);
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', { variant: 'error' });
+    }
     window.open(`https://vldchatroom.herokuapp.com/room/${_id}/${identity}`);
   };
 

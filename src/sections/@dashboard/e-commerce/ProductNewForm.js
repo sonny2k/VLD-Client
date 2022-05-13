@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 // form
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -40,27 +40,36 @@ ProductNewForm.propTypes = {
   categories: PropTypes.array,
 };
 
-export default function ProductNewForm({ categories, title, description, specdes, unit, components, origin, category }) {
+export default function ProductNewForm({
+  categories,
+  title,
+  description,
+  specdes,
+  unit,
+  components,
+  origin,
+  category,
+}) {
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
+
+  const [imageUrl, setimageUrl] = useState('');
 
   const NewProductSchema = Yup.object().shape({
     title: Yup.string().required('Vui lòng điền tên'),
     unit: Yup.string().required('Vui lòng điền đơn vị tính'),
   });
 
-  const defaultValues = useMemo(
-    () => ({
-      title: title || '',
-      description: description || '',
-      specdes: specdes || '',
-      unit: unit || '',
-      components: components || '',
-      origin: origin || '',
-      category: category || '',
-    }),
-  );
+  const defaultValues = useMemo(() => ({
+    title: title || '',
+    description: description || '',
+    specdes: specdes || '',
+    unit: unit || '',
+    components: components || '',
+    origin: origin || '',
+    category: category || '',
+  }));
 
   const methods = useForm({
     resolver: yupResolver(NewProductSchema),
@@ -89,6 +98,7 @@ export default function ProductNewForm({ categories, title, description, specdes
         category: data.category,
         components: data.components,
         origin: data.origin,
+        image: imageUrl,
       });
       enqueueSnackbar('Tạo sản phẩm thành công');
       navigate(PATH_DASHBOARD.user.productlist);
@@ -97,8 +107,43 @@ export default function ProductNewForm({ categories, title, description, specdes
     }
   };
 
+  const handleDrop = useCallback(
+    async (acceptedFiles) => {
+      const file = acceptedFiles[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+          uploadImage(reader.result);
+        };
+        setValue(
+          'image',
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          })
+        );
+      }
+    },
+    [setValue]
+  );
+
+  const uploadImage = async (base64EncodedImage) => {
+    const pic = base64EncodedImage.toString();
+    try {
+      const img = await axios.post(`/api/admin/product/image`, {
+        pic,
+      });
+      setimageUrl(img.data);
+    } catch (err) {
+      console.error(err);
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', {
+        variant: 'error',
+      });
+    }
+  };
+
   return (
-    <FormProvider methods={methods} >
+    <FormProvider methods={methods}>
       <Grid container spacing={3}>
         <Grid item xs={12} md={12}>
           <Card sx={{ p: 3 }}>
@@ -131,6 +176,11 @@ export default function ProductNewForm({ categories, title, description, specdes
 
               <div>
                 <RHFTextField name="origin" label="Nhà sản xuất" />
+              </div>
+
+              <div>
+                <LabelStyle>Hình ảnh</LabelStyle>
+                <RHFUploadAvatar name="image" accept="image/*" maxSize={3145728} onDrop={handleDrop} type="file" />
               </div>
 
               <div>
