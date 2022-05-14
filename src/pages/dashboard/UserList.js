@@ -45,14 +45,15 @@ const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'bị 
 
 const DEPARTMENT_OPTIONS = [
   'Tất cả',
-  'chuyên khoa tim mạch',
-  'chuyên khoa nội',
-  'chuyên khoa ngoại',
-  'chuyên khoa thần kinh',
-  'chuyên khoa nhãn khoa',
-  'chuyên khoa tai mũi họng',
-  'chuyên khoa răng-hàm-mặt',
-  'chuyên khoa ung bướu',
+  'tim mạch',
+  'nội',
+  'ngoại',
+  'thần kinh',
+  'nhãn khoa',
+  'tai mũi họng',
+  'răng-hàm-mặt',
+  'ung bướu',
+  'y học cổ truyền',
 ];
 
 const TABLE_HEAD = [

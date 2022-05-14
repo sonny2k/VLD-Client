@@ -45,9 +45,9 @@ export default function ArticleTableRow({ row, selected, onEditRow, onSelectRow,
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
 
-      <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
+      <TableCell sx={{ display: 'flex', alignItems: 'left' }}>
         <Avatar alt={title} src={banner} sx={{ mr: 2 }} />
-        <Typography variant="subtitle2" noWrap>
+        <Typography variant="subtitle2" >
           {title}
         </Typography>
       </TableCell>
@@ -56,11 +56,11 @@ export default function ArticleTableRow({ row, selected, onEditRow, onSelectRow,
         {author}
       </TableCell>
 
-      <TableCell align="center">{format(new Date(createdat), 'dd/MM/yyyy')}</TableCell>
+      {/* <TableCell align="center">{format(new Date(createdat), 'dd/MM/yyyy')}</TableCell> */}
 
-      <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
+      {/* <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
         {hourofpublish}
-      </TableCell>
+      </TableCell> */}
 
       <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
         {name}
