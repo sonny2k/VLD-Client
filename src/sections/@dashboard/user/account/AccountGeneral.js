@@ -34,11 +34,13 @@ export default function ModalEditInformation() {
   const cursor = true;
 
   const UpdateUserSchema = Yup.object().shape({
-    fname: Yup.string().required('Vui lòng điền tên chính xác'),
-    lname: Yup.string().matches(
-      /^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/,
-      'Vui lòng điền họ chính xác'
-    ),
+    fname: Yup.string().required('Vui lòng điền tên chính xác').max(255),
+    lname: Yup.string()
+      .matches(
+        /^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/,
+        'Vui lòng điền họ chính xác'
+      )
+      .max(255),
     email: Yup.string().email('Vui lòng nhập đúng định dạng Email').max(255),
     bd: Yup.string().nullable().required('Ngày sinh là bắt buộc'),
   });

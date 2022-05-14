@@ -9,11 +9,11 @@ import { dispatch } from '../store';
 const initialState = {
   isLoading: false,
   error: null,
-  medicines: [],
+  docdetail: {},
 };
 
 const slice = createSlice({
-  name: 'medicine',
+  name: 'doctordetail',
   initialState,
   reducers: {
     // START LOADING
@@ -28,11 +28,11 @@ const slice = createSlice({
     },
 
     // GET MEDICINES
-    getMedicinesSuccess(state, action) {
-      const medicines = action.payload;
+    getDoctorDetailSuccess(state, action) {
+      const docdetail = action.payload;
 
       state.isLoading = false;
-      state.medicines = medicines;
+      state.docdetail = docdetail;
     },
   },
 });
@@ -42,12 +42,12 @@ export default slice.reducer;
 
 // ----------------------------------------------------------------------
 
-export function getMedicines() {
+export function getDocDetail() {
   return async () => {
     dispatch(slice.actions.startLoading());
     try {
-      const response = await axios.get('/api/admin/product/viewProduct');
-      dispatch(slice.actions.getMedicinesSuccess(response.data));
+      const response = await axios.get('/api/doctor/account/info');
+      dispatch(slice.actions.getDoctorDetailSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }
