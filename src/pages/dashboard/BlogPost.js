@@ -3,6 +3,7 @@ import { sentenceCase } from 'change-case';
 import { useParams } from 'react-router-dom';
 // @mui
 import { Box, Card, Divider, Container, Typography, Pagination } from '@mui/material';
+import { styled } from '@mui/material/styles';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
@@ -25,13 +26,21 @@ import {
 } from '../../sections/@dashboard/blog';
 
 // ----------------------------------------------------------------------
+const RootStyle = styled('div')(({ theme }) => ({
+  paddingTop: theme.spacing(8),
+  paddingBottom: theme.spacing(8),
+  [theme.breakpoints.up('md')]: {
+    paddingTop: theme.spacing(11),
+    paddingBottom: theme.spacing(11),
+  },
+}));
 
 export default function BlogPost() {
   const { themeStretch } = useSettings();
 
   const isMountedRef = useIsMountedRef();
 
-  const { title } = useParams();
+  const { id } = useParams();
 
   const [recentPosts, setRecentPosts] = useState([]);
 
@@ -41,91 +50,46 @@ export default function BlogPost() {
 
   const getPost = useCallback(async () => {
     try {
-      const response = await axios.get('/api/blog/post', {
-        params: { title },
-      });
+      const response = await axios.get(`/api/admin/article/viewListArticle/detail/${id}`);
 
       if (isMountedRef.current) {
-        setPost(response.data.post);
+        setPost(response.data);
       }
     } catch (error) {
       console.error(error);
       setError(error.message);
     }
-  }, [isMountedRef, title]);
-
-  const getRecentPosts = useCallback(async () => {
-    try {
-      const response = await axios.get('/api/blog/posts/recent', {
-        params: { title },
-      });
-
-      if (isMountedRef.current) {
-        setRecentPosts(response.data.recentPosts);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }, [isMountedRef, title]);
+  }, [isMountedRef, id]);
 
   useEffect(() => {
     getPost();
-    getRecentPosts();
-  }, [getRecentPosts, getPost]);
+  }, [getPost]);
 
   return (
-    <Page title="Blog: Post Details">
-      <Container maxWidth={themeStretch ? false : 'lg'}>
-        <HeaderBreadcrumbs
-          heading="Post Details"
-          links={[
-            { name: 'Dashboard', href: PATH_DASHBOARD.root },
-            { name: 'Blog', href: PATH_DASHBOARD.blog.root },
-            { name: sentenceCase(title) },
-          ]}
-        />
+    <Page title="Chi tiết bài đăng">
+      <RootStyle>
+        <Container maxWidth={themeStretch ? false : 'lg'}>
+          {post && (
+            <Card>
+              <BlogPostHero post={post} />
 
-        {post && (
-          <Card>
-            <BlogPostHero post={post} />
-
-            <Box sx={{ p: { xs: 3, md: 5 } }}>
-              <Typography variant="h6" sx={{ mb: 5 }}>
-                {post.description}
-              </Typography>
-
-              <Markdown children={post.body} />
-
-              <Box sx={{ my: 5 }}>
-                <Divider />
-                <BlogPostTags post={post} />
-                <Divider />
-              </Box>
-
-              <Box sx={{ display: 'flex', mb: 2 }}>
-                <Typography variant="h4">Comments</Typography>
-                <Typography variant="subtitle2" sx={{ color: 'text.disabled' }}>
-                  ({post.comments.length})
+              <Box sx={{ p: { xs: 3, md: 5 } }}>
+                <Typography variant="h6" sx={{ mb: 5 }}>
+                  {post.briefdescription}
                 </Typography>
+
+                <Markdown children={post.content} />
               </Box>
+            </Card>
+          )}
 
-              <BlogPostCommentList post={post} />
+          {!post && !error && <SkeletonPost />}
 
-              <Box sx={{ mb: 5, mt: 3, display: 'flex', justifyContent: 'flex-end' }}>
-                <Pagination count={8} color="primary" />
-              </Box>
+          {error && <Typography variant="h6">404 {error}!</Typography>}
 
-              <BlogPostCommentForm />
-            </Box>
-          </Card>
-        )}
-
-        {!post && !error && <SkeletonPost />}
-
-        {error && <Typography variant="h6">404 {error}!</Typography>}
-
-        <BlogPostRecent posts={recentPosts} />
-      </Container>
+          {/* <BlogPostRecent posts={recentPosts} /> */}
+        </Container>
+      </RootStyle>
     </Page>
   );
 }

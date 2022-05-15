@@ -23,32 +23,47 @@ export default function GeneralAnalytics() {
   const { themeStretch } = useSettings();
 
   return (
-    <Page title="General: Analytics">
+    <Page title="Thống kê">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Hi, Welcome back
+          Số liệu tổng quan về Văn Lang Doctor
         </Typography>
 
         <Grid container spacing={3}>
           <Grid item xs={12} sm={6} md={3}>
-            <AnalyticsWidgetSummary title="Weekly Sales" total={714000} icon={'ant-design:android-filled'} />
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={3}>
-            <AnalyticsWidgetSummary title="New Users" total={1352831} color="info" icon={'ant-design:apple-filled'} />
-          </Grid>
-
-          <Grid item xs={12} sm={6} md={3}>
             <AnalyticsWidgetSummary
-              title="Item Orders"
-              total={1723315}
+              title="Lịch hẹn chờ xác nhận"
               color="warning"
-              icon={'ant-design:windows-filled'}
+              total={714000}
+              icon={'medical-icon:i-waiting-area'}
             />
           </Grid>
 
           <Grid item xs={12} sm={6} md={3}>
-            <AnalyticsWidgetSummary title="Bug Reports" total={234} color="error" icon={'ant-design:bug-filled'} />
+            <AnalyticsWidgetSummary
+              title="Lịch hẹn chờ khám"
+              total={1352831}
+              color="info"
+              icon={'fa6-solid:house-medical-circle-exclamation'}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={3}>
+            <AnalyticsWidgetSummary
+              title="Lịch hẹn bị từ chối"
+              total={1723315}
+              color="error"
+              icon={'fa6-solid:house-medical-circle-xmark'}
+            />
+          </Grid>
+
+          <Grid item xs={12} sm={6} md={3}>
+            <AnalyticsWidgetSummary
+              title="Lịch hẹn đã hoàn thành"
+              total={234}
+              color="success"
+              icon={'fa6-solid:house-medical-circle-check'}
+            />
           </Grid>
 
           <Grid item xs={12} md={6} lg={8}>

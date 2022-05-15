@@ -1,10 +1,10 @@
 import { format, getTime, formatDistance } from 'date-fns';
-import vi from 'date-fns/locale/vi'
+import vi from 'date-fns/locale/vi';
 
 // ----------------------------------------------------------------------
 
 export function fDate(date) {
-  return format(new Date(date), 'dd MMMM yyyy');
+  return format(new Date(date), 'dd MMMM yyyy', { locale: vi });
 }
 
 export function fDateTime(date) {

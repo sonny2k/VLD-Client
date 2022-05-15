@@ -5,7 +5,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { styled, alpha } from '@mui/material/styles';
 import { Box, Link, Card, Avatar, Typography, CardContent, Stack } from '@mui/material';
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import { PATH_DASHBOARD, PATH_PAGE } from '../../../routes/paths';
 // hooks
 import useResponsive from '../../../hooks/useResponsive';
 // utils
@@ -39,7 +39,9 @@ BlogPostCard.propTypes = {
 export default function BlogPostCard({ post, index }) {
   const isDesktop = useResponsive('up', 'md');
 
-  const { cover, title, view, comment, share, author, createdAt } = post;
+  const { banner, title, createdat, _id } = post;
+
+  const { fname, lname, profilepic } = post.author;
 
   const latestPost = index === 0 || index === 1 || index === 2;
 
@@ -47,8 +49,8 @@ export default function BlogPostCard({ post, index }) {
     return (
       <Card>
         <Avatar
-          alt={author.name}
-          src={author.avatarUrl}
+          alt={fname}
+          src={profilepic}
           sx={{
             zIndex: 9,
             top: 24,
@@ -58,9 +60,9 @@ export default function BlogPostCard({ post, index }) {
             position: 'absolute',
           }}
         />
-        <PostContent title={title} view={view} comment={comment} share={share} createdAt={createdAt} index={index} />
+        <PostContent title={title} createdAt={createdat} index={index} id={_id} />
         <OverlayStyle />
-        <Image alt="cover" src={cover} sx={{ height: 360 }} />
+        <Image alt="cover" src={banner} sx={{ height: 360 }} />
       </Card>
     );
   }
@@ -80,8 +82,8 @@ export default function BlogPostCard({ post, index }) {
           }}
         />
         <Avatar
-          alt={author.name}
-          src={author.avatarUrl}
+          alt={fname}
+          src={profilepic}
           sx={{
             left: 24,
             zIndex: 9,
@@ -91,10 +93,10 @@ export default function BlogPostCard({ post, index }) {
             position: 'absolute',
           }}
         />
-        <Image alt="cover" src={cover} ratio="4/3" />
+        <Image alt="cover" src={banner} ratio="4/3" />
       </Box>
 
-      <PostContent title={title} view={view} comment={comment} share={share} createdAt={createdAt} />
+      <PostContent title={title} createdAt={createdat} id={_id} />
     </Card>
   );
 }
@@ -102,27 +104,17 @@ export default function BlogPostCard({ post, index }) {
 // ----------------------------------------------------------------------
 
 PostContent.propTypes = {
-  comment: PropTypes.number,
-  createdAt: PropTypes.string,
   index: PropTypes.number,
-  share: PropTypes.number,
   title: PropTypes.string,
-  view: PropTypes.number,
 };
 
-export function PostContent({ title, view, comment, share, createdAt, index }) {
+export function PostContent({ title, createdAt, index, id }) {
   const isDesktop = useResponsive('up', 'md');
 
-  const linkTo = PATH_DASHBOARD.blog.view(paramCase(title));
+  const linkTo = PATH_PAGE.article(paramCase(id));
 
   const latestPostLarge = index === 0;
   const latestPostSmall = index === 1 || index === 2;
-
-  const POST_INFO = [
-    { number: comment, icon: 'eva:message-circle-fill' },
-    { number: view, icon: 'eva:eye-fill' },
-    { number: share, icon: 'eva:share-fill' },
-  ];
 
   return (
     <CardContent
@@ -158,29 +150,6 @@ export function PostContent({ title, view, comment, share, createdAt, index }) {
           {title}
         </TextMaxLine>
       </Link>
-
-      <Stack
-        flexWrap="wrap"
-        direction="row"
-        justifyContent="flex-end"
-        sx={{
-          mt: 3,
-          color: 'text.disabled',
-          ...((latestPostLarge || latestPostSmall) && {
-            opacity: 0.64,
-            color: 'common.white',
-          }),
-        }}
-      >
-        {POST_INFO.map((info, index) => (
-          <TextIconLabel
-            key={index}
-            icon={<Iconify icon={info.icon} sx={{ width: 16, height: 16, mr: 0.5 }} />}
-            value={fShortenNumber(info.number)}
-            sx={{ typography: 'caption', ml: index === 0 ? 0 : 1.5 }}
-          />
-        ))}
-      </Stack>
     </CardContent>
   );
 }

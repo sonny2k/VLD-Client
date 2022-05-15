@@ -95,18 +95,17 @@ export default function Router() {
             { path: 'doctorlist', element: <DoctorList /> },
             { path: 'doclist', element: <DocList /> },
             { path: 'productlist', element: <ProductList /> },
-            { path: 'departmentcreate', element: <DepartmentCreate/>},
-            { path: 'departmentedit', element: <DepartmentEdit/>},
-            { path: 'articlelist', element: <ArticleList/>},
-            { path: 'categorylist', element: <CategoryList/>},
-            { path: 'supplierlist', element: <SupplierList/>},
-            { path: 'categorycreate', element: <CategoryCreate/>},
-            { path: 'categoryedit', element: <CategoryEdit/>},
-            { path: 'suppliercreate', element: <SupplierCreate/>},
-            { path: 'supplieredit', element: <SupplierEdit/>},
-            { path: 'productcreate', element: <ProductCreate/>},
-            { path: 'productedit', element: <ProductEdit/>},
-
+            { path: 'departmentcreate', element: <DepartmentCreate /> },
+            { path: 'departmentedit', element: <DepartmentEdit /> },
+            { path: 'articlelist', element: <ArticleList /> },
+            { path: 'categorylist', element: <CategoryList /> },
+            { path: 'supplierlist', element: <SupplierList /> },
+            { path: 'categorycreate', element: <CategoryCreate /> },
+            { path: 'categoryedit', element: <CategoryEdit /> },
+            { path: 'suppliercreate', element: <SupplierCreate /> },
+            { path: 'supplieredit', element: <SupplierEdit /> },
+            { path: 'productcreate', element: <ProductCreate /> },
+            { path: 'productedit', element: <ProductEdit /> },
           ],
         },
         {
@@ -174,6 +173,8 @@ export default function Router() {
         { path: 'about-us', element: <About /> },
         { path: 'contact-us', element: <Contact /> },
         { path: 'faqs', element: <Faqs /> },
+        { path: 'articles', element: <BlogPosts /> },
+        { path: 'articles/:id', element: <BlogPost /> },
       ],
     },
     { path: '*', element: <Navigate to="/404" replace /> },
@@ -233,8 +234,6 @@ const SupplierCreate = Loadable(lazy(() => import('../pages/dashboard/SupplierEd
 const SupplierEdit = Loadable(lazy(() => import('../pages/dashboard/SupplierCreate')));
 const ProductCreate = Loadable(lazy(() => import('../pages/dashboard/ProductCreate')));
 const ProductEdit = Loadable(lazy(() => import('../pages/dashboard/ProductEdit')));
-
-
 
 // APP
 const Chat = Loadable(lazy(() => import('../pages/dashboard/Chat')));

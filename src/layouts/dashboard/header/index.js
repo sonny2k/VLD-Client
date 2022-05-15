@@ -88,8 +88,8 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
     }
   }, [notis]);
 
-  if (notis !== null) {
-    return (
+  return (
+    notis !== null && (
       <RootStyle isCollapse={isCollapse} isOffset={isOffset} verticalLayout={verticalLayout}>
         <Toolbar
           sx={{
@@ -119,7 +119,6 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
           )}
         </Toolbar>
       </RootStyle>
-    );
-  }
-  return <LoadingScreen />;
+    )
+  );
 }

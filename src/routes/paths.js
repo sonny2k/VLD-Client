@@ -30,6 +30,8 @@ export const PATH_PAGE = {
   page404: '/404',
   page500: '/500',
   components: '/components',
+  articles: '/articles',
+  article: (id) => `/articles/${id}`,
 };
 
 export const PATH_DASHBOARD = {
@@ -78,7 +80,6 @@ export const PATH_DASHBOARD = {
     supplieredit: path(ROOTS_DASHBOARD, '/user/supplieredit'),
     productcreate: path(ROOTS_DASHBOARD, '/user/productcreate'),
     productedit: path(ROOTS_DASHBOARD, '/user/productedit'),
-
   },
   eCommerce: {
     root: path(ROOTS_DASHBOARD, '/e-commerce'),

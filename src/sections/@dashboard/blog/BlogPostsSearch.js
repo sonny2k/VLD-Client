@@ -11,7 +11,7 @@ import useIsMountedRef from '../../../hooks/useIsMountedRef';
 // utils
 import axios from '../../../utils/axios';
 // routes
-import { PATH_DASHBOARD } from '../../../routes/paths';
+import { PATH_DASHBOARD, PATH_PAGE } from '../../../routes/paths';
 // components
 import Image from '../../../components/Image';
 import Iconify from '../../../components/Iconify';
@@ -39,12 +39,10 @@ export default function BlogPostsSearch() {
     try {
       setSearchQuery(value);
       if (value) {
-        const response = await axios.get('/api/blog/posts/search', {
-          params: { query: value },
-        });
+        const response = await axios.get(`/api/user/article/searchArticle/${value}`);
 
         if (isMountedRef.current) {
-          setSearchResults(response.data.results);
+          setSearchResults(response.data);
         }
       }
     } catch (error) {
@@ -52,8 +50,8 @@ export default function BlogPostsSearch() {
     }
   };
 
-  const handleClick = (title) => {
-    navigate(PATH_DASHBOARD.blog.view(paramCase(title)));
+  const handleClick = (_id) => {
+    navigate(PATH_PAGE.article(paramCase(_id)));
   };
 
   const handleKeyUp = (event) => {
@@ -72,12 +70,12 @@ export default function BlogPostsSearch() {
       onInputChange={(event, value) => handleChangeSearch(value)}
       getOptionLabel={(post) => post.title}
       noOptionsText={<SearchNotFound searchQuery={searchQuery} />}
-      isOptionEqualToValue={(option, value) => option.id === value.id}
+      isOptionEqualToValue={(option, value) => option._id === value._id}
       renderInput={(params) => (
         <InputStyle
           {...params}
           stretchStart={200}
-          placeholder="Search post..."
+          placeholder="Tìm tin tức..."
           onKeyUp={handleKeyUp}
           InputProps={{
             ...params.InputProps,
@@ -90,14 +88,14 @@ export default function BlogPostsSearch() {
         />
       )}
       renderOption={(props, post, { inputValue }) => {
-        const { title, cover } = post;
+        const { title, banner, _id } = post;
         const matches = match(title, inputValue);
         const parts = parse(title, matches);
 
         return (
           <li {...props}>
-            <Image alt={cover} src={cover} sx={{ width: 48, height: 48, borderRadius: 1, flexShrink: 0, mr: 1.5 }} />
-            <Link underline="none" onClick={() => handleClick(title)}>
+            <Image alt={banner} src={banner} sx={{ width: 48, height: 48, borderRadius: 1, flexShrink: 0, mr: 1.5 }} />
+            <Link underline="none" onClick={() => handleClick(_id)}>
               {parts.map((part, index) => (
                 <Typography
                   key={index}
