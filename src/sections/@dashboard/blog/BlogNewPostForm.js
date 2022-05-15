@@ -12,7 +12,7 @@ import { Grid, Card, Chip, Stack, Button, TextField, Typography, Autocomplete } 
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
 // components
-import { RHFSwitch, RHFEditor, FormProvider, RHFTextField, RHFUploadSingleFile } from '../../../components/hook-form';
+import { RHFSwitch, RHFEditor, FormProvider, RHFTextField, RHFUploadSingleFile, RHFSelect } from '../../../components/hook-form';
 //
 import BlogNewPostPreview from './BlogNewPostPreview';
 
@@ -130,7 +130,7 @@ export default function BlogNewPostForm() {
               <Stack spacing={3}>
                 <RHFTextField name="title" label="Tiêu đề" />
 
-                <RHFTextField name="author" label="Tác giả" />
+                <RHFSelect name="articlecategory" label="Loại tin tức" />
 
                 <RHFTextField name="briefdescription" label="Mô tả ngắn" multiline rows={3} />
 
