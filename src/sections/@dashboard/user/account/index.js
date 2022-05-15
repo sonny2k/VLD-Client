@@ -19,3 +19,6 @@ export { default as EditCategory} from './EditCaregory';
 export { default as CreateCategory} from './CreateCategory';
 export { default as CreateSupplier} from './CreateSupplier';
 export { default as EditSupplier} from './EditSupplier';
+export { default as CreateArticleCategory} from './CreateArticleCategory';
+export { default as EditArticleCategory} from './EditArticleCategory';
+

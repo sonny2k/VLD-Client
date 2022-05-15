@@ -14,6 +14,10 @@ export { default as CategoryTableRow} from './CategoryTableRow';
 export { default as CategoryTableToolbar} from './CategoryTableToolbar';
 export { default as SupplierTableRow} from './SupplierTableRow';
 export { default as SupplierTableToolbar} from './SupplierTableToolbar';
+export { default as CategoryArticleTableRow} from './CategoryArticleTableRow';
+export { default as CategoryArticleTableToolbar} from './CategoryArticleTableToolbar';
+
+
 
 
 

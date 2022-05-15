@@ -22,7 +22,7 @@ export default function BlogNewPost() {
           heading="Tạo tin tức mới"
           links={[
             { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
-            { name: 'Tin tức', href: PATH_DASHBOARD.blog.root },
+            { name: 'Tin tức', href: PATH_DASHBOARD.user.articlelist },
             { name: 'Tin tức mới' },
           ]}
         />

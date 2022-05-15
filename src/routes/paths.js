@@ -78,6 +78,9 @@ export const PATH_DASHBOARD = {
     supplieredit: path(ROOTS_DASHBOARD, '/user/supplieredit'),
     productcreate: path(ROOTS_DASHBOARD, '/user/productcreate'),
     productedit: path(ROOTS_DASHBOARD, '/user/productedit'),
+    categoryarticlelist: path(ROOTS_DASHBOARD, '/user/categoryarticlelist'),
+    categoryarticlecreate: path(ROOTS_DASHBOARD, '/user/categoryarticlecreate'),
+    categoryarticleedit: path(ROOTS_DASHBOARD, '/user/categoryarticleedit'),
 
   },
   eCommerce: {
