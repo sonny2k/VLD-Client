@@ -35,7 +35,6 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 }));
 
 // ----------------------------------------------------------------------
-
 ProductNewForm.propTypes = {
   categories: PropTypes.array,
   origins: PropTypes.array,

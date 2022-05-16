@@ -24,9 +24,11 @@ export default function ArticleTableRow({ row, selected, onEditRow, onSelectRow,
 
   // const { fname, profilepic, lname } = row.doctor.account;
 
-  const { title, author, createdat, hourofpublish, status, banner } = row;
+  const { title, author, status, banner } = row;
 
   const { name } = row.articlecategory;
+
+  const authorname = `${author.lname} ${author.fname}`
 
 
   const [openMenu, setOpenMenuActions] = useState(null);
@@ -53,7 +55,7 @@ export default function ArticleTableRow({ row, selected, onEditRow, onSelectRow,
       </TableCell>
       
       <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-        {author}
+        {authorname}
       </TableCell>
 
       {/* <TableCell align="center">{format(new Date(createdat), 'dd/MM/yyyy')}</TableCell> */}
@@ -70,12 +72,12 @@ export default function ArticleTableRow({ row, selected, onEditRow, onSelectRow,
       <Label
           variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
           color={
-            (status === 'Chưa đăng' && 'warning') ||
-            (status === 'Đã đăng' && 'success')
+            (status === 0 && 'warning') ||
+            (status === 1 && 'success')
           }
           sx={{ textTransform: 'capitalize' }}
         >
-          {status}
+          {status === 0 ? 'Chưa đăng' : 'Đã đăng'}
         </Label>
       </TableCell>
 

@@ -83,6 +83,7 @@ export const PATH_DASHBOARD = {
     categoryarticlelist: path(ROOTS_DASHBOARD, '/user/categoryarticlelist'),
     categoryarticlecreate: path(ROOTS_DASHBOARD, '/user/categoryarticlecreate'),
     categoryarticleedit: path(ROOTS_DASHBOARD, '/user/categoryarticleedit'),
+    doccreate: path(ROOTS_DASHBOARD, '/user/doccreate'),
   },
   eCommerce: {
     root: path(ROOTS_DASHBOARD, '/e-commerce'),

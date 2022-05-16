@@ -1,4 +1,5 @@
 import * as Yup from 'yup';
+import PropTypes from 'prop-types';
 import { useCallback, useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
@@ -17,23 +18,6 @@ import { RHFSwitch, RHFEditor, FormProvider, RHFTextField, RHFUploadSingleFile, 
 import BlogNewPostPreview from './BlogNewPostPreview';
 
 // ----------------------------------------------------------------------
-
-const TAGS_OPTION = [
-  'Toy Story 3',
-  'Logan',
-  'Full Metal Jacket',
-  'Dangal',
-  'The Sting',
-  '2001: A Space Odyssey',
-  "Singin' in the Rain",
-  'Toy Story',
-  'Bicycle Thieves',
-  'The Kid',
-  'Inglourious Basterds',
-  'Snatch',
-  '3 Idiots',
-];
-
 const LabelStyle = styled(Typography)(({ theme }) => ({
   ...theme.typography.subtitle2,
   color: theme.palette.text.secondary,
@@ -41,8 +25,11 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
 }));
 
 // ----------------------------------------------------------------------
+BlogNewPostForm.propTypes = {
+  artcategories: PropTypes.array,
+};
 
-export default function BlogNewPostForm() {
+export default function BlogNewPostForm( {artcategories} ) {
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
@@ -130,7 +117,11 @@ export default function BlogNewPostForm() {
               <Stack spacing={3}>
                 <RHFTextField name="title" label="Tiêu đề" />
 
-                <RHFSelect name="articlecategory" label="Loại tin tức" />
+                <RHFSelect name="articlecategory" label="Loại tin tức">
+                  {artcategories.map((option) => (
+                    <option key={option._id}>{option.name}</option>
+                  ))}
+                </RHFSelect>
 
                 <RHFTextField name="briefdescription" label="Mô tả ngắn" multiline rows={3} />
 

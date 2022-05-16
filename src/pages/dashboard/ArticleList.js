@@ -118,7 +118,7 @@ export default function ArticleList() {
 
     if (filterRole !== 'Tất cả') {
       articles = articles.filter(
-        (item) => unorm.nfd(item.status).toLowerCase().indexOf(unorm.nfd(filterRole).toLowerCase()) !== -1
+        (item) => unorm.nfd(item.status === 0 ? 'Chưa đăng' : 'Đã đăng').toLowerCase().indexOf(unorm.nfd(filterRole).toLowerCase()) !== -1
       );
     }
 

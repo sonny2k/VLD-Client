@@ -169,7 +169,7 @@ export default function DocList() {
             <Button
               variant="contained"
               component={RouterLink}
-               to={PATH_DASHBOARD.user}
+               to={PATH_DASHBOARD.user.doccreate}
               startIcon={<Iconify icon={'eva:plus-fill'} />}
             >
               Thêm bác sĩ
