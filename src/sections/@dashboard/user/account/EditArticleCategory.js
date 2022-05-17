@@ -82,13 +82,13 @@ export default function EditArticleCategory({ isEdit, name, id }) {
           name: data.name,
         });
         enqueueSnackbar('Cập nhật danh mục thành công');
-        navigate(PATH_DASHBOARD.user.categorylist);
+        navigate(PATH_DASHBOARD.user.categoryarticlelist);
       } else {
         await axios.post("/api/admin/article/createArticleCategory", {
           name: data.name,
         })
         enqueueSnackbar('Tạo danh mục thành công');
-      navigate(PATH_DASHBOARD.user.categorylist);
+      navigate(PATH_DASHBOARD.user.categoryarticlelist);
       }      
     } catch (error) {
       console.error(error);

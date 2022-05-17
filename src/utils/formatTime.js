@@ -7,6 +7,10 @@ export function fDate(date) {
   return format(new Date(date), 'dd MMMM yyyy', { locale: vi });
 }
 
+export function fDateToa(date) {
+  return format(new Date(date), 'dd MMMM ', { locale: vi });
+}
+
 export function fDateTime(date) {
   return format(new Date(date), 'dd MMM yyyy HH:mm');
 }

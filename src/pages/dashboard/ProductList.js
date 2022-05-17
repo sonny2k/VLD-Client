@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation, Link as RouterLink } from 'react-router-dom';
 import unorm from 'unorm';
+import { useSnackbar } from 'notistack';
 import { paramCase } from 'change-case';
 import { format } from 'date-fns';
 // @mui
@@ -139,7 +140,18 @@ export default function ProductList() {
     setProducts(deleteRow);
   };
 
-  const handleDeleteRows = (selected) => {
+  const { enqueueSnackbar } = useSnackbar();
+
+  const handleDeleteRows = async (selected) => {
+    try {
+      await axios.post(`/api/admin/product/deleteProduct`, {
+        data: selected,
+      });
+      enqueueSnackbar('xóa sản phẩm thành công');
+      navigate(PATH_DASHBOARD.user.productlist);
+  } catch (error) {
+    console.error(error);
+  }
     const deleteRows = products.filter((row) => !selected.includes(row._id));
     setSelected([]);
     setProducts(deleteRows);
@@ -215,7 +227,7 @@ export default function ProductList() {
                     )
                   }
                   actions={
-                    <Tooltip title="Delete">
+                    <Tooltip title="Xóa sản phẩm">
                       <IconButton color="primary" onClick={() => handleDeleteRows(selected)}>
                         <Iconify icon={'eva:trash-2-outline'} />
                       </IconButton>

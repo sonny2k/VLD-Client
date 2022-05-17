@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { paramCase } from 'change-case';
+import { useSnackbar } from 'notistack';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import unorm from 'unorm';
 // @mui
@@ -37,7 +38,7 @@ import Scrollbar from '../../components/Scrollbar';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import { TableEmptyRows, TableHeadCustom, TableNoData, TableSelectedActions } from '../../components/table';
 // sections
-import { CategoryTableToolbar, CategoryTableRow } from '../../sections/@dashboard/user/list';
+import { CategoryArticleTableToolbar, CategoryArticleTableRow } from '../../sections/@dashboard/user/list';
 // ----------------------------------------------------------------------
 const ROLE_OPTIONS = ['Tất cả', 'Đã đăng', 'Chưa đăng'];
 
@@ -72,6 +73,8 @@ export default function CategoryArticleList() {
 
   const { themeStretch } = useSettings();
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const navigate = useNavigate();
 
   const [categories, setCategories] = useState([]);
@@ -87,6 +90,7 @@ export default function CategoryArticleList() {
     }
     getCategory();
   }, []);
+
 
   const [filterName, setFilterName] = useState('');
 
@@ -137,7 +141,17 @@ export default function CategoryArticleList() {
     setCategories(deleteRow);
   };
 
-  const handleDeleteRows = (selected) => {
+
+  const handleDeleteRows = async (selected) => {
+    try {
+        await axios.post(`/api/admin/article/deleteArticleCategory`, {
+          data: selected,
+        });
+        enqueueSnackbar('xóa danh mục thành công');
+        navigate(PATH_DASHBOARD.user.categoryarticlelist);
+    } catch (error) {
+      console.error(error);
+    }
     const deleteRows = categories.filter((row) => !selected.includes(row._id));
     setSelected([]);
     setCategories(deleteRows);
@@ -186,7 +200,7 @@ export default function CategoryArticleList() {
           <Card>
             <Divider />
 
-            <CategoryTableToolbar
+            <CategoryArticleTableToolbar
               filterName={filterName}
               filterRole={filterRole}
               onFilterName={handleFilterName}
@@ -208,7 +222,7 @@ export default function CategoryArticleList() {
                       )
                     }
                     actions={
-                      <Tooltip title="Delete">
+                      <Tooltip title="Xóa danh mục">
                         <IconButton color="primary" onClick={() => handleDeleteRows(selected)}>
                           <Iconify icon={'eva:trash-2-outline'} />
                         </IconButton>
@@ -235,7 +249,7 @@ export default function CategoryArticleList() {
 
                   <TableBody>
                     {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-                      <CategoryTableRow
+                      <CategoryArticleTableRow
                         key={row._id}
                         row={row}
                         selected={selected.includes(row._id)}

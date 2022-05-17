@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { paramCase } from 'change-case';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import unorm from 'unorm';
+import { useSnackbar } from 'notistack';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import {
@@ -138,7 +139,18 @@ export default function DocList() {
     setDoctors(deleteRow);
   };
 
-  const handleDeleteRows = (selected) => {
+  const { enqueueSnackbar } = useSnackbar();
+
+  const handleDeleteRows = async (selected) => {
+    try {
+      await axios.post(`/api/admin/doctor/deleteDoctor`, {
+        data: selected,
+      });
+      enqueueSnackbar('xóa bác sĩ thành công');
+      navigate(PATH_DASHBOARD.user.doclist);
+  } catch (error) {
+    console.error(error);
+  }
     const deleteRows = doctors.filter((row) => !selected.includes(row._id));
     setSelected([]);
     setDoctors(deleteRows);
@@ -202,7 +214,7 @@ export default function DocList() {
                     )
                   }
                   actions={
-                    <Tooltip title="Delete">
+                    <Tooltip title="Xóa bác sĩ">
                       <IconButton color="primary" onClick={() => handleDeleteRows(selected)}>
                         <Iconify icon={'eva:trash-2-outline'} />
                       </IconButton>

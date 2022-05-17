@@ -12,6 +12,8 @@ import { styled } from '@mui/material/styles';
 import { Grid, Card, Chip, Stack, Button, TextField, Typography, Autocomplete } from '@mui/material';
 // routes
 import { PATH_DASHBOARD } from '../../../routes/paths';
+// utils
+import axios from '../../../utils/axios';
 // components
 import { RHFSwitch, RHFEditor, FormProvider, RHFTextField, RHFUploadSingleFile, RHFSelect } from '../../../components/hook-form';
 //
@@ -45,23 +47,18 @@ export default function BlogNewPostForm( {artcategories} ) {
   };
 
   const NewBlogSchema = Yup.object().shape({
-    title: Yup.string().required('Title is required'),
-    description: Yup.string().required('Description is required'),
-    content: Yup.string().min(1000).required('Content is required'),
-    cover: Yup.mixed().required('Cover is required'),
+    title: Yup.string().required('Tiêu đề là cần thần'),
+    briefdescription: Yup.string().required('Hãy điền mô tả ngắn'),
+    content: Yup.string().max(1000).required('Nội dung dưới 1000 kí tự'),
   });
 
   const defaultValues = {
     title: '',
-    description: '',
+    briefdescription: '',
     content: '',
+    articlecategory: '',
     cover: null,
-    tags: ['Logan'],
     publish: true,
-    comments: true,
-    metaTitle: '',
-    metaDescription: '',
-    metaKeywords: ['Logan'],
   };
 
   const methods = useForm({
@@ -80,13 +77,22 @@ export default function BlogNewPostForm( {artcategories} ) {
 
   const values = watch();
 
-  const onSubmit = async () => {
+  const onSubmit = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      handleClosePreview();
-      enqueueSnackbar('Post success!');
-      navigate(PATH_DASHBOARD.blog.posts);
+      await axios.post('/api/admin/article/createArticle', {
+        title: data.title,
+        briefdescription: data.briefdescription,
+        content: data.content,
+        category: data.categoryne !== '' ? data.categoryne : artcategories[0].name,
+        banner: data.banner,
+        status: data.status,
+        datecreate: data.datecreate,
+        relevantarticles: data.relevantarticles,
+        publish: data.publish,
+        hourofpublish: data.hourofpublish,
+      });
+      enqueueSnackbar('Tạo tin tức thành công');
+      navigate(PATH_DASHBOARD.user.articlelist);
     } catch (error) {
       console.error(error);
     }
@@ -110,7 +116,7 @@ export default function BlogNewPostForm( {artcategories} ) {
 
   return (
     <>
-      <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+      <FormProvider methods={methods} >
         <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
             <Card sx={{ p: 3 }}>
@@ -156,7 +162,7 @@ export default function BlogNewPostForm( {artcategories} ) {
               <Button fullWidth color="inherit" variant="outlined" size="large" onClick={handleOpenPreview}>
                 Xem trước
               </Button>
-              <LoadingButton fullWidth type="submit" variant="contained" size="large" loading={isSubmitting}>
+              <LoadingButton fullWidth type="submit" variant="contained" size="large" loading={isSubmitting} onClick={handleSubmit(onSubmit)}>
                 Đăng tin tức
               </LoadingButton>
             </Stack>

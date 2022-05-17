@@ -102,11 +102,18 @@ export default function InvoiceNewEditForm({
         });
       } else if (
         !isEdit &&
-        values.medicines.some((el) => el.product === null || el.quantity === '' || el.rate === '')
+        values.medicines.some((el) => el.product === null && el.quantity === '' || el.rate === '')
       ) {
         enqueueSnackbar('Vui lòng chọn thuốc và điền đầy đủ thông tin!', {
           variant: 'error',
         });
+       } else if (
+          !isEdit &&
+          values.medicines.some((el) => el.product === null || el.quantity === 0 || el.rate === '')
+        ) {
+          enqueueSnackbar('Vui lòng điền số lượng lớn hơn 0!', {
+            variant: 'error',
+          });
       } else if (uniqueValues.size < values.medicines.length) {
         enqueueSnackbar('Sản phẩm thuốc trùng lặp, vui lòng kiểm tra lại', { variant: 'error' });
       } else if (!isEdit && values.medicines.length > 0) {
@@ -131,6 +138,13 @@ export default function InvoiceNewEditForm({
         values.medicines.some((el) => el.product === null || el.quantity === '' || el.rate === '')
       ) {
         enqueueSnackbar('Vui lòng chọn thuốc và điền đầy đủ thông tin!', {
+          variant: 'error',
+        });
+      } else if (
+        !isEdit &&
+        values.medicines.some((el) => el.product === null || el.quantity === 0 || el.rate === '')
+      ) {
+        enqueueSnackbar('Vui lòng điền số lượng lớn hơn 0!', {
           variant: 'error',
         });
       } else if (uniqueValues.size < values.medicines.length) {

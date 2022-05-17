@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { paramCase } from 'change-case';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 import unorm from 'unorm';
 // @mui
 import { useTheme } from '@mui/material/styles';
@@ -43,10 +44,7 @@ const ROLE_OPTIONS = ['Tất cả', 'Đã đăng', 'Chưa đăng'];
 
 const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'đã hủy', 'đã hoàn thành'];
 
-const TABLE_HEAD = [
-    { id: 'name', label: 'Tên danh mục', align: 'left' },
-    { id: '' },
-];
+const TABLE_HEAD = [{ id: 'name', label: 'Tên danh mục', align: 'left' }, { id: '' }];
 
 // ----------------------------------------------------------------------
 
@@ -87,6 +85,7 @@ export default function CategoryList() {
     }
     getCategory();
   }, []);
+  
 
   const [filterName, setFilterName] = useState('');
 
@@ -107,9 +106,7 @@ export default function CategoryList() {
 
     if (filterName) {
       categories = categories.filter(
-        (item) =>
-          unorm.nfd(item.name).toLowerCase().indexOf(unorm.nfd(filterName).toLowerCase()) !== -1 
-          
+        (item) => unorm.nfd(item.name).toLowerCase().indexOf(unorm.nfd(filterName).toLowerCase()) !== -1
       );
     }
 
@@ -137,7 +134,18 @@ export default function CategoryList() {
     setCategories(deleteRow);
   };
 
-  const handleDeleteRows = (selected) => {
+  const { enqueueSnackbar } = useSnackbar();
+
+  const handleDeleteRows = async (selected) => {
+    try {
+      await axios.post(`/api/admin/product/deleteProductCategory`, {
+        data: selected,
+      });
+      enqueueSnackbar('xóa danh mục thành công');
+      navigate(PATH_DASHBOARD.user.categorylist);
+  } catch (error) {
+    console.error(error);
+  }
     const deleteRows = categories.filter((row) => !selected.includes(row._id));
     setSelected([]);
     setCategories(deleteRows);
@@ -146,12 +154,11 @@ export default function CategoryList() {
   const handleEditRow = (_id, name) => {
     navigate(PATH_DASHBOARD.user.categorycreate, {
       state: {
-        id1:_id,
+        id1: _id,
         name1: name,
-      }
+      },
     });
   };
-
 
   const dataFiltered = applySortFilter({
     categories,
@@ -208,7 +215,7 @@ export default function CategoryList() {
                       )
                     }
                     actions={
-                      <Tooltip title="Delete">
+                      <Tooltip title="Xóa danh mục">
                         <IconButton color="primary" onClick={() => handleDeleteRows(selected)}>
                           <Iconify icon={'eva:trash-2-outline'} />
                         </IconButton>

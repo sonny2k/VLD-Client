@@ -27,6 +27,8 @@ export default function UserCards() {
 
   const [filterDepartment, setFilterDepartment] = useState('Tất cả chuyên khoa');
 
+  const checkDay = new Date();
+
   const DEPARTMENT_OPTIONS = [
     'Tất cả chuyên khoa',
     'chuyên khoa tim mạch',
@@ -164,7 +166,7 @@ export default function UserCards() {
               },
             }}
           >
-            {dataFiltered.map((doctor) => (
+            {dataFiltered.map((doctor) => ( doctor.availables[0].date !== null &&
               <UserCard key={doctor._id} doctor={doctor} />
             ))}
           </Box>

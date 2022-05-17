@@ -87,6 +87,16 @@ export default function DoctorTableRow({
 
   const [open, setOpen] = useState(false);
 
+  const [open1, setOpen1] = useState(false);
+
+  const handleClickOpen1 = () => {
+    setOpen1(true);
+  };
+
+  const handleClose1 = () => {
+    setOpen1(false);
+  };
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -102,6 +112,10 @@ export default function DoctorTableRow({
   };
 
   const handleCloseMenu = () => {
+    setOpenMenuActions(null);
+  };
+
+  const handleCloseMenu1 = () => {
     setOpenMenuActions(null);
   };
 
@@ -237,7 +251,7 @@ export default function DoctorTableRow({
                   sx={{ color: 'error.main' }}
                 >
                   <Iconify icon={'eva:trash-2-outline'} />
-                  Từ chối lịch hẹn
+                  Hủy lịch hẹn
                 </MenuItem>
               )}
 
@@ -257,8 +271,8 @@ export default function DoctorTableRow({
               {status === 'chờ xác nhận' && (
                 <MenuItem
                   onClick={() => {
-                    handleClickOpen();
-                    handleCloseMenu();
+                    handleClickOpen1();
+                    handleCloseMenu1();
                   }}
                   sx={{ color: 'error.main' }}
                 >
@@ -273,11 +287,24 @@ export default function DoctorTableRow({
           <Dialog open={open} onClose={handleClose}>
             <DialogTitle sx={{ m: 1, p: 2 }}>{'Bạn muốn hủy lịch hẹn?'}</DialogTitle>
             <DialogContent>
-              <DialogContentText>Buổi hẹn sẽ bị từ chối sau khi nhấp đồng ý, bạn có muốn tiếp tục?</DialogContentText>
+              <DialogContentText>Buổi hẹn đang chờ khám sẽ bị hủy sau khi nhấp đồng ý, bạn có muốn tiếp tục?</DialogContentText>
               <RHFTextField autoFocus name="excuse" label="Lý do từ chối" fullWidth variant="standard" />
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose}>Trở về</Button>
+              <Button variant="contained" onClick={handleSubmit(cancelAndClose)} autoFocus>
+                Đồng ý
+              </Button>
+            </DialogActions>
+          </Dialog>
+          <Dialog open={open1} onClose={handleClose1}>
+            <DialogTitle sx={{ m: 1, p: 2 }}>{'Bạn muốn từ chối lịch hẹn?'}</DialogTitle>
+            <DialogContent>
+              <DialogContentText>Buổi hẹn đang chờ xác nhận sẽ bị từ chối sau khi nhấp đồng ý, bạn có muốn tiếp tục?</DialogContentText>
+              <RHFTextField autoFocus name="excuse" label="Lý do từ chối" fullWidth variant="standard" />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleClose1}>Trở về</Button>
               <Button variant="contained" onClick={handleSubmit(cancelAndClose)} autoFocus>
                 Đồng ý
               </Button>

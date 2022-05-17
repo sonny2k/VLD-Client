@@ -36,6 +36,8 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
 
   const { account } = useAuth();
 
+  const checkDay = new Date();
+
   const navigate = useNavigate();
 
   ModalCreateConsultation.propTypes = {
@@ -52,7 +54,11 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
 
   const [position, setPosition] = useState(null);
 
+  console.log(position);
+
   const [hourc, setHourC] = useState(null);
+
+  const [datetext, setDateText] = useState('Vui lòng chọn ngày');
 
   const createConsultSchema = Yup.object().shape({
     name: Yup.string().min(2, 'Tối thiểu 2 kí tự').max(30, 'Tối đa 30 kí tự').required('Vui lòng nhập họ tên hợp lệ!'),
@@ -173,13 +179,20 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
                 }}
               >
                 <option disabled selected>
-                  Vui lòng chọn ngày
+                  {datetext}
                 </option>
-                {sorted.map((option, index) => (
-                  <option key={index} value={format(new Date(option.date), 'yyyy-MM-dd')}>
-                    {format(new Date(option.date), 'dd-MM-yyyy')}
-                  </option>
-                ))}
+                {sorted.map(
+                  (option, index) =>
+                    (new Date(option.date) >= checkDay ?  (
+                      <option key={index} value={{date: format(new Date(option.date), 'yyyy-MM-dd')}}>
+                        {format(new Date(option.date), 'dd-MM-yyyy')}
+                      </option> 
+                    
+                    ) : <option disabled>
+                          {format(new Date(option.date), 'dd-MM-yyyy')}
+                        </option>
+                    )
+                )}
               </RHFSelect>
 
               {position !== null && (
@@ -193,14 +206,13 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
                   <option disabled selected>
                     Vui lòng chọn giờ
                   </option>
-                  {availables[position].hours.map((option, index) =>
-                    option.status === false ? (
-                      <option key={index} value={option.time}>
-                        {option.time}
-                      </option>
-                    ) : (
-                      <option disabled>khung giờ {option.time} đã được đặt</option>
-                    )
+                  {availables[position].hours.map(
+                    (option, index) =>
+                      option.status === false && (
+                        <option key={index} value={option.time}>
+                          {option.time}
+                        </option>
+                      )
                   )}
                 </RHFSelect>
               )}

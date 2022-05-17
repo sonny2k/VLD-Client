@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { paramCase } from 'change-case';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import unorm from 'unorm';
+import { useSnackbar } from 'notistack';
+
 // @mui
 import { useTheme } from '@mui/material/styles';
 import {
@@ -140,7 +142,18 @@ export default function ArticleList() {
     setArticles(deleteRow);
   };
 
-  const handleDeleteRows = (selected) => {
+  const { enqueueSnackbar } = useSnackbar();
+
+  const handleDeleteRows = async (selected) => {
+    try {
+      await axios.post(`/api/admin/article/deleteArticle`, {
+        data: selected,
+      });
+      enqueueSnackbar('xóa tin tức thành công');
+      navigate(PATH_DASHBOARD.user.articlelist);
+  } catch (error) {
+    console.error(error);
+  }
     const deleteRows = articles.filter((row) => !selected.includes(row._id));
     setSelected([]);
     setArticles(deleteRows);
@@ -205,7 +218,7 @@ export default function ArticleList() {
                       )
                     }
                     actions={
-                      <Tooltip title="Delete">
+                      <Tooltip title="Xóa tin tức">
                         <IconButton color="primary" onClick={() => handleDeleteRows(selected)}>
                           <Iconify icon={'eva:trash-2-outline'} />
                         </IconButton>

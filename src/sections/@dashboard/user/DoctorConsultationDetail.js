@@ -259,7 +259,7 @@ export default function DoctorConsultationDetail({ consultation }) {
                 <Typography variant="body2">
                   Chiều cao:&nbsp;
                   <Link component="span" variant="subtitle2" color="text.primary">
-                    {height}
+                    {height}cm
                   </Link>
                 </Typography>
               </Stack>
@@ -269,7 +269,7 @@ export default function DoctorConsultationDetail({ consultation }) {
                 <Typography variant="body2">
                   Cân nặng:&nbsp;
                   <Link component="span" variant="subtitle2" color="text.primary">
-                    {weight}
+                    {weight} kg
                   </Link>
                 </Typography>
               </Stack>
