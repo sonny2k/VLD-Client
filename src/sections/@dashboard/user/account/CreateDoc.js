@@ -80,6 +80,8 @@ export default function CreateDoc({ fname, lname, id, phone, depa }) {
 
   const [message, setMessage] = useState('');
 
+  const [createmessage, setCreateMessage] = useState('');
+
   const sendcode = async (phone) => {
     await axios.post('api/user/auth/sendcode', {
       phone,
@@ -111,12 +113,29 @@ export default function CreateDoc({ fname, lname, id, phone, depa }) {
         }
         if (message.message === 'approved') {
           await handleSubmit(createDoc)();
+          if (createmessage) {
+            if (
+              createmessage.success === false &&
+              createmessage.message === 'Số điện thoại đã được đăng ký ở tài khoản khác'
+            ) {
+              enqueueSnackbar('Số điện thoại đã tồn tại', { variant: 'error' });
+              reset({ phone: '' });
+            }
+            if (createmessage.success === true) {
+              enqueueSnackbar('Tạo bác sĩ thành công!');
+              navigate(PATH_DASHBOARD.user.doclist);
+            }
+            if (createmessage.success === false && createmessage.message === 'Lỗi tải dữ liệu') {
+              enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại');
+              reset();
+            }
+          }
         }
       }
     };
 
     ver();
-  }, [message]);
+  }, [message, createmessage]);
 
   const createDoc = async (data) => {
     try {
@@ -125,14 +144,14 @@ export default function CreateDoc({ fname, lname, id, phone, depa }) {
       }
       if (depaa !== null && depaa !== 'Vui lòng chọn chuyên khoa') {
         const phone = `+84${data.phone.slice(1)}`;
-        await axios.post('/api/admin/doctor/createDoctor', {
+        const res = await axios.post('/api/admin/doctor/createDoctor', {
           fname: data.fname,
           lname: data.lname,
           phone,
           department: depaa,
         });
-        enqueueSnackbar('Tạo bác sĩ thành công!');
-        navigate(PATH_DASHBOARD.user.doclist);
+        const mes = res.data;
+        setCreateMessage(mes);
       }
     } catch (error) {
       console.error(error);
@@ -140,6 +159,12 @@ export default function CreateDoc({ fname, lname, id, phone, depa }) {
         setError('afterSubmit', error);
       }
     }
+  };
+
+  const defaultValues = {
+    phone: '',
+    lname: '',
+    fname: '',
   };
 
   const NewDocSchema = Yup.object().shape({
@@ -151,15 +176,6 @@ export default function CreateDoc({ fname, lname, id, phone, depa }) {
       .phone('VN', true, 'Số điện thoại không hợp lệ'),
   });
 
-  const defaultValues = useMemo(
-    () => ({
-      lname: lname || '',
-      fname: fname || '',
-      phone: phone || '',
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  );
-
   const methods = useForm({
     resolver: yupResolver(NewDocSchema),
     defaultValues,
@@ -167,16 +183,10 @@ export default function CreateDoc({ fname, lname, id, phone, depa }) {
 
   const {
     reset,
-    watch,
-    control,
     setError,
-    setValue,
-    getValues,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
-
-  const values = watch();
 
   const onSubmit = async (data) => {
     try {
