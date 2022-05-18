@@ -22,10 +22,18 @@ DocTableRow.propTypes = {
 export default function DocTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
   const theme = useTheme();
 
-  
-  const { department, educationplace, workcertificate,level,degree,description,excellence,workhistory,education, _id} = row;
-
-
+  const {
+    department,
+    educationplace,
+    workcertificate,
+    level,
+    degree,
+    description,
+    excellence,
+    workhistory,
+    education,
+    _id,
+  } = row;
 
   const { gender, fname, lname, profilepic, phone } = row.account;
   const { street, ward, district, city } = row.account.address;
@@ -60,7 +68,7 @@ export default function DocTableRow({ row, selected, onEditRow, onSelectRow, onD
       <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
         0{phone.slice(3)}
       </TableCell>
-      
+
       <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
         {department}
       </TableCell>
@@ -74,11 +82,6 @@ export default function DocTableRow({ row, selected, onEditRow, onSelectRow, onD
           Không xác định
         </TableCell>
       )}
-
-     
-
-
-      
 
       {/* <TableCell align="center">
         <Iconify
@@ -121,7 +124,7 @@ export default function DocTableRow({ row, selected, onEditRow, onSelectRow, onD
               </MenuItem> */}
               <MenuItem
                 onClick={() => {
-                  onEditRow(department, educationplace, workcertificate,level,degree,description,excellence,workhistory,education, _id );
+                  onEditRow();
                   handleCloseMenu();
                 }}
               >

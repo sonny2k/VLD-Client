@@ -118,7 +118,9 @@ export default function DocList() {
     }
 
     if (filterRole !== 'Tất cả') {
-      doctors = doctors.filter((item) => unorm.nfd(item.department).toLowerCase().indexOf(unorm.nfd(filterRole).toLowerCase()) !== -1);
+      doctors = doctors.filter(
+        (item) => unorm.nfd(item.department).toLowerCase().indexOf(unorm.nfd(filterRole).toLowerCase()) !== -1
+      );
     }
 
     return doctors;
@@ -148,15 +150,26 @@ export default function DocList() {
       });
       enqueueSnackbar('xóa bác sĩ thành công');
       navigate(PATH_DASHBOARD.user.doclist);
-  } catch (error) {
-    console.error(error);
-  }
+    } catch (error) {
+      console.error(error);
+    }
     const deleteRows = doctors.filter((row) => !selected.includes(row._id));
     setSelected([]);
     setDoctors(deleteRows);
   };
 
-  const handleEditRow = async (_id, educationplace, workcertificate,level,degree,description,excellence,workhistory,education, department) => {
+  const handleEditRow = async (
+    _id,
+    educationplace,
+    workcertificate,
+    level,
+    degree,
+    description,
+    excellence,
+    workhistory,
+    education,
+    department
+  ) => {
     navigate(PATH_DASHBOARD.user.docedit, {
       state: {
         id1: _id,
@@ -194,7 +207,7 @@ export default function DocList() {
             <Button
               variant="contained"
               component={RouterLink}
-               to={PATH_DASHBOARD.user.doccreate}
+              to={PATH_DASHBOARD.user.doccreate}
               startIcon={<Iconify icon={'eva:plus-fill'} />}
             >
               Thêm bác sĩ
@@ -260,18 +273,20 @@ export default function DocList() {
                       selected={selected.includes(row._id)}
                       onSelectRow={() => onSelectRow(row._id)}
                       onDeleteRow={() => handleDeleteRow(row._id)}
-                      onEditRow={() => handleEditRow(
-                        row._id,
-                        row.department,
-                        row.educationplace,
-                        row.workcertificate,
-                        row.level,
-                        row.degree,
-                        row.description,
-                        row.excellence,
-                        row.workhistory,
-                        row.education,
-                        )}
+                      onEditRow={() =>
+                        handleEditRow(
+                          row._id,
+                          row.department,
+                          row.educationplace,
+                          row.workcertificate,
+                          row.level,
+                          row.degree,
+                          row.description,
+                          row.excellence,
+                          row.workhistory,
+                          row.education
+                        )
+                      }
                     />
                   ))}
 
