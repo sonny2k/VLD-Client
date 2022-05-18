@@ -11,7 +11,7 @@ export default function ContactForm() {
       <MotionInView variants={varFade().inUp}>
         <Typography variant="h3">
           Hãy liên hệ cho chúng tôi <br />
-          Chúng tôi rất vui khi được lắng nghe bạn.
+          Chúng tôi rất vui khi được lắng nghe bạn
         </Typography>
       </MotionInView>
 

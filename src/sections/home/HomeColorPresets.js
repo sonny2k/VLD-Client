@@ -35,13 +35,13 @@ export default function HomeColorPresets() {
       <Container sx={{ position: 'relative', textAlign: 'center' }}>
         <MotionInView variants={varFade().inUp}>
           <Typography component="div" variant="overline" sx={{ mb: 2, color: 'text.disabled' }}>
-            choose your style
+            Chọn kiểu mẫu của bạn
           </Typography>
         </MotionInView>
 
         <MotionInView variants={varFade().inUp}>
           <Typography variant="h2" sx={{ mb: 3 }}>
-            Color presets
+            Màu sắc
           </Typography>
         </MotionInView>
 
@@ -51,7 +51,7 @@ export default function HomeColorPresets() {
               color: (theme) => (theme.palette.mode === 'light' ? 'text.secondary' : 'text.primary'),
             }}
           >
-            Express your own style with just one click.
+            Thể hiện phong cách của riêng bạn chỉ với một cú nhấp chuột.
           </Typography>
         </MotionInView>
 

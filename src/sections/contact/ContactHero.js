@@ -34,7 +34,7 @@ const RootStyle = styled('div')(({ theme }) => ({
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   backgroundImage:
-    'url(https://minimal-assets-api.vercel.app/assets/overlay.svg), url(https://minimal-assets-api.vercel.app/assets/images/contact/hero.jpg)',
+    'url(https://minimal-assets-api.vercel.app/assets/overlay.svg), url(https://www.specialtyansweringservice.net/wp-content/uploads/doctor-on-call-on-phone.png)',
   padding: theme.spacing(10, 0),
   [theme.breakpoints.up('md')]: {
     height: 560,
@@ -58,15 +58,16 @@ export default function ContactHero() {
     <RootStyle>
       <Container component={MotionContainer} sx={{ position: 'relative', height: '100%' }}>
         <ContentStyle>
-          <TextAnimate text="Where" sx={{ color: 'primary.main' }} variants={varFade().inRight} />
-          <br />
-          <Box sx={{ display: 'inline-flex', color: 'common.white' }}>
-            <TextAnimate text="to" sx={{ mr: 2 }} />
-            <TextAnimate text="find" sx={{ mr: 2 }} />
-            <TextAnimate text="us?" />
+          {/* <TextAnimate text="Thông" sx={{ color: 'primary.main' }} variants={varFade().inRight} />
+          <br /> */}
+          <Box sx={{ display: 'inline-flex', color: 'black' }}>
+            <TextAnimate text="Thông" sx={{ mr: 2 }} />
+            <TextAnimate text="tin" sx={{ mr: 2 }} />
+            <TextAnimate text="liên" sx={{ mr: 2 }} />
+            <TextAnimate text="hệ" />
           </Box>
 
-          <Grid container spacing={5} sx={{ mt: 5, color: 'common.white' }}>
+          <Grid container spacing={5} sx={{ mt: 5, color: 'black' }}>
             {CONTACTS.map((contact) => (
               <Grid key={contact.country} item xs={12} sm={6} md={3} lg={2} sx={{ pr: { md: 5 } }}>
                 <m.div variants={varFade().in}>

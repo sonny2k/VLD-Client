@@ -56,20 +56,18 @@ export default function HomeDarkMode() {
             <ContentStyle>
               <MotionInView variants={varFade().inUp}>
                 <Typography component="div" variant="overline" sx={{ mb: 2, color: 'text.disabled' }}>
-                  Easy switch between styles.
+                  Dễ dàng chuyển đổi giữa các phong cách
                 </Typography>
               </MotionInView>
 
               <MotionInView variants={varFade().inUp}>
                 <Typography variant="h2" sx={{ mb: 3, color: 'common.white' }}>
-                  Dark mode
+                  Chế độ tối
                 </Typography>
               </MotionInView>
 
               <MotionInView variants={varFade().inUp}>
-                <Typography sx={{ color: 'common.white', mb: 5 }}>
-                  A dark theme that feels easier on the eyes.
-                </Typography>
+                <Typography sx={{ color: 'common.white', mb: 5 }}>Một chủ đề tối tạo cảm giác dễ nhìn hơn</Typography>
               </MotionInView>
             </ContentStyle>
           </Grid>

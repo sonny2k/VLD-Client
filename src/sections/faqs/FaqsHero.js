@@ -52,7 +52,7 @@ export default function FaqsHero() {
           <m.div variants={varFade().inUp}>
             <InputStyle
               stretchStart={280}
-              placeholder="Search support"
+              placeholder="Tìm kiếm hỗ trợ"
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">

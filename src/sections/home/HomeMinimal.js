@@ -11,8 +11,7 @@ const CARDS = [
   {
     icon: 'https://i.ibb.co/H73wHpr/feelings.png',
     title: 'Tim mạch',
-    description:
-      'Hỗ trợ các vấn đề tim mạch như thở gấp, tim đập nhanh,...',
+    description: 'Hỗ trợ các vấn đề tim mạch như thở gấp, tim đập nhanh,...',
   },
   {
     icon: 'https://i.ibb.co/176M5fX/medical-shield.png',
@@ -23,7 +22,7 @@ const CARDS = [
     icon: 'https://i.ibb.co/By4bdgH/brain.png',
     title: 'Thần kinh',
     description: 'Tư vấn các vấn đề liên quan đến thần kinh như suy nhược thần kinh, thiếu máu não,...',
-  }
+  },
 ];
 
 const shadowIcon = (color) => `drop-shadow(2px 2px 2px ${alpha(color, 0.48)})`;
@@ -97,12 +96,14 @@ export default function HomeMinimal() {
           }}
         >
           <MotionInView variants={varFade().inUp}>
-            <Typography component="div" variant="overline" sx={{ mb: 2, color: 'text.disabled' }}>
+            {/* <Typography component="div" variant="overline" sx={{ mb: 2, color: 'text.disabled' }}>
               Một số chuyên khoa phổ biến.
-            </Typography>
+            </Typography> */}
           </MotionInView>
           <MotionInView variants={varFade().inDown}>
-            <Typography variant="h2">Nhận lời khuyên từ các bác sĩ trực tuyến khi bạn cảm thấy lo lắng về sức khỏe</Typography>
+            <Typography variant="h2">
+              Nhận lời khuyên từ các bác sĩ trực tuyến khi bạn cảm thấy lo lắng về sức khỏe
+            </Typography>
           </MotionInView>
         </Box>
 
@@ -137,8 +138,12 @@ export default function HomeMinimal() {
                   {card.title}
                 </Typography>
                 <Typography sx={{ color: isLight ? 'text.secondary' : 'common.white' }}>{card.description}</Typography>
-                <Typography variant="h5" paragraph> </Typography>
-                <Button size="medium" variant="contained" href='/dashboard/user/cards'>Đặt lịch tư vấn</Button>
+                <Typography variant="h5" paragraph>
+                  {' '}
+                </Typography>
+                <Button size="medium" variant="contained" href="/dashboard/user/cards">
+                  Đặt lịch tư vấn
+                </Button>
               </CardStyle>
             </MotionInView>
           ))}
