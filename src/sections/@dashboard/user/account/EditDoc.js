@@ -116,16 +116,7 @@ export default function EditDoc({ id, educationplace, workcertificate,level,degr
                   gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
                 }}
               >
-            <RHFSelect loading={!depa.length} label="Chuyên khoa" name="department">
-                  <option disabled selected>
-                    Vui lòng chọn chuyên khoa
-                  </option>
-                  {depa.map((option, index) => (
-                    <option key={index} value={option.name}>
-                      {option.name}
-                    </option>
-                  ))}
-              </RHFSelect>              
+                         
               <RHFTextField name="educationplace" label="Nơi tốt nghiệp" />
               <RHFTextField name="workcertificate" label="Chứng chỉ " />
               <RHFTextField name="excellence" label="Chuyên môn " />
@@ -134,6 +125,16 @@ export default function EditDoc({ id, educationplace, workcertificate,level,degr
               <RHFTextField name="degree" label="Bằng cấp " />
               <RHFTextField name="workhistory" label="Lịch sử làm việc " />
               <RHFTextField name="education" label="Quá trình đào tạo " />
+              <RHFSelect loading={!depa.length} label="Chuyên khoa" name="department">
+                  <option disabled selected>
+                    Vui lòng chọn chuyên khoa
+                  </option>
+                  {depa.map((option, index) => (
+                    <option key={index} value={option.name}>
+                      {option.name}
+                    </option>
+                  ))}
+              </RHFSelect>   
               </Box>
               <div>
                 <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
