@@ -22,7 +22,6 @@ import axios from '../../../utils/axios';
 // ----------------------------------------------------------------------
 
 export default function RegisterForm() {
-
   const { enqueueSnackbar } = useSnackbar();
 
   const { register } = useAuth();
@@ -34,14 +33,27 @@ export default function RegisterForm() {
   const [showPassword2, setShowPassword2] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
-  
+
   const RegisterSchema = Yup.object().shape({
-    firstName: Yup.string().matches(/^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/, 'Vui lòng điền tên chính xác'),
-    lastName: Yup.string().matches(/^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/, 'Vui lòng điền họ chính xác'),
-    phone: Yup.string().min(10, "Vui lòng nhập số điện thoại có 10 chữ số").max(10, "Vui lòng nhập số điện thoại có 10 chữ số").phone('VN', true, 'Số điện thoại không hợp lệ'),
-    password: Yup.string().min(8, "Vui lòng nhập mật khẩu từ 8 ký tự trở lên và chứa ít nhất 1 số")
-    .matches(/(?=.*[0-9])/, "Mật khẩu phải chứa ít nhất một số.").required('Mật khẩu là bắt buộc'),
-    passwordConfirmation: Yup.string().oneOf([Yup.ref('password'), null], 'Mật khẩu không khớp').required('Nhập lại mật khẩu là bắt buộc'),
+    firstName: Yup.string().matches(
+      /^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/,
+      'Vui lòng điền tên chính xác'
+    ),
+    lastName: Yup.string().matches(
+      /^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/,
+      'Vui lòng điền họ chính xác'
+    ),
+    phone: Yup.string()
+      .min(10, 'Vui lòng nhập số điện thoại có 10 chữ số')
+      .max(10, 'Vui lòng nhập số điện thoại có 10 chữ số')
+      .phone('VN', true, 'Số điện thoại không hợp lệ'),
+    password: Yup.string()
+      .min(8, 'Vui lòng nhập mật khẩu từ 8 ký tự trở lên và chứa ít nhất 1 số')
+      .matches(/(?=.*[0-9])/, 'Mật khẩu phải chứa ít nhất một số.')
+      .required('Mật khẩu là bắt buộc'),
+    passwordConfirmation: Yup.string()
+      .oneOf([Yup.ref('password'), null], 'Mật khẩu không khớp')
+      .required('Nhập lại mật khẩu là bắt buộc'),
     // code: Yup.string()
     // .required('Vui lòng nhập mã xác minh')
     // .matches(/^[0-9]+$/, "Mã xác minh phải là số")
@@ -58,12 +70,12 @@ export default function RegisterForm() {
     phone: '',
     password: '',
     passwordConfirmation: '',
-    code: '', 
+    code: '',
     city: '',
     district: '',
     ward: '',
     street: '',
-    role: 'Người dùng'
+    role: 'Người dùng',
   };
 
   const methods = useForm({
@@ -79,13 +91,13 @@ export default function RegisterForm() {
     formState: { errors, isSubmitting },
   } = methods;
 
-  const [ message, setMessage ] = useState('')
+  const [message, setMessage] = useState('');
 
   const sendcode = async (phone) => {
     await axios.post('api/user/auth/sendcode', {
       phone,
     });
-  }
+  };
 
   const verifycode = async (phone, code) => {
     const res = await axios.post('api/user/auth/verifycode', {
@@ -108,47 +120,61 @@ export default function RegisterForm() {
         if (message.message === 'Số điện thoại đã được đăng ký ở tài khoản khác') {
           enqueueSnackbar('Số điện thoại đã được đăng ký ở tài khoản khác');
         }
-        if (message.message === "approved") {
+        if (message.message === 'approved') {
           await handleSubmit(regis)();
         }
       }
     };
-    
+
     ver();
   }, [message]);
 
   const regis = async (data) => {
     try {
       const phone = `+84${data.phone.slice(1)}`;
-      await register(data.profilepic, data.birthday, data.gender, data.email, phone, data.password, data.firstName, data.lastName, data.city, data.district, data.ward, data.street, data.role);
+      await register(
+        data.profilepic,
+        data.birthday,
+        data.gender,
+        data.email,
+        phone,
+        data.password,
+        data.firstName,
+        data.lastName,
+        data.city,
+        data.district,
+        data.ward,
+        data.street,
+        data.role
+      );
       enqueueSnackbar('Tạo tài khoản thành công');
       navigate(PATH_DASHBOARD.user.account);
     } catch (error) {
       console.error(error);
       if (isMountedRef.current) {
         setError('afterSubmit', error);
-      } 
+      }
     }
-  }
+  };
 
   const onSubmit = async (data) => {
     try {
-      const phone = `+84${data.phone.slice(1)}`
+      const phone = `+84${data.phone.slice(1)}`;
       await verifycode(phone, data.code);
     } catch (error) {
       console.error(error);
       if (isMountedRef.current) {
         setError('afterSubmit', error);
-      } 
+      }
     }
   };
 
   const sc = async (data) => {
     try {
       setDisable(true);
-      countDownBtn()
-      const phonenum = `+84${data.phone.slice(1)}` 
-      await sendcode(phonenum)
+      countDownBtn();
+      const phonenum = `+84${data.phone.slice(1)}`;
+      await sendcode(phonenum);
       enqueueSnackbar('Mã đã được gửi vào số điện thoại của bạn!');
     } catch (error) {
       console.error(error);
@@ -156,9 +182,9 @@ export default function RegisterForm() {
         setError('afterSubmit', error);
       }
     }
-  }
+  };
 
-  const [ disable, setDisable ] = useState(false);
+  const [disable, setDisable] = useState(false);
 
   function countDownBtn() {
     let timeLeft = 7;
@@ -166,13 +192,13 @@ export default function RegisterForm() {
       let text = document.getElementById('sco').text;
       if (timeLeft === 0) {
         clearInterval(countDown);
-        text = "Gửi mã xác minh";
+        text = 'Gửi mã xác minh';
         setDisable(false);
       } else {
         text = timeLeft;
       }
       timeLeft -= 1;
-    }, 1000)
+    }, 1000);
   }
 
   return (
@@ -217,18 +243,34 @@ export default function RegisterForm() {
           }}
         />
 
-        <Stack 
-          direction={{ xs: 'column', sm: 'row' }} 
+        <Stack
+          direction={{ xs: 'column', sm: 'row' }}
           divider={<Divider orientation="vertical" flexItem />}
           spacing={2}
         >
           <RHFTextField name="code" label="Mã xác minh" />
-          <LoadingButton disabled={disable} id='sco' fullWidth size="medium" variant="text" loading={isSubmitting} onClick={handleSubmit(sc)}>
+          <LoadingButton
+            disabled={disable}
+            id="sco"
+            fullWidth
+            size="medium"
+            variant="text"
+            loading={isSubmitting}
+            onClick={handleSubmit(sc)}
+          >
             Gửi mã xác minh
           </LoadingButton>
         </Stack>
 
-        <LoadingButton id='dk' fullWidth size="large" type="submit" variant="contained" loading={isSubmitting} onClick={handleSubmit(onSubmit)}>
+        <LoadingButton
+          id="dk"
+          fullWidth
+          size="large"
+          type="submit"
+          variant="contained"
+          loading={isSubmitting}
+          onClick={handleSubmit(onSubmit)}
+        >
           Đăng ký
         </LoadingButton>
       </Stack>

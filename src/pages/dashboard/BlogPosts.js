@@ -30,14 +30,6 @@ const RootStyle = styled('div')(({ theme }) => ({
   },
 }));
 
-const SORT_OPTIONS = [
-  { value: 'latest', label: 'Mới nhất' },
-  { value: 'oldest', label: 'Cũ nhất' },
-  { value: 'Dấu hiệu và triệu chứng', label: 'Dấu hiệu và triệu chứng' },
-  { value: 'Thuốc và cách sử dụn', label: 'Thuốc và cách sử dụng' },
-  { value: 'Miễn dịch và dị ứng', label: 'Miễn dịch và dị ứng' },
-];
-
 // ----------------------------------------------------------------------
 
 const applySort = (posts, sortBy) => {
@@ -67,7 +59,14 @@ export default function BlogPosts() {
 
   const [posts, setPosts] = useState([]);
 
+  const [articlecategories, setArticleCategories] = useState([]);
+
   const [filters, setFilters] = useState('latest');
+
+  const SORT_OPTIONS = [
+    { value: 'latest', label: 'Mới nhất' },
+    { value: 'oldest', label: 'Cũ nhất' },
+  ];
 
   const sortedPosts = applySort(posts, filters);
 
@@ -83,9 +82,22 @@ export default function BlogPosts() {
     }
   }, [isMountedRef]);
 
+  const getAllCategories = useCallback(async () => {
+    try {
+      const response = await axios.get('/api/admin/article/viewArticleCategory');
+
+      if (isMountedRef.current) {
+        setArticleCategories(response.data);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, [isMountedRef]);
+
   useEffect(() => {
     getAllPosts();
-  }, [getAllPosts]);
+    getAllCategories();
+  }, [getAllPosts, getAllCategories]);
 
   const handleChangeSort = (value) => {
     if (value) {
@@ -94,12 +106,15 @@ export default function BlogPosts() {
   };
 
   return (
-    <Page title="Tin tức: Các bài đăng">
+    <Page title="Tin tức VLD">
       <RootStyle>
         <Container maxWidth={themeStretch ? false : 'lg'}>
           <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
             <BlogPostsSearch />
-            <BlogPostsSort query={filters} options={SORT_OPTIONS} onSort={handleChangeSort} />
+            {articlecategories.length > 0 &&
+              articlecategories.map((item) => SORT_OPTIONS.push({ value: item.name, label: item.name })) && (
+                <BlogPostsSort query={filters} options={SORT_OPTIONS} onSort={handleChangeSort} />
+              )}
           </Stack>
 
           <Grid container spacing={3}>

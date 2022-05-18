@@ -1,4 +1,4 @@
-import { useEffect,useState } from 'react';
+import { useEffect, useState } from 'react';
 import { paramCase } from 'change-case';
 import { useParams, useLocation } from 'react-router-dom';
 
@@ -16,15 +16,30 @@ import useSettings from '../../hooks/useSettings';
 // components
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import ProductNewForm from '../../sections/@dashboard/e-commerce/ProductNewForm';
+
 import { CreateDoc } from '../../sections/@dashboard/user/account';
 
 // ----------------------------------------------------------------------
 
 export default function DocCreate() {
   const { themeStretch } = useSettings();
-  const isEdit = false
- 
+  const isEdit = false;
+
+  const [deps, setDeps] = useState([]);
+
+  useEffect(() => {
+    async function getDepartments() {
+      const URL = '/api/admin/department/viewListDepartment';
+      try {
+        const res = await axios.get(URL);
+        setDeps(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getDepartments();
+  }, []);
+
   return (
     <Page title="Bác sĩ: Thêm mới bác sĩ">
       <Container maxWidth={themeStretch ? false : 'lg'}>
@@ -39,8 +54,7 @@ export default function DocCreate() {
             { name: !isEdit ? 'Thêm bác sĩ' : 'Chỉnh sửa bác sĩ' },
           ]}
         />
-        <CreateDoc  isEdit={isEdit}  />
-        
+        <CreateDoc depa={deps} />
       </Container>
     </Page>
   );

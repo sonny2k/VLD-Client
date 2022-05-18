@@ -39,7 +39,7 @@ EditDoc.propTypes = {
   isEdit: PropTypes.bool,
 };
 
-export default function EditDoc({ isEdit, name, id }) {
+export default function EditDoc({ isEdit, fname, lname, phone, id }) {
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -50,9 +50,10 @@ export default function EditDoc({ isEdit, name, id }) {
 
   const defaultValues = useMemo(
     () => ({
-        lname: lname || '',
-        fname: fname || '',
-        phone: phone || '',    }),
+      lname: lname || '',
+      fname: fname || '',
+      phone: phone || '',
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   );
 
@@ -75,21 +76,23 @@ export default function EditDoc({ isEdit, name, id }) {
 
   const onSubmit = async (data) => {
     try {
-      if ( isEdit === true) {
+      if (isEdit === true) {
         await axios.put(`/api/admin/product/updateProductCategory/${id}`, {
-            fname: data.fname,
-            lname: data.lname,
-            phone: data.phone,        });
+          fname: data.fname,
+          lname: data.lname,
+          phone: data.phone,
+        });
         enqueueSnackbar('Cập nhật danh mục thành công');
         navigate(PATH_DASHBOARD.user.doclist);
       } else {
-        await axios.post("/api/admin/product/createProductCategory", {
-            fname: data.fname,
-            lname: data.lname,
-            phone: data.phone,        })
+        await axios.post('/api/admin/product/createProductCategory', {
+          fname: data.fname,
+          lname: data.lname,
+          phone: data.phone,
+        });
         enqueueSnackbar('Tạo danh mục thành công');
-      navigate(PATH_DASHBOARD.user.doclist);
-      }      
+        navigate(PATH_DASHBOARD.user.doclist);
+      }
     } catch (error) {
       console.error(error);
     }
@@ -101,17 +104,16 @@ export default function EditDoc({ isEdit, name, id }) {
         <Grid item xs={12} md={9}>
           <Card sx={{ p: 3 }}>
             <Stack spacing={3}>
-            <RHFTextField name="lname" label="Họ " />
-            <RHFTextField name="fname" label="Tên" />
-            <RHFTextField name="phone" label="Số điện thọai " />
+              <RHFTextField name="lname" label="Họ " />
+              <RHFTextField name="fname" label="Tên" />
+              <RHFTextField name="phone" label="Số điện thọai " />
               <div>
-              <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-                <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
-                  {!isEdit === true ? 'Tạo danh mục' : 'Lưu thay đổi'}
-                </LoadingButton>
-              </Stack>
+                <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
+                  <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
+                    {!isEdit === true ? 'Tạo danh mục' : 'Lưu thay đổi'}
+                  </LoadingButton>
+                </Stack>
               </div>
-
             </Stack>
           </Card>
         </Grid>
