@@ -180,6 +180,7 @@ export default function UserTableRow({
             (status === 'chờ xác nhận' && 'warning') ||
             (status === 'chờ khám' && 'info') ||
             (status === 'bị từ chối' && 'error') ||
+            (status === 'đã hủy' && 'error') ||
             (status === 'đã hoàn thành' && 'success')
           }
           sx={{ textTransform: 'capitalize' }}

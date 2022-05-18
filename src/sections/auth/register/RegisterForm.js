@@ -112,13 +112,13 @@ export default function RegisterForm() {
     const ver = async () => {
       if (message) {
         if (message.message === 'pending') {
-          enqueueSnackbar('Sai mã xác minh, xin thử lại');
+          enqueueSnackbar('Sai mã xác minh, xin thử lại', { variant: 'error' });
         }
         if (message.message === 'Lỗi máy chủ') {
-          enqueueSnackbar('Bạn chưa gửi mã xác minh hoặc mã xác minh không đúng định dạng, xin thử lại');
+          enqueueSnackbar('Bạn chưa gửi mã xác minh hoặc mã xác minh không đúng định dạng, xin thử lại', { variant: 'error' });
         }
         if (message.message === 'Số điện thoại đã được đăng ký ở tài khoản khác') {
-          enqueueSnackbar('Số điện thoại đã được đăng ký ở tài khoản khác');
+          enqueueSnackbar('Số điện thoại đã được đăng ký ở tài khoản khác', { variant: 'error' });
         }
         if (message.message === 'approved') {
           await handleSubmit(regis)();

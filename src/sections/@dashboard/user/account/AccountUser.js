@@ -5,7 +5,7 @@ import { useCallback, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
-import { Box, Grid, Card, Stack, Typography } from '@mui/material';
+  import { Box, Grid, Card, Stack, Typography, InputAdornment  } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import LoadingScreen from '../../../../components/LoadingScreen';
 // hooks
@@ -106,8 +106,23 @@ export default function AccountUser() {
                   gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
                 }}
               >
-                <RHFTextField name="height" label="Chiều cao" defaultValue={user.height} />
-                <RHFTextField name="weight" label="Cân nặng" defaultValue={user.weight} />
+                <RHFTextField type="number" name="height" label="Chiều cao" defaultValue={user.height}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        cm
+                      </InputAdornment>
+                    ),
+                  }}
+                 />
+                <RHFTextField type="number" name="weight" label="Cân nặng" defaultValue={user.weight}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      kg
+                    </InputAdornment>
+                  ),
+                }} />
                 <RHFTextField
                   name="pastmedicalhistory"
                   label="Tiền sử bệnh lý"
@@ -117,6 +132,7 @@ export default function AccountUser() {
                 <RHFTextField name="familyhistory" label="Tiền sử gia đình" defaultValue={user.familyhistory} />
 
                 <RHFSelect name="bloodtype" label="Nhóm máu" placeholder="Nhóm máu" defaultValue={user.bloodtype}>
+                  <option selected> {''} </option>
                   {bloodtypes.map((option) => (
                     <option key={option.code}>{option.label}</option>
                   ))}

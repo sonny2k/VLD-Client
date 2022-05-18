@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 // @mui
 import { styled, useTheme } from '@mui/material/styles';
+import { capitalize } from '@material-ui/core';
 import {
   Avatar,
   Stack,
@@ -18,7 +19,7 @@ import {
   TableContainer,
 } from '@mui/material';
 // utils
-import { fDate } from '../../../../utils/formatTime';
+import { fDateToa } from '../../../../utils/formatTime';
 import { fCurrency } from '../../../../utils/formatNumber';
 // components
 import Label from '../../../../components/Label';
@@ -117,8 +118,8 @@ export default function InvoiceDetails({ pre }) {
                 (gender === 3 && 'Không xác định') ||
                 (gender === null && 'Không xác định')}{' '}
             </Typography>
-            <Typography variant="body2">Cân nặng: {weight} </Typography>
-            <Typography variant="body2">Chiều cao: {height} </Typography>
+            <Typography variant="body2">Cân nặng: {weight} kg </Typography>
+            <Typography variant="body2">Chiều cao: {height}cm </Typography>
           </Grid>
 
           <Grid item xs={4} sm={4} sx={{ mb: 4 }}>
@@ -173,13 +174,13 @@ export default function InvoiceDetails({ pre }) {
           </TableContainer>
         </Scrollbar>
 
-        <Grid container>
+        <Grid container >
           <Grid item xs={12} md={9} sx={{ py: 3 }}>
             <Typography variant="subtitle2">Lời dặn</Typography>
             <Typography variant="body2">{note}</Typography>
           </Grid>
-          <Grid item xs={12} md={3} sx={{ py: 3, textAlign: 'center' }}>
-            <Typography variant="body2">Ngày kê đơn: {format(new Date(date), 'dd/MM/yyyy')}</Typography>
+          <Grid  item xs={12} md={3} sx={{ py: 3, textAlign: 'center' }}>
+            <Typography sx={{ textTransform: 'capitalize' }} >ngày {(fDateToa(date))} năm 2022</Typography>
             <Typography variant="body2">Bác sĩ điều trị</Typography>
             <Image alt="signature" src={signature} />
             <Typography variant="body2">{namedoc}</Typography>

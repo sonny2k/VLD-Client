@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import { Avatar, Divider } from '@mui/material';
 // utils
 import { fCurrency } from '../../../../utils/formatNumber';
-import { fDate } from '../../../../utils/formatTime';
+import { fDateToa } from '../../../../utils/formatTime';
 //
 import styles from './InvoiceStyle';
 
@@ -60,17 +60,10 @@ export default function InvoicePDF({ pre }) {
             <Text style={[styles.overline, styles.mb8]}>Thông tin bệnh nhân</Text>
             <Text style={styles.body1}>Tên: {name}</Text>
             <Text style={styles.body1}>Giới tính: {gender === 1 && 'Nam' || gender === 2 && 'Nữ' || gender === 3 && 'Không xác định' || gender === null && 'Không xác định'}.</Text>
-            <Text style={styles.body1}>Cân nặng: {weight}</Text>
-            <Text style={styles.body1}>Chiều cao: {height}</Text>
-
+            <Text style={styles.body1}>Cân nặng: {weight} kg</Text>
+            <Text style={styles.body1}>Chiều cao: {height}cm</Text>
           </View>
 
-          <View style={styles.col6}>
-            <Text style={[styles.overline, styles.mb8]}>Thông tin bác sĩ</Text>
-            <Text style={styles.body1}>Tên: {namedoc}</Text>          
-            <Text style={styles.body1}>Chuyên khoa: {department}</Text>
-            <Text style={styles.body1}>Đơn vị: VLang Doctor</Text>
-          </View>
         </View>
 
         <Text style={[styles.overline, styles.mb8]}>Chi tiết toa thuốc</Text>
@@ -116,7 +109,7 @@ export default function InvoicePDF({ pre }) {
 
                 <View style={styles.tableCell_1}>
                   <Text>
-                    {pro.rate}
+                    {pro.rate}...
                   </Text>
                 </View>
 
@@ -129,11 +122,11 @@ export default function InvoicePDF({ pre }) {
         <View style={[styles.gridContainer, styles.mt20]}>
           <View style={styles.col8}>
             <Text style={styles.subtitle2}>Lời dặn</Text>
-            <Text>{note}</Text>
+            <Text>{note}...</Text>
           </View>
           <View style={[styles.col4, styles.alignCenter]}>
             <View style={styles.col8}>
-              <Text style={styles.subtitle2}>Ngày kê đơn: {format(new Date(date), 'dd/MM/yyyy')}</Text>
+              <Text style={styles.subtitle2}>ngày {(fDateToa(date))} năm 2022</Text>
               <Text style={styles.subtitle2}>Bác sĩ điều trị</Text>
               <Image alt="signature" src={signature}/>  
               <Text style={styles.subtitle2}>{namedoc}.</Text>    

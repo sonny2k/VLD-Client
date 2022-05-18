@@ -41,7 +41,7 @@ import LoadingScreen from '../../components/LoadingScreen';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'bị từ chối', 'đã hoàn thành'];
+const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'bị từ chối', 'đã hủy', 'đã hoàn thành'];
 
 const DEPARTMENT_OPTIONS = [
   'Tất cả',
@@ -167,7 +167,16 @@ export default function UserList() {
     setConsult(deleteRow);
   };
 
-  const handleDeleteRows = (selected) => {
+  const handleDeleteRows = async (selected) => {
+    try {
+    await axios.post(`/api/user/consultation/deleteConsultation`, {
+      data: selected,
+    });
+    enqueueSnackbar('xóa lịch hẹn thành công');
+    navigate(PATH_DASHBOARD.user.list);
+} catch (error) {
+  console.error(error);
+}
     const deleteRows = consult.filter((row) => !selected.includes(row._id));
     setSelected([]);
     setConsult(deleteRows);
@@ -260,7 +269,7 @@ export default function UserList() {
                       )
                     }
                     actions={
-                      <Tooltip title="Delete">
+                      <Tooltip title="Xóa lịch hẹn">
                         <IconButton color="primary" onClick={() => handleDeleteRows(selected)}>
                           <Iconify icon={'eva:trash-2-outline'} />
                         </IconButton>

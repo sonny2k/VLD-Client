@@ -41,7 +41,7 @@ import LoadingScreen from '../../components/LoadingScreen';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'bị từ chối', 'đã hoàn thành'];
+const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'bị từ chối', 'đã hủy', 'đã hoàn thành' ];
 
 const DEPARTMENT_OPTIONS = [
   'Tất cả',

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { paramCase } from 'change-case';
+import { useSnackbar } from 'notistack';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import unorm from 'unorm';
 // @mui
@@ -135,7 +136,18 @@ export default function DepartmentList() {
     setDepartments(deleteRow);
   };
 
-  const handleDeleteRows = (selected) => {
+  const { enqueueSnackbar } = useSnackbar();
+
+  const handleDeleteRows = async (selected) => {
+    try {
+      await axios.post(`/api/admin/department/deleteDepartment`, {
+        data: selected,
+      });
+      enqueueSnackbar('xóa chuyên khoa thành công');
+      navigate(PATH_DASHBOARD.user.department);
+  } catch (error) {
+    console.error(error);
+  }
     const deleteRows = departments.filter((row) => !selected.includes(row._id));
     setSelected([]);
     setDepartments(deleteRows);
@@ -205,7 +217,7 @@ export default function DepartmentList() {
                     )
                   }
                   actions={
-                    <Tooltip title="Delete">
+                    <Tooltip title="Xóa chuyên khoa">
                       <IconButton color="primary" onClick={() => handleDeleteRows(selected)}>
                         <Iconify icon={'eva:trash-2-outline'} />
                       </IconButton>
