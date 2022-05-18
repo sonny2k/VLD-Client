@@ -137,7 +137,7 @@ export default function BlogNewPostForm( {artcategories} ) {
                 </div>
 
                 <div>
-                  <LabelStyle>Hình ảnh</LabelStyle>
+                  <LabelStyle>Ảnh bìa</LabelStyle>
                   <RHFUploadSingleFile name="banner" accept="image/*" maxSize={3145728} onDrop={handleDrop} />
                 </div>
               </Stack>
@@ -145,7 +145,7 @@ export default function BlogNewPostForm( {artcategories} ) {
           </Grid>
 
           <Grid item xs={12} md={4}>
-            <Card sx={{ p: 3 }}>
+            {/* <Card sx={{ p: 3 }}>
               <Stack spacing={3}>
                 <div>
                   <RHFSwitch
@@ -156,7 +156,7 @@ export default function BlogNewPostForm( {artcategories} ) {
                   />
                 </div>
               </Stack>
-            </Card>
+            </Card> */}
 
             <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
               <Button fullWidth color="inherit" variant="outlined" size="large" onClick={handleOpenPreview}>

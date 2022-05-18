@@ -25,8 +25,6 @@ export default function DocTableRow({ row, selected, onEditRow, onSelectRow, onD
   
   const { department, educationplace, workcertificate,level,degree,description,excellence,workhistory,education, _id} = row;
 
-
-
   const { gender, fname, lname, profilepic, phone } = row.account;
   const { street, ward, district, city } = row.account.address;
 

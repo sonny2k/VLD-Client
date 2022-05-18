@@ -77,8 +77,8 @@ function PreviewHero({ title, banner }) {
           left: 0,
           right: 0,
           zIndex: 9,
-          position: 'absolute',
           color: 'common.white',
+          position: 'absolute',
           pt: { xs: 3, lg: 10 },
         }}
       >
@@ -98,7 +98,7 @@ function PreviewHero({ title, banner }) {
           bgcolor: (theme) => alpha(theme.palette.grey[900], 0.8),
         }}
       />
-      <Image alt="banner" src={banner} />
+      <Image alt="banner" src={banner} ratio="16/9" />
     </Box>
   );
 }

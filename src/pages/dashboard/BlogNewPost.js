@@ -22,7 +22,7 @@ export default function BlogNewPost() {
   const [artCate, setArtCate] = useState([]);
   useEffect(() => {
     getArtCates();
-  }, [artCate]);
+  }, []);
 
   const getArtCates = async () => {
     try {
