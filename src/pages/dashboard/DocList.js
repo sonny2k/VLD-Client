@@ -46,7 +46,7 @@ const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'đã 
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Bác sĩ', align: 'left' },
-  { id: 'street', label: 'Địa chỉ', align: 'center' },
+  { id: 'phone', label: 'Số điện thoại', align: 'center' },
   { id: 'department', label: 'Chuyên khoa', align: 'center' },
   { id: 'gender', label: 'Giới tính', align: 'center' },
   { id: '' },
@@ -156,8 +156,21 @@ export default function DocList() {
     setDoctors(deleteRows);
   };
 
-  const handleEditRow = (id) => {
-    navigate(`${PATH_DASHBOARD.user.root}/detail/${paramCase(id)}`);
+  const handleEditRow = async (_id, educationplace, workcertificate,level,degree,description,excellence,workhistory,education, department) => {
+    navigate(PATH_DASHBOARD.user.docedit, {
+      state: {
+        id1: _id,
+        educationplace1: educationplace,
+        workcertificate1: workcertificate,
+        level1: level,
+        degree1: degree,
+        description1: description,
+        excellence1: excellence,
+        workhistory1: workhistory,
+        education1: education,
+        department1: department,
+      },
+    });
   };
 
   const dataFiltered = applySortFilter({
@@ -247,7 +260,18 @@ export default function DocList() {
                       selected={selected.includes(row._id)}
                       onSelectRow={() => onSelectRow(row._id)}
                       onDeleteRow={() => handleDeleteRow(row._id)}
-                      onEditRow={() => handleEditRow(row._id)}
+                      onEditRow={() => handleEditRow(
+                        row._id,
+                        row.department,
+                        row.educationplace,
+                        row.workcertificate,
+                        row.level,
+                        row.degree,
+                        row.description,
+                        row.excellence,
+                        row.workhistory,
+                        row.education,
+                        )}
                     />
                   ))}
 

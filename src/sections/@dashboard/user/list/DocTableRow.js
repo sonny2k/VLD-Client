@@ -22,11 +22,12 @@ DocTableRow.propTypes = {
 export default function DocTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
   const theme = useTheme();
 
-  // const { fname, profilepic, lname } = row.doctor.account;
+  
+  const { department, educationplace, workcertificate,level,degree,description,excellence,workhistory,education, _id} = row;
 
-  const { department } = row;
 
-  const { gender, fname, lname, profilepic } = row.account;
+
+  const { gender, fname, lname, profilepic, phone } = row.account;
   const { street, ward, district, city } = row.account.address;
 
   const name = `${lname} ${fname}`;
@@ -56,15 +57,9 @@ export default function DocTableRow({ row, selected, onEditRow, onSelectRow, onD
         </Typography>
       </TableCell>
 
-      {ward === undefined || district === undefined || city === undefined ? 
-        <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-        {street}
-      </TableCell>
-      :
       <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-      {address}
+        0{phone.slice(3)}
       </TableCell>
-      }
       
       <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
         {department}
@@ -126,7 +121,7 @@ export default function DocTableRow({ row, selected, onEditRow, onSelectRow, onD
               </MenuItem> */}
               <MenuItem
                 onClick={() => {
-                  onEditRow();
+                  onEditRow(department, educationplace, workcertificate,level,degree,description,excellence,workhistory,education, _id );
                   handleCloseMenu();
                 }}
               >

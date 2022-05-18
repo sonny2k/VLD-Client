@@ -110,6 +110,8 @@ export default function Router() {
             { path: 'categoryarticlecreate', element: <CategoryArticleCreate /> },
             { path: 'categoryarticleedit', element: <CategoryArticleEdit /> },
             { path: 'doccreate', element:<DocCreate/>},
+            { path: 'docedit', element:<DocEdit/>},
+
           ],
         },
         {
@@ -242,6 +244,8 @@ const CategoryArticleList = Loadable(lazy(() => import('../pages/dashboard/Categ
 const CategoryArticleCreate = Loadable(lazy(() => import('../pages/dashboard/CategoryArticleEdit')));
 const CategoryArticleEdit = Loadable(lazy(() => import('../pages/dashboard/CategoryArticleCreate')));
 const DocCreate = Loadable(lazy(() => import('../pages/dashboard/DocCreate')));
+const DocEdit = Loadable(lazy(() => import('../pages/dashboard/DocEdit')));
+
 
 // APP
 const Chat = Loadable(lazy(() => import('../pages/dashboard/Chat')));
