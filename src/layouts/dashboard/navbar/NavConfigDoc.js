@@ -89,27 +89,6 @@ const navConfigDoc = [
 
   // APP
   // ----------------------------------------------------------------------
-  {
-    subheader: 'Tư vấn',
-    items: [
-      // {
-      //   title: 'mail',
-      //   path: PATH_DASHBOARD.mail.root,
-      //   icon: ICONS.mail,
-      //   info: (
-      //     <Label variant="outlined" color="error">
-      //       +32
-      //     </Label>
-      //   ),
-      // },
-      { title: 'Tư vấn trực tuyến', path: PATH_DASHBOARD.calendar, icon: ICONS.calendar },
-      // {
-      //   title: 'kanban',
-      //   path: PATH_DASHBOARD.kanban,
-      //   icon: ICONS.kanban,
-      // },
-    ],
-  },
 ];
 
 export default navConfigDoc;
