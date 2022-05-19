@@ -138,9 +138,23 @@ export default function UserTableRow({
 
   return (
     <TableRow hover selected={selected}>
-      <TableCell padding="checkbox">
-        <Checkbox checked={selected} onClick={onSelectRow} />
-      </TableCell>
+      {status === 'bị từ chối' && (
+        <TableCell padding="checkbox">
+          <Checkbox checked={selected} onClick={onSelectRow} />
+        </TableCell>
+      )}
+
+      {status === 'đã hủy' && (
+        <TableCell padding="checkbox">
+          <Checkbox checked={selected} onClick={onSelectRow} />
+        </TableCell>
+      )}
+
+      {status === 'chờ xác nhận' && <TableCell />}
+
+      {status === 'chờ khám' && <TableCell />}
+
+      {status === 'đã hoàn thành' && <TableCell />}
 
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
         <Avatar alt={name} src={profilepic} sx={{ mr: 2 }} />
@@ -259,8 +273,8 @@ export default function UserTableRow({
           <Dialog open={open} onClose={handleClose}>
             <DialogTitle sx={{ m: 1, p: 2 }}>{'Bạn muốn hủy lịch hẹn?'}</DialogTitle>
             <DialogContent>
-              <DialogContentText>Buổi hẹn sẽ bị từ chối sau khi nhấp đồng ý, bạn có muốn tiếp tục?</DialogContentText>
-              <RHFTextField autoFocus name="excuse" label="Lý do từ chối" fullWidth variant="standard" />
+              <DialogContentText>Buổi hẹn sẽ bị hủy sau khi nhấp đồng ý, bạn có muốn tiếp tục?</DialogContentText>
+              <RHFTextField autoFocus name="excuse" label="Lý do hủy" fullWidth variant="standard" />
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose}>Trở về</Button>

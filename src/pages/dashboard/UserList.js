@@ -169,14 +169,14 @@ export default function UserList() {
 
   const handleDeleteRows = async (selected) => {
     try {
-    await axios.post(`/api/user/consultation/deleteConsultation`, {
-      data: selected,
-    });
-    enqueueSnackbar('xóa lịch hẹn thành công');
-    navigate(PATH_DASHBOARD.user.list);
-} catch (error) {
-  console.error(error);
-}
+      await axios.post(`/api/user/consultation/deleteConsult`, {
+        data: selected,
+      });
+      enqueueSnackbar('Xóa lịch hẹn thành công!');
+      navigate(PATH_DASHBOARD.user.list);
+    } catch (error) {
+      console.error(error);
+    }
     const deleteRows = consult.filter((row) => !selected.includes(row._id));
     setSelected([]);
     setConsult(deleteRows);
@@ -262,12 +262,6 @@ export default function UserList() {
                     dense={dense}
                     numSelected={selected.length}
                     rowCount={consult.length}
-                    onSelectAllRows={(checked) =>
-                      onSelectAllRows(
-                        checked,
-                        consult.map((row) => row._id)
-                      )
-                    }
                     actions={
                       <Tooltip title="Xóa lịch hẹn">
                         <IconButton color="primary" onClick={() => handleDeleteRows(selected)}>
@@ -286,12 +280,6 @@ export default function UserList() {
                     rowCount={consult.length}
                     numSelected={selected.length}
                     onSort={onSort}
-                    onSelectAllRows={(checked) =>
-                      onSelectAllRows(
-                        checked,
-                        consult.map((row) => row._id)
-                      )
-                    }
                   />
 
                   <TableBody>

@@ -29,6 +29,7 @@ import {
 } from '@mui/material';
 // utils
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import DeleteIcon from '@mui/icons-material/Delete';
 import CancelIcon from '@mui/icons-material/Cancel';
 import DuoIcon from '@mui/icons-material/Duo';
 import createAvatar from '../../../utils/createAvatar';
@@ -133,6 +134,19 @@ export default function UserNewForm({ consultation }) {
     navigate(PATH_DASHBOARD.user.list);
   };
 
+  const deleteconsult = async () => {
+    try {
+      await axios.post('/api/user/consultation/deleteConsult', {
+        data: [consultation._id],
+      });
+      enqueueSnackbar('Xóa lịch hẹn thành công!');
+      navigate(PATH_DASHBOARD.user.list);
+    } catch (err) {
+      console.error(err);
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', { variant: 'error' });
+    }
+  };
+
   const cancel = async (data) => {
     try {
       await axios.post('/api/user/consultation/cancelconsult', {
@@ -163,19 +177,6 @@ export default function UserNewForm({ consultation }) {
     window.open(`https://vldchatroom.herokuapp.com/room/${_id}/${identity}`);
   };
 
-  const changesymptom = async (data) => {
-    try {
-      await axios.put('/api/user/consultation/consultsymptom', {
-        _id: consultation._id,
-        symptom: data.symptom,
-      });
-      enqueueSnackbar('Thay đổi triệu chứng thành công');
-    } catch (err) {
-      console.error(err);
-      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', { variant: 'error' });
-    }
-  };
-
   return (
     <FormProvider methods={methods}>
       <Grid container spacing={3}>
@@ -186,7 +187,8 @@ export default function UserNewForm({ consultation }) {
                 (status === 'chờ xác nhận' && 'warning') ||
                 (status === 'chờ khám' && 'info') ||
                 (status === 'bị từ chối' && 'error') ||
-                (status === 'đã hoàn thành' && 'success')
+                (status === 'đã hoàn thành' && 'success') ||
+                (status === 'đã hủy' && 'error')
               }
               sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
             >
@@ -296,22 +298,28 @@ export default function UserNewForm({ consultation }) {
               >
                 <RHFTextField name="symptom" multiline rows={3} label="Triệu chứng" disabled />
                 {status === 'bị từ chối' && <RHFTextField name="excusetext" label="Lý do từ chối" disabled />}
+                {status === 'đã hủy' && <RHFTextField name="excusetext" label="Lý do hủy" disabled />}
               </Box>
             </Stack>
 
-            {status === 'bị từ chối' || status === 'đã hoàn thành' ? (
+            {status === 'bị từ chối' || status === 'đã hủy' || status === 'đã hoàn thành' ? (
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                 <Box
                   sx={{
                     display: 'grid',
                     columnGap: 1,
                     rowGap: 1,
-                    gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(1, 1fr)' },
+                    gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
                   }}
                 >
                   <Tooltip title="Trở về">
                     <IconButton onClick={back}>
                       <ArrowBackIosNewIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Xóa lịch hẹn vĩnh viễn">
+                    <IconButton onClick={deleteconsult}>
+                      <DeleteIcon />
                     </IconButton>
                   </Tooltip>
                 </Box>
@@ -333,7 +341,7 @@ export default function UserNewForm({ consultation }) {
                       </IconButton>
                     </Tooltip>
 
-                    <Tooltip title="Từ chối lịch hẹn">
+                    <Tooltip title="Hủy lịch hẹn">
                       <IconButton color="error" onClick={handleClickOpen}>
                         <CancelIcon />
                       </IconButton>
@@ -354,7 +362,7 @@ export default function UserNewForm({ consultation }) {
                       </IconButton>
                     </Tooltip>
 
-                    <Tooltip title="Từ chối lịch hẹn">
+                    <Tooltip title="Hủy lịch hẹn">
                       <IconButton color="error" onClick={handleClickOpen}>
                         <CancelIcon />
                       </IconButton>
@@ -372,8 +380,8 @@ export default function UserNewForm({ consultation }) {
             <Dialog open={open} onClose={handleClose}>
               <DialogTitle sx={{ m: 1, p: 2 }}>{'Bạn muốn hủy lịch hẹn?'}</DialogTitle>
               <DialogContent>
-                <DialogContentText>Buổi hẹn sẽ bị từ chối sau khi nhấp đồng ý, bạn có muốn tiếp tục?</DialogContentText>
-                <RHFTextField autoFocus name="excuse" label="Lý do từ chối" fullWidth variant="standard" />
+                <DialogContentText>Buổi hẹn sẽ bị hủy sau khi nhấp đồng ý, bạn có muốn tiếp tục?</DialogContentText>
+                <RHFTextField autoFocus name="excuse" label="Lý do hủy" fullWidth variant="standard" />
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose}>Trở về</Button>

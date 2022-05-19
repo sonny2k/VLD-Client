@@ -180,30 +180,19 @@ export default function DocList() {
     setDoctors(deleteRows);
   };
 
-  const handleEditRow = async (
-    _id,
-    educationplace,
-    workcertificate,
-    level,
-    degree,
-    description,
-    excellence,
-    workhistory,
-    education,
-    department
-  ) => {
+  const handleEditRow = async (row) => {
     navigate(PATH_DASHBOARD.user.docedit, {
       state: {
-        id1: _id,
-        educationplace1: educationplace,
-        workcertificate1: workcertificate,
-        level1: level,
-        degree1: degree,
-        description1: description,
-        excellence1: excellence,
-        workhistory1: workhistory,
-        education1: education,
-        department1: department,
+        id1: row._id,
+        department1: row.department,
+        educationplace1: row.educationplace,
+        workcertificate1: row.workcertificate,
+        level1: row.level,
+        degree1: row.degree,
+        description1: row.description,
+        excellence1: row.excellence,
+        workhistory1: row.workhistory,
+        education1: row.education,
       },
     });
   };
@@ -298,20 +287,7 @@ export default function DocList() {
                       selected={selected.includes(row._id)}
                       onSelectRow={() => onSelectRow(row._id)}
                       onDeleteRow={() => handleDeleteRow(row._id)}
-                      onEditRow={() =>
-                        handleEditRow(
-                          row._id,
-                          row.department,
-                          row.educationplace,
-                          row.workcertificate,
-                          row.level,
-                          row.degree,
-                          row.description,
-                          row.excellence,
-                          row.workhistory,
-                          row.education
-                        )
-                      }
+                      onEditRow={(row) => handleEditRow(row)}
                     />
                   ))}
 

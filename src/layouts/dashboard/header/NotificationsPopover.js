@@ -260,7 +260,8 @@ function NotificationItem({ notification }) {
         notification.type === 'canceldoc' ||
         notification.type === 'confirm' ||
         notification.type === 'createprescription' ||
-        notification.type === 'updateprescription'
+        notification.type === 'updateprescription' ||
+        notification.type === 'joinroom'
           ? () => seenUser(notification._id)
           : () => seenDoc(notification._id)
       }
@@ -304,7 +305,8 @@ function renderContent(notification) {
     notification.type === 'confirm' ||
     notification.type === 'canceldoc' ||
     notification.type === 'createprescription' ||
-    notification.type === 'updateprescription' ? (
+    notification.type === 'updateprescription' ||
+    notification.type === 'joinroom' ? (
       <Typography variant="subtitle2">
         {`Bác sĩ ${notification.creator.account.fname} ${notification.title}`}
         <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}>
@@ -376,6 +378,17 @@ function renderContent(notification) {
     };
   }
   if (notification.type === 'updateprescription') {
+    return {
+      avatar: (
+        <img
+          alt={notification.title}
+          src="https://minimal-assets-api.vercel.app/assets/icons/ic_notification_chat.svg"
+        />
+      ),
+      title,
+    };
+  }
+  if (notification.type === 'joinroom') {
     return {
       avatar: (
         <img

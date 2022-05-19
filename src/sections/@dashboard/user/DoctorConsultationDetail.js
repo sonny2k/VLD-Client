@@ -83,6 +83,8 @@ export default function DoctorConsultationDetail({ consultation }) {
 
   const [open, setOpen] = useState(false);
 
+  const [open1, setOpen1] = useState(false);
+
   let noRoomName = false;
 
   if (!roomname) {
@@ -97,8 +99,21 @@ export default function DoctorConsultationDetail({ consultation }) {
     setOpen(false);
   };
 
+  const handleClickOpen1 = () => {
+    setOpen1(true);
+  };
+
+  const handleClose1 = () => {
+    setOpen1(false);
+  };
+
   const cancelAndClose = (data) => {
     cancel(data);
+    handleClose();
+  };
+
+  const cancelAndClose1 = (data) => {
+    refuse(data);
     handleClose();
   };
 
@@ -121,6 +136,7 @@ export default function DoctorConsultationDetail({ consultation }) {
   };
 
   const handleCreateNameAndRoomName = async () => {
+    window.open(`https://vldchatroom.herokuapp.com/room/${_id}/${identity}`);
     try {
       await axios.post('/api/doctor/consultation/createRoomName', {
         _id: consultation._id,
@@ -129,7 +145,18 @@ export default function DoctorConsultationDetail({ consultation }) {
       console.error(err);
       enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', { variant: 'error' });
     }
-    window.open(`https://vldchatroom.herokuapp.com/room/${_id}/${identity}`);
+    try {
+      await axios.post('/api/doctor/consultation/joinRoomNoti', {
+        _id: consultation._id,
+        doctor: consultation.doctor,
+        user: consultation.user,
+        date: consultation.date,
+        hour: consultation.hour,
+      });
+    } catch (err) {
+      console.error(err);
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', { variant: 'error' });
+    }
   };
 
   const defaultValues = useMemo(
@@ -167,7 +194,24 @@ export default function DoctorConsultationDetail({ consultation }) {
 
   const cancel = async (data) => {
     try {
-      await axios.post('/api/doctor/consultation/cancelconsultation', {
+      await axios.post('/api/doctor/consultation/cancelConsultation', {
+        _id: consultation._id,
+        doctor: consultation.doctor,
+        date: consultation.date,
+        hour: consultation.hour,
+        excuse: data.excuse,
+      });
+      enqueueSnackbar('Hủy lịch hẹn thành công');
+      navigate(PATH_DASHBOARD.user.doctorlist);
+    } catch (err) {
+      console.error(err);
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', { variant: 'error' });
+    }
+  };
+
+  const refuse = async (data) => {
+    try {
+      await axios.post('/api/doctor/consultation/refuseConsultation', {
         _id: consultation._id,
         doctor: consultation.doctor,
         date: consultation.date,
@@ -176,19 +220,6 @@ export default function DoctorConsultationDetail({ consultation }) {
       });
       enqueueSnackbar('Từ chối lịch hẹn thành công');
       navigate(PATH_DASHBOARD.user.doctorlist);
-    } catch (err) {
-      console.error(err);
-      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', { variant: 'error' });
-    }
-  };
-
-  const changesymptom = async (data) => {
-    try {
-      await axios.put('/api/user/consultation/consultsymptom', {
-        _id: consultation._id,
-        symptom: data.symptom,
-      });
-      enqueueSnackbar('Thay đổi triệu chứng thành công');
     } catch (err) {
       console.error(err);
       enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', { variant: 'error' });
@@ -218,7 +249,8 @@ export default function DoctorConsultationDetail({ consultation }) {
                 (status === 'chờ xác nhận' && 'warning') ||
                 (status === 'chờ khám' && 'info') ||
                 (status === 'bị từ chối' && 'error') ||
-                (status === 'đã hoàn thành' && 'success')
+                (status === 'đã hoàn thành' && 'success') ||
+                (status === 'đã hủy' && 'error')
               }
               sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
             >
@@ -334,10 +366,11 @@ export default function DoctorConsultationDetail({ consultation }) {
               >
                 <RHFTextField name="symptom" multiline rows={3} label="Triệu chứng" disabled />
                 {status === 'bị từ chối' && <RHFTextField name="excusetext" label="Lý do từ chối" disabled />}
+                {status === 'đã hủy' && <RHFTextField name="excusetext" label="Lý do hủy" disabled />}
               </Box>
             </Stack>
 
-            {status === 'bị từ chối' || status === 'đã hoàn thành' ? (
+            {status === 'bị từ chối' || status === 'đã hủy' || status === 'đã hoàn thành' ? (
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                 <Box
                   sx={{
@@ -409,8 +442,8 @@ export default function DoctorConsultationDetail({ consultation }) {
                     </Tooltip>
 
                     {status === 'chờ khám' && (
-                      <Tooltip title="Từ chối lịch hẹn">
-                        <IconButton color="error" onClick={handleClickOpen}>
+                      <Tooltip title="Hủy lịch hẹn">
+                        <IconButton color="error" onClick={handleClickOpen1}>
                           <CancelIcon />
                         </IconButton>
                       </Tooltip>
@@ -452,6 +485,21 @@ export default function DoctorConsultationDetail({ consultation }) {
               </DialogContent>
               <DialogActions>
                 <Button onClick={handleClose}>Trở về</Button>
+                <Button onClick={handleSubmit(cancelAndClose1)} variant="contained" autoFocus>
+                  Đồng ý
+                </Button>
+              </DialogActions>
+            </Dialog>
+            <Dialog open={open1} onClose={handleClose1}>
+              <DialogTitle sx={{ m: 1, p: 2 }}>{'Bạn muốn hủy lịch hẹn?'}</DialogTitle>
+              <DialogContent>
+                <DialogContentText>
+                  Buổi hẹn sẽ hiển thị ở trạng thái đã hủy ở phía người dùng sau khi nhấp đồng ý, bạn có muốn tiếp tục?
+                </DialogContentText>
+                <RHFTextField autoFocus name="excuse" label="Lý do hủy" fullWidth variant="standard" />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose1}>Trở về</Button>
                 <Button onClick={handleSubmit(cancelAndClose)} variant="contained" autoFocus>
                   Đồng ý
                 </Button>

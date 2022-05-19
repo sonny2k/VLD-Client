@@ -55,20 +55,19 @@ export default function DocEdit() {
             ]}
           />
 
-          <EditDoc 
-          depa={depas}
-          id={Location.state.id1}
-          educationplace={Location.state.educationplace1}
-          workcertificate={Location.state.workcertificate1}
-          level={Location.state.level1}
-          description={Location.state.description1}
-          excellence={Location.state.excellence1}
-          workhistory={Location.state.workhistory1}
-          education={Location.state.education1}
-          degree={Location.state.degreee1}
-          department={Location.state.department1}
-
-           />
+          <EditDoc
+            depa={depas}
+            id2={Location.state.id1}
+            educationplace2={Location.state.educationplace1}
+            workcertificate2={Location.state.workcertificate1}
+            level2={Location.state.level1}
+            description2={Location.state.description1}
+            excellence2={Location.state.excellence1}
+            workhistory2={Location.state.workhistory1}
+            education2={Location.state.education1}
+            degree2={Location.state.degree1}
+            department2={Location.state.department1}
+          />
         </Container>
       </Page>
     )

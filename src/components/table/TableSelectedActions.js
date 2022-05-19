@@ -33,12 +33,6 @@ export default function TableSelectedActions({ dense, actions, rowCount, numSele
         }),
       }}
     >
-      <Checkbox
-        indeterminate={numSelected > 0 && numSelected < rowCount}
-        checked={rowCount > 0 && numSelected === rowCount}
-        onChange={(event) => onSelectAllRows(event.target.checked)}
-      />
-
       <Typography
         variant="subtitle1"
         sx={{

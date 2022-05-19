@@ -39,34 +39,39 @@ EditDoc.propTypes = {
   depa: PropTypes.array,
 };
 
-export default function EditDoc({ id, educationplace, workcertificate,level,degree,description,excellence,workhistory,education, depa, department }) {
+export default function EditDoc({
+  id2,
+  educationplace2,
+  workcertificate2,
+  level2,
+  degree2,
+  description2,
+  excellence2,
+  workhistory2,
+  education2,
+  depa,
+  department2,
+}) {
   const navigate = useNavigate();
 
   const { enqueueSnackbar } = useSnackbar();
 
   const [depaa, setDepaa] = useState(null);
 
-
-  const NewCategorySchema = Yup.object().shape({
-  });
-
-  const defaultValues = useMemo(
-    () => ({
-      description: description || '',
-      educationplace: educationplace || '',
-      workcertificate: workcertificate || '',
-      level: level || '',
-      degree: degree || '',
-      excellence: excellence || '',
-      workhistory: workhistory || '',
-      education: education || '',
-      department: department || '',
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  );
+  const defaultValues = {
+    description: description2 || '',
+    educationplace: educationplace2 || '',
+    workcertificate: workcertificate2 || '',
+    level: level2 || '',
+    degree: degree2 || '',
+    excellence: excellence2 || '',
+    workhistory: workhistory2 || '',
+    education: education2 || '',
+    departmentne: department2 || '',
+  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
 
   const methods = useForm({
-    resolver: yupResolver(NewCategorySchema),
     defaultValues,
   });
 
@@ -84,19 +89,19 @@ export default function EditDoc({ id, educationplace, workcertificate,level,degr
 
   const onSubmit = async (data) => {
     try {
-        await axios.put(`/api/admin/doctor/updateDoctor/${id}`, {
-          description: data.description,
-          educationplace: data.educationplace,
-          workcertificate: data.workcertificate,
-          excellence: data.excellence,
-          level: data.level,
-          workhistory: data.workhistory,
-          education: data.education,
-          degree: data.degree,
-          department: data.department !== '' ? data.department : depa[0].name,
-        });
-        enqueueSnackbar('Cập nhật thông tin bác sĩ thành công');
-        navigate(PATH_DASHBOARD.user.doclist);
+      await axios.put(`/api/admin/doctor/updateDoctor/${id2}`, {
+        description: data.description,
+        educationplace: data.educationplace,
+        workcertificate: data.workcertificate,
+        excellence: data.excellence,
+        level: data.level,
+        workhistory: data.workhistory,
+        education: data.education,
+        degree: data.degree,
+        department: data.department !== '' ? data.department : depa[0].name,
+      });
+      enqueueSnackbar('Cập nhật thông tin bác sĩ thành công');
+      navigate(PATH_DASHBOARD.user.doclist);
     } catch (error) {
       console.error(error);
     }
@@ -107,42 +112,148 @@ export default function EditDoc({ id, educationplace, workcertificate,level,degr
       <Grid container spacing={3}>
         <Grid item xs={12} md={12}>
           <Card sx={{ p: 3 }}>
-            <Stack spacing={3}>
-            <Box
-                sx={{
-                  display: 'grid',
-                  rowGap: 3,
-                  columnGap: 2,
-                  gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
-                }}
-              >
-                         
-              <RHFTextField name="educationplace" label="Nơi tốt nghiệp" />
-              <RHFTextField name="workcertificate" label="Chứng chỉ " />
-              <RHFTextField name="excellence" label="Chuyên môn " />
-              <RHFTextField name="level" label="Cấp bậc " />
-              <RHFTextField name="description" label="Mô tả" />
-              <RHFTextField name="degree" label="Bằng cấp " />
-              <RHFTextField name="workhistory" label="Lịch sử làm việc " />
-              <RHFTextField name="education" label="Quá trình đào tạo " />
-              <RHFSelect loading={!depa.length} label="Chuyên khoa" name="department">
-                  <option disabled selected>
-                    Vui lòng chọn chuyên khoa
-                  </option>
-                  {depa.map((option, index) => (
-                    <option key={index} value={option.name}>
-                      {option.name}
+            <Stack alignItems="flex-end">
+              <Controller
+                name="departmentne"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <RHFSelect
+                    onChange={(event) => setValue('departmentne', event.target.value)}
+                    label="Chuyên khoa"
+                    name="departmentne"
+                  >
+                    <option disabled selected>
+                      Vui lòng chọn chuyên khoa
                     </option>
-                  ))}
-              </RHFSelect>   
-              </Box>
-              <div>
-                <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
-                  <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
-                    Lưu thay đổi
-                  </LoadingButton>
-                </Stack>
-              </div>
+                    {depa.map((option, index) => (
+                      <option key={option._id} value={option.name}>
+                        {option.name}
+                      </option>
+                    ))}
+                  </RHFSelect>
+                )}
+              />
+            </Stack>
+            <Stack alignItems="flex-end" sx={{ mt: 3 }} />
+
+            <Box
+              sx={{
+                display: 'grid',
+                rowGap: 3,
+                columnGap: 2,
+                gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
+              }}
+            >
+              <Controller
+                name="educationplace"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <RHFTextField
+                    name="educationplace"
+                    label="Nơi tốt nghiệp"
+                    onChange={(event) => setValue('educationplace', event.target.value)}
+                  />
+                )}
+              />
+
+              <Controller
+                name="workcertificate"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <RHFTextField
+                    name="workcertificate"
+                    label="Chứng chỉ"
+                    onChange={(event) => setValue('workcertificate', event.target.value)}
+                  />
+                )}
+              />
+
+              <Controller
+                name="level"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <RHFTextField
+                    name="level"
+                    label="Cấp bậc"
+                    onChange={(event) => setValue('level', event.target.value)}
+                  />
+                )}
+              />
+
+              <Controller
+                name="degree"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <RHFTextField
+                    name="degree"
+                    label="Bằng cấp"
+                    onChange={(event) => setValue('degree', event.target.value)}
+                  />
+                )}
+              />
+            </Box>
+            <Stack alignItems="flex-end" sx={{ mt: 3 }} />
+            <Stack spacing={3} alignItems="flex-end">
+              <Controller
+                name="description"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <RHFTextField
+                    name="description"
+                    multiline
+                    rows={4}
+                    label="Mô tả"
+                    onChange={(event) => setValue('description', event.target.value)}
+                  />
+                )}
+              />
+
+              <Controller
+                name="excellence"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <RHFTextField
+                    name="excellence"
+                    multiline
+                    rows={4}
+                    label="Chuyên môn"
+                    onChange={(event) => setValue('excellence', event.target.value)}
+                  />
+                )}
+              />
+
+              <Controller
+                name="workhistory"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <RHFTextField
+                    name="workhistory"
+                    multiline
+                    rows={4}
+                    label="Lịch sử làm việc"
+                    onChange={(event) => setValue('workhistory', event.target.value)}
+                  />
+                )}
+              />
+
+              <Controller
+                name="education"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                  <RHFTextField
+                    name="education"
+                    multiline
+                    rows={4}
+                    label="Quá trình đào tạo"
+                    onChange={(event) => setValue('education', event.target.value)}
+                  />
+                )}
+              />
+            </Stack>
+            <Stack spacing={3} alignItems="flex-end" sx={{ mt: 3 }}>
+              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                Lưu thay đổi
+              </LoadingButton>
             </Stack>
           </Card>
         </Grid>

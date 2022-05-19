@@ -41,7 +41,7 @@ import LoadingScreen from '../../components/LoadingScreen';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'bị từ chối', 'đã hủy', 'đã hoàn thành' ];
+const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'bị từ chối', 'đã hủy', 'đã hoàn thành'];
 
 const DEPARTMENT_OPTIONS = [
   'Tất cả',
@@ -182,7 +182,24 @@ export default function DoctorList() {
 
   const cancel = async (_id, doctor, date, hour, excuse) => {
     try {
-      await axios.post('/api/doctor/consultation/cancelconsultation', {
+      await axios.post('/api/doctor/consultation/cancelConsultation', {
+        _id,
+        doctor,
+        date,
+        hour,
+        excuse,
+      });
+      enqueueSnackbar('Hủy buổi hẹn thành công');
+      navigate(PATH_DASHBOARD.user.doctorlist);
+    } catch (err) {
+      console.error(err);
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', { variant: 'error' });
+    }
+  };
+
+  const refuse = async (_id, doctor, date, hour, excuse) => {
+    try {
+      await axios.post('/api/doctor/consultation/refuseConsultation', {
         _id,
         doctor,
         date,
@@ -260,41 +277,13 @@ export default function DoctorList() {
 
             <Scrollbar>
               <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
-                {selected.length > 0 && (
-                  <TableSelectedActions
-                    dense={dense}
-                    numSelected={selected.length}
-                    rowCount={consult.length}
-                    onSelectAllRows={(checked) =>
-                      onSelectAllRows(
-                        checked,
-                        consult.map((row) => row._id)
-                      )
-                    }
-                    actions={
-                      <Tooltip title="Delete">
-                        <IconButton color="primary" onClick={() => handleDeleteRows(selected)}>
-                          <Iconify icon={'eva:trash-2-outline'} />
-                        </IconButton>
-                      </Tooltip>
-                    }
-                  />
-                )}
-
                 <Table size={dense ? 'small' : 'medium'}>
                   <TableHeadCustom
                     order={order}
                     orderBy={orderBy}
                     headLabel={TABLE_HEAD}
                     rowCount={consult.length}
-                    numSelected={selected.length}
                     onSort={onSort}
-                    onSelectAllRows={(checked) =>
-                      onSelectAllRows(
-                        checked,
-                        consult.map((row) => row._id)
-                      )
-                    }
                   />
 
                   <TableBody>
@@ -308,6 +297,7 @@ export default function DoctorList() {
                         onEditRow={() => handleEditRow(row._id)}
                         onViewPrescription={() => handlePrescription(row._id)}
                         onCancel={(excuse) => cancel(row._id, row.doctor, row.date, row.hour, excuse)}
+                        onRefuse={(excuse) => refuse(row._id, row.doctor, row.date, row.hour, excuse)}
                         onConfirm={() => confirm(row._id)}
                       />
                     ))}

@@ -42,24 +42,13 @@ import { PATH_DASHBOARD } from '../../../../routes/paths';
 
 DoctorTableRow.propTypes = {
   row: PropTypes.object,
-  selected: PropTypes.bool,
-  onEditRow: PropTypes.func,
-  onSelectRow: PropTypes.func,
-  onDeleteRow: PropTypes.func,
+
   onViewPrescription: PropTypes.func,
   onCancel: PropTypes.func,
+  onRefuse: PropTypes.func,
 };
 
-export default function DoctorTableRow({
-  row,
-  selected,
-  onEditRow,
-  onSelectRow,
-  onDeleteRow,
-  onCancel,
-  onConfirm,
-  onViewPrescription,
-}) {
+export default function DoctorTableRow({ row, onEditRow, onCancel, onRefuse, onConfirm, onViewPrescription }) {
   const theme = useTheme();
 
   const { fname, profilepic, lname } = row.user.account;
@@ -124,6 +113,11 @@ export default function DoctorTableRow({
     handleClose();
   };
 
+  const refuseAndClose = (data) => {
+    onRefuse(data.excuse);
+    handleClose();
+  };
+
   const methods = useForm({
     resolver: yupResolver(ExcuseSchema),
   });
@@ -150,11 +144,7 @@ export default function DoctorTableRow({
   };
 
   return (
-    <TableRow hover selected={selected}>
-      <TableCell padding="checkbox">
-        <Checkbox checked={selected} onClick={onSelectRow} />
-      </TableCell>
-
+    <TableRow hover>
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
         <Avatar alt={name} src={profilepic} sx={{ mr: 2 }} />
         <Link to={linkTo} color="inherit" component={RouterLink}>
@@ -193,7 +183,8 @@ export default function DoctorTableRow({
             (status === 'chờ xác nhận' && 'warning') ||
             (status === 'chờ khám' && 'info') ||
             (status === 'bị từ chối' && 'error') ||
-            (status === 'đã hoàn thành' && 'success')
+            (status === 'đã hoàn thành' && 'success') ||
+            (status === 'đã hủy' && 'error')
           }
           sx={{ textTransform: 'capitalize' }}
         >
@@ -287,8 +278,10 @@ export default function DoctorTableRow({
           <Dialog open={open} onClose={handleClose}>
             <DialogTitle sx={{ m: 1, p: 2 }}>{'Bạn muốn hủy lịch hẹn?'}</DialogTitle>
             <DialogContent>
-              <DialogContentText>Buổi hẹn đang chờ khám sẽ bị hủy sau khi nhấp đồng ý, bạn có muốn tiếp tục?</DialogContentText>
-              <RHFTextField autoFocus name="excuse" label="Lý do từ chối" fullWidth variant="standard" />
+              <DialogContentText>
+                Buổi hẹn đang chờ khám sẽ bị hủy sau khi nhấp đồng ý, bạn có muốn tiếp tục?
+              </DialogContentText>
+              <RHFTextField autoFocus name="excuse" label="Lý do hủy" fullWidth variant="standard" />
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose}>Trở về</Button>
@@ -300,12 +293,14 @@ export default function DoctorTableRow({
           <Dialog open={open1} onClose={handleClose1}>
             <DialogTitle sx={{ m: 1, p: 2 }}>{'Bạn muốn từ chối lịch hẹn?'}</DialogTitle>
             <DialogContent>
-              <DialogContentText>Buổi hẹn đang chờ xác nhận sẽ bị từ chối sau khi nhấp đồng ý, bạn có muốn tiếp tục?</DialogContentText>
+              <DialogContentText>
+                Buổi hẹn đang chờ xác nhận sẽ bị từ chối sau khi nhấp đồng ý, bạn có muốn tiếp tục?
+              </DialogContentText>
               <RHFTextField autoFocus name="excuse" label="Lý do từ chối" fullWidth variant="standard" />
             </DialogContent>
             <DialogActions>
               <Button onClick={handleClose1}>Trở về</Button>
-              <Button variant="contained" onClick={handleSubmit(cancelAndClose)} autoFocus>
+              <Button variant="contained" onClick={handleSubmit(refuseAndClose)} autoFocus>
                 Đồng ý
               </Button>
             </DialogActions>
