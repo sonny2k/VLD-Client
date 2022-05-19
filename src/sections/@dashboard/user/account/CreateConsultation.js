@@ -181,17 +181,14 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
                 <option disabled selected>
                   {datetext}
                 </option>
-                {sorted.map(
-                  (option, index) =>
-                    (new Date(option.date) >= checkDay ?  (
-                      <option key={index} value={{date: format(new Date(option.date), 'yyyy-MM-dd')}}>
-                        {format(new Date(option.date), 'dd-MM-yyyy')}
-                      </option> 
-                    
-                    ) : <option disabled>
-                          {format(new Date(option.date), 'dd-MM-yyyy')}
-                        </option>
-                    )
+                {sorted.map((option, index) =>
+                  new Date(option.date) >= checkDay ? (
+                    <option key={index} value={format(new Date(option.date), 'yyyy-MM-dd')}>
+                      {format(new Date(option.date), 'dd-MM-yyyy')}
+                    </option>
+                  ) : (
+                    <option disabled>Ngày {format(new Date(option.date), 'dd-MM-yyyy')} không khả dụng</option>
+                  )
                 )}
               </RHFSelect>
 
