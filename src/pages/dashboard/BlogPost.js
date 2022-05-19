@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import { Box, Card, Divider, Container, Typography, Pagination } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // routes
-import { PATH_DASHBOARD } from '../../routes/paths';
+import { PATH_DASHBOARD, PATH_PAGE } from '../../routes/paths';
 // hooks
 import useSettings from '../../hooks/useSettings';
 import useIsMountedRef from '../../hooks/useIsMountedRef';
@@ -69,6 +69,14 @@ export default function BlogPost() {
     <Page title="Chi tiết bài đăng">
       <RootStyle>
         <Container maxWidth={themeStretch ? false : 'lg'}>
+          <HeaderBreadcrumbs
+            heading="Chi tiết bài đăng"
+            links={[
+              { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
+              { name: 'Tin tức', href: PATH_PAGE.articles },
+              { name: post && post.title },
+            ]}
+          />
           {post && (
             <Card>
               <BlogPostHero post={post} />
