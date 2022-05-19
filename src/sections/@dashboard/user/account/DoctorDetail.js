@@ -103,8 +103,6 @@ export default function DoctorDetail() {
 
   const values = watch();
 
-  console.log(values.degree);
-
   const onSubmit = async (values) => {
     try {
       await axios.put('/api/doctor/account/detailinfo', {
