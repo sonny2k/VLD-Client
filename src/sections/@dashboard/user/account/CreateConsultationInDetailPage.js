@@ -29,6 +29,8 @@ export default function ModalCreateConsultation({ doctor }) {
 
   const { account } = useAuth();
 
+  const checkDay = new Date();
+
   const { availables } = doctor;
 
   const sorted = availables.sort((a, b) => {
@@ -138,11 +140,15 @@ export default function ModalCreateConsultation({ doctor }) {
                 <option disabled selected>
                   Vui lòng chọn ngày
                 </option>
-                {sorted.map((option, index) => (
-                  <option key={index} value={format(new Date(option.date), 'yyyy-MM-dd')}>
-                    {format(new Date(option.date), 'dd-MM-yyyy')}
-                  </option>
-                ))}
+                {sorted.map((option, index) =>
+                  new Date(option.date) >= checkDay ? (
+                    <option key={index} value={format(new Date(option.date), 'yyyy-MM-dd')}>
+                      {format(new Date(option.date), 'dd-MM-yyyy')}
+                    </option>
+                  ) : (
+                    <option disabled>Ngày {format(new Date(option.date), 'dd-MM-yyyy')} không khả dụng</option>
+                  )
+                )}
               </RHFSelect>
 
               {position !== null && (
