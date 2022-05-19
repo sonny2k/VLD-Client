@@ -45,15 +45,6 @@ const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'bị 
 
 const DEPARTMENT_OPTIONS = [
   'Tất cả',
-  'tim mạch',
-  'nội',
-  'ngoại',
-  'thần kinh',
-  'nhãn khoa',
-  'tai mũi họng',
-  'răng-hàm-mặt',
-  'ung bướu',
-  'y học cổ truyền',
 ];
 
 const TABLE_HEAD = [
@@ -113,13 +104,28 @@ export default function UserList() {
     getConsult();
   }, [consult]);
 
+  const [dep, setDep] = useState([]);
+
+  useEffect(() => {
+    getDeps();
+  }, [dep]);
+
+  const getDeps = async () => {
+    try {
+      const res = await axios.get('/api/admin/department/viewListDepartment');
+      setDep(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const [filterName, setFilterName] = useState('');
 
   const [filterDepartment, setFilterDepartment] = useState('Tất cả');
 
   const { currentTab: filterStatus, onChangeTab: onChangeFilterStatus } = useTabs('Tất cả');
 
-  function applySortFilter({ consult, comparator, filterName, filterStatus, filterRole, filterDepartment }) {
+  function applySortFilter({ consult, comparator, filterName, filterStatus, filterRole, filterDepartment, dep }) {
     const stabilizedThis = consult.map((el, index) => [el, index]);
 
     stabilizedThis.sort((a, b) => {
@@ -140,6 +146,10 @@ export default function UserList() {
 
     if (filterStatus !== 'Tất cả') {
       consult = consult.filter((item) => item.status === filterStatus);
+    }
+
+    if (dep.length > 0 && DEPARTMENT_OPTIONS.length === 1) {
+      dep.map((item) => DEPARTMENT_OPTIONS.push(item.name));
     }
 
     if (filterDepartment !== 'Tất cả') {
@@ -213,6 +223,7 @@ export default function UserList() {
     filterName,
     filterStatus,
     filterDepartment,
+    dep,
   });
 
   const denseHeight = dense ? 52 : 72;

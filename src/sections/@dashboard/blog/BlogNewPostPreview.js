@@ -36,10 +36,7 @@ export default function BlogNewPostPreview({ values, isValid, isSubmitting, isOp
         <Typography variant="subtitle1" sx={{ flexGrow: 1 }}>
           Xem trước bài đăng
         </Typography>
-        <Button onClick={onClose}>Hủy bỏ</Button>
-        <LoadingButton type="submit" variant="contained" disabled={!isValid} loading={isSubmitting} onClick={onSubmit}>
-          Đăng tin tức
-        </LoadingButton>
+        <Button onClick={onClose}>Trở về</Button>
       </DialogActions>
 
       {hasContent ? (

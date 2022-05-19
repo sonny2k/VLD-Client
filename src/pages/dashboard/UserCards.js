@@ -31,14 +31,6 @@ export default function UserCards() {
 
   const DEPARTMENT_OPTIONS = [
     'Tất cả chuyên khoa',
-    'chuyên khoa tim mạch',
-    'chuyên khoa nội',
-    'chuyên khoa ngoại',
-    'chuyên khoa thần kinh',
-    'chuyên khoa nhãn khoa',
-    'chuyên khoa tai mũi họng',
-    'chuyên khoa răng-hàm-mặt',
-    'chuyên khoa ung bướu',
   ];
 
   const [doctors, setDoctors] = useState([]);
@@ -55,7 +47,22 @@ export default function UserCards() {
     fetchDoctors();
   }, [doctors]);
 
-  function handleSortAndSearch({ doctors }) {
+  const [dep, setDep] = useState([]);
+
+  useEffect(() => {
+    getDeps();
+  }, [dep]);
+
+  const getDeps = async () => {
+    try {
+      const res = await axios.get('/api/admin/department/viewListDepartment');
+      setDep(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  function handleSortAndSearch({ doctors, dep }) {
     if (filterName) {
       doctors = doctors.filter(
         (item) =>
@@ -63,6 +70,10 @@ export default function UserCards() {
           unorm.nfkd(item.account.fname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1
         // doctor.department.toLowerCase().split('chuyên khoa')[1].trim() === 'nội khoa'
       );
+    }
+
+    if (dep.length > 0 && DEPARTMENT_OPTIONS.length === 1) {
+      dep.map((item) => DEPARTMENT_OPTIONS.push(item.name));
     }
 
     if (filterDepartment !== 'Tất cả chuyên khoa') {
@@ -84,6 +95,7 @@ export default function UserCards() {
 
   const dataFiltered = handleSortAndSearch({
     doctors,
+    dep,
   });
 
   const isNotFound = (!dataFiltered.length && filterName) || (!dataFiltered.length && filterDepartment);
