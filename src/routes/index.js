@@ -131,6 +131,7 @@ export default function Router() {
             { path: 'posts', element: <BlogPosts /> },
             { path: 'post/:title', element: <BlogPost /> },
             { path: 'new', element: <BlogNewPost /> },
+            { path: 'edit', element: <BlogEditPost /> },
           ],
         },
         {
@@ -218,6 +219,8 @@ const InvoiceEdit = Loadable(lazy(() => import('../pages/dashboard/InvoiceEdit')
 const BlogPosts = Loadable(lazy(() => import('../pages/dashboard/BlogPosts')));
 const BlogPost = Loadable(lazy(() => import('../pages/dashboard/BlogPost')));
 const BlogNewPost = Loadable(lazy(() => import('../pages/dashboard/BlogNewPost')));
+const BlogEditPost = Loadable(lazy(() => import('../pages/dashboard/BlogEditPost')));
+
 
 // USER
 const UserProfile = Loadable(lazy(() => import('../pages/dashboard/UserProfile')));

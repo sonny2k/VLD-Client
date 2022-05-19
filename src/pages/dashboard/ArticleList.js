@@ -159,9 +159,17 @@ export default function ArticleList() {
     setArticles(deleteRows);
   };
 
-  const handleEditRow = (id) => {
-    navigate(`${PATH_DASHBOARD.user.root}/detail/${paramCase(id)}`);
-  };
+  const handleEditRow = (_id, title, briefdescription, content, articlecategory, banner) => {
+    navigate(PATH_DASHBOARD.blog.edit, {
+      state: {
+        id1:_id,
+        title1: title,
+        briefdescription1: briefdescription,
+        content1: content,
+        articlecategory1: articlecategory,
+        banner1: banner,
+      }
+    });  };
 
   const dataFiltered = applySortFilter({
     articles,
@@ -251,7 +259,7 @@ export default function ArticleList() {
                         selected={selected.includes(row._id)}
                         onSelectRow={() => onSelectRow(row._id)}
                         onDeleteRow={() => handleDeleteRow(row._id)}
-                        onEditRow={() => handleEditRow(row._id)}
+                        onEditRow={() => handleEditRow(row._id, row.title, row.briefdescription, row.content, row.articlecategory, row.banner)}
                       />
                     ))}
 
