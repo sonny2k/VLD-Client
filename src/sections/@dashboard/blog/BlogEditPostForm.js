@@ -160,7 +160,7 @@ export default function BlogEditPostForm({
           content: data.content,
           articlecategory: data.articlecategory !== '' ? data.articlecategory : artcategories[0]._id,
           banner: imageUrl,
-          status: 1,
+          status: 0,
           createdat: created,
         });
         enqueueSnackbar('Cập nhật tin tức thành công');
@@ -245,7 +245,7 @@ export default function BlogEditPostForm({
           </Grid>
 
           <Grid item xs={12} md={4}>
-          <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
+            <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
               <Button color="inherit" variant="outlined" size="large" onClick={handleOpenPreview}>
                 Xem trước
               </Button>
