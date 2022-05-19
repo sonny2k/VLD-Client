@@ -7,19 +7,22 @@ import Iconify from '../../../../components/Iconify';
 
 DocTableToolbar.propTypes = {
   filterName: PropTypes.string,
+  dep: PropTypes.string,
   filterRole: PropTypes.string,
   onFilterName: PropTypes.func,
   onFilterRole: PropTypes.func,
+  onFilterDep: PropTypes.func,
+  optionsDep: PropTypes.arrayOf(PropTypes.string),
   optionsRole: PropTypes.arrayOf(PropTypes.string),
 };
 
-export default function DocTableToolbar({ filterName, filterRole, onFilterName, onFilterRole, optionsRole }) {
+export default function DocTableToolbar({ filterName, filterRole, onFilterName, onFilterRole, optionsRole, optionsDep, onFilterDep, dep }) {
   return (
     <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ py: 2.5, px: 3 }}>
       <TextField
         fullWidth
         select
-        label="Giới tính"
+        label="Chuyên khoa"
         value={filterRole}
         onChange={onFilterRole}
         SelectProps={{
@@ -32,7 +35,7 @@ export default function DocTableToolbar({ filterName, filterRole, onFilterName, 
           textTransform: 'capitalize',
         }}
       >
-        {optionsRole.map((option) => (
+        {optionsDep.map((option) => (
           <MenuItem
             key={option}
             value={option}

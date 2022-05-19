@@ -45,7 +45,7 @@ import LoadingScreen from '../../components/LoadingScreen';
 import { ProductTableToolbar, ProductTableRow } from '../../sections/@dashboard/user/list';
 
 // ----------------------------------------------------------------------
-const ROLE_OPTIONS = ['Tất cả', 'giảm đau', 'đau họng', 'ho', 'viêm họng', 'cảm', 'viêm xoang', 'nhỏ mắt', 'ung bướu', 'thần kinh'];
+const ROLE_OPTIONS = ['Tất cả'];
 
 const TABLE_HEAD = [
   { id: 'tile', label: 'Tên thuốc', align: 'left' },
@@ -93,13 +93,28 @@ export default function ProductList() {
     setProducts(medicines);
   }, [dispatch, medicines]);
 
+  const [pro, setPro] = useState([]);
+
+  useEffect(() => {
+    getPros();
+  }, [pro]);
+
+  const getPros = async () => {
+    try {
+      const res = await axios.get('/api/admin/product/viewProductCategory');
+      setPro(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const [filterName, setFilterName] = useState('');
 
   const [filterRole, setFilterRole] = useState('Tất cả');
 
   // const { currentTab: filterStatus, onChangeTab: onChangeFilterStatus } = useTabs('Tất cả');
 
-  function applySortFilter({ products, comparator, filterName, filterStatus, filterRole }) {
+  function applySortFilter({ products, comparator, filterName, filterStatus, filterRole, pro }) {
     const stabilizedThis = products.map((el, index) => [el, index]);
 
     stabilizedThis.sort((a, b) => {
@@ -114,6 +129,10 @@ export default function ProductList() {
       products = products.filter(
         (item) => unorm.nfd(item.title).toLowerCase().indexOf(unorm.nfd(filterName).toLowerCase()) !== -1
       );
+    }
+
+    if (pro.length > 0 && ROLE_OPTIONS.length === 1) {
+      pro.map((item) => ROLE_OPTIONS.push(item.name));
     }
 
     if (filterRole !== 'Tất cả') {
@@ -178,6 +197,7 @@ export default function ProductList() {
     comparator: getComparator(order, orderBy),
     filterName,
     filterRole,
+    pro,
   });
 
   const denseHeight = dense ? 52 : 72;

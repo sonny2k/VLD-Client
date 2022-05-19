@@ -8,12 +8,15 @@ import Iconify from '../../../../components/Iconify';
 ArticleTableToolbar.propTypes = {
   filterName: PropTypes.string,
   filterRole: PropTypes.string,
+  filterRole1: PropTypes.string,
   onFilterName: PropTypes.func,
   onFilterRole: PropTypes.func,
+  onFilterRole1: PropTypes.func,
+  optionsRole1: PropTypes.arrayOf(PropTypes.string),
   optionsRole: PropTypes.arrayOf(PropTypes.string),
 };
 
-export default function ArticleTableToolbar({ filterName, filterRole, onFilterName, onFilterRole, optionsRole }) {
+export default function ArticleTableToolbar({ filterName, filterRole, filterRole1, onFilterName, onFilterRole, onFilterRole1, optionsRole, optionsRole1 }) {
   return (
     <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ py: 2.5, px: 3 }}>
       <TextField
@@ -33,6 +36,39 @@ export default function ArticleTableToolbar({ filterName, filterRole, onFilterNa
         }}
       >
         {optionsRole.map((option) => (
+          <MenuItem
+            key={option}
+            value={option}
+            sx={{
+              mx: 1,
+              my: 0.5,
+              borderRadius: 0.75,
+              typography: 'body2',
+              textTransform: 'capitalize',
+            }}
+          >
+            {option}
+          </MenuItem>
+        ))}
+      </TextField>
+
+      <TextField
+        fullWidth
+        select
+        label="Loại tin tức"
+        value={filterRole1}
+        onChange={onFilterRole1}
+        SelectProps={{
+          MenuProps: {
+            sx: { '& .MuiPaper-root': { maxHeight: 260 } },
+          },
+        }}
+        sx={{
+          maxWidth: { sm: 240 },
+          textTransform: 'capitalize',
+        }}
+      >
+        {optionsRole1.map((option) => (
           <MenuItem
             key={option}
             value={option}

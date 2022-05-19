@@ -43,6 +43,8 @@ import { ArticleTableToolbar, ArticleTableRow } from '../../sections/@dashboard/
 // ----------------------------------------------------------------------
 const ROLE_OPTIONS = ['Tất cả', 'Đã đăng', 'Chưa đăng'];
 
+const ROLE_OPTIONS1 = ['Tất cả'];
+
 const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'đã hủy', 'đã hoàn thành'];
 
 const TABLE_HEAD = [
@@ -93,13 +95,30 @@ export default function ArticleList() {
     getArticle();
   }, []);
 
+  const [art, setArt] = useState([]);
+
+  useEffect(() => {
+    getArts();
+  }, [art]);
+
+  const getArts = async () => {
+    try {
+      const res = await axios.get('/api/admin/article/viewArticleCategory');
+      setArt(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const [filterName, setFilterName] = useState('');
 
   const [filterRole, setFilterRole] = useState('Tất cả');
 
+  const [filterRole1, setFilterRole1] = useState('Tất cả');
+
   // const { currentTab: filterStatus, onChangeTab: onChangeFilterStatus } = useTabs('Tất cả');
 
-  function applySortFilter({ articles, comparator, filterName, filterStatus, filterRole }) {
+  function applySortFilter({ articles, comparator, filterName, filterStatus, filterRole, filterRole1 }) {
     const stabilizedThis = articles.map((el, index) => [el, index]);
 
     stabilizedThis.sort((a, b) => {
@@ -120,7 +139,22 @@ export default function ArticleList() {
 
     if (filterRole !== 'Tất cả') {
       articles = articles.filter(
-        (item) => unorm.nfd(item.status === 0 ? 'Chưa đăng' : 'Đã đăng').toLowerCase().indexOf(unorm.nfd(filterRole).toLowerCase()) !== -1
+        (item) =>
+          unorm
+            .nfkd(item.status === 0 ? 'Chưa đăng' : 'Đã đăng')
+            .toLowerCase()
+            .indexOf(unorm.nfkd(filterRole).toLowerCase()) !== -1
+      );
+    }
+
+    if (art.length > 0 && ROLE_OPTIONS1.length === 1) {
+      art.map((item) => ROLE_OPTIONS1.push(item.name));
+    }
+
+    if (filterRole1 !== 'Tất cả') {
+      articles = articles.filter(
+        (item) =>
+          unorm.nfkd(item.articlecategory.name).toLowerCase().indexOf(unorm.nfkd(filterRole1).toLowerCase()) !== -1
       );
     }
 
@@ -134,6 +168,10 @@ export default function ArticleList() {
 
   const handleFilterRole = (event) => {
     setFilterRole(event.target.value);
+  };
+
+  const handleFilterRole1 = (event) => {
+    setFilterRole1(event.target.value);
   };
 
   const handleDeleteRow = (id) => {
@@ -151,9 +189,9 @@ export default function ArticleList() {
       });
       enqueueSnackbar('xóa tin tức thành công');
       navigate(PATH_DASHBOARD.user.articlelist);
-  } catch (error) {
-    console.error(error);
-  }
+    } catch (error) {
+      console.error(error);
+    }
     const deleteRows = articles.filter((row) => !selected.includes(row._id));
     setSelected([]);
     setArticles(deleteRows);
@@ -162,20 +200,23 @@ export default function ArticleList() {
   const handleEditRow = (_id, title, briefdescription, content, articlecategory, banner) => {
     navigate(PATH_DASHBOARD.blog.edit, {
       state: {
-        id1:_id,
+        id1: _id,
         title1: title,
         briefdescription1: briefdescription,
         content1: content,
         articlecategory1: articlecategory,
         banner1: banner,
-      }
-    });  };
+      },
+    });
+  };
 
   const dataFiltered = applySortFilter({
     articles,
     comparator: getComparator(order, orderBy),
     filterName,
     filterRole,
+    filterRole1,
+    art,
   });
 
   const denseHeight = dense ? 52 : 72;
@@ -207,9 +248,12 @@ export default function ArticleList() {
             <ArticleTableToolbar
               filterName={filterName}
               filterRole={filterRole}
+              filterRole1={filterRole1}
               onFilterName={handleFilterName}
               onFilterRole={handleFilterRole}
+              onFilterRole1={handleFilterRole1}
               optionsRole={ROLE_OPTIONS}
+              optionsRole1={ROLE_OPTIONS1}
             />
 
             <Scrollbar>
@@ -259,7 +303,16 @@ export default function ArticleList() {
                         selected={selected.includes(row._id)}
                         onSelectRow={() => onSelectRow(row._id)}
                         onDeleteRow={() => handleDeleteRow(row._id)}
-                        onEditRow={() => handleEditRow(row._id, row.title, row.briefdescription, row.content, row.articlecategory, row.banner)}
+                        onEditRow={() =>
+                          handleEditRow(
+                            row._id,
+                            row.title,
+                            row.briefdescription,
+                            row.content,
+                            row.articlecategory,
+                            row.banner
+                          )
+                        }
                       />
                     ))}
 

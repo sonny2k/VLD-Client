@@ -40,7 +40,7 @@ import { TableEmptyRows, TableHeadCustom, TableNoData, TableSelectedActions } fr
 // sections
 import { DocTableToolbar, DocTableRow } from '../../sections/@dashboard/user/list';
 // ----------------------------------------------------------------------
-const ROLE_OPTIONS = ['Tất cả', 'chuyên khoa tim mạch', 'chuyên khoa nhi'];
+const ROLE_OPTIONS = ['Tất cả'];
 
 const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'đã hủy', 'đã hoàn thành'];
 
@@ -92,13 +92,28 @@ export default function DocList() {
     fetchDoctors();
   }, [doctors]);
 
+  const [dep, setDep] = useState([]);
+
+  useEffect(() => {
+    getDeps();
+  }, [dep]);
+
+  const getDeps = async () => {
+    try {
+      const res = await axios.get('/api/admin/department/viewListDepartment');
+      setDep(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const [filterName, setFilterName] = useState('');
 
   const [filterRole, setFilterRole] = useState('Tất cả');
 
   // const { currentTab: filterStatus, onChangeTab: onChangeFilterStatus } = useTabs('Tất cả');
 
-  function applySortFilter({ doctors, comparator, filterName, filterStatus, filterRole }) {
+  function applySortFilter({ doctors, comparator, filterName, filterStatus, filterRole, dep }) {
     const stabilizedThis = doctors.map((el, index) => [el, index]);
 
     stabilizedThis.sort((a, b) => {
@@ -112,14 +127,18 @@ export default function DocList() {
     if (filterName) {
       doctors = doctors.filter(
         (item) =>
-          unorm.nfd(item.account.lname).toLowerCase().indexOf(unorm.nfd(filterName).toLowerCase()) !== -1 ||
-          unorm.nfd(item.account.fname).toLowerCase().indexOf(unorm.nfd(filterName).toLowerCase()) !== -1
+          unorm.nfkd(item.account.lname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1 ||
+          unorm.nfkd(item.account.fname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1
       );
+    }
+
+    if (dep.length > 0 && ROLE_OPTIONS.length === 1) {
+      dep.map((item) => ROLE_OPTIONS.push(item.name));
     }
 
     if (filterRole !== 'Tất cả') {
       doctors = doctors.filter(
-        (item) => unorm.nfd(item.department).toLowerCase().indexOf(unorm.nfd(filterRole).toLowerCase()) !== -1
+        (item) => unorm.nfkd(item.department).toLowerCase().indexOf(unorm.nfkd(filterRole).toLowerCase()) !== -1
       );
     }
 
@@ -135,6 +154,9 @@ export default function DocList() {
     setFilterRole(event.target.value);
   };
 
+  const handleFilterDep = (event) => {
+    setDep(event.target.value);
+  };
   const handleDeleteRow = (id) => {
     const deleteRow = doctors.filter((row) => row._id !== id);
     setSelected([]);
@@ -191,6 +213,7 @@ export default function DocList() {
     comparator: getComparator(order, orderBy),
     filterName,
     filterRole,
+    dep,
   });
 
   const denseHeight = dense ? 52 : 72;
@@ -221,9 +244,11 @@ export default function DocList() {
           <DocTableToolbar
             filterName={filterName}
             filterRole={filterRole}
+            filterDep={dep}
             onFilterName={handleFilterName}
             onFilterRole={handleFilterRole}
-            optionsRole={ROLE_OPTIONS}
+            optionsDep={ROLE_OPTIONS}
+            onFilterDep={handleFilterDep}
           />
 
           <Scrollbar>
