@@ -15,7 +15,14 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 // utils
 import axios from '../../../utils/axios';
 // components
-import { RHFSwitch, RHFEditor, FormProvider, RHFTextField, RHFUploadSingleFile, RHFSelect } from '../../../components/hook-form';
+import {
+  RHFSwitch,
+  RHFEditor,
+  FormProvider,
+  RHFTextField,
+  RHFUploadSingleFile,
+  RHFSelect,
+} from '../../../components/hook-form';
 //
 import BlogNewPostPreview from './BlogNewPostPreview';
 
@@ -31,10 +38,14 @@ BlogNewPostForm.propTypes = {
   artcategories: PropTypes.array,
 };
 
-export default function BlogNewPostForm( {artcategories} ) {
+export default function BlogNewPostForm({ artcategories }) {
   const navigate = useNavigate();
 
   const [open, setOpen] = useState(false);
+
+  const [btn, setBtn] = useState('Đăng bài');
+
+  const [imageUrl, setimageUrl] = useState('');
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -49,7 +60,7 @@ export default function BlogNewPostForm( {artcategories} ) {
   const NewBlogSchema = Yup.object().shape({
     title: Yup.string().required('Tiêu đề là cần thần'),
     briefdescription: Yup.string().required('Hãy điền mô tả ngắn'),
-    content: Yup.string().max(1000).required('Nội dung dưới 1000 kí tự'),
+    content: Yup.string().required('Vui lòng nhập nội dung'),
   });
 
   const defaultValues = {
@@ -57,7 +68,7 @@ export default function BlogNewPostForm( {artcategories} ) {
     briefdescription: '',
     content: '',
     articlecategory: '',
-    cover: null,
+    banner: null,
     publish: true,
   };
 
@@ -78,18 +89,16 @@ export default function BlogNewPostForm( {artcategories} ) {
   const values = watch();
 
   const onSubmit = async (data) => {
+    const created = new Date();
     try {
       await axios.post('/api/admin/article/createArticle', {
         title: data.title,
         briefdescription: data.briefdescription,
         content: data.content,
-        category: data.categoryne !== '' ? data.categoryne : artcategories[0].name,
-        banner: data.banner,
-        status: data.status,
-        datecreate: data.datecreate,
-        relevantarticles: data.relevantarticles,
-        publish: data.publish,
-        hourofpublish: data.hourofpublish,
+        articlecategory: data.articlecategory !== '' ? data.articlecategory : artcategories[0]._id,
+        banner: imageUrl,
+        status: 1,
+        createdat: created,
       });
       enqueueSnackbar('Tạo tin tức thành công');
       navigate(PATH_DASHBOARD.user.articlelist);
@@ -98,11 +107,24 @@ export default function BlogNewPostForm( {artcategories} ) {
     }
   };
 
-  const handleDrop = useCallback(
-    (acceptedFiles) => {
-      const file = acceptedFiles[0];
+  const handleSwitch = (event) => {
+    if (event.target.value === false) {
+      setBtn('Lưu nháp');
+    }
+    if (event.target.value === true) {
+      setBtn('Đăng bài');
+    }
+  };
 
+  const handleDrop = useCallback(
+    async (acceptedFiles) => {
+      const file = acceptedFiles[0];
       if (file) {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () => {
+          uploadImage(reader.result);
+        };
         setValue(
           'banner',
           Object.assign(file, {
@@ -114,9 +136,24 @@ export default function BlogNewPostForm( {artcategories} ) {
     [setValue]
   );
 
+  const uploadImage = async (base64EncodedImage) => {
+    const pic = base64EncodedImage.toString();
+    try {
+      const img = await axios.post(`/api/admin/product/image`, {
+        pic,
+      });
+      setimageUrl(img.data);
+    } catch (err) {
+      console.error(err);
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', {
+        variant: 'error',
+      });
+    }
+  };
+
   return (
     <>
-      <FormProvider methods={methods} >
+      <FormProvider methods={methods}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={8}>
             <Card sx={{ p: 3 }}>
@@ -125,7 +162,9 @@ export default function BlogNewPostForm( {artcategories} ) {
 
                 <RHFSelect name="articlecategory" label="Loại tin tức">
                   {artcategories.map((option) => (
-                    <option key={option._id}>{option.name}</option>
+                    <option value={option._id} key={option._id}>
+                      {option.name}
+                    </option>
                   ))}
                 </RHFSelect>
 
@@ -138,7 +177,13 @@ export default function BlogNewPostForm( {artcategories} ) {
 
                 <div>
                   <LabelStyle>Ảnh bìa</LabelStyle>
-                  <RHFUploadSingleFile name="banner" accept="image/*" maxSize={3145728} onDrop={handleDrop} />
+                  <RHFUploadSingleFile
+                    name="banner"
+                    accept="image/*"
+                    maxSize={3145728}
+                    onDrop={handleDrop}
+                    type="file"
+                  />
                 </div>
               </Stack>
             </Card>
@@ -150,7 +195,8 @@ export default function BlogNewPostForm( {artcategories} ) {
                 <div>
                   <RHFSwitch
                     name="publish"
-                    label="Công khai"
+                    label="Công khai bài đăng"
+                    onClick={handleSwitch}
                     labelPlacement="start"
                     sx={{ mb: 1, mx: 0, width: 1, justifyContent: 'space-between' }}
                   />
@@ -162,8 +208,15 @@ export default function BlogNewPostForm( {artcategories} ) {
               <Button fullWidth color="inherit" variant="outlined" size="large" onClick={handleOpenPreview}>
                 Xem trước
               </Button>
-              <LoadingButton fullWidth type="submit" variant="contained" size="large" loading={isSubmitting} onClick={handleSubmit(onSubmit)}>
-                Đăng tin tức
+              <LoadingButton
+                fullWidth
+                type="submit"
+                variant="contained"
+                size="large"
+                loading={isSubmitting}
+                onClick={handleSubmit(onSubmit)}
+              >
+                {btn}
               </LoadingButton>
             </Stack>
           </Grid>

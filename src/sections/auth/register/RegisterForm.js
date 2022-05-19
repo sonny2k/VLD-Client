@@ -36,7 +36,7 @@ export default function RegisterForm() {
 
   const RegisterSchema = Yup.object().shape({
     firstName: Yup.string().matches(
-      /^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/,
+      /^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ ,.'-]+$/u,
       'Vui lòng điền tên chính xác'
     ),
     lastName: Yup.string().matches(
@@ -115,7 +115,9 @@ export default function RegisterForm() {
           enqueueSnackbar('Sai mã xác minh, xin thử lại', { variant: 'error' });
         }
         if (message.message === 'Lỗi máy chủ') {
-          enqueueSnackbar('Bạn chưa gửi mã xác minh hoặc mã xác minh không đúng định dạng, xin thử lại', { variant: 'error' });
+          enqueueSnackbar('Bạn chưa gửi mã xác minh hoặc mã xác minh không đúng định dạng, xin thử lại', {
+            variant: 'error',
+          });
         }
         if (message.message === 'Số điện thoại đã được đăng ký ở tài khoản khác') {
           enqueueSnackbar('Số điện thoại đã được đăng ký ở tài khoản khác', { variant: 'error' });

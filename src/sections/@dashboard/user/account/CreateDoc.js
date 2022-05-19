@@ -168,8 +168,16 @@ export default function CreateDoc({ fname, lname, id, phone, depa }) {
   };
 
   const NewDocSchema = Yup.object().shape({
-    lname: Yup.string().required('Vui lòng điền họ'),
-    fname: Yup.string().required('Vui lòng điền tên'),
+    lname: Yup.string()
+      .matches(
+        /^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]+$/,
+        'Vui lòng điền họ chính xác'
+      )
+      .max(255),
+    fname: Yup.string().matches(
+      /^[a-zA-Z_ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ ,.'-]+$/u,
+      'Vui lòng điền tên chính xác'
+    ),
     phone: Yup.string()
       .min(10, 'Vui lòng nhập số điện thoại có 10 chữ số')
       .max(10, 'Vui lòng nhập số điện thoại có 10 chữ số')
