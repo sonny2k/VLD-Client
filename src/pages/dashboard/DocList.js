@@ -312,7 +312,7 @@ export default function DocList() {
                           row.excellence,
                           row.workhistory,
                           row.education,
-                          name
+                          name,
                         )
                       }
                     />

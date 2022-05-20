@@ -67,6 +67,7 @@ export default function DocEdit() {
             education2={Location.state.education1}
             degree2={Location.state.degree1}
             department2={Location.state.department1}
+            
           />
         </Container>
       </Page>
