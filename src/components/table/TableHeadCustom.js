@@ -42,8 +42,6 @@ export default function TableHeadCustom({
   return (
     <TableHead sx={sx}>
       <TableRow>
-        <TableCell />
-
         {headLabel.map((headCell) => (
           <TableCell
             key={headCell.id}
