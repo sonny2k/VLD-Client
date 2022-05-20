@@ -166,7 +166,7 @@ export default function ProductList() {
       await axios.post(`/api/admin/product/deleteProduct`, {
         data: selected,
       });
-      enqueueSnackbar('xóa sản phẩm thành công');
+      enqueueSnackbar('Xóa sản phẩm thành công!');
       navigate(PATH_DASHBOARD.user.productlist);
   } catch (error) {
     console.error(error);

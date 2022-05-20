@@ -83,14 +83,14 @@ export default function CreateSupplier({ isEdit, name, description, id }) {
           name: data.name,
           description: data.description,
         });
-        enqueueSnackbar('Cập nhật nhà cung cấp thành công');
+        enqueueSnackbar('Cập nhật nhà cung cấp thành công!');
         navigate(PATH_DASHBOARD.user.supplierlist);
       } else {
         await axios.post("/api/admin/supplier/createSupplier", {
           name: data.name,
           description: data.description,
         })
-        enqueueSnackbar('Tạo nhà cung cấp thành công');
+        enqueueSnackbar('Tạo nhà cung cấp thành công!');
       navigate(PATH_DASHBOARD.user.supplierlist);
       }      
     } catch (error) {

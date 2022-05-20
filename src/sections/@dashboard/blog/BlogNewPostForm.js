@@ -141,7 +141,7 @@ export default function BlogNewPostForm({ artcategories }) {
           status: 1,
           createdat: created,
         });
-        enqueueSnackbar('Tạo tin tức thành công');
+        enqueueSnackbar('Tạo tin tức thành công!');
         navigate(PATH_DASHBOARD.user.articlelist);
       } else if (selectedIndex === 0) {
         await axios.post('/api/admin/article/createArticle', {
@@ -153,7 +153,7 @@ export default function BlogNewPostForm({ artcategories }) {
           status: 0,
           createdat: created,
         });
-        enqueueSnackbar('Tạo tin tức thành công');
+        enqueueSnackbar('Tạo tin tức thành công!');
         navigate(PATH_DASHBOARD.user.articlelist);
       }
     } catch (error) {

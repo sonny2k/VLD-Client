@@ -29,9 +29,7 @@ export default function UserCards() {
 
   const checkDay = new Date();
 
-  const DEPARTMENT_OPTIONS = [
-    'Tất cả chuyên khoa',
-  ];
+  const DEPARTMENT_OPTIONS = ['Tất cả chuyên khoa'];
 
   const [doctors, setDoctors] = useState([]);
   useEffect(() => {
@@ -106,11 +104,7 @@ export default function UserCards() {
         <Container maxWidth={themeStretch ? false : 'lg'}>
           <HeaderBreadcrumbs
             heading="Danh sách bác sĩ"
-            links={[
-              { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
-              { name: 'Cá nhân', href: PATH_DASHBOARD.user.root },
-              { name: 'Danh sách bác sĩ' },
-            ]}
+            links={[{ name: 'Bảng điều khiển', href: PATH_DASHBOARD.root }, { name: 'Danh sách bác sĩ' }]}
           />
 
           <Stack
@@ -178,9 +172,9 @@ export default function UserCards() {
               },
             }}
           >
-            {dataFiltered.map((doctor) => ( doctor.availables[0].date !== null &&
-              <UserCard key={doctor._id} doctor={doctor} />
-            ))}
+            {dataFiltered.map(
+              (doctor) => doctor.availables[0].date !== null && <UserCard key={doctor._id} doctor={doctor} />
+            )}
           </Box>
         </Container>
       </Page>

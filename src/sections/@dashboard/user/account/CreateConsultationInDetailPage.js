@@ -89,7 +89,7 @@ export default function ModalCreateConsultation({ doctor }) {
           hour: hourc,
           doctor: doctor._id,
         });
-        enqueueSnackbar('Bạn đã đăng kí lịch thăm khám thành công');
+        enqueueSnackbar('Bạn đã đăng kí lịch thăm khám thành công!');
         navigate(PATH_DASHBOARD.user.list);
       }
 

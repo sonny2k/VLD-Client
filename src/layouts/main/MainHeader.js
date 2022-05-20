@@ -132,7 +132,7 @@ export default function MainHeader() {
             {isDesktop && <MenuDesktop isOffset={isOffset} isHome={isHome} navConfig={navConfig} />}
 
             <Stack direction={{ xs: 'row' }} spacing={2}>
-              <Button variant="text" rel="noopener" href={PATH_AUTH.register}>
+              <Button variant="outlined" rel="noopener" href={PATH_AUTH.register}>
                 Đăng ký
               </Button>
 

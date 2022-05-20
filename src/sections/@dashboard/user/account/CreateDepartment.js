@@ -83,14 +83,14 @@ export default function CreateDepartment({ isEdit, name, description, id }) {
           name: data.name,
           description: data.description,
         });
-        enqueueSnackbar('Cập nhật chuyên khoa thành công');
+        enqueueSnackbar('Cập nhật chuyên khoa thành công!');
         navigate(PATH_DASHBOARD.user.department);
       } else {
         await axios.post("/api/admin/department/createDepartment", {
           name: data.name,
           description: data.description,
         })
-        enqueueSnackbar('Tạo chuyên khoa thành công');
+        enqueueSnackbar('Tạo chuyên khoa thành công!');
       navigate(PATH_DASHBOARD.user.department);
       }      
     } catch (error) {

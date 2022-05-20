@@ -81,13 +81,13 @@ export default function EditCategory({ isEdit, name, id }) {
         await axios.put(`/api/admin/product/updateProductCategory/${id}`, {
           name: data.name,
         });
-        enqueueSnackbar('Cập nhật danh mục thành công');
+        enqueueSnackbar('Cập nhật danh mục thành công!');
         navigate(PATH_DASHBOARD.user.categorylist);
       } else {
         await axios.post("/api/admin/product/createProductCategory", {
           name: data.name,
         })
-        enqueueSnackbar('Tạo danh mục thành công');
+        enqueueSnackbar('Tạo danh mục thành công!');
       navigate(PATH_DASHBOARD.user.categorylist);
       }      
     } catch (error) {

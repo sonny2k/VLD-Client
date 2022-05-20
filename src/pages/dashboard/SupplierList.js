@@ -146,7 +146,7 @@ export default function SupplierList() {
       await axios.post(`/api/admin/supplier/deleteSupplier`, {
         data: selected,
       });
-      enqueueSnackbar('xóa nhà cung cấp thành công');
+      enqueueSnackbar('Xóa nhà cung cấp thành công!');
       navigate(PATH_DASHBOARD.user.supplierlist);
   } catch (error) {
     console.error(error);

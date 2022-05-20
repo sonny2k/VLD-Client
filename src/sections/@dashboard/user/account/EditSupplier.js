@@ -83,14 +83,14 @@ export default function EditCategory({ isEdit, name, description, id }) {
           name: data.name,
           description: data.description,
         });
-        enqueueSnackbar('Cập nhật nhà cung cấp thành công');
+        enqueueSnackbar('Cập nhật nhà cung cấp thành công!');
         navigate(PATH_DASHBOARD.user.department);
       } else {
         await axios.post("/api/admin/supplier/createSuppier", {
           name: data.name,
           description: data.description,
         })
-        enqueueSnackbar('Tạo nhà cung cấp thành công');
+        enqueueSnackbar('Tạo nhà cung cấp thành công!');
       navigate(PATH_DASHBOARD.user.department);
       }      
     } catch (error) {

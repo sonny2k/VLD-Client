@@ -41,7 +41,7 @@ import { TableEmptyRows, TableHeadCustom, TableNoData, TableSelectedActions } fr
 // sections
 import { ArticleTableToolbar, ArticleTableRow } from '../../sections/@dashboard/user/list';
 // ----------------------------------------------------------------------
-const ROLE_OPTIONS = ['Tất cả', 'Đã đăng', 'Chưa đăng'];
+const ROLE_OPTIONS = ['Tất cả', 'Công khai', 'Nháp'];
 
 const ROLE_OPTIONS1 = ['Tất cả'];
 
@@ -141,7 +141,7 @@ export default function ArticleList() {
       articles = articles.filter(
         (item) =>
           unorm
-            .nfkd(item.status === 0 ? 'Chưa đăng' : 'Đã đăng')
+            .nfkd(item.status === 0 ? 'Nháp' : 'Công khai')
             .toLowerCase()
             .indexOf(unorm.nfkd(filterRole).toLowerCase()) !== -1
       );
@@ -187,7 +187,7 @@ export default function ArticleList() {
       await axios.post(`/api/admin/article/deleteArticle`, {
         data: selected,
       });
-      enqueueSnackbar('xóa tin tức thành công');
+      enqueueSnackbar('Xóa tin tức thành công!');
       navigate(PATH_DASHBOARD.user.articlelist);
     } catch (error) {
       console.error(error);

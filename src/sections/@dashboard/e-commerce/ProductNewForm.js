@@ -83,7 +83,7 @@ export default function ProductNewForm({ categories, origins }) {
         origin: data.origin !== '' ? data.origin : origins[0].name,
         image: imageUrl,
       });
-      enqueueSnackbar('Tạo sản phẩm thành công');
+      enqueueSnackbar('Tạo sản phẩm thành công!');
       navigate(PATH_DASHBOARD.user.productlist);
     } catch (error) {
       console.error(error);

@@ -109,7 +109,7 @@ export default function ProductEditForm({
         origin: data.origin !== '' ? data.origin : origins[0].name,
         image: data.image,
       });
-      enqueueSnackbar('Cập nhật sản phẩm thành công');
+      enqueueSnackbar('Cập nhật sản phẩm thành công!');
       navigate(PATH_DASHBOARD.user.productlist);
     } catch (error) {
       console.error(error);

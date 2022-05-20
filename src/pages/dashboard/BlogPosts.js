@@ -128,6 +128,11 @@ export default function BlogPosts() {
               )
             )}
           </Grid>
+          <Stack alignItems='center' mt={3}>
+            <Button variant='contained' size='large' >
+              Tải thêm
+            </Button>
+          </Stack>
         </Container>
       </RootStyle>
     </Page>

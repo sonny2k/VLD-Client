@@ -147,7 +147,7 @@ export default function CategoryArticleList() {
         await axios.post(`/api/admin/article/deleteArticleCategory`, {
           data: selected,
         });
-        enqueueSnackbar('xóa danh mục thành công');
+        enqueueSnackbar('Xóa danh mục thành công!');
         navigate(PATH_DASHBOARD.user.categoryarticlelist);
     } catch (error) {
       console.error(error);

@@ -36,7 +36,7 @@ export default function SettingFullscreen() {
         }),
       }}
     >
-      {fullscreen ? 'Exit Fullscreen' : 'Fullscreen'}
+      {fullscreen ? 'Thoát toàn màn hình' : 'Toàn màn hỉnh'}
     </Button>
   );
 }

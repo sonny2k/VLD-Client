@@ -100,7 +100,7 @@ export default function EditDoc({
         degree: data.degree,
         department: data.department !== '' ? data.department : depa[0].name,
       });
-      enqueueSnackbar('Cập nhật thông tin bác sĩ thành công');
+      enqueueSnackbar('Cập nhật thông tin bác sĩ thành công!');
       navigate(PATH_DASHBOARD.user.doclist);
     } catch (error) {
       console.error(error);

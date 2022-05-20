@@ -66,7 +66,7 @@ export default function UserAccount() {
               { name: 'Cài đặt tài khoản' },
             ]}
           />
-  
+
           <Tabs
             value={currentTab}
             scrollButtons="auto"
@@ -74,16 +74,15 @@ export default function UserAccount() {
             allowScrollButtonsMobile
             onChange={(e, value) => setCurrentTab(value)}
           >
-            {ACCOUNT_TABS.map((tab) => (
-              tab.value !== null ?
-              <Tab disableRipple key={tab.value} label={tab.value} icon={tab.icon} value={tab.value} />
-              :
-              null
-            ))}
+            {ACCOUNT_TABS.map((tab) =>
+              tab.value !== null ? (
+                <Tab disableRipple key={tab.value} label={tab.value} icon={tab.icon} value={tab.value} />
+              ) : null
+            )}
           </Tabs>
-  
+
           <Box sx={{ mb: 5 }} />
-  
+
           {ACCOUNT_TABS.map((tab) => {
             const isMatched = tab.value === currentTab;
             return isMatched && <Box key={tab.value}>{tab.component}</Box>;
@@ -117,7 +116,7 @@ export default function UserAccount() {
               { name: 'Cài đặt tài khoản' },
             ]}
           />
-  
+
           <Tabs
             value={currentTab}
             scrollButtons="auto"
@@ -129,9 +128,9 @@ export default function UserAccount() {
               <Tab disableRipple key={tab.value} label={tab.value} icon={tab.icon} value={tab.value} />
             ))}
           </Tabs>
-  
+
           <Box sx={{ mb: 5 }} />
-  
+
           {ACCOUNT_TABS.map((tab) => {
             const isMatched = tab.value === currentTab;
             return isMatched && <Box key={tab.value}>{tab.component}</Box>;
@@ -164,13 +163,9 @@ export default function UserAccount() {
         <Container maxWidth={themeStretch ? false : 'lg'}>
           <HeaderBreadcrumbs
             heading="Tài khoản"
-            links={[
-              { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
-              { name: 'Người dùng', href: PATH_DASHBOARD.user.root },
-              { name: 'Cài đặt tài khoản' },
-            ]}
+            links={[{ name: 'Bảng điều khiển', href: PATH_DASHBOARD.root }, { name: 'Cài đặt tài khoản' }]}
           />
-  
+
           <Tabs
             value={currentTab}
             scrollButtons="auto"
@@ -182,9 +177,9 @@ export default function UserAccount() {
               <Tab disableRipple key={tab.value} label={tab.value} icon={tab.icon} value={tab.value} />
             ))}
           </Tabs>
-  
+
           <Box sx={{ mb: 5 }} />
-  
+
           {ACCOUNT_TABS.map((tab) => {
             const isMatched = tab.value === currentTab;
             return isMatched && <Box key={tab.value}>{tab.component}</Box>;

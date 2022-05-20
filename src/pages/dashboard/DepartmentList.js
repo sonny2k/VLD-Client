@@ -143,7 +143,7 @@ export default function DepartmentList() {
       await axios.post(`/api/admin/department/deleteDepartment`, {
         data: selected,
       });
-      enqueueSnackbar('xóa chuyên khoa thành công');
+      enqueueSnackbar('Xóa chuyên khoa thành công!');
       navigate(PATH_DASHBOARD.user.department);
   } catch (error) {
     console.error(error);

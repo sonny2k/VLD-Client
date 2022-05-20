@@ -170,7 +170,7 @@ export default function DocList() {
       await axios.post(`/api/admin/doctor/deleteDoctor`, {
         data: selected,
       });
-      enqueueSnackbar('xóa bác sĩ thành công');
+      enqueueSnackbar('Xóa bác sĩ thành công!');
       navigate(PATH_DASHBOARD.user.doclist);
     } catch (error) {
       console.error(error);
