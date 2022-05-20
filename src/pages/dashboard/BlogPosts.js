@@ -22,8 +22,8 @@ import { BlogPostCard, BlogPostsSort, BlogPostsSearch } from '../../sections/@da
 
 // ----------------------------------------------------------------------
 const RootStyle = styled('div')(({ theme }) => ({
-  paddingTop: theme.spacing(8),
-  paddingBottom: theme.spacing(8),
+  paddingTop: theme.spacing(11),
+  paddingBottom: theme.spacing(11),
   [theme.breakpoints.up('md')]: {
     paddingTop: theme.spacing(11),
     paddingBottom: theme.spacing(11),
@@ -58,6 +58,13 @@ export default function BlogPosts() {
   const isMountedRef = useIsMountedRef();
 
   const [posts, setPosts] = useState([]);
+
+  const [numberposts, setNumberPosts] = useState(3);
+
+  let dis = false;
+  if (numberposts >= posts.length) {
+    dis = true;
+  }
 
   const [articlecategories, setArticleCategories] = useState([]);
 
@@ -105,6 +112,11 @@ export default function BlogPosts() {
     }
   };
 
+  const handleClick = () => {
+    const loadmore = numberposts + 4;
+    setNumberPosts(loadmore);
+  };
+
   return (
     <Page title="Tin tức VLD">
       <RootStyle>
@@ -118,7 +130,7 @@ export default function BlogPosts() {
           </Stack>
 
           <Grid container spacing={3}>
-            {(!posts.length ? [...Array(12)] : sortedPosts).map((post, index) =>
+            {(!posts.length ? [...Array(6)] : sortedPosts).slice(0, numberposts).map((post, index) =>
               post ? (
                 <Grid key={post._id} item xs={12} sm={6} md={(index === 0 && 6) || 3}>
                   <BlogPostCard post={post} index={index} />
@@ -128,11 +140,13 @@ export default function BlogPosts() {
               )
             )}
           </Grid>
-          <Stack alignItems='center' mt={3}>
-            <Button variant='contained' size='large' >
-              Tải thêm
-            </Button>
-          </Stack>
+          {dis === false && (
+            <Stack alignItems="center" mt={3}>
+              <Button onClick={handleClick} variant="contained" size="large">
+                Tải thêm
+              </Button>
+            </Stack>
+          )}
         </Container>
       </RootStyle>
     </Page>

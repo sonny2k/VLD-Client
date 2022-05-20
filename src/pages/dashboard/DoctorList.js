@@ -43,9 +43,7 @@ import LoadingScreen from '../../components/LoadingScreen';
 
 const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'bị từ chối', 'đã hủy', 'đã hoàn thành'];
 
-const DEPARTMENT_OPTIONS = [
-  'Tất cả',
-];
+const DEPARTMENT_OPTIONS = ['Tất cả'];
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Người hẹn', align: 'left' },
@@ -332,12 +330,6 @@ export default function DoctorList() {
                 page={page}
                 onPageChange={onChangePage}
                 onRowsPerPageChange={onChangeRowsPerPage}
-              />
-
-              <FormControlLabel
-                control={<Switch checked={dense} onChange={onChangeDense} />}
-                label="Thu gọn"
-                sx={{ px: 3, py: 1.5, top: 0, position: { md: 'absolute' } }}
               />
             </Box>
           </Card>

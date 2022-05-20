@@ -49,7 +49,12 @@ export default function DocTableRow({ row, selected, onEditRow, onSelectRow, onD
 
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
         <Avatar alt={name} src={profilepic} sx={{ mr: 2 }} />
-        <Link onClick={onEditRow} color="inherit">
+        <Link
+          onClick={() => {
+            onEditRow(name);
+          }}
+          color="inherit"
+        >
           <Typography variant="subtitle2" noWrap>
             {name}
           </Typography>

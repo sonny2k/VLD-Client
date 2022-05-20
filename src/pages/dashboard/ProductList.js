@@ -168,9 +168,9 @@ export default function ProductList() {
       });
       enqueueSnackbar('Xóa sản phẩm thành công!');
       navigate(PATH_DASHBOARD.user.productlist);
-  } catch (error) {
-    console.error(error);
-  }
+    } catch (error) {
+      console.error(error);
+    }
     const deleteRows = products.filter((row) => !selected.includes(row._id));
     setSelected([]);
     setProducts(deleteRows);
@@ -314,12 +314,6 @@ export default function ProductList() {
               page={page}
               onPageChange={onChangePage}
               onRowsPerPageChange={onChangeRowsPerPage}
-            />
-
-            <FormControlLabel
-              control={<Switch checked={dense} onChange={onChangeDense} />}
-              label="Thu gọn"
-              sx={{ px: 3, py: 1.5, top: 0, position: { md: 'absolute' } }}
             />
           </Box>
         </Card>

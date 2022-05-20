@@ -145,9 +145,9 @@ export default function DepartmentList() {
       });
       enqueueSnackbar('Xóa chuyên khoa thành công!');
       navigate(PATH_DASHBOARD.user.department);
-  } catch (error) {
-    console.error(error);
-  }
+    } catch (error) {
+      console.error(error);
+    }
     const deleteRows = departments.filter((row) => !selected.includes(row._id));
     setSelected([]);
     setDepartments(deleteRows);
@@ -156,10 +156,10 @@ export default function DepartmentList() {
   const handleEditRow = (_id, name, description) => {
     navigate(PATH_DASHBOARD.user.departmentcreate, {
       state: {
-        id1:_id,
+        id1: _id,
         name1: name,
         description1: description,
-      }
+      },
     });
   };
 
@@ -272,12 +272,6 @@ export default function DepartmentList() {
               page={page}
               onPageChange={onChangePage}
               onRowsPerPageChange={onChangeRowsPerPage}
-            />
-
-            <FormControlLabel
-              control={<Switch checked={dense} onChange={onChangeDense} />}
-              label="Thu gọn"
-              sx={{ px: 3, py: 1.5, top: 0, position: { md: 'absolute' } }}
             />
           </Box>
         </Card>

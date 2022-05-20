@@ -45,9 +45,9 @@ const ROLE_OPTIONS = ['Tất cả', 'Đã đăng', 'Chưa đăng'];
 const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'đã hủy', 'đã hoàn thành'];
 
 const TABLE_HEAD = [
-    { id: 'name', label: 'Tên nhà cung cấp', align: 'left' },
-    { id: 'description', label: 'Mô tả', align: 'center'},
-    { id: '' },
+  { id: 'name', label: 'Tên nhà cung cấp', align: 'left' },
+  { id: 'description', label: 'Mô tả', align: 'center' },
+  { id: '' },
 ];
 
 // ----------------------------------------------------------------------
@@ -109,9 +109,7 @@ export default function SupplierList() {
 
     if (filterName) {
       suppliers = suppliers.filter(
-        (item) =>
-          unorm.nfd(item.name).toLowerCase().indexOf(unorm.nfd(filterName).toLowerCase()) !== -1 
-          
+        (item) => unorm.nfd(item.name).toLowerCase().indexOf(unorm.nfd(filterName).toLowerCase()) !== -1
       );
     }
 
@@ -148,9 +146,9 @@ export default function SupplierList() {
       });
       enqueueSnackbar('Xóa nhà cung cấp thành công!');
       navigate(PATH_DASHBOARD.user.supplierlist);
-  } catch (error) {
-    console.error(error);
-  }
+    } catch (error) {
+      console.error(error);
+    }
     const deleteRows = suppliers.filter((row) => !selected.includes(row._id));
     setSelected([]);
     setSuppliers(deleteRows);
@@ -159,10 +157,10 @@ export default function SupplierList() {
   const handleEditRow = (_id, name, description) => {
     navigate(PATH_DASHBOARD.user.suppliercreate, {
       state: {
-        id1:_id,
+        id1: _id,
         name1: name,
         description1: description,
-      }
+      },
     });
   };
 
@@ -276,12 +274,6 @@ export default function SupplierList() {
                 page={page}
                 onPageChange={onChangePage}
                 onRowsPerPageChange={onChangeRowsPerPage}
-              />
-
-              <FormControlLabel
-                control={<Switch checked={dense} onChange={onChangeDense} />}
-                label="Thu gọn"
-                sx={{ px: 3, py: 1.5, top: 0, position: { md: 'absolute' } }}
               />
             </Box>
           </Card>

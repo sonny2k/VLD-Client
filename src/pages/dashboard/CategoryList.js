@@ -9,6 +9,7 @@ import {
   Box,
   Tab,
   Tabs,
+  Grid,
   Card,
   Table,
   Switch,
@@ -40,9 +41,6 @@ import { TableEmptyRows, TableHeadCustom, TableNoData, TableSelectedActions } fr
 // sections
 import { CategoryTableToolbar, CategoryTableRow } from '../../sections/@dashboard/user/list';
 // ----------------------------------------------------------------------
-const ROLE_OPTIONS = ['Tất cả', 'Đã đăng', 'Chưa đăng'];
-
-const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'đã hủy', 'đã hoàn thành'];
 
 const TABLE_HEAD = [{ id: 'name', label: 'Tên danh mục', align: 'left' }, { id: '' }];
 
@@ -85,7 +83,6 @@ export default function CategoryList() {
     }
     getCategory();
   }, []);
-  
 
   const [filterName, setFilterName] = useState('');
 
@@ -143,9 +140,9 @@ export default function CategoryList() {
       });
       enqueueSnackbar('Xóa danh mục thành công!');
       navigate(PATH_DASHBOARD.user.categorylist);
-  } catch (error) {
-    console.error(error);
-  }
+    } catch (error) {
+      console.error(error);
+    }
     const deleteRows = categories.filter((row) => !selected.includes(row._id));
     setSelected([]);
     setCategories(deleteRows);
@@ -189,96 +186,93 @@ export default function CategoryList() {
               </Button>
             }
           />
+          <Grid container direction="row" justifyContent="center" alignItems="center">
+            <Card sx={{ width: 600, position: 'relative' }}>
+              <Divider />
 
-          <Card>
-            <Divider />
+              <CategoryTableToolbar
+                filterName={filterName}
+                filterRole={filterRole}
+                onFilterName={handleFilterName}
+                onFilterRole={handleFilterRole}
+              />
 
-            <CategoryTableToolbar
-              filterName={filterName}
-              filterRole={filterRole}
-              onFilterName={handleFilterName}
-              onFilterRole={handleFilterRole}
-              optionsRole={ROLE_OPTIONS}
-            />
+              <Scrollbar>
+                <TableContainer>
+                  {selected.length > 0 && (
+                    <TableSelectedActions
+                      dense={dense}
+                      numSelected={selected.length}
+                      rowCount={categories.length}
+                      onSelectAllRows={(checked) =>
+                        onSelectAllRows(
+                          checked,
+                          categories.map((row) => row._id)
+                        )
+                      }
+                      actions={
+                        <Tooltip title="Xóa danh mục">
+                          <IconButton color="primary" onClick={() => handleDeleteRows(selected)}>
+                            <Iconify icon={'eva:trash-2-outline'} />
+                          </IconButton>
+                        </Tooltip>
+                      }
+                    />
+                  )}
 
-            <Scrollbar>
-              <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
-                {selected.length > 0 && (
-                  <TableSelectedActions
-                    dense={dense}
-                    numSelected={selected.length}
-                    rowCount={categories.length}
-                    onSelectAllRows={(checked) =>
-                      onSelectAllRows(
-                        checked,
-                        categories.map((row) => row._id)
-                      )
-                    }
-                    actions={
-                      <Tooltip title="Xóa danh mục">
-                        <IconButton color="primary" onClick={() => handleDeleteRows(selected)}>
-                          <Iconify icon={'eva:trash-2-outline'} />
-                        </IconButton>
-                      </Tooltip>
-                    }
-                  />
-                )}
+                  <Table size={dense ? 'small' : 'medium'}>
+                    <TableHeadCustom
+                      order={order}
+                      orderBy={orderBy}
+                      headLabel={TABLE_HEAD}
+                      rowCount={categories.length}
+                      numSelected={selected.length}
+                      onSort={onSort}
+                      onSelectAllRows={(checked) =>
+                        onSelectAllRows(
+                          checked,
+                          categories.map((row) => row._id)
+                        )
+                      }
+                    />
 
-                <Table size={dense ? 'small' : 'medium'}>
-                  <TableHeadCustom
-                    order={order}
-                    orderBy={orderBy}
-                    headLabel={TABLE_HEAD}
-                    rowCount={categories.length}
-                    numSelected={selected.length}
-                    onSort={onSort}
-                    onSelectAllRows={(checked) =>
-                      onSelectAllRows(
-                        checked,
-                        categories.map((row) => row._id)
-                      )
-                    }
-                  />
+                    <TableBody>
+                      {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
+                        <CategoryTableRow
+                          key={row._id}
+                          row={row}
+                          selected={selected.includes(row._id)}
+                          onSelectRow={() => onSelectRow(row._id)}
+                          onDeleteRow={() => handleDeleteRow(row._id)}
+                          onEditRow={() => handleEditRow(row._id, row.name)}
+                        />
+                      ))}
 
-                  <TableBody>
-                    {dataFiltered.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
-                      <CategoryTableRow
-                        key={row._id}
-                        row={row}
-                        selected={selected.includes(row._id)}
-                        onSelectRow={() => onSelectRow(row._id)}
-                        onDeleteRow={() => handleDeleteRow(row._id)}
-                        onEditRow={() => handleEditRow(row._id, row.name)}
+                      <TableEmptyRows
+                        height={denseHeight}
+                        emptyRows={emptyRows(page, rowsPerPage, categories.length)}
                       />
-                    ))}
 
-                    <TableEmptyRows height={denseHeight} emptyRows={emptyRows(page, rowsPerPage, categories.length)} />
+                      <TableNoData isNotFound={isNotFound} />
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </Scrollbar>
 
-                    <TableNoData isNotFound={isNotFound} />
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Scrollbar>
-
-            <Box sx={{ position: 'relative' }}>
-              <TablePagination
-                labelRowsPerPage="Số dòng mỗi trang:"
-                rowsPerPageOptions={[5, 10, 25]}
-                component="div"
-                count={dataFiltered.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={onChangePage}
-                onRowsPerPageChange={onChangeRowsPerPage}
-              />
-
-              <FormControlLabel
-                control={<Switch checked={dense} onChange={onChangeDense} />}
-                label="Thu gọn"
-                sx={{ px: 3, py: 1.5, top: 0, position: { md: 'absolute' } }}
-              />
-            </Box>
-          </Card>
+              <Box sx={{ position: 'relative' }}>
+                <TablePagination
+                  labelRowsPerPage="Số dòng mỗi trang:"
+                  rowsPerPageOptions={[5, 10, 25]}
+                  component="div"
+                  count={dataFiltered.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onPageChange={onChangePage}
+                  onRowsPerPageChange={onChangeRowsPerPage}
+                />
+              </Box>
+            </Card>
+          </Grid>
         </Container>
       </Page>
     )
