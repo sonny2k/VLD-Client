@@ -197,7 +197,7 @@ export default function CategoryArticleList() {
             }
           />
 
-          <Card>
+          <Card alignItems='center' sx={{ alignItems:'center', width: 800, position: '' }} md={{ alignItems:'center', width: 500, position: 'relative' }}>
             <Divider />
 
             <CategoryArticleTableToolbar
@@ -209,7 +209,7 @@ export default function CategoryArticleList() {
             />
 
             <Scrollbar>
-              <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
+              <TableContainer sx={{ Width: 500, position: 'relative' }} md={{ Width: 300, position: 'relative' }}>
                 {selected.length > 0 && (
                   <TableSelectedActions
                     dense={dense}
