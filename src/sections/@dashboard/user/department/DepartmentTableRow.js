@@ -42,11 +42,13 @@ export default function DepartmentTableRow({ row, selected, onEditRow, onSelectR
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
 
-      <Link onClick={onEditRow} color="inherit">
-        <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-          {name}
-        </TableCell>
-      </Link>
+      <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
+        <Link onClick={onEditRow} color="inherit">
+          <Typography variant="subtitle2" noWrap>
+            {name}
+          </Typography>
+        </Link>
+      </TableCell>
 
       <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
         {description}

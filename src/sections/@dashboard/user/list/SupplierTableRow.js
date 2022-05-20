@@ -39,11 +39,13 @@ export default function SupplierTableRow({ row, selected, onEditRow, onSelectRow
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
-      <Link onClick={onEditRow} color="inherit">
-        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-          {name}
-        </TableCell>
-      </Link>
+
+      <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+        <Link onClick={onEditRow} color="inherit">
+          <Typography variant="subtitle2">{name}</Typography>
+        </Link>
+      </TableCell>
+
       <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
         {description}
       </TableCell>

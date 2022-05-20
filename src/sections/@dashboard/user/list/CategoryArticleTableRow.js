@@ -22,7 +22,7 @@ CategoryArticleTableRow.propTypes = {
 export default function CategoryArticleTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
   const theme = useTheme();
 
-  const {_id, name } = row;
+  const { _id, name } = row;
 
   const [openMenu, setOpenMenuActions] = useState(null);
 
@@ -39,12 +39,13 @@ export default function CategoryArticleTableRow({ row, selected, onEditRow, onSe
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
-      <Link onClick={onEditRow} color="inherit">
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {name}
+        <Link onClick={onEditRow} color="inherit">
+          <Typography variant="subtitle2">{name}</Typography>
+        </Link>
       </TableCell>
-      </Link>
+
       {/* <TableCell align="center">
         <Iconify
           icon={roomname ? 'eva:checkmark-circle-fill' : 'eva:clock-outline'}

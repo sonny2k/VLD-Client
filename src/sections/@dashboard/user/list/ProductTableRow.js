@@ -46,7 +46,7 @@ export default function ProductTableRow({ row, selected, onEditRow, onSelectRow,
 
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
         <Avatar alt={title} src={image} sx={{ mr: 2 }} />
-        <Link onClick={onEditRow} color="inherit" >
+        <Link onClick={onEditRow} color="inherit">
           <Typography variant="subtitle2" noWrap>
             {title}
           </Typography>

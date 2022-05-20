@@ -28,8 +28,7 @@ export default function ArticleTableRow({ row, selected, onEditRow, onSelectRow,
 
   const { name } = row.articlecategory;
 
-  const authorname = `${author.lname} ${author.fname}`
-
+  const authorname = `${author.lname} ${author.fname}`;
 
   const [openMenu, setOpenMenuActions] = useState(null);
 
@@ -50,14 +49,10 @@ export default function ArticleTableRow({ row, selected, onEditRow, onSelectRow,
       <TableCell sx={{ display: 'flex', alignItems: 'left' }}>
         <Avatar alt={title} src={banner} sx={{ mr: 2 }} />
         <Link onClick={onEditRow} color="inherit">
-
-        <Typography variant="subtitle2" >
-          {title}
-        </Typography>
+          <Typography variant="subtitle2">{title}</Typography>
         </Link>
-
       </TableCell>
-      
+
       <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
         {authorname}
       </TableCell>
@@ -73,12 +68,9 @@ export default function ArticleTableRow({ row, selected, onEditRow, onSelectRow,
       </TableCell>
 
       <TableCell align="center">
-      <Label
+        <Label
           variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
-          color={
-            (status === 0 && 'warning') ||
-            (status === 1 && 'success')
-          }
+          color={(status === 0 && 'warning') || (status === 1 && 'success')}
           sx={{ textTransform: 'capitalize' }}
         >
           {status === 0 ? 'Chưa đăng' : 'Đã đăng'}
