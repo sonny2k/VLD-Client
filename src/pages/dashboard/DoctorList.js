@@ -34,7 +34,7 @@ import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
 import Scrollbar from '../../components/Scrollbar';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import { TableEmptyRows, TableHeadCustom, TableNoData, TableSelectedActions } from '../../components/table';
+import { TableEmptyRows, TableHeadCustom1, TableNoData, TableSelectedActions1 } from '../../components/table';
 // sections
 import { DoctorTableToolbar, DoctorTableRow } from '../../sections/@dashboard/user/list';
 import LoadingScreen from '../../components/LoadingScreen';
@@ -290,7 +290,7 @@ export default function DoctorList() {
             <Scrollbar>
               <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
                 <Table size={dense ? 'small' : 'medium'}>
-                  <TableHeadCustom
+                  <TableHeadCustom1
                     order={order}
                     orderBy={orderBy}
                     headLabel={TABLE_HEAD}

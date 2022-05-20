@@ -34,7 +34,7 @@ import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
 import Scrollbar from '../../components/Scrollbar';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import { TableEmptyRows, TableHeadCustom, TableNoData, TableSelectedActions } from '../../components/table';
+import { TableEmptyRows, TableHeadCustom2, TableNoData, TableSelectedActions1 } from '../../components/table';
 // sections
 import { UserTableToolbar, UserTableRow } from '../../sections/@dashboard/user/list';
 import LoadingScreen from '../../components/LoadingScreen';
@@ -269,7 +269,7 @@ export default function UserList() {
             <Scrollbar>
               <TableContainer sx={{ minWidth: 800, position: 'relative' }}>
                 {selected.length > 0 && (
-                  <TableSelectedActions
+                  <TableSelectedActions1
                     dense={dense}
                     numSelected={selected.length}
                     rowCount={consult.length}
@@ -284,7 +284,7 @@ export default function UserList() {
                 )}
 
                 <Table size={dense ? 'small' : 'medium'}>
-                  <TableHeadCustom
+                  <TableHeadCustom2
                     order={order}
                     orderBy={orderBy}
                     headLabel={TABLE_HEAD}

@@ -19,7 +19,7 @@ DoctorTableToolbar.propTypes = {
 export default function DoctorTableToolbar({ filterName, filterDepartment, onFilterDepartment, onFilterName, optionsDepartment }) {
   return (
     <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ py: 2.5, px: 3 }}>
-      <TextField
+      {/* <TextField
         fullWidth
         select
         label="Chuyên khoa"
@@ -50,7 +50,7 @@ export default function DoctorTableToolbar({ filterName, filterDepartment, onFil
             {option}
           </MenuItem>
         ))}
-      </TextField>
+      </TextField> */}
 
       <TextField
         fullWidth

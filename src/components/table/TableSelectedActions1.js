@@ -4,7 +4,7 @@ import { Checkbox, Typography, Stack } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
-TableSelectedActions.propTypes = {
+TableSelectedActions1.propTypes = {
   dense: PropTypes.bool,
   actions: PropTypes.node,
   rowCount: PropTypes.number,
@@ -12,7 +12,7 @@ TableSelectedActions.propTypes = {
   onSelectAllRows: PropTypes.func,
 };
 
-export default function TableSelectedActions({ dense, actions, rowCount, numSelected, onSelectAllRows }) {
+export default function TableSelectedActions1({ dense, actions, rowCount, numSelected, onSelectAllRows }) {
   return (
     <Stack
       direction="row"
@@ -33,11 +33,6 @@ export default function TableSelectedActions({ dense, actions, rowCount, numSele
         }),
       }}
     >
-      <Checkbox
-        indeterminate={numSelected > 0 && numSelected < rowCount}
-        checked={rowCount > 0 && numSelected === rowCount}
-        onChange={(event) => onSelectAllRows(event.target.checked)}
-      />
       <Typography
         variant="subtitle1"
         sx={{
