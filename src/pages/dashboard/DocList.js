@@ -180,19 +180,32 @@ export default function DocList() {
     setDoctors(deleteRows);
   };
 
-  const handleEditRow = async (row) => {
+  const handleEditRow = async (
+    _id,
+    department,
+    educationplace,
+    workcertificate,
+    level,
+    degree,
+    description,
+    excellence,
+    workhistory,
+    education,
+    name
+  ) => {
     navigate(PATH_DASHBOARD.user.docedit, {
       state: {
-        id1: row._id,
-        department1: row.department,
-        educationplace1: row.educationplace,
-        workcertificate1: row.workcertificate,
-        level1: row.level,
-        degree1: row.degree,
-        description1: row.description,
-        excellence1: row.excellence,
-        workhistory1: row.workhistory,
-        education1: row.education,
+        id1: _id,
+        department1: department,
+        educationplace1: educationplace,
+        workcertificate1: workcertificate,
+        level1: level,
+        degree1: degree,
+        description1: description,
+        excellence1: excellence,
+        workhistory1: workhistory,
+        education1: education,
+        fname1: name,
       },
     });
   };
@@ -214,7 +227,7 @@ export default function DocList() {
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
           heading="Danh sách bác sĩ"
-          links={[{ name: 'Bảng điều khiển', href: PATH_DASHBOARD.root }, { name: 'Danh sách chờ duyệt' }]}
+          links={[{ name: 'Bảng điều khiển', href: PATH_DASHBOARD.root }, { name: 'Danh sách tài khoản bác sĩ' }]}
           action={
             <Button
               variant="contained"
@@ -287,7 +300,21 @@ export default function DocList() {
                       selected={selected.includes(row._id)}
                       onSelectRow={() => onSelectRow(row._id)}
                       onDeleteRow={() => handleDeleteRow(row._id)}
-                      onEditRow={(row) => handleEditRow(row)}
+                      onEditRow={(name) =>
+                        handleEditRow(
+                          row._id,
+                          row.department,
+                          row.educationplace,
+                          row.workcertificate,
+                          row.level,
+                          row.degree,
+                          row.description,
+                          row.excellence,
+                          row.workhistory,
+                          row.education,
+                          name
+                        )
+                      }
                     />
                   ))}
 

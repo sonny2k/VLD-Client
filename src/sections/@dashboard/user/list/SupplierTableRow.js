@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { format } from 'date-fns';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Checkbox, TableRow, TableCell, Typography, MenuItem } from '@mui/material';
+import { Avatar, Checkbox, TableRow, TableCell, Typography, MenuItem, Link } from '@mui/material';
 // components
 import Label from '../../../../components/Label';
 import Iconify from '../../../../components/Iconify';
@@ -22,7 +22,7 @@ SupplierTableRow.propTypes = {
 export default function SupplierTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
   const theme = useTheme();
 
-  const {_id, name, description } = row;
+  const { _id, name, description } = row;
 
   const [openMenu, setOpenMenuActions] = useState(null);
 
@@ -39,11 +39,11 @@ export default function SupplierTableRow({ row, selected, onEditRow, onSelectRow
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
-
-      <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
-        {name}
-      </TableCell>
-
+      <Link onClick={onEditRow} color="inherit">
+        <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
+          {name}
+        </TableCell>
+      </Link>
       <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
         {description}
       </TableCell>

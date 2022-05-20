@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { format } from 'date-fns';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Checkbox, TableRow, TableCell, Typography, MenuItem } from '@mui/material';
+import { Avatar, Checkbox, TableRow, TableCell, Typography, MenuItem, Link } from '@mui/material';
 // components
 import Label from '../../../../components/Label';
 import Iconify from '../../../../components/Iconify';
@@ -39,11 +39,12 @@ export default function CategoryArticleTableRow({ row, selected, onEditRow, onSe
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
+      <Link onClick={onEditRow} color="inherit">
 
       <TableCell align="left" sx={{ textTransform: 'capitalize' }}>
         {name}
       </TableCell>
-
+      </Link>
       {/* <TableCell align="center">
         <Iconify
           icon={roomname ? 'eva:checkmark-circle-fill' : 'eva:clock-outline'}

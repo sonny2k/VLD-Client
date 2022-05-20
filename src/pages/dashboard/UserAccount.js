@@ -56,15 +56,11 @@ export default function UserAccount() {
       },
     ];
     return (
-      <Page title="Người dùng: Cài đặt tài khoản">
+      <Page title="Bác sĩ: Cài đặt tài khoản">
         <Container maxWidth={themeStretch ? false : 'lg'}>
           <HeaderBreadcrumbs
-            heading="Tài khoản"
-            links={[
-              { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
-              { name: 'Người dùng', href: PATH_DASHBOARD.user.root },
-              { name: 'Cài đặt tài khoản' },
-            ]}
+            heading="Tài khoản bác sĩ"
+            links={[{ name: 'Bảng điều khiển', href: PATH_DASHBOARD.root }, { name: 'Cài đặt tài khoản' }]}
           />
 
           <Tabs
@@ -106,13 +102,12 @@ export default function UserAccount() {
       },
     ];
     return (
-      <Page title="Người dùng: Cài đặt tài khoản">
+      <Page title="Quản trị viên: Cài đặt tài khoản">
         <Container maxWidth={themeStretch ? false : 'lg'}>
           <HeaderBreadcrumbs
-            heading="Tài khoản"
+            heading="Tài khoản quản trị viên"
             links={[
               { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
-              { name: 'Người dùng', href: PATH_DASHBOARD.user.root },
               { name: 'Cài đặt tài khoản' },
             ]}
           />
@@ -162,7 +157,7 @@ export default function UserAccount() {
       <Page title="Người dùng: Cài đặt tài khoản">
         <Container maxWidth={themeStretch ? false : 'lg'}>
           <HeaderBreadcrumbs
-            heading="Tài khoản"
+            heading="Tài khoản người dùng"
             links={[{ name: 'Bảng điều khiển', href: PATH_DASHBOARD.root }, { name: 'Cài đặt tài khoản' }]}
           />
 

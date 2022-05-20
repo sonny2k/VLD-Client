@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { format } from 'date-fns';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Checkbox, TableRow, TableCell, Typography, MenuItem } from '@mui/material';
+import { Avatar, Checkbox, TableRow, TableCell, Typography, MenuItem, Link } from '@mui/material';
 // components
 import Label from '../../../../components/Label';
 import Iconify from '../../../../components/Iconify';
@@ -49,9 +49,11 @@ export default function DocTableRow({ row, selected, onEditRow, onSelectRow, onD
 
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
         <Avatar alt={name} src={profilepic} sx={{ mr: 2 }} />
-        <Typography variant="subtitle2" noWrap>
-          {name}
-        </Typography>
+        <Link onClick={onEditRow} color="inherit">
+          <Typography variant="subtitle2" noWrap>
+            {name}
+          </Typography>
+        </Link>
       </TableCell>
 
       <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
@@ -113,7 +115,7 @@ export default function DocTableRow({ row, selected, onEditRow, onSelectRow, onD
               </MenuItem> */}
               <MenuItem
                 onClick={() => {
-                  onEditRow();
+                  onEditRow(name);
                   handleCloseMenu();
                 }}
               >

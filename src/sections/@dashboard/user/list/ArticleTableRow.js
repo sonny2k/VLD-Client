@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { format } from 'date-fns';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Checkbox, TableRow, TableCell, Typography, MenuItem } from '@mui/material';
+import { Avatar, Checkbox, TableRow, TableCell, Typography, MenuItem, Link } from '@mui/material';
 // components
 import Label from '../../../../components/Label';
 import Iconify from '../../../../components/Iconify';
@@ -49,9 +49,13 @@ export default function ArticleTableRow({ row, selected, onEditRow, onSelectRow,
 
       <TableCell sx={{ display: 'flex', alignItems: 'left' }}>
         <Avatar alt={title} src={banner} sx={{ mr: 2 }} />
+        <Link onClick={onEditRow} color="inherit">
+
         <Typography variant="subtitle2" >
           {title}
         </Typography>
+        </Link>
+
       </TableCell>
       
       <TableCell align="center" sx={{ textTransform: 'capitalize' }}>

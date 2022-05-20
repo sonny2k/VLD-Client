@@ -117,7 +117,7 @@ export default function BlogEditPostForm({
     title: title || '',
     briefdescription: briefdescription || '',
     content: content || '',
-    articlecategory: articlecategory || '',
+    articlecategory: articlecategory._id || '',
     banner: banner || null,
     publish: true,
   }));
@@ -217,7 +217,7 @@ export default function BlogEditPostForm({
 
                 <RHFSelect name="articlecategory" label="Loại tin tức">
                   {artcategories.map((option) => (
-                    <option value={option._id} key={option._id}>
+                    <option value={option._id} key={option.name}>
                       {option.name}
                     </option>
                   ))}

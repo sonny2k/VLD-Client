@@ -98,7 +98,7 @@ export default function EditDoc({
         workhistory: data.workhistory,
         education: data.education,
         degree: data.degree,
-        department: data.department !== '' ? data.department : depa[0].name,
+        department: data.departmentne !== '' ? data.departmentne : depa[0].name,
       });
       enqueueSnackbar('Cập nhật thông tin bác sĩ thành công!');
       navigate(PATH_DASHBOARD.user.doclist);

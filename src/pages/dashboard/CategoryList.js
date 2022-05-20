@@ -177,7 +177,7 @@ export default function CategoryList() {
         <Container maxWidth={themeStretch ? false : 'lg'}>
           <HeaderBreadcrumbs
             heading="Danh sách danh mục"
-            links={[{ name: 'Bảng điều khiển', href: PATH_DASHBOARD.root }, { name: 'Danh sách danh mục' }]}
+            links={[{ name: 'Bảng điều khiển', href: PATH_DASHBOARD.root }, { name: 'Danh sách danh mục thuốc' }]}
             action={
               <Button
                 variant="contained"

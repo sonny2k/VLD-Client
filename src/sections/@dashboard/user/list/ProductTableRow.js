@@ -28,8 +28,6 @@ export default function ProductTableRow({ row, selected, onEditRow, onSelectRow,
 
   const { title, description, category, specdes, image, unit, components, origin, _id } = row;
 
-  const linkTo = `${PATH_DASHBOARD.user.productedit}/${_id}`;
-
   const [openMenu, setOpenMenuActions] = useState(null);
 
   const handleOpenMenu = (event) => {
@@ -48,7 +46,7 @@ export default function ProductTableRow({ row, selected, onEditRow, onSelectRow,
 
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
         <Avatar alt={title} src={image} sx={{ mr: 2 }} />
-        <Link to={linkTo} color="inherit" component={RouterLink}>
+        <Link onClick={onEditRow} color="inherit" >
           <Typography variant="subtitle2" noWrap>
             {title}
           </Typography>
@@ -90,7 +88,7 @@ export default function ProductTableRow({ row, selected, onEditRow, onSelectRow,
               </MenuItem> */}
               <MenuItem
                 onClick={() => {
-                  onEditRow(_id, title, description, specdes, unit, components, origin, image, category);
+                  // onEditRow(_id, title, description, specdes, unit, components, origin, image, category);
                   handleCloseMenu();
                 }}
               >

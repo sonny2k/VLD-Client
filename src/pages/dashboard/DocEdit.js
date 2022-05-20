@@ -41,17 +41,17 @@ export default function DocEdit() {
 
   return (
     depas !== null && (
-      <Page title="Sửa chi tiết bác sĩ ">
+      <Page title="Cập nhật bác sĩ ">
         <Container maxWidth={themeStretch ? false : 'lg'}>
           <HeaderBreadcrumbs
-            heading="Sửa chi tiết bác sĩ "
+            heading="Cập nhật bác sĩ "
             links={[
               { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
               {
                 name: 'Danh sách',
                 href: PATH_DASHBOARD.user.doclist,
               },
-              { name: 'Sửa chi tiết bác sĩ' },
+              { name: `Cập nhật bác sĩ ${Location.state.fname1}`  },
             ]}
           />
 

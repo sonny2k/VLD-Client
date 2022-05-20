@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { format } from 'date-fns';
 // @mui
 import { useTheme } from '@mui/material/styles';
-import { Avatar, Checkbox, TableRow, TableCell, Typography, MenuItem } from '@mui/material';
+import { Avatar, Checkbox, TableRow, TableCell, Typography, MenuItem, Link } from '@mui/material';
 // components
 import Label from '../../../../components/Label';
 import Iconify from '../../../../components/Iconify';
@@ -24,7 +24,7 @@ export default function DepartmentTableRow({ row, selected, onEditRow, onSelectR
 
   // const { fname, profilepic, lname } = row.doctor.account;
 
-  const {_id, name, description } = row;
+  const { _id, name, description } = row;
 
   const [openMenu, setOpenMenuActions] = useState(null);
 
@@ -42,9 +42,11 @@ export default function DepartmentTableRow({ row, selected, onEditRow, onSelectR
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
 
-      <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-        {name}
-      </TableCell>
+      <Link onClick={onEditRow} color="inherit">
+        <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
+          {name}
+        </TableCell>
+      </Link>
 
       <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
         {description}

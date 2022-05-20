@@ -208,8 +208,8 @@ export default function ProductList() {
     <Page title="Quản lý: Danh sách sản phẩm">
       <Container maxWidth={themeStretch ? false : 'lg'}>
         <HeaderBreadcrumbs
-          heading="Danh sách sản phẩm"
-          links={[{ name: 'Bảng điều khiển', href: PATH_DASHBOARD.root }, { name: 'Danh sách' }]}
+          heading="Danh sách "
+          links={[{ name: 'Bảng điều khiển', href: PATH_DASHBOARD.root }, { name: 'Danh sách sản phẩm' }]}
           action={
             <Button
               variant="contained"

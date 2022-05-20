@@ -180,11 +180,11 @@ export default function CategoryArticleList() {
 
   return (
     categories !== null && (
-      <Page title="Danh sách danh mục thuốc">
+      <Page title="Danh sách danh mục tin tức">
         <Container maxWidth={themeStretch ? false : 'lg'}>
           <HeaderBreadcrumbs
-            heading="Danh sách danh mục"
-            links={[{ name: 'Bảng điều khiển', href: PATH_DASHBOARD.root }, { name: 'Danh sách danh mục' }]}
+            heading="Danh sách danh mục "
+            links={[{ name: 'Bảng điều khiển', href: PATH_DASHBOARD.root }, { name: 'Danh sách danh mục tin tức' }]}
             action={
               <Button
                 variant="contained"
