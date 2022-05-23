@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
+import { useSnackbar } from 'notistack';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Avatar, Checkbox, TableRow, TableCell, Typography, MenuItem, Link } from '@mui/material';
@@ -8,6 +10,10 @@ import { Avatar, Checkbox, TableRow, TableCell, Typography, MenuItem, Link } fro
 import Label from '../../../../components/Label';
 import Iconify from '../../../../components/Iconify';
 import { TableMoreMenu } from '../../../../components/table';
+// utils
+import axios from '../../../../utils/axios';
+// routes
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -21,6 +27,10 @@ ArticleTableRow.propTypes = {
 
 export default function ArticleTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
   const theme = useTheme();
+
+  const navigate = useNavigate();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   // const { fname, profilepic, lname } = row.doctor.account;
 
@@ -38,6 +48,32 @@ export default function ArticleTableRow({ row, selected, onEditRow, onSelectRow,
 
   const handleCloseMenu = () => {
     setOpenMenuActions(null);
+  };
+
+  const Public = async () => {
+    try {
+      await axios.post(`/api/admin/article/publicArticle`, {
+        id: row._id,
+      });
+      enqueueSnackbar('Công khai tin tức thành công!');
+      navigate(PATH_DASHBOARD.user.articlelist);
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
+    }
+  };
+
+  const Hide = async () => {
+    try {
+      await axios.post(`/api/admin/article/hideArticle`, {
+        id: row._id,
+      });
+      enqueueSnackbar('Ẩn tin tức thành công!');
+      navigate(PATH_DASHBOARD.user.articlelist);
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
+    }
   };
 
   return (
@@ -73,7 +109,7 @@ export default function ArticleTableRow({ row, selected, onEditRow, onSelectRow,
           color={(status === 0 && 'warning') || (status === 1 && 'success')}
           sx={{ textTransform: 'capitalize' }}
         >
-          {status === 0 ? 'Chưa đăng' : 'Đã đăng'}
+          {status === 0 ? 'Nháp' : 'Công khai'}
         </Label>
       </TableCell>
 
@@ -106,16 +142,32 @@ export default function ArticleTableRow({ row, selected, onEditRow, onSelectRow,
           onClose={handleCloseMenu}
           actions={
             <>
-              {/* <MenuItem
-                onClick={() => {
-                  onDeleteRow();
-                  handleCloseMenu();
-                }}
-                sx={{ color: 'error.main' }}
-              >
-                <Iconify icon={'eva:trash-2-outline'} />
-                Delete
-              </MenuItem> */}
+              {status === 0 && (
+                <MenuItem
+                  onClick={() => {
+                    Public();
+                    handleCloseMenu();
+                  }}
+                  sx={{ color: 'success.main' }}
+                >
+                  <Iconify icon={'ant-design:eye-filled'} />
+                  Công khai bài đăng
+                </MenuItem>
+              )}
+
+              {status === 1 && (
+                <MenuItem
+                  onClick={() => {
+                    Hide();
+                    handleCloseMenu();
+                  }}
+                  sx={{ color: 'warning.main' }}
+                >
+                  <Iconify icon={'ant-design:eye-invisible-filled'} />
+                  Ẩn bài đăng (nháp)
+                </MenuItem>
+              )}
+
               <MenuItem
                 onClick={() => {
                   onEditRow();

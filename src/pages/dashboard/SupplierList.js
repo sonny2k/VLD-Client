@@ -109,13 +109,13 @@ export default function SupplierList() {
 
     if (filterName) {
       suppliers = suppliers.filter(
-        (item) => unorm.nfd(item.name).toLowerCase().indexOf(unorm.nfd(filterName).toLowerCase()) !== -1
+        (item) => unorm.nfkd(item.name).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1
       );
     }
 
     if (filterRole !== 'Tất cả') {
       suppliers = suppliers.filter(
-        (item) => unorm.nfd(item.status).toLowerCase().indexOf(unorm.nfd(filterRole).toLowerCase()) !== -1
+        (item) => unorm.nfkd(item.status).toLowerCase().indexOf(unorm.nfkd(filterRole).toLowerCase()) !== -1
       );
     }
 

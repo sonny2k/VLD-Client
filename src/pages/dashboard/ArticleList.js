@@ -93,12 +93,15 @@ export default function ArticleList() {
       }
     }
     getArticle();
-  }, []);
+  }, [articles]);
 
   const [art, setArt] = useState([]);
 
   useEffect(() => {
     getArts();
+    if (art.length > 0 && ROLE_OPTIONS1.length === 1) {
+      art.map((item) => ROLE_OPTIONS1.push(item.name));
+    }
   }, [art]);
 
   const getArts = async () => {
@@ -132,8 +135,8 @@ export default function ArticleList() {
     if (filterName) {
       articles = articles.filter(
         (item) =>
-          unorm.nfd(item.title).toLowerCase().indexOf(unorm.nfd(filterName).toLowerCase()) !== -1 ||
-          unorm.nfd(item.author).toLowerCase().indexOf(unorm.nfd(filterName).toLowerCase()) !== -1
+          unorm.nfkd(item.title).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1 ||
+          unorm.nfkd(item.author).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1
       );
     }
 
@@ -145,10 +148,6 @@ export default function ArticleList() {
             .toLowerCase()
             .indexOf(unorm.nfkd(filterRole).toLowerCase()) !== -1
       );
-    }
-
-    if (art.length > 0 && ROLE_OPTIONS1.length === 1) {
-      art.map((item) => ROLE_OPTIONS1.push(item.name));
     }
 
     if (filterRole1 !== 'Tất cả') {

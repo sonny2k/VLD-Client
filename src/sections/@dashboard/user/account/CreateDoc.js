@@ -80,7 +80,7 @@ export default function CreateDoc({ fname, lname, id, phone, depa }) {
 
   const [message, setMessage] = useState('');
 
-  const [createmessage, setCreateMessage] = useState('');
+  const [createmessage, setCreateMessage] = useState(null);
 
   const sendcode = async (phone) => {
     await axios.post('api/user/auth/sendcode', {
@@ -112,14 +112,18 @@ export default function CreateDoc({ fname, lname, id, phone, depa }) {
           enqueueSnackbar('Số điện thoại đã được đăng ký ở tài khoản khác', { variant: 'error' });
         }
         if (message.message === 'approved') {
-          await handleSubmit(createDoc)();
-          if (createmessage) {
+          if (createmessage === null) {
+            await handleSubmit(createDoc)();
+          }
+
+          if (createmessage !== null) {
             if (
               createmessage.success === false &&
               createmessage.message === 'Số điện thoại đã được đăng ký ở tài khoản khác'
             ) {
               enqueueSnackbar('Số điện thoại đã tồn tại', { variant: 'error' });
               reset({ phone: '' });
+              setCreateMessage(null);
             }
             if (createmessage.success === true) {
               enqueueSnackbar('Tạo bác sĩ thành công!');
@@ -128,6 +132,7 @@ export default function CreateDoc({ fname, lname, id, phone, depa }) {
             if (createmessage.success === false && createmessage.message === 'Lỗi tải dữ liệu') {
               enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại');
               reset();
+              setCreateMessage(null);
             }
           }
         }

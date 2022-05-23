@@ -34,7 +34,8 @@ export default function RejectionFiles({ fileRejections }) {
 
             {errors.map((error) => (
               <Typography key={error.code} variant="caption" component="p">
-                - {error.message}
+                {error.message === 'File is larger than 3145728 bytes' && '- Kích thước tệp tin quá lớn!'}
+                {error.message === 'File type must be image/*' && '- Tệp tin không phải là hình ảnh!'}
               </Typography>
             ))}
           </Box>

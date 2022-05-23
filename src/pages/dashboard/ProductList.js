@@ -127,7 +127,7 @@ export default function ProductList() {
 
     if (filterName) {
       products = products.filter(
-        (item) => unorm.nfd(item.title).toLowerCase().indexOf(unorm.nfd(filterName).toLowerCase()) !== -1
+        (item) => unorm.nfkd(item.title).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1
       );
     }
 
@@ -137,7 +137,7 @@ export default function ProductList() {
 
     if (filterRole !== 'Tất cả') {
       products = products.filter(
-        (item) => unorm.nfd(item.category).toLowerCase().indexOf(unorm.nfd(filterRole).toLowerCase()) !== -1
+        (item) => unorm.nfkd(item.category).toLowerCase().indexOf(unorm.nfkd(filterRole).toLowerCase()) !== -1
       );
     }
 

@@ -109,12 +109,12 @@ export default function DepartmentList() {
 
     if (filterName) {
       departments = departments.filter(
-        (item) => unorm.nfd(item.name).toLowerCase().indexOf(unorm.nfd(filterName).toLowerCase()) !== -1
+        (item) => unorm.nfkd(item.name).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1
       );
     }
     if (filterRole !== 'Tất cả') {
       departments = departments.filter(
-        (item) => unorm.nfd(item.name).toLowerCase().indexOf(unorm.nfd(filterRole).toLowerCase()) !== -1
+        (item) => unorm.nfkd(item.name).toLowerCase().indexOf(unorm.nfkd(filterRole).toLowerCase()) !== -1
       );
     }
 
