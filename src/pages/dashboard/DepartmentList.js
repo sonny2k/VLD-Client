@@ -45,7 +45,7 @@ const ROLE_OPTIONS = ['Tất cả', 'tim mạch', 'nhi'];
 const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'đã hủy', 'đã hoàn thành'];
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Chuyên khoa', align: 'left' },
+  { id: 'name', label: 'Chuyên khoa', align: 'center' },
   { id: 'description', label: 'Mô tả', align: 'center' },
   { id: '' },
 ];
