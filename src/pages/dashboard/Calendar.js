@@ -10,7 +10,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Card, Button, Container, DialogTitle } from '@mui/material';
 // redux
 import { useDispatch, useSelector } from '../../redux/store';
-import { getEvents, openModal, closeModal, updateEvent, selectEvent, selectRange } from '../../redux/slices/calendar';
+import { getEvents, openModal, closeModal, updateEvent, selectEvent, selectRange, getAwaitConsultation } from '../../redux/slices/calendar';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
@@ -52,7 +52,7 @@ export default function Calendar() {
   const { events, isOpenModal, selectedRange } = useSelector((state) => state.calendar);
 
   useEffect(() => {
-    dispatch(getEvents());
+    dispatch(getAwaitConsultation());
   }, [dispatch]);
 
   useEffect(() => {
@@ -142,10 +142,6 @@ export default function Calendar() {
     }
   };
 
-  const handleAddEvent = () => {
-    dispatch(openModal());
-  };
-
   const handleCloseModal = () => {
     dispatch(closeModal());
   };
@@ -157,15 +153,15 @@ export default function Calendar() {
           heading="Lịch tư vấn trực tuyến"
           links={[{ name: 'Bảng điều khiển', href: PATH_DASHBOARD.root }, { name: 'Lịch tư vấn' }]}
           // moreLink="https://fullcalendar.io/docs/react"
-          action={
-            <Button
-              variant="contained"
-              startIcon={<Iconify icon={'eva:plus-fill'} width={20} height={20} />}
-              onClick={handleAddEvent}
-            >
-              New Event
-            </Button>
-          }
+          // action={
+          //   <Button
+          //     variant="contained"
+          //     startIcon={<Iconify icon={'eva:plus-fill'} width={20} height={20} />}
+          //     onClick={handleAddEvent}
+          //   >
+          //     New Event
+          //   </Button>
+          // }
         />
 
         <Card>
@@ -204,9 +200,9 @@ export default function Calendar() {
         </Card>
 
         <DialogAnimate open={isOpenModal} onClose={handleCloseModal}>
-          <DialogTitle>{selectedEvent ? 'Edit Event' : 'Add Event'}</DialogTitle>
+          <DialogTitle>{selectedEvent ? 'Xem chi tiết' : 'Add Event'}</DialogTitle>
 
-          <CalendarForm event={selectedEvent || {}} range={selectedRange} onCancel={handleCloseModal} />
+          <CalendarForm event={selectedEvent || {}} range={selectedRange} onCancel={handleCloseModal} event1={events} />
         </DialogAnimate>
       </Container>
     </Page>

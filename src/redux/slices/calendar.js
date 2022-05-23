@@ -36,33 +36,19 @@ const slice = createSlice({
       state.events = action.payload;
     },
 
-    // CREATE EVENT
-    createEventSuccess(state, action) {
-      const newEvent = action.payload;
-      state.isLoading = false;
-      state.events = [...state.events, newEvent];
-    },
+    // // UPDATE EVENT
+    // updateEventSuccess(state, action) {
+    //   const event = action.payload;
+    //   const updateEvent = state.events.map((_event) => {
+    //     if (_event.id === event.id) {
+    //       return event;
+    //     }
+    //     return _event;
+    //   });
 
-    // UPDATE EVENT
-    updateEventSuccess(state, action) {
-      const event = action.payload;
-      const updateEvent = state.events.map((_event) => {
-        if (_event.id === event.id) {
-          return event;
-        }
-        return _event;
-      });
-
-      state.isLoading = false;
-      state.events = updateEvent;
-    },
-
-    // DELETE EVENT
-    deleteEventSuccess(state, action) {
-      const { eventId } = action.payload;
-      const deleteEvent = state.events.filter((event) => event.id !== eventId);
-      state.events = deleteEvent;
-    },
+    //   state.isLoading = false;
+    //   state.events = updateEvent;
+    // },
 
     // SELECT EVENT
     selectEvent(state, action) {
@@ -88,6 +74,13 @@ const slice = createSlice({
       state.isOpenModal = false;
       state.selectedEventId = null;
       state.selectedRange = null;
+    },
+
+    // GET List
+    getAwaitConsultationSuccess(state, action) {
+      const hah = action.payload;
+      state.isLoading = false;
+      state.events = hah;
     },
   },
 });
@@ -151,6 +144,20 @@ export function deleteEvent(eventId) {
     try {
       await axios.post('/api/calendar/events/delete', { eventId });
       dispatch(slice.actions.deleteEventSuccess({ eventId }));
+    } catch (error) {
+      dispatch(slice.actions.hasError(error));
+    }
+  };
+}
+
+// ----------------------------------------------------------------------
+
+export function getAwaitConsultation() {
+  return async () => {
+    dispatch(slice.actions.startLoading());
+    try {
+      const response = await axios.get('/api/doctor/consultation/viewAwaitConsultation');
+      dispatch(slice.actions.getAwaitConsultationSuccess(response.data));
     } catch (error) {
       dispatch(slice.actions.hasError(error));
     }

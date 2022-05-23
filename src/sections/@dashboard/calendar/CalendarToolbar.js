@@ -15,7 +15,7 @@ const VIEW_OPTIONS = [
   { value: 'dayGridMonth', label: 'Tháng', icon: 'ic:round-view-module' },
   { value: 'timeGridWeek', label: 'Tuần', icon: 'ic:round-view-week' },
   { value: 'timeGridDay', label: 'Ngày', icon: 'ic:round-view-day' },
-  { value: 'listWeek', label: 'Chủ đề', icon: 'ic:round-view-agenda' },
+  // { value: 'listWeek', label: 'Chủ đề', icon: 'ic:round-view-agenda' },
 ];
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -37,7 +37,7 @@ CalendarToolbar.propTypes = {
   onNextDate: PropTypes.func,
   onPrevDate: PropTypes.func,
   onChangeView: PropTypes.func,
-  view: PropTypes.oneOf(['dayGridMonth', 'timeGridWeek', 'timeGridDay', 'listWeek']),
+  view: PropTypes.oneOf(['dayGridMonth', 'timeGridWeek', 'timeGridDay']),
 };
 
 export default function CalendarToolbar({ date, view, onToday, onNextDate, onPrevDate, onChangeView }) {

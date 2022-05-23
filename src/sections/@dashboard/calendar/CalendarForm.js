@@ -1,18 +1,46 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import merge from 'lodash/merge';
-import { isBefore } from 'date-fns';
+import { isBefore, format } from 'date-fns';
 import { useSnackbar } from 'notistack';
+import { useCallback, useState, useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 // form
 import { useForm, Controller } from 'react-hook-form';
+import { styled } from '@mui/material/styles';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
-import { Box, Stack, Button, Tooltip, TextField, IconButton, DialogActions } from '@mui/material';
+import {  Box,
+  Card,
+  Grid,
+  Stack,
+  Typography,
+  Button,
+  Tooltip,
+  Link,
+  CardHeader,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  TextField,
+  IconButton,} from '@mui/material';
 import { LoadingButton, MobileDateTimePicker } from '@mui/lab';
-// redux
-import { useDispatch } from '../../../redux/store';
-import { createEvent, updateEvent, deleteEvent } from '../../../redux/slices/calendar';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import CancelIcon from '@mui/icons-material/Cancel';
+import NoteAddIcon from '@mui/icons-material/NoteAdd';
+import DuoIcon from '@mui/icons-material/Duo';
+import CheckIcon from '@mui/icons-material/Check';
+import { getAwaitConsultation } from '../../../redux/slices/calendar';
+import createAvatar from '../../../utils/createAvatar';
+
+import axios from '../../../utils/axios';
+import useAuth from '../../../hooks/useAuth';
+
 // components
+import Label from '../../../components/Label';
+import Avatar from '../../../components/Avatar';
 import Iconify from '../../../components/Iconify';
 import { ColorSinglePicker } from '../../../components/color-utils';
 import { FormProvider, RHFTextField, RHFSwitch } from '../../../components/hook-form';
@@ -29,46 +57,69 @@ const COLOR_OPTIONS = [
   '#7A0C2E', // theme.palette.error.darker
 ];
 
-const getInitialValues = (event, range) => {
-  const _event = {
-    title: '',
-    description: '',
-    textColor: '#1890FF',
-    allDay: false,
-    start: range ? new Date(range.start) : new Date(),
-    end: range ? new Date(range.end) : new Date(),
-  };
-
-  if (event || range) {
-    return merge({}, _event, event);
-  }
-
-  return _event;
-};
-
 // ----------------------------------------------------------------------
 
 CalendarForm.propTypes = {
   event: PropTypes.object,
   range: PropTypes.object,
-  onCancel: PropTypes.func,
+  consultation: PropTypes.object,
 };
 
-export default function CalendarForm({ event, range, onCancel }) {
+export default function CalendarForm({ consultation }) {
+  const IconStyle = styled(Iconify)(({ theme }) => ({
+    width: 20,
+    height: 20,
+    marginTop: 1,
+    flexShrink: 0,
+    marginRight: theme.spacing(2),
+  }));
+
   const { enqueueSnackbar } = useSnackbar();
+
+  const { date, hour, status, symptom, name, phone, _id, roomname, excuse } = consultation;
 
   const dispatch = useDispatch();
 
-  const isCreating = Object.keys(event).length === 0;
+  const requestname = `${lname} ${fname}`;
 
-  const EventSchema = Yup.object().shape({
-    title: Yup.string().max(255).required('Title is required'),
-    description: Yup.string().max(5000),
-  });
+  const { bloodtype, height, weight, pastmedicalhistory, drughistory, familyhistory } = consultation.user;
+
+  const { fname, lname, profilepic, gender } = consultation.user.account;
+  
+  const { account } = useAuth();
+
+  const identity = `Bác sĩ ${account.lname} ${account.fname}`;
+
+  const { events } = useSelector((state) => state.events);
+
+  useEffect(() => {
+    dispatch(getAwaitConsultation());
+  }, [dispatch]);
+
+  useEffect(() => {
+    reset(events);
+  }, [events]);
+
+  const EventSchema = Yup.object().shape({});
+
+  const defaultValues = useMemo(
+    () => ({
+      username: name || requestname,
+      phone: phone || '',
+      date: format(new Date(date), 'dd/MM/yyyy') || '',
+      hour: hour || '',
+      symptom: symptom || '',
+      profilepic: profilepic || '',
+      status: status || '',
+      excusetext: excuse || '',
+    }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [consultation]
+  );
 
   const methods = useForm({
     resolver: yupResolver(EventSchema),
-    defaultValues: getInitialValues(event, range),
+    defaultValues,
   });
 
   const {
@@ -79,114 +130,262 @@ export default function CalendarForm({ event, range, onCancel }) {
     formState: { isSubmitting },
   } = methods;
 
-  const onSubmit = async (data) => {
-    try {
-      const newEvent = {
-        title: data.title,
-        description: data.description,
-        textColor: data.textColor,
-        allDay: data.allDay,
-        start: data.start,
-        end: data.end,
-      };
-      if (event.id) {
-        dispatch(updateEvent(event.id, newEvent));
-        enqueueSnackbar('Update success!');
-      } else {
-        enqueueSnackbar('Create success!');
-        dispatch(createEvent(newEvent));
-      }
-      onCancel();
-      reset();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const handleDelete = async () => {
-    if (!event.id) return;
-    try {
-      onCancel();
-      dispatch(deleteEvent(event.id));
-      enqueueSnackbar('Delete success!');
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const values = watch();
 
   const isDateError = isBefore(new Date(values.end), new Date(values.start));
 
+  const handleCreateNameAndRoomName = async () => {
+    window.open(`https://vldchatroom.herokuapp.com/room/${_id}/${identity}`);
+    try {
+      await axios.post('/api/doctor/consultation/createRoomName', {
+        _id: consultation._id,
+      });
+    } catch (err) {
+      console.error(err);
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', { variant: 'error' });
+    }
+    try {
+      await axios.post('/api/doctor/consultation/joinRoomNoti', {
+        _id: consultation._id,
+        doctor: consultation.doctor,
+        user: consultation.user,
+        date: consultation.date,
+        hour: consultation.hour,
+      });
+    } catch (err) {
+      console.error(err);
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!', { variant: 'error' });
+    }
+  };
+
+  let noRoomName = false;
+
+  if (!roomname) {
+    noRoomName = true;
+  }
+
   return (
-    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-      <Stack spacing={3} sx={{ p: 3 }}>
-        <RHFTextField name="title" label="Title" />
+    <FormProvider methods={methods}>
+      <Grid container spacing={3}>
+        <Grid item xs={12} md={4}>
+          <Card sx={{ py: 10, px: 3 }}>
+            <Label
+              color={
+                (status === 'chờ khám' && 'info')
+              }
+              sx={{ textTransform: 'uppercase', position: 'absolute', top: 24, right: 24 }}
+            >
+              {status}
+            </Label>
 
-        <RHFTextField name="description" label="Description" multiline rows={4} />
+            <Box sx={{ mb: 5 }}>
+              <Avatar
+                src={profilepic}
+                alt={`${lname} ${fname}`}
+                color={profilepic ? 'default' : createAvatar(`${lname} ${fname}`).color}
+                sx={{
+                  mx: 'auto',
+                  borderWidth: 2,
+                  borderStyle: 'solid',
+                  borderColor: 'common.white',
+                  width: { xs: 80, md: 128 },
+                  height: { xs: 80, md: 128 },
+                }}
+              >
+                {createAvatar(`${lname} ${fname}`).name}
+              </Avatar>
+            </Box>
 
-        <RHFSwitch name="allDay" label="All day" />
+            <Stack spacing={2} sx={{ p: 3 }}>
+              <Stack direction="row">
+                <IconStyle icon={'ic:outline-bloodtype'} />
+                <Typography variant="body2">
+                  Nhóm máu:&nbsp;
+                  <Link component="span" variant="subtitle2" color="text.primary">
+                    {bloodtype}
+                  </Link>
+                </Typography>
+              </Stack>
 
-        <Controller
-          name="start"
-          control={control}
-          render={({ field }) => (
-            <MobileDateTimePicker
-              {...field}
-              label="Start date"
-              inputFormat="dd/MM/yyyy hh:mm a"
-              renderInput={(params) => <TextField {...params} fullWidth />}
-            />
-          )}
-        />
+              <Stack direction="row">
+                <IconStyle icon={'mdi:human-male-height'} />
+                <Typography variant="body2">
+                  Chiều cao:&nbsp;
+                  <Link component="span" variant="subtitle2" color="text.primary">
+                    {height}cm
+                  </Link>
+                </Typography>
+              </Stack>
 
-        <Controller
-          name="end"
-          control={control}
-          render={({ field }) => (
-            <MobileDateTimePicker
-              {...field}
-              label="End date"
-              inputFormat="dd/MM/yyyy hh:mm a"
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  fullWidth
-                  error={!!isDateError}
-                  helperText={isDateError && 'End date must be later than start date'}
-                />
-              )}
-            />
-          )}
-        />
+              <Stack direction="row">
+                <IconStyle icon={'icon-park-outline:weight'} />
+                <Typography variant="body2">
+                  Cân nặng:&nbsp;
+                  <Link component="span" variant="subtitle2" color="text.primary">
+                    {weight} kg
+                  </Link>
+                </Typography>
+              </Stack>
 
-        <Controller
-          name="textColor"
-          control={control}
-          render={({ field }) => (
-            <ColorSinglePicker value={field.value} onChange={field.onChange} colors={COLOR_OPTIONS} />
-          )}
-        />
-      </Stack>
+              <Stack direction="row">
+                <IconStyle icon={'bi:file-earmark-medical'} />
+                <Typography variant="body2">
+                  Tiền sử bệnh lý:&nbsp;
+                  <Link component="span" variant="subtitle2" color="text.primary">
+                    {pastmedicalhistory}
+                  </Link>
+                </Typography>
+              </Stack>
 
-      <DialogActions>
-        {!isCreating && (
-          <Tooltip title="Delete Event">
-            <IconButton onClick={handleDelete}>
-              <Iconify icon="eva:trash-2-outline" width={20} height={20} />
-            </IconButton>
-          </Tooltip>
-        )}
-        <Box sx={{ flexGrow: 1 }} />
+              <Stack direction="row">
+                <IconStyle icon={'healthicons:medicines'} />
+                <Typography variant="body2">
+                  Tiền sử dị ứng:&nbsp;
+                  <Link component="span" variant="subtitle2" color="text.primary">
+                    {drughistory}
+                  </Link>
+                </Typography>
+              </Stack>
 
-        <Button variant="outlined" color="inherit" onClick={onCancel}>
-          Cancel
-        </Button>
+              <Stack direction="row">
+                <IconStyle icon={'carbon:pedestrian-family'} />
+                <Typography variant="body2">
+                  Tiền sử gia đình:&nbsp;
+                  <Link component="span" variant="subtitle2" color="text.primary">
+                    {familyhistory}
+                  </Link>
+                </Typography>
+              </Stack>
+            </Stack>
+          </Card>
+        </Grid>
 
-        <LoadingButton type="submit" variant="contained" loading={isSubmitting} loadingIndicator="Loading...">
-          Add
-        </LoadingButton>
-      </DialogActions>
+        <Grid item xs={12} md={8}>
+          <Card sx={{ p: 3 }}>
+            <Box
+              sx={{
+                display: 'grid',
+                columnGap: 2,
+                rowGap: 3,
+                gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
+              }}
+            >
+              <RHFTextField name="username" label="Họ tên người hẹn" disabled />
+              <RHFTextField name="phone" label="Số điện thoại người hẹn" disabled />
+              <RHFTextField name="date" label="Ngày hẹn" disabled />
+              <RHFTextField name="hour" label="Giờ hẹn" disabled />
+            </Box>
+
+            <Stack sx={{ mt: 3 }}>
+              <Box
+                sx={{
+                  display: 'grid',
+                  columnGap: 2,
+                  rowGap: 3,
+                  gridTemplateColumns: { xs: 'repeat(1, 2fr)', sm: 'repeat(1, 2fr)' },
+                }}
+              >
+                <RHFTextField name="symptom" multiline rows={3} label="Triệu chứng" disabled />
+                {status === 'bị từ chối' && <RHFTextField name="excusetext" label="Lý do từ chối" disabled />}
+                {status === 'đã hủy' && <RHFTextField name="excusetext" label="Lý do hủy" disabled />}
+              </Box>
+            </Stack>
+
+            {status === 'bị từ chối' || status === 'đã hủy' || status === 'đã hoàn thành' ? (
+              <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+                <Box
+                  sx={{
+                    display: 'grid',
+                    columnGap: 1,
+                    rowGap: 1,
+                    gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(1, 1fr)' },
+                  }}
+                >
+                  <Tooltip title="Trở về">
+                    <IconButton >
+                      <ArrowBackIosNewIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+              </Stack>
+            ) : (
+              <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+                {status === 'chờ xác nhận' ? (
+                  <Box
+                    sx={{
+                      display: 'grid',
+                      columnGap: 1,
+                      rowGap: 1,
+                      gridTemplateColumns: { xs: 'repeat(3, 1fr)', sm: 'repeat(3, 1fr)' },
+                    }}
+                  >
+                    <Tooltip title="Trở về">
+                      <IconButton >
+                        <ArrowBackIosNewIcon />
+                      </IconButton>
+                    </Tooltip>
+
+                    {status === 'chờ xác nhận' ? (
+                      <Tooltip title="Từ chối lịch hẹn">
+                        <IconButton color="error" >
+                          <CancelIcon />
+                        </IconButton>
+                      </Tooltip>
+                    ) : (
+                      <Tooltip title="Tham gia buổi tư vấn">
+                        <IconButton color="info" onClick={handleCreateNameAndRoomName}>
+                          <DuoIcon />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+
+                    {status === 'chờ xác nhận' && (
+                      <Tooltip title="Xác nhận lịch hẹn">
+                        <IconButton color="success" >
+                          <CheckIcon />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </Box>
+                ) : (
+                  <Box
+                    sx={{
+                      display: 'grid',
+                      columnGap: 1,
+                      rowGap: 0.5,
+                      gridTemplateColumns: { xs: 'repeat(4, 1fr)', sm: 'repeat(4, 1fr)' },
+                    }}
+                  >
+                    <Tooltip title="Trở về">
+                      <IconButton onClick>
+                        <ArrowBackIosNewIcon />
+                      </IconButton>
+                    </Tooltip>
+
+                    
+
+                   
+
+                    {status === 'chờ xác nhận' ? (
+                      <Tooltip title="Từ chối lịch hẹn">
+                        <IconButton color="error" onClick>
+                          <CancelIcon />
+                        </IconButton>
+                      </Tooltip>
+                    ) : (
+                      <Tooltip title="Tham gia buổi tư vấn">
+                        <IconButton color="info" onClick={handleCreateNameAndRoomName}>
+                          <DuoIcon />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </Box>
+                )}
+              </Stack>
+            )}
+          </Card>
+        </Grid>
+      </Grid>
     </FormProvider>
   );
 }
