@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 // @mui
 import { Container } from '@mui/material';
 // routes
@@ -7,7 +7,6 @@ import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
 import useSettings from '../../hooks/useSettings';
 // utils
-import { getMedicines } from '../../redux/slices/medicine';
 import axios from '../../utils/axios';
 // components
 import Page from '../../components/Page';
@@ -57,6 +56,7 @@ export default function BlogEditPost() {
             content={Location.state.content1}
             articlecategory={Location.state.articlecategory1}
             banner={Location.state.banner1}
+            status={Location.state.status1}
           />
         </Container>
       </Page>

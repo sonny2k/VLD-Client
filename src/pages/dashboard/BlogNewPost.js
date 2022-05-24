@@ -35,20 +35,20 @@ export default function BlogNewPost() {
 
   return (
     artCate.length > 0 && (
-    <Page title="Tin tức: Tin tức mới">
-      <Container maxWidth={themeStretch ? false : 'lg'}>
-        <HeaderBreadcrumbs
-          heading="Tạo tin tức mới"
-          links={[
-            { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
-            { name: 'Tin tức', href: PATH_DASHBOARD.user.articlelist },
-            { name: 'Tin tức mới' },
-          ]}
-        />
+      <Page title="Tin tức: Tin tức mới">
+        <Container maxWidth={themeStretch ? false : 'lg'}>
+          <HeaderBreadcrumbs
+            heading="Tạo tin tức mới"
+            links={[
+              { name: 'Bảng điều khiển', href: PATH_DASHBOARD.root },
+              { name: 'Tin tức', href: PATH_DASHBOARD.user.articlelist },
+              { name: 'Tin tức mới' },
+            ]}
+          />
 
-        <BlogNewPostForm artcategories={artCate} />
-      </Container>
-    </Page>
+          <BlogNewPostForm artcategories={artCate} />
+        </Container>
+      </Page>
     )
   );
 }

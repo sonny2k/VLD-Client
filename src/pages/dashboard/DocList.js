@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { paramCase } from 'change-case';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 import unorm from 'unorm';
 import { useSnackbar } from 'notistack';
 // @mui
@@ -77,6 +77,8 @@ export default function DocList() {
   const { themeStretch } = useSettings();
 
   const navigate = useNavigate();
+
+  const location = useLocation();
 
   const [doctors, setDoctors] = useState([]);
   useEffect(() => {
@@ -171,7 +173,7 @@ export default function DocList() {
         data: selected,
       });
       enqueueSnackbar('Xóa bác sĩ thành công!');
-      navigate(PATH_DASHBOARD.user.doclist);
+      window.location.reload();
     } catch (error) {
       console.error(error);
     }
@@ -263,7 +265,7 @@ export default function DocList() {
                   onSelectAllRows={(checked) =>
                     onSelectAllRows(
                       checked,
-                      doctors.map((row) => row._id)
+                      doctors.map((row) => row.account._id)
                     )
                   }
                   actions={
@@ -287,7 +289,7 @@ export default function DocList() {
                   onSelectAllRows={(checked) =>
                     onSelectAllRows(
                       checked,
-                      doctors.map((row) => row._id)
+                      doctors.map((row) => row.account._id)
                     )
                   }
                 />
@@ -297,8 +299,8 @@ export default function DocList() {
                     <DocTableRow
                       key={row._id}
                       row={row}
-                      selected={selected.includes(row._id)}
-                      onSelectRow={() => onSelectRow(row._id)}
+                      selected={selected.includes(row.account._id)}
+                      onSelectRow={() => onSelectRow(row.account._id)}
                       onDeleteRow={() => handleDeleteRow(row._id)}
                       onEditRow={(name) =>
                         handleEditRow(

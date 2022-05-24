@@ -70,7 +70,7 @@ export default function BlogNewPostForm({ artcategories }) {
 
   const handleMenuItemClick = (event, index) => {
     setSelectedIndex(index);
-    setOpen(false);
+    setOpenBut(false);
   };
 
   const handleToggle = () => {
@@ -82,7 +82,7 @@ export default function BlogNewPostForm({ artcategories }) {
       return;
     }
 
-    setOpen(false);
+    setOpenBut(false);
   };
 
   const [imageUrl, setimageUrl] = useState('');
@@ -98,7 +98,7 @@ export default function BlogNewPostForm({ artcategories }) {
   };
 
   const NewBlogSchema = Yup.object().shape({
-    title: Yup.string().required('Tiêu đề là cần thần'),
+    title: Yup.string().required('Tiêu đề là cần thiết'),
     briefdescription: Yup.string().required('Hãy điền mô tả ngắn'),
     content: Yup.string().required('Vui lòng nhập nội dung'),
   });
@@ -217,7 +217,7 @@ export default function BlogNewPostForm({ artcategories }) {
 
                 <div>
                   <LabelStyle>Nội dung tin tức</LabelStyle>
-                  <RHFEditor name="content" placeholder="Điền nôi dung cho tin tức" />
+                  <RHFEditor name="content" placeholder="Điền nội dung cho tin tức" />
                 </div>
 
                 <div>
