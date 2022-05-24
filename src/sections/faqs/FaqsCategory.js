@@ -8,36 +8,36 @@ import { MotionInView, varFade } from '../../components/animate';
 // ----------------------------------------------------------------------
 
 const CATEGORIES = [
-  {
-    label: 'Managing your account',
-    icon: 'https://minimal-assets-api.vercel.app/assets/icons/faqs/ic_account.svg',
-    href: '#',
-  },
-  {
-    label: 'Payment',
-    icon: 'https://minimal-assets-api.vercel.app/assets/icons/faqs/ic_payment.svg',
-    href: '#',
-  },
-  {
-    label: 'Delivery',
-    icon: 'https://minimal-assets-api.vercel.app/assets/icons/faqs/ic_delivery.svg',
-    href: '#',
-  },
-  {
-    label: 'Problem with the Product',
-    icon: 'https://minimal-assets-api.vercel.app/assets/icons/faqs/ic_package.svg',
-    href: '#',
-  },
-  {
-    label: 'Return & Refund',
-    icon: 'https://minimal-assets-api.vercel.app/assets/icons/faqs/ic_refund.svg',
-    href: '#',
-  },
-  {
-    label: 'Guarantees and assurances',
-    icon: 'https://minimal-assets-api.vercel.app/assets/icons/faqs/ic_assurances.svg',
-    href: '#',
-  },
+  // {
+  //   label: 'Managing your account',
+  //   icon: 'https://minimal-assets-api.vercel.app/assets/icons/faqs/ic_account.svg',
+  //   href: '#',
+  // },
+  // {
+  //   label: 'Payment',
+  //   icon: 'https://minimal-assets-api.vercel.app/assets/icons/faqs/ic_payment.svg',
+  //   href: '#',
+  // },
+  // {
+  //   label: 'Delivery',
+  //   icon: 'https://minimal-assets-api.vercel.app/assets/icons/faqs/ic_delivery.svg',
+  //   href: '#',
+  // },
+  // {
+  //   label: 'Problem with the Product',
+  //   icon: 'https://minimal-assets-api.vercel.app/assets/icons/faqs/ic_package.svg',
+  //   href: '#',
+  // },
+  // {
+  //   label: 'Return & Refund',
+  //   icon: 'https://minimal-assets-api.vercel.app/assets/icons/faqs/ic_refund.svg',
+  //   href: '#',
+  // },
+  // {
+  //   label: 'Guarantees and assurances',
+  //   icon: 'https://minimal-assets-api.vercel.app/assets/icons/faqs/ic_assurances.svg',
+  //   href: '#',
+  // },
 ];
 
 // ----------------------------------------------------------------------

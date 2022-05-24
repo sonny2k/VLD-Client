@@ -9,11 +9,13 @@ export default function FaqsForm() {
   return (
     <Stack spacing={3}>
       <MotionInView variants={varFade().inUp}>
-        <Typography variant="h4">Haven't found the right help?</Typography>
+        <Typography variant="h4">Bạn vẫn chưa tìm được câu trả lời?</Typography>
+        <br />
+        <Typography variant="h4">Hãy đặt câu hỏi cho chúng tôi.</Typography>
       </MotionInView>
 
       <MotionInView variants={varFade().inUp}>
-        <TextField fullWidth label="Name" />
+        <TextField fullWidth label="Họ và tên" />
       </MotionInView>
 
       <MotionInView variants={varFade().inUp}>
@@ -21,16 +23,16 @@ export default function FaqsForm() {
       </MotionInView>
 
       <MotionInView variants={varFade().inUp}>
-        <TextField fullWidth label="Subject" />
+        <TextField fullWidth label="Chủ đề" />
       </MotionInView>
 
       <MotionInView variants={varFade().inUp}>
-        <TextField fullWidth label="Enter your message here." multiline rows={4} />
+        <TextField fullWidth label="Nhập câu hỏi vào đây" multiline rows={4} />
       </MotionInView>
 
       <MotionInView variants={varFade().inUp}>
         <Button size="large" variant="contained">
-          Submit Now
+          Đặt câu hỏi
         </Button>
       </MotionInView>
     </Stack>
