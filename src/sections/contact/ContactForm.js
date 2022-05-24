@@ -10,14 +10,14 @@ export default function ContactForm() {
     <Stack spacing={5}>
       <MotionInView variants={varFade().inUp}>
         <Typography variant="h3">
-          Feel free to contact us. <br />
-          We'll be glad to hear from you, buddy.
+          Hãy liên hệ cho chúng tôi <br />
+          Chúng tôi rất vui khi được lắng nghe bạn.
         </Typography>
       </MotionInView>
 
       <Stack spacing={3}>
         <MotionInView variants={varFade().inUp}>
-          <TextField fullWidth label="Name" />
+          <TextField fullWidth label="Họ tên" />
         </MotionInView>
 
         <MotionInView variants={varFade().inUp}>
@@ -25,17 +25,17 @@ export default function ContactForm() {
         </MotionInView>
 
         <MotionInView variants={varFade().inUp}>
-          <TextField fullWidth label="Subject" />
+          <TextField fullWidth label="Chủ đề" />
         </MotionInView>
 
         <MotionInView variants={varFade().inUp}>
-          <TextField fullWidth label="Enter your message here." multiline rows={4} />
+          <TextField fullWidth label="Hãy để lại lời nhắn ở đây" multiline rows={4} />
         </MotionInView>
       </Stack>
 
       <MotionInView variants={varFade().inUp}>
         <Button size="large" variant="contained">
-          Submit Now
+          Đồng ý
         </Button>
       </MotionInView>
     </Stack>
