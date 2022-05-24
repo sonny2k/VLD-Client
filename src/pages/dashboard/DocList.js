@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { paramCase } from 'change-case';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 import unorm from 'unorm';
 import { useSnackbar } from 'notistack';
 // @mui
@@ -42,13 +42,15 @@ import { DocTableToolbar, DocTableRow } from '../../sections/@dashboard/user/lis
 // ----------------------------------------------------------------------
 const ROLE_OPTIONS = ['Tất cả'];
 
+const ROLE_OPTIONS1 = ['Tất cả', 'Kích hoạt', 'Vô hiệu hóa'];
+
 const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'đã hủy', 'đã hoàn thành'];
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Bác sĩ', align: 'left' },
   { id: 'phone', label: 'Số điện thoại', align: 'center' },
   { id: 'department', label: 'Chuyên khoa', align: 'center' },
-  { id: 'gender', label: 'Giới tính', align: 'center' },
+  { id: 'status', label: 'Trạng thái', align: 'center' },
   { id: '' },
 ];
 
@@ -77,6 +79,8 @@ export default function DocList() {
   const { themeStretch } = useSettings();
 
   const navigate = useNavigate();
+
+  const location = useLocation();
 
   const [doctors, setDoctors] = useState([]);
   useEffect(() => {
@@ -111,9 +115,12 @@ export default function DocList() {
 
   const [filterRole, setFilterRole] = useState('Tất cả');
 
+  const [filterRole1, setFilterRole1] = useState('Tất cả');
+
+
   // const { currentTab: filterStatus, onChangeTab: onChangeFilterStatus } = useTabs('Tất cả');
 
-  function applySortFilter({ doctors, comparator, filterName, filterStatus, filterRole, dep }) {
+  function applySortFilter({ doctors, comparator, filterName, filterStatus, filterRole, dep, filterRole1 }) {
     const stabilizedThis = doctors.map((el, index) => [el, index]);
 
     stabilizedThis.sort((a, b) => {
@@ -142,6 +149,16 @@ export default function DocList() {
       );
     }
 
+    if (filterRole1 !== 'Tất cả') {
+      doctors = doctors.filter(
+        (item) =>
+          unorm
+            .nfkd(item.status === 0 ? 'Vô hiệu hóa' : 'Kích hoạt')
+            .toLowerCase()
+            .indexOf(unorm.nfkd(filterRole1).toLowerCase()) !== -1
+      );
+    }
+
     return doctors;
   }
 
@@ -152,6 +169,10 @@ export default function DocList() {
 
   const handleFilterRole = (event) => {
     setFilterRole(event.target.value);
+  };
+
+  const handleFilterRole1 = (event) => {
+    setFilterRole1(event.target.value);
   };
 
   const handleFilterDep = (event) => {
@@ -171,7 +192,7 @@ export default function DocList() {
         data: selected,
       });
       enqueueSnackbar('Xóa bác sĩ thành công!');
-      navigate(PATH_DASHBOARD.user.doclist);
+      window.location.reload();
     } catch (error) {
       console.error(error);
     }
@@ -215,6 +236,7 @@ export default function DocList() {
     comparator: getComparator(order, orderBy),
     filterName,
     filterRole,
+    filterRole1,
     dep,
   });
 
@@ -246,10 +268,13 @@ export default function DocList() {
           <DocTableToolbar
             filterName={filterName}
             filterRole={filterRole}
+            filterRole1={filterRole1}
             filterDep={dep}
             onFilterName={handleFilterName}
             onFilterRole={handleFilterRole}
+            onFilterRole1={handleFilterRole1}
             optionsDep={ROLE_OPTIONS}
+            optionsRole1={ROLE_OPTIONS1}
             onFilterDep={handleFilterDep}
           />
 
@@ -263,7 +288,7 @@ export default function DocList() {
                   onSelectAllRows={(checked) =>
                     onSelectAllRows(
                       checked,
-                      doctors.map((row) => row._id)
+                      doctors.map((row) => row.account._id)
                     )
                   }
                   actions={
@@ -287,7 +312,7 @@ export default function DocList() {
                   onSelectAllRows={(checked) =>
                     onSelectAllRows(
                       checked,
-                      doctors.map((row) => row._id)
+                      doctors.map((row) => row.account._id)
                     )
                   }
                 />
@@ -297,8 +322,8 @@ export default function DocList() {
                     <DocTableRow
                       key={row._id}
                       row={row}
-                      selected={selected.includes(row._id)}
-                      onSelectRow={() => onSelectRow(row._id)}
+                      selected={selected.includes(row.account._id)}
+                      onSelectRow={() => onSelectRow(row.account._id)}
                       onDeleteRow={() => handleDeleteRow(row._id)}
                       onEditRow={(name) =>
                         handleEditRow(

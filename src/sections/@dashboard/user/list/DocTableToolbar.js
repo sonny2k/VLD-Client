@@ -9,14 +9,17 @@ DocTableToolbar.propTypes = {
   filterName: PropTypes.string,
   dep: PropTypes.string,
   filterRole: PropTypes.string,
+  filterRole1: PropTypes.string,
   onFilterName: PropTypes.func,
   onFilterRole: PropTypes.func,
+  onFilterRole1: PropTypes.func,
   onFilterDep: PropTypes.func,
   optionsDep: PropTypes.arrayOf(PropTypes.string),
   optionsRole: PropTypes.arrayOf(PropTypes.string),
+  optionsRole1: PropTypes.arrayOf(PropTypes.string),
 };
 
-export default function DocTableToolbar({ filterName, filterRole, onFilterName, onFilterRole, optionsRole, optionsDep, onFilterDep, dep }) {
+export default function DocTableToolbar({ filterName, filterRole, filterRole1,  onFilterName, onFilterRole,  onFilterRole1, optionsDep, optionsRole1, dep }) {
   return (
     <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ py: 2.5, px: 3 }}>
       <TextField
@@ -36,6 +39,39 @@ export default function DocTableToolbar({ filterName, filterRole, onFilterName, 
         }}
       >
         {optionsDep.map((option) => (
+          <MenuItem
+            key={option}
+            value={option}
+            sx={{
+              mx: 1,
+              my: 0.5,
+              borderRadius: 0.75,
+              typography: 'body2',
+              textTransform: 'capitalize',
+            }}
+          >
+            {option}
+          </MenuItem>
+        ))}
+      </TextField>
+
+      <TextField
+        fullWidth
+        select
+        label="Trạng thái"
+        value={filterRole1}
+        onChange={onFilterRole1}
+        SelectProps={{
+          MenuProps: {
+            sx: { '& .MuiPaper-root': { maxHeight: 260 } },
+          },
+        }}
+        sx={{
+          maxWidth: { sm: 240 },
+          textTransform: 'capitalize',
+        }}
+      >
+        {optionsRole1.map((option) => (
           <MenuItem
             key={option}
             value={option}

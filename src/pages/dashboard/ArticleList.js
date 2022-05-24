@@ -196,7 +196,7 @@ export default function ArticleList() {
     setArticles(deleteRows);
   };
 
-  const handleEditRow = (_id, title, briefdescription, content, articlecategory, banner) => {
+  const handleEditRow = (_id, title, briefdescription, content, articlecategory, banner, status) => {
     navigate(PATH_DASHBOARD.blog.edit, {
       state: {
         id1: _id,
@@ -205,6 +205,7 @@ export default function ArticleList() {
         content1: content,
         articlecategory1: articlecategory,
         banner1: banner,
+        status1: status,
       },
     });
   };
@@ -309,7 +310,8 @@ export default function ArticleList() {
                             row.briefdescription,
                             row.content,
                             row.articlecategory,
-                            row.banner
+                            row.banner,
+                            row.status
                           )
                         }
                       />

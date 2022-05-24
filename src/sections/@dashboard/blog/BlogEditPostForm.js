@@ -5,21 +5,18 @@ import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
+import { styled, useTheme } from '@mui/material/styles';
 // form
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 // @mui
-import { LoadingButton } from '@mui/lab';
-import { styled } from '@mui/material/styles';
 import {
   Grid,
   Card,
-  Chip,
   Stack,
   Button,
-  TextField,
   Typography,
-  Autocomplete,
+  Box,
   ButtonGroup,
   Grow,
   Paper,
@@ -32,14 +29,8 @@ import { PATH_DASHBOARD } from '../../../routes/paths';
 // utils
 import axios from '../../../utils/axios';
 // components
-import {
-  RHFSwitch,
-  RHFEditor,
-  FormProvider,
-  RHFTextField,
-  RHFUploadSingleFile,
-  RHFSelect,
-} from '../../../components/hook-form';
+import { RHFEditor, FormProvider, RHFTextField, RHFUploadSingleFile, RHFSelect } from '../../../components/hook-form';
+import Label from '../../../components/Label';
 //
 import BlogNewPostPreview from './BlogNewPostPreview';
 
@@ -63,14 +54,15 @@ export default function BlogEditPostForm({
   content,
   banner,
   articlecategory,
+  status,
 }) {
   const navigate = useNavigate();
+
+  const theme = useTheme();
 
   const options = ['Lưu nháp', 'Đăng bài'];
 
   const [open, setOpen] = useState(false);
-
-  const [btn, setBtn] = useState('Lưu thay đổi');
 
   const [selectedIndex, setSelectedIndex] = useState(1);
 
@@ -78,13 +70,13 @@ export default function BlogEditPostForm({
 
   const [openbut, setOpenBut] = useState(false);
 
-  const [imageUrl, setimageUrl] = useState('');
+  const [imageUrl, setimageUrl] = useState(null);
 
   const { enqueueSnackbar } = useSnackbar();
 
   const handleMenuItemClick = (event, index) => {
     setSelectedIndex(index);
-    setOpen(false);
+    setOpenBut(false);
   };
 
   const handleToggle = () => {
@@ -96,7 +88,7 @@ export default function BlogEditPostForm({
       return;
     }
 
-    setOpen(false);
+    setOpenBut(false);
   };
 
   const handleOpenPreview = () => {
@@ -108,7 +100,7 @@ export default function BlogEditPostForm({
   };
 
   const NewBlogSchema = Yup.object().shape({
-    title: Yup.string().required('Tiêu đề là cần thần'),
+    title: Yup.string().required('Tiêu đề là cần thiết'),
     briefdescription: Yup.string().required('Hãy điền mô tả ngắn'),
     content: Yup.string().required('Vui lòng nhập nội dung'),
   });
@@ -147,7 +139,7 @@ export default function BlogEditPostForm({
           briefdescription: data.briefdescription,
           content: data.content,
           articlecategory: data.articlecategory !== '' ? data.articlecategory : artcategories[0]._id,
-          banner: imageUrl,
+          banner: imageUrl !== null ? imageUrl : banner,
           status: 1,
           createdat: created,
         });
@@ -159,7 +151,7 @@ export default function BlogEditPostForm({
           briefdescription: data.briefdescription,
           content: data.content,
           articlecategory: data.articlecategory !== '' ? data.articlecategory : artcategories[0]._id,
-          banner: imageUrl,
+          banner: imageUrl !== null ? imageUrl : banner,
           status: 0,
           createdat: created,
         });
@@ -209,10 +201,19 @@ export default function BlogEditPostForm({
   return (
     <>
       <FormProvider methods={methods}>
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={8}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={7}>
             <Card sx={{ p: 3 }}>
               <Stack spacing={3}>
+                <Box sx={{ textAlign: { sm: 'right' } }}>
+                  <Label
+                    variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
+                    color={(status === 1 && 'success') || (status === 0 && 'warning')}
+                    sx={{ textTransform: 'uppercase', color: 'Black' }}
+                  >
+                    <h2>{status === 1 ? 'Công khai' : 'Nháp'}</h2>
+                  </Label>
+                </Box>
                 <RHFTextField name="title" label="Tiêu đề" />
 
                 <RHFSelect name="articlecategory" label="Loại tin tức">
@@ -227,7 +228,7 @@ export default function BlogEditPostForm({
 
                 <div>
                   <LabelStyle>Nội dung tin tức</LabelStyle>
-                  <RHFEditor name="content" placeholder="Điền nôi dung cho tin tức" />
+                  <RHFEditor name="content" placeholder="Điền nội dung cho tin tức" />
                 </div>
 
                 <div>
@@ -244,7 +245,7 @@ export default function BlogEditPostForm({
             </Card>
           </Grid>
 
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={5}>
             <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
               <Button color="inherit" variant="outlined" size="large" onClick={handleOpenPreview}>
                 Xem trước

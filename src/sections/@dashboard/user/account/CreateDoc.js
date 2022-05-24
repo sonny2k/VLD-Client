@@ -99,40 +99,45 @@ export default function CreateDoc({ fname, lname, id, phone, depa }) {
 
   useEffect(() => {
     const ver = async () => {
-      if (message) {
-        if (message.message === 'pending') {
-          enqueueSnackbar('Sai mã xác minh, xin thử lại', { variant: 'error' });
-        }
-        if (message.message === 'Lỗi máy chủ') {
-          enqueueSnackbar('Bạn chưa gửi mã xác minh hoặc mã xác minh không đúng định dạng, xin thử lại', {
-            variant: 'error',
-          });
-        }
-        if (message.message === 'Số điện thoại đã được đăng ký ở tài khoản khác') {
-          enqueueSnackbar('Số điện thoại đã được đăng ký ở tài khoản khác', { variant: 'error' });
-        }
-        if (message.message === 'approved') {
-          if (createmessage === null) {
-            await handleSubmit(createDoc)();
+      if (depaa === null || depaa === 'Vui lòng chọn chuyên khoa') {
+        enqueueSnackbar('Vui lòng chọn chuyên khoa cho bác sĩ!', { variant: 'warning' });
+      }
+      if (depaa !== null && depaa !== 'Vui lòng chọn chuyên khoa') {
+        if (message) {
+          if (message.message === 'pending') {
+            enqueueSnackbar('Sai mã xác minh, xin thử lại', { variant: 'error' });
           }
+          if (message.message === 'Lỗi máy chủ') {
+            enqueueSnackbar('Bạn chưa gửi mã xác minh hoặc mã xác minh không đúng định dạng, xin thử lại', {
+              variant: 'error',
+            });
+          }
+          if (message.message === 'Số điện thoại đã được đăng ký ở tài khoản khác') {
+            enqueueSnackbar('Số điện thoại đã được đăng ký ở tài khoản khác', { variant: 'error' });
+          }
+          if (message.message === 'approved') {
+            if (createmessage === null) {
+              await handleSubmit(createDoc)();
+            }
 
-          if (createmessage !== null) {
-            if (
-              createmessage.success === false &&
-              createmessage.message === 'Số điện thoại đã được đăng ký ở tài khoản khác'
-            ) {
-              enqueueSnackbar('Số điện thoại đã tồn tại', { variant: 'error' });
-              reset({ phone: '' });
-              setCreateMessage(null);
-            }
-            if (createmessage.success === true) {
-              enqueueSnackbar('Tạo bác sĩ thành công!');
-              navigate(PATH_DASHBOARD.user.doclist);
-            }
-            if (createmessage.success === false && createmessage.message === 'Lỗi tải dữ liệu') {
-              enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại');
-              reset();
-              setCreateMessage(null);
+            if (createmessage !== null) {
+              if (
+                createmessage.success === false &&
+                createmessage.message === 'Số điện thoại đã được đăng ký ở tài khoản khác'
+              ) {
+                enqueueSnackbar('Số điện thoại đã tồn tại', { variant: 'error' });
+                reset({ phone: '' });
+                setCreateMessage(null);
+              }
+              if (createmessage.success === true) {
+                enqueueSnackbar('Tạo bác sĩ thành công!');
+                navigate(PATH_DASHBOARD.user.doclist);
+              }
+              if (createmessage.success === false && createmessage.message === 'Lỗi tải dữ liệu') {
+                enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại');
+                reset();
+                setCreateMessage(null);
+              }
             }
           }
         }
@@ -144,20 +149,15 @@ export default function CreateDoc({ fname, lname, id, phone, depa }) {
 
   const createDoc = async (data) => {
     try {
-      if (depaa === null || depaa === 'Vui lòng chọn chuyên khoa') {
-        enqueueSnackbar('Vui lòng chọn chuyên khoa cho bác sĩ!', { variant: 'error' });
-      }
-      if (depaa !== null && depaa !== 'Vui lòng chọn chuyên khoa') {
-        const phone = `+84${data.phone.slice(1)}`;
-        const res = await axios.post('/api/admin/doctor/createDoctor', {
-          fname: data.fname,
-          lname: data.lname,
-          phone,
-          department: depaa,
-        });
-        const mes = res.data;
-        setCreateMessage(mes);
-      }
+      const phone = `+84${data.phone.slice(1)}`;
+      const res = await axios.post('/api/admin/doctor/createDoctor', {
+        fname: data.fname,
+        lname: data.lname,
+        phone,
+        department: depaa,
+      });
+      const mes = res.data;
+      setCreateMessage(mes);
     } catch (error) {
       console.error(error);
       if (isMountedRef.current) {
