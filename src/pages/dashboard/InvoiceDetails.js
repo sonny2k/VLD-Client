@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import unorm from 'unorm';
 // @mui
@@ -6,7 +6,7 @@ import { Container } from '@mui/material';
 // utils
 import axios from '../../utils/axios';
 // routes
-import { PATH_DASHBOARD } from '../../routes/paths';
+import { PATH_DASHBOARD, PATH_PAGE } from '../../routes/paths';
 // _mock_
 import { _invoices } from '../../_mock/_invoice';
 // hooks
@@ -28,10 +28,17 @@ export default function InvoiceDetails() {
 
   const { idne } = useParams();
 
+  const navigate = useNavigate();
+
   const [pre, setPre] = useState(null);
 
   useEffect(() => {
     getPrescription();
+    if (pre !== null) {
+      if (pre.message === 'Lỗi tải dữ liệu') {
+        navigate(PATH_PAGE.page404);
+      }
+    }
   }, [pre]);
 
   const getPrescription = async () => {
@@ -44,7 +51,8 @@ export default function InvoiceDetails() {
   };
 
   return (
-    pre !== null && (
+    pre !== null &&
+    pre.consultation !== null && (
       <Page title="Toa thuốc: Xem chi tiết">
         <Container maxWidth={themeStretch ? false : 'lg'}>
           {unorm.nfkd(account.role).toLowerCase().indexOf(unorm.nfkd('Người dùng').toLowerCase()) !== -1 ? (

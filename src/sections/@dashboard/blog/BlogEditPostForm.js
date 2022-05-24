@@ -202,7 +202,7 @@ export default function BlogEditPostForm({
     <>
       <FormProvider methods={methods}>
         <Grid container spacing={2}>
-          <Grid item xs={12} md={7}>
+          <Grid item xs={12} md={8}>
             <Card sx={{ p: 3 }}>
               <Stack spacing={3}>
                 <Box sx={{ textAlign: { sm: 'right' } }}>
@@ -245,9 +245,9 @@ export default function BlogEditPostForm({
             </Card>
           </Grid>
 
-          <Grid item xs={12} md={5}>
+          <Grid item xs={12} md={4}>
             <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
-              <Button color="inherit" variant="outlined" size="large" onClick={handleOpenPreview}>
+              <Button color="inherit" variant="outlined" onClick={handleOpenPreview}>
                 Xem trước
               </Button>
               <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">

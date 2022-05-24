@@ -15,6 +15,8 @@ export default function useTable(props) {
 
   const [selected, setSelected] = useState(props?.defaultSelected || []);
 
+  const [selected1, setSelected1] = useState(props?.defaultSelected || []);
+
   const onSort = (id) => {
     const isAsc = orderBy === id && order === 'asc';
     if (id !== '') {
@@ -40,12 +42,37 @@ export default function useTable(props) {
     setSelected(newSelected);
   };
 
+  const onSelectRow1 = (id) => {
+    const selectedIndex1 = selected1.indexOf(id);
+
+    let newSelected1 = [];
+
+    if (selectedIndex1 === -1) {
+      newSelected1 = newSelected1.concat(selected1, id);
+    } else if (selectedIndex1 === 0) {
+      newSelected1 = newSelected1.concat(selected1.slice(1));
+    } else if (selectedIndex1 === selected1.length - 1) {
+      newSelected1 = newSelected1.concat(selected1.slice(0, -1));
+    } else if (selectedIndex1 > 0) {
+      newSelected1 = newSelected1.concat(selected1.slice(0, selectedIndex1), selected1.slice(selectedIndex1 + 1));
+    }
+    setSelected1(newSelected1);
+  };
+
   const onSelectAllRows = (checked, newSelecteds) => {
     if (checked) {
       setSelected(newSelecteds);
       return;
     }
     setSelected([]);
+  };
+
+  const onSelectAllRows1 = (checked, newSelecteds1) => {
+    if (checked) {
+      setSelected1(newSelecteds1);
+      return;
+    }
+    setSelected1([]);
   };
 
   const onChangePage = (event, newPage) => {
@@ -73,8 +100,12 @@ export default function useTable(props) {
     //
     selected,
     setSelected,
+    selected1,
+    setSelected1,
     onSelectRow,
     onSelectAllRows,
+    onSelectRow1,
+    onSelectAllRows1,
     //
     onSort,
     onChangePage,

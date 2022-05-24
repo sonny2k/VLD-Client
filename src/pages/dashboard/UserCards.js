@@ -173,7 +173,9 @@ export default function UserCards() {
             }}
           >
             {dataFiltered.map(
-              (doctor) => doctor.availables[0].date !== null && <UserCard key={doctor._id} doctor={doctor} />
+              (doctor) =>
+                doctor.availables[0].date !== null &&
+                doctor.status === 1 && <UserCard key={doctor._id} doctor={doctor} />
             )}
           </Box>
         </Container>

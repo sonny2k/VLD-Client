@@ -236,7 +236,7 @@ export default function BlogNewPostForm({ artcategories }) {
 
           <Grid item xs={12} md={4}>
             <Stack direction="row" spacing={1.5} sx={{ mt: 3 }}>
-              <Button color="inherit" variant="outlined" size="large" onClick={handleOpenPreview}>
+              <Button color="inherit" variant="outlined" onClick={handleOpenPreview}>
                 Xem trước
               </Button>
               <ButtonGroup variant="contained" ref={anchorRef} aria-label="split button">
