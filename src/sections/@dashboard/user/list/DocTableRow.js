@@ -1,13 +1,19 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
+import { useSnackbar } from 'notistack';
 // @mui
 import { useTheme } from '@mui/material/styles';
 import { Avatar, Checkbox, TableRow, TableCell, Typography, MenuItem, Link } from '@mui/material';
+// utils
+import axios from '../../../../utils/axios';
 // components
 import Label from '../../../../components/Label';
 import Iconify from '../../../../components/Iconify';
 import { TableMoreMenu } from '../../../../components/table';
+// routes
+import { PATH_DASHBOARD } from '../../../../routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -22,7 +28,7 @@ DocTableRow.propTypes = {
 export default function DocTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
   const theme = useTheme();
 
-  const { department } = row;
+  const { department, status } = row;
 
   const { gender, fname, lname, profilepic, phone } = row.account;
   const { street, ward, district, city } = row.account.address;
@@ -30,6 +36,10 @@ export default function DocTableRow({ row, selected, onEditRow, onSelectRow, onD
   const name = `${lname} ${fname}`;
 
   const address = `${street}, ${ward}, ${district}, ${city}`;
+
+  const navigate = useNavigate();
+
+  const { enqueueSnackbar } = useSnackbar();
 
   const [openMenu, setOpenMenuActions] = useState(null);
 
@@ -39,6 +49,32 @@ export default function DocTableRow({ row, selected, onEditRow, onSelectRow, onD
 
   const handleCloseMenu = () => {
     setOpenMenuActions(null);
+  };
+
+  const Public = async () => {
+    try {
+      await axios.post(`/api/admin/doctor/publicDoctor`, {
+        id: row._id,
+      });
+      enqueueSnackbar('Kích hoạt bác sĩ thành công thành công!');
+      navigate(PATH_DASHBOARD.user.doclist);
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
+    }
+  };
+
+  const Hide = async () => {
+    try {
+      await axios.post(`/api/admin/doctor/hideDoctor`, {
+        id: row._id,
+      });
+      enqueueSnackbar('Vô hiệu hóa bác sĩ thành công!');
+      navigate(PATH_DASHBOARD.user.doclist);
+    } catch (error) {
+      console.error(error);
+      enqueueSnackbar('Có lỗi xảy ra, vui lòng thử lại!');
+    }
   };
 
   return (
@@ -69,15 +105,15 @@ export default function DocTableRow({ row, selected, onEditRow, onSelectRow, onD
         {department}
       </TableCell>
 
-      {gender === 1 || gender === 2 ? (
-        <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-          {gender === 1 ? 'Nam' : 'Nữ'}
-        </TableCell>
-      ) : (
-        <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
-          Không xác định
-        </TableCell>
-      )}
+      <TableCell align="center">
+        <Label
+          variant={theme.palette.mode === 'light' ? 'ghost' : 'filled'}
+          color={(status === 0 && 'warning') || (status === 1 && 'success')}
+          sx={{ textTransform: 'capitalize' }}
+        >
+          {status === 0 ? 'Vô hiệu hóa' : 'Kích hoạt'}
+        </Label>
+      </TableCell>
 
       {/* <TableCell align="center">
         <Iconify
@@ -108,16 +144,31 @@ export default function DocTableRow({ row, selected, onEditRow, onSelectRow, onD
           onClose={handleCloseMenu}
           actions={
             <>
-              {/* <MenuItem
-                onClick={() => {
-                  onDeleteRow();
-                  handleCloseMenu();
-                }}
-                sx={{ color: 'error.main' }}
-              >
-                <Iconify icon={'eva:trash-2-outline'} />
-                Delete
-              </MenuItem> */}
+              {status === 0 && (
+                <MenuItem
+                  onClick={() => {
+                    Public();
+                    handleCloseMenu();
+                  }}
+                  sx={{ color: 'success.main' }}
+                >
+                  <Iconify icon={'ant-design:eye-filled'} />
+                  Kích hoạt bác sĩ
+                </MenuItem>
+              )}
+
+              {status === 1 && (
+                <MenuItem
+                  onClick={() => {
+                    Hide();
+                    handleCloseMenu();
+                  }}
+                  sx={{ color: 'warning.main' }}
+                >
+                  <Iconify icon={'ant-design:eye-invisible-filled'} />
+                  Vô hiệu hóa bác sĩ
+                </MenuItem>
+              )}
               <MenuItem
                 onClick={() => {
                   onEditRow(name);

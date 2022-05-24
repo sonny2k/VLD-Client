@@ -185,10 +185,11 @@ export default function Calendar() {
               initialDate={date}
               initialView={view}
               dayMaxEventRows={3}
-              eventDisplay="block"
+              eventDisplay="name"
               headerToolbar={false}
-              allDayMaintainDuration
+              
               eventResizableFromStart
+              
               select={handleSelectRange}
               eventDrop={handleDropEvent}
               eventClick={handleSelectEvent}

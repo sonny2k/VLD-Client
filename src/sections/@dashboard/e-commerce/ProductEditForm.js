@@ -187,7 +187,7 @@ export default function ProductEditForm({
               </div>
 
               <div>
-                <RHFSelect loading={!origins.length} name="origin" label="Nhà sản xuất">
+                <RHFSelect loading={!origins.length} name="origin" label="Nhà cung cấp">
                   {origins.map((option) => (
                     <option key={option._id}>{option.name}</option>
                   ))}

@@ -158,7 +158,7 @@ export default function ProductNewForm({ categories, origins }) {
               </div>
 
               <div>
-                <RHFSelect name="origin" label="Nhà sản xuất">
+                <RHFSelect name="origin" label="Nhà cung cấp">
                   {origins.map((option) => (
                     <option key={option._id}>{option.name}</option>
                   ))}
