@@ -26,7 +26,7 @@ export default function Faqs() {
           <FaqsCategory />
 
           <Typography variant="h3" sx={{ mb: 5 }}>
-            Frequently asked questions
+            Những câu hỏi thắc mắc thường gặp
           </Typography>
 
           <Grid container spacing={10}>

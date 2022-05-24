@@ -18,7 +18,7 @@ export default function AboutVision() {
         }}
       >
         <Image
-          src="https://minimal-assets-api.vercel.app/assets/images/about/vision.jpg"
+          src="https://1hnoof1mss9r2pb77wlon4zt-wpengine.netdna-ssl.com/wp-content/uploads/2018/04/iStock-638377134.jpg"
           alt="about-vision"
           effect="black-and-white"
         />
@@ -34,7 +34,7 @@ export default function AboutVision() {
             justifyContent: 'center',
           }}
         >
-          {['logo_amazon', 'logo_hbo', 'logo_ibm', 'logo_lya', 'logo_spotify', 'logo_netflix'].map((logo) => (
+          {/* {['logo_amazon', 'logo_hbo', 'logo_ibm', 'logo_lya', 'logo_spotify', 'logo_netflix'].map((logo) => (
             <MotionInView key={logo} variants={varFade().in}>
               <Image
                 alt={logo}
@@ -45,7 +45,7 @@ export default function AboutVision() {
                 }}
               />
             </MotionInView>
-          ))}
+          ))} */}
         </Box>
       </Box>
 
@@ -53,7 +53,8 @@ export default function AboutVision() {
         <Grid item xs={12} sm={8}>
           <MotionInView variants={varFade().inUp}>
             <Typography variant="h3" sx={{ textAlign: 'center' }}>
-              Our vision offering the best product nulla vehicula tortor scelerisque ultrices malesuada.
+              Văn Lang Doctor luôn cố gắng để trở thành dịch vụ chăm sóc sức khỏe tốt nhất nhằm đáp ứng mọi nhu cầu khám
+              chữa bệnh cho mọi người.
             </Typography>
           </MotionInView>
         </Grid>
