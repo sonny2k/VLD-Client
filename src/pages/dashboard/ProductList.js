@@ -52,7 +52,7 @@ const TABLE_HEAD = [
   { id: 'category', label: 'Loại thuốc', align: 'left' },
   { id: 'specdes', label: 'Quy cách', align: 'left' },
   { id: 'components', label: 'Thành phần thuốc', align: 'left' },
-  { id: 'origin', label: 'Nhà sản xuất', align: 'left' },
+  { id: 'origin', label: 'Nhà cung cấp', align: 'left' },
   { id: '' },
 ];
 
