@@ -1,5 +1,4 @@
 import { Font, StyleSheet } from '@react-pdf/renderer';
-import { normalizeViewportProps } from 'viewport-mercator-project';
 
 // ----------------------------------------------------------------------
 
@@ -10,13 +9,13 @@ Font.register({
 
 const styles = StyleSheet.create({
   col4: { width: '30%' },
-  col5: {width: '45%'},
+  col5: { width: '45%' },
   col8: { width: '75%' },
   col6: { width: '50%' },
-  col7: { width: '60%'},
+  col7: { width: '60%' },
   mb8: { marginBottom: 8 },
   mb40: { marginBottom: 40 },
-  mt20: { marginTop: 20},
+  mt20: { marginTop: 20 },
   overline: {
     fontSize: 8,
     marginBottom: 8,
@@ -32,8 +31,8 @@ const styles = StyleSheet.create({
   alignCenter: { textAlign: 'center' },
   page: {
     padding: '40px 24px 0 24px',
-    fontSize: 9,
-    lineHeight: 1.6,
+    fontSize: 10,
+    lineHeight: 2,
     fontFamily: 'Roboto',
     backgroundColor: '#fff',
     textTransform: 'capitalize',
@@ -64,7 +63,7 @@ const styles = StyleSheet.create({
   tableCell_1: { width: '30%' },
   tableCell_2: { width: '15%', paddingRight: 28 },
   tableCell_3: { width: '20%' },
-  tableCell_4: { width: '15%', paddingLeft: 15 },
+  tableCell_4: { width: '15%' },
 });
 
 export default styles;

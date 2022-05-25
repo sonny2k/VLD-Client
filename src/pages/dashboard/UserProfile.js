@@ -95,11 +95,11 @@ export default function UserProfile() {
         icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
         component: <Profile doctor={doctor} posts={_userFeeds} />,
       },
-      // {
-      //   value: 'Đánh giá',
-      //   icon: <Iconify icon={'eva:heart-fill'} width={20} height={20} />,
-      //   component: <ProductDetailsReview doctor={doctor} />,
-      // },
+      {
+        value: 'Đánh giá',
+        icon: <Iconify icon={'eva:heart-fill'} width={20} height={20} />,
+        component: <ProductDetailsReview doctor={doctor} />,
+      },
       // {
       //   value: 'Yeu cau',
       //   icon: <Iconify icon={'eva:people-fill'} width={20} height={20} />,

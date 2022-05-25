@@ -29,8 +29,8 @@ const LINKS = [
   {
     headline: 'Liên hệ',
     children: [
-      { name: 'support@vanlangdoctor.tech', href: '#' },
-      { name: '45 Nguyễn Khắc Nhu, Phường Cô Giang, Quận 1, Thành phố Hồ Chí Minh 700000', href: '#' },
+      { name: 'support@vanlangdoctor.tech', href: 'mailto:support@vanlangdoctor.tech' },
+      { name: '45 Nguyễn Khắc Nhu, Phường Cô Giang, Quận 1, Thành phố Hồ Chí Minh', href: '#' },
     ],
   },
 ];
@@ -57,8 +57,8 @@ export default function MainFooter() {
           </Grid>
           <Grid item xs={8} md={3}>
             <Typography variant="body2" sx={{ pr: { md: 5 } }}>
-              Van Lang Doctor là đồ án Capstone của Team 16 thuộc khóa K24 
-              khoa Kỹ Thuật Phần Mềm trường đại học Văn Lang.
+              Van Lang Doctor là đồ án Capstone của Team 16 thuộc khóa K24 khoa Kỹ Thuật Phần Mềm trường đại học Văn
+              Lang.
             </Typography>
 
             <Stack
@@ -71,34 +71,34 @@ export default function MainFooter() {
           </Grid>
 
           <Grid item xs={12} md={8}>
-            <Stack
-              spacing={5}
-              direction={{ xs: 'column', md: 'row' }}
-              justifyContent="space-between"
-            >
+            <Stack spacing={5} direction={{ xs: 'column', md: 'row' }} justifyContent="space-between">
               {LINKS.map((list) => (
                 <Stack key={list.headline} spacing={2}>
                   <Typography component="p" variant="overline">
                     {list.headline}
                   </Typography>
                   {list.children.map((link) => (
-                    <Link
-                      to={link.href}
-                      key={link.name}
-                      color="inherit"
-                      variant="body2"
-                      component={RouterLink}
-                      sx={{ display: 'block' }}
-                    >
-                      {link.name}
-                    </Link>
+                    <ul key={link.name}>
+                      {link.headline === 'Liên hệ' ? (
+                        <Link
+                          to={link.href}
+                          color="black"
+                          variant="body2"
+                          component={RouterLink}
+                          sx={{ display: 'block' }}
+                        >
+                          {link.name}
+                        </Link>
+                      ) : (
+                        <a href={link.href}>{link.name}</a>
+                      )}
+                    </ul>
                   ))}
                 </Stack>
               ))}
             </Stack>
           </Grid>
         </Grid>
-
         <Typography
           component="p"
           variant="body2"
@@ -109,7 +109,7 @@ export default function MainFooter() {
             textAlign: { xs: 'center', md: 'left' },
           }}
         >
-          © 2022. All rights reserved
+          © 2022 Văn Lang Doctor
         </Typography>
       </Container>
     </RootStyle>

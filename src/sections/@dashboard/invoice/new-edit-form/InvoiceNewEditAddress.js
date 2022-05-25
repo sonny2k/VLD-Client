@@ -1,16 +1,13 @@
-import PropTypes from 'prop-types';
 // form
 import { useFormContext } from 'react-hook-form';
 // @mui
-import { Stack, Divider, Typography, Button } from '@mui/material';
+import { Stack, Divider, Typography } from '@mui/material';
 // hooks
 import useResponsive from '../../../../hooks/useResponsive';
 import useToggle from '../../../../hooks/useToggle';
 // _mock
 import { _invoiceAddressFrom, _invoiceAddressTo } from '../../../../_mock/_invoice';
 // components
-import Iconify from '../../../../components/Iconify';
-//
 import InvoiceAddressListDialog from './InvoiceAddressListDialog';
 
 // ----------------------------------------------------------------------
@@ -35,11 +32,9 @@ export default function InvoiceNewEditAddress({
 
   const values = watch();
 
-  const { toggle: openFrom, onOpen: onOpenFrom, onClose: onCloseFrom } = useToggle();
-
   const { toggle: openTo, onOpen: onOpenTo, onClose: onCloseTo } = useToggle();
 
-  const { invoiceFrom, invoiceTo } = values;
+  const { invoiceTo } = values;
 
   return (
     <Stack
@@ -115,13 +110,13 @@ function Info({ name, gender, weight, height }) {
       <Typography variant="body2">
         Chiều cao:&nbsp;
         <Typography component="span" variant="subtitle2" color="text.primary">
-          {height}
+          {height} Cm
         </Typography>
       </Typography>
       <Typography variant="body2">
         Cân nặng:&nbsp;
         <Typography component="span" variant="subtitle2" color="text.primary">
-          {weight}
+          {weight}Kg
         </Typography>
       </Typography>
     </>

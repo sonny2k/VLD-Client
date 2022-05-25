@@ -141,7 +141,7 @@ export default function BlogEditPostForm({
           articlecategory: data.articlecategory !== '' ? data.articlecategory : artcategories[0]._id,
           banner: imageUrl !== null ? imageUrl : banner,
           status: 1,
-          createdat: created,
+          updatedat: created,
         });
         enqueueSnackbar('Cập nhật tin tức thành công!');
         navigate(PATH_DASHBOARD.user.articlelist);
@@ -153,7 +153,7 @@ export default function BlogEditPostForm({
           articlecategory: data.articlecategory !== '' ? data.articlecategory : artcategories[0]._id,
           banner: imageUrl !== null ? imageUrl : banner,
           status: 0,
-          createdat: created,
+          updatedat: created,
         });
         enqueueSnackbar('Cập nhật tin tức thành công!');
         navigate(PATH_DASHBOARD.user.articlelist);

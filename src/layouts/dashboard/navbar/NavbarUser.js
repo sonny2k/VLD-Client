@@ -9,7 +9,7 @@ import { DocIllustration } from '../../../assets';
 
 // ----------------------------------------------------------------------
 
-export default function NavbarDocs() {
+export default function NavbarUser() {
   const { account } = useAuth();
 
   return (
@@ -27,7 +27,7 @@ export default function NavbarDocs() {
       </div>
 
       <Button
-        href={'https://vanlangdoctor.notion.site/vanlangdoctor/B-c-s-b7c783a8c3544b8e9d3b1745234db77e'}
+        href={'https://vanlangdoctor.notion.site/Ng-i-d-ng-6ef17aa7bf704771acf8ed6f43cc33d8'}
         target="_blank"
         rel="noopener"
         variant="contained"

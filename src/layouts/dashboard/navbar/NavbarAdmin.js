@@ -13,10 +13,7 @@ export default function NavbarAdmin() {
   const { account } = useAuth();
 
   return (
-    <Stack
-      spacing={3}
-      sx={{ px: 5, pb: 5, mt: 10, width: 1, textAlign: 'center', display: 'block' }}
-    >
+    <Stack spacing={3} sx={{ px: 5, pb: 5, mt: 10, width: 1, textAlign: 'center', display: 'block' }}>
       <DocIllustration sx={{ width: 1 }} />
 
       <div>
@@ -29,7 +26,12 @@ export default function NavbarAdmin() {
         </Typography>
       </div>
 
-      <Button href={"/"} target="_blank" rel="noopener" variant="contained">
+      <Button
+        href={'https://vanlangdoctor.notion.site/vanlangdoctor/Admin-9124f504ccea482d97137c9a298a611b'}
+        target="_blank"
+        rel="noopener"
+        variant="contained"
+      >
         Tài liệu
       </Button>
     </Stack>

@@ -36,10 +36,17 @@ ProductDetailsReviewOverview.propTypes = {
 };
 
 export default function ProductDetailsReviewOverview({ doctor, onOpen }) {
-  const { totalRating, totalReview, ratings } = doctor;
+  const { ratings } = doctor;
 
   const total = sumBy(ratings, (star) => star.starCount);
 
+  const oneStar = ratings.filter((rating) => rating.star === 1).length;
+  const twoStars = ratings.filter((rating) => rating.star === 2).length;
+  const threeStars = ratings.filter((rating) => rating.star === 3).length;
+  const fourStars = ratings.filter((rating) => rating.star === 4).length;
+  const fiveStars = ratings.filter((rating) => rating.star === 5).length;
+
+  const totalRating = oneStar + twoStars + threeStars + fourStars + fiveStars;
   return (
     <Grid container>
       <GridStyle item xs={12} md={4}>
@@ -51,7 +58,7 @@ export default function ProductDetailsReviewOverview({ doctor, onOpen }) {
         </Typography>
         <RatingStyle readOnly value={totalRating} precision={0.1} />
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          ({fShortenNumber(totalReview)}
+          ({fShortenNumber(ratings.length)}
           &nbsp;reviews)
         </Typography>
       </GridStyle>
