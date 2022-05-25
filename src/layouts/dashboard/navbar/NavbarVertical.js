@@ -22,6 +22,7 @@ import navConfigDoc from './NavConfigDoc';
 import NavbarAdmin from './NavbarAdmin';
 import navConfig from './NavConfig';
 import NavbarDocs from './NavbarDocs';
+import NavbarUser from './NavbarUser';
 import NavbarAccount from './NavbarAccount';
 import CollapseButton from './CollapseButton';
 import useAuth from '../../../hooks/useAuth';
@@ -62,7 +63,7 @@ export default function NavbarVertical({ isOpenSidebar, onCloseSidebar }) {
     if (isOpenSidebar) {
       onCloseSidebar();
     }
-   
+
     if (unorm.nfd(account.role).toLowerCase().indexOf(unorm.nfd('Người dùng').toLowerCase()) !== -1) {
       setRole(navConfig);
     }
@@ -109,7 +110,15 @@ export default function NavbarVertical({ isOpenSidebar, onCloseSidebar }) {
 
       <Box sx={{ flexGrow: 1 }} />
 
-      {!isCollapse && <NavbarDocs />}
+      {!isCollapse && unorm.nfd(account.role).toLowerCase().indexOf(unorm.nfd('Người dùng').toLowerCase()) !== -1 && (
+        <NavbarUser />
+      )}
+      {!isCollapse && unorm.nfd(account.role).toLowerCase().indexOf(unorm.nfd('Bác sĩ').toLowerCase()) !== -1 && (
+        <NavbarDocs />
+      )}
+      {!isCollapse && unorm.nfd(account.role).toLowerCase().indexOf(unorm.nfd('Admin').toLowerCase()) !== -1 && (
+        <NavbarAdmin />
+      )}
     </Scrollbar>
   );
 

@@ -28,17 +28,10 @@ export default function InvoiceDetails() {
 
   const { idne } = useParams();
 
-  const navigate = useNavigate();
-
   const [pre, setPre] = useState(null);
 
   useEffect(() => {
     getPrescription();
-    if (pre !== null) {
-      if (pre.message === 'Lỗi tải dữ liệu') {
-        navigate(PATH_PAGE.page404);
-      }
-    }
   }, [pre]);
 
   const getPrescription = async () => {
@@ -51,8 +44,7 @@ export default function InvoiceDetails() {
   };
 
   return (
-    pre !== null &&
-    pre.consultation !== null && (
+    pre !== null && (
       <Page title="Toa thuốc: Xem chi tiết">
         <Container maxWidth={themeStretch ? false : 'lg'}>
           {unorm.nfkd(account.role).toLowerCase().indexOf(unorm.nfkd('Người dùng').toLowerCase()) !== -1 ? (

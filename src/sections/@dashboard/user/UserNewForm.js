@@ -309,7 +309,7 @@ export default function UserNewForm({ consultation }) {
                     display: 'grid',
                     columnGap: 1,
                     rowGap: 1,
-                    gridTemplateColumns: { xs: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' },
+                    gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(2, 1fr)' },
                   }}
                 >
                   <Tooltip title="Trở về">
