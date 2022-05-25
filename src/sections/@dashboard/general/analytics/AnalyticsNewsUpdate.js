@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
+import { useState } from 'react';
 // @mui
 import { Box, Stack, Link, Card, Button, Divider, Typography, CardHeader } from '@mui/material';
 // utils
@@ -13,32 +14,44 @@ import Scrollbar from '../../../../components/Scrollbar';
 
 // ----------------------------------------------------------------------
 
-export default function AnalyticsNewsUpdate() {
+export default function AnalyticsNewsUpdate({ articles }) {
+  const [Load, setLoad] = useState(5);
+
+  let check = false;
+
+  const All = () => {
+    setLoad(articles.length);
+  };
+  if (Load === articles.length) {
+    check = true;
+  }
   return (
     <Card>
-      <CardHeader title="News Update" />
+      <CardHeader title="Tin tức cập nhật" />
 
       <Scrollbar>
         <Stack spacing={3} sx={{ p: 3, pr: 0 }}>
-          {_analyticPost.map((news) => (
-            <NewsItem key={news.id} news={news} />
+          {articles.slice(0, Load).map((item) => (
+            <NewsItem key={item._id} article={item} />
           ))}
         </Stack>
       </Scrollbar>
 
       <Divider />
 
-      <Box sx={{ p: 2, textAlign: 'right' }}>
-        <Button
-          to="#"
-          size="small"
-          color="inherit"
-          component={RouterLink}
-          endIcon={<Iconify icon={'eva:arrow-ios-forward-fill'} />}
-        >
-          View all
-        </Button>
-      </Box>
+      {check === false && (
+        <Box sx={{ p: 2, textAlign: 'right' }}>
+          <Button
+            to="#"
+            size="small"
+            color="inherit"
+            onClick={All}
+            endIcon={<Iconify icon={'eva:arrow-ios-forward-fill'} />}
+          >
+            Xem tất cả
+          </Button>
+        </Box>
+      )}
     </Card>
   );
 }
@@ -46,20 +59,19 @@ export default function AnalyticsNewsUpdate() {
 // ----------------------------------------------------------------------
 
 NewsItem.propTypes = {
-  news: PropTypes.shape({
-    description: PropTypes.string,
-    image: PropTypes.string,
-    postedAt: PropTypes.instanceOf(Date),
+  article: PropTypes.shape({
+    briefdescription: PropTypes.string,
+    banner: PropTypes.string,
     title: PropTypes.string,
   }),
 };
 
-function NewsItem({ news }) {
-  const { image, title, description, postedAt } = news;
+function NewsItem({ article }) {
+  const { banner, title, briefdescription } = article;
 
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
-      <Image alt={title} src={image} sx={{ width: 48, height: 48, borderRadius: 1.5, flexShrink: 0 }} />
+      <Image alt={title} src={banner} sx={{ width: 48, height: 48, borderRadius: 1.5, flexShrink: 0 }} />
       <Box sx={{ minWidth: 240 }}>
         <Link component={RouterLink} to="#" color="inherit">
           <Typography variant="subtitle2" noWrap>
@@ -67,12 +79,9 @@ function NewsItem({ news }) {
           </Typography>
         </Link>
         <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-          {description}
+          {briefdescription}
         </Typography>
       </Box>
-      <Typography variant="caption" sx={{ pr: 3, flexShrink: 0, color: 'text.secondary' }}>
-        {fToNow(postedAt)}
-      </Typography>
     </Stack>
   );
 }

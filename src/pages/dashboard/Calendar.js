@@ -175,7 +175,7 @@ export default function Calendar() {
               onChangeView={handleChangeView}
             />
             <FullCalendar
-              weekends
+              
               editable
               droppable
               selectable

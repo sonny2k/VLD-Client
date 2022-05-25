@@ -86,17 +86,17 @@ const navConfigDoc = [
       // },
     ],
   },
-  {
-    subheader: 'Tư vấn',
-    items: [
-      // MANAGEMENT : USER
-      {
-        title: 'Cuộc hẹn',
-        path: PATH_DASHBOARD.calendar,
-        icon: ICONS.calendar,
-      },
-    ],
-  },
+  // {
+  //   subheader: 'Tư vấn',
+  //   items: [
+  //     // MANAGEMENT : USER
+  //     {
+  //       title: 'Cuộc hẹn',
+  //       path: PATH_DASHBOARD.calendar,
+  //       icon: ICONS.calendar,
+  //     },
+  //   ],
+  // },
 
   // APP
   // ----------------------------------------------------------------------

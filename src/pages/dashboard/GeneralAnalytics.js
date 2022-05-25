@@ -40,6 +40,20 @@ export default function GeneralAnalytics() {
     getConsult();
   }, [consult]);
 
+  const [article, setArticle] = useState([]);
+  useEffect(() => {
+    async function getArticle() {
+      const URL = '/api/admin/article/viewListArticle';
+      try {
+        const res = await axios.get(URL);
+        setArticle(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    getArticle();
+  }, [article]);
+
   return (
     consult.length > 0 && (
       <Page title="Thống kê">
@@ -85,7 +99,7 @@ export default function GeneralAnalytics() {
               />
             </Grid>
 
-            <Grid item xs={12} md={6} lg={8}>
+            {/* <Grid item xs={12} md={6} lg={8}>
               <AnalyticsWebsiteVisits />
             </Grid>
 
@@ -99,23 +113,23 @@ export default function GeneralAnalytics() {
 
             <Grid item xs={12} md={6} lg={4}>
               <AnalyticsCurrentSubject />
-            </Grid>
+            </Grid> */}
 
-            <Grid item xs={12} md={6} lg={8}>
-              <AnalyticsNewsUpdate />
-            </Grid>
+             {article.length > 0 && <Grid item xs={12} md={12} lg={12}>
+              <AnalyticsNewsUpdate articles={article}/>
+            </Grid> }
 
-            <Grid item xs={12} md={6} lg={4}>
+            {/* <Grid item xs={12} md={6} lg={4}>
               <AnalyticsOrderTimeline />
             </Grid>
 
             <Grid item xs={12} md={6} lg={4}>
-              <AnalyticsTrafficBySite />
+              <AnalyticsTrafficBySite /> 
             </Grid>
 
             <Grid item xs={12} md={6} lg={8}>
               <AnalyticsTasks />
-            </Grid>
+            </Grid> */}
           </Grid>
         </Container>
       </Page>
