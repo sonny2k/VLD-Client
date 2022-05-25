@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 import { useState } from 'react';
+import { format } from 'date-fns';
 // @mui
 import { Box, Stack, Link, Card, Button, Divider, Typography, CardHeader } from '@mui/material';
 // utils
@@ -63,11 +64,12 @@ NewsItem.propTypes = {
     briefdescription: PropTypes.string,
     banner: PropTypes.string,
     title: PropTypes.string,
+    updatedat: PropTypes.string,
   }),
 };
 
 function NewsItem({ article }) {
-  const { banner, title, briefdescription } = article;
+  const { banner, title, briefdescription, updatedat } = article;
 
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
@@ -82,6 +84,12 @@ function NewsItem({ article }) {
           {briefdescription}
         </Typography>
       </Box>
+      <Box sx={{ minWidth: 240 }}>
+        <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+          {format(new Date(updatedat), 'dd/MM/yyyy')}
+        </Typography>
+      </Box>
+
     </Stack>
   );
 }
