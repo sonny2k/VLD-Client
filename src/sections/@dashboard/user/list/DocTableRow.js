@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { format } from 'date-fns';
 import { useSnackbar } from 'notistack';
 // @mui
 import { useTheme } from '@mui/material/styles';
@@ -25,17 +24,14 @@ DocTableRow.propTypes = {
   onDeleteRow: PropTypes.func,
 };
 
-export default function DocTableRow({ row, selected, onEditRow, onSelectRow, onDeleteRow }) {
+export default function DocTableRow({ row, selected, onEditRow, onSelectRow, onSelectRow1 }) {
   const theme = useTheme();
 
   const { department, status } = row;
 
-  const { gender, fname, lname, profilepic, phone } = row.account;
-  const { street, ward, district, city } = row.account.address;
+  const { fname, lname, profilepic, phone } = row.account;
 
   const name = `${lname} ${fname}`;
-
-  const address = `${street}, ${ward}, ${district}, ${city}`;
 
   const navigate = useNavigate();
 
@@ -49,6 +45,11 @@ export default function DocTableRow({ row, selected, onEditRow, onSelectRow, onD
 
   const handleCloseMenu = () => {
     setOpenMenuActions(null);
+  };
+
+  const selectAction = () => {
+    onSelectRow();
+    onSelectRow1();
   };
 
   const Public = async () => {
@@ -80,7 +81,7 @@ export default function DocTableRow({ row, selected, onEditRow, onSelectRow, onD
   return (
     <TableRow hover selected={selected}>
       <TableCell padding="checkbox">
-        <Checkbox checked={selected} onClick={onSelectRow} />
+        <Checkbox checked={selected} onClick={selectAction} />
       </TableCell>
 
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>

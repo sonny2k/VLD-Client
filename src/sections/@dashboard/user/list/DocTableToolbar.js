@@ -19,7 +19,17 @@ DocTableToolbar.propTypes = {
   optionsRole1: PropTypes.arrayOf(PropTypes.string),
 };
 
-export default function DocTableToolbar({ filterName, filterRole, filterRole1,  onFilterName, onFilterRole,  onFilterRole1, optionsDep, optionsRole1, dep }) {
+export default function DocTableToolbar({
+  filterName,
+  filterRole,
+  filterRole1,
+  onFilterName,
+  onFilterRole,
+  onFilterRole1,
+  optionsDep,
+  optionsRole1,
+  dep,
+}) {
   return (
     <Stack spacing={2} direction={{ xs: 'column', sm: 'row' }} sx={{ py: 2.5, px: 3 }}>
       <TextField
@@ -92,7 +102,7 @@ export default function DocTableToolbar({ filterName, filterRole, filterRole1,  
         fullWidth
         value={filterName}
         onChange={(event) => onFilterName(event.target.value)}
-        placeholder="Tìm kiếm theo bác sĩ..."
+        placeholder="Tìm kiếm theo tên hoặc SĐT bác sĩ..."
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

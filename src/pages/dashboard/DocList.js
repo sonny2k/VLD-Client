@@ -7,11 +7,8 @@ import { useSnackbar } from 'notistack';
 import { useTheme } from '@mui/material/styles';
 import {
   Box,
-  Tab,
-  Tabs,
   Card,
   Table,
-  Switch,
   Button,
   Tooltip,
   Divider,
@@ -20,13 +17,11 @@ import {
   IconButton,
   TableContainer,
   TablePagination,
-  FormControlLabel,
 } from '@mui/material';
 import LoadingScreen from '../../components/LoadingScreen';
 // routes
 import { PATH_DASHBOARD } from '../../routes/paths';
 // hooks
-import useTabs from '../../hooks/useTabs';
 import useSettings from '../../hooks/useSettings';
 import useTable, { getComparator, emptyRows } from '../../hooks/useTable';
 // utils
@@ -43,8 +38,6 @@ import { DocTableToolbar, DocTableRow } from '../../sections/@dashboard/user/lis
 const ROLE_OPTIONS = ['Tất cả'];
 
 const ROLE_OPTIONS1 = ['Tất cả', 'Kích hoạt', 'Vô hiệu hóa'];
-
-const STATUS_OPTIONS = ['Tất cả', 'chờ xác nhận', 'chờ khám', 'đã hủy', 'đã hoàn thành'];
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Bác sĩ', align: 'left' },
@@ -66,12 +59,15 @@ export default function DocList() {
     setPage,
     //
     selected,
+    selected1,
     setSelected,
+    setSelected1,
     onSelectRow,
     onSelectAllRows,
+    onSelectRow1,
+    onSelectAllRows1,
     //
     onSort,
-    onChangeDense,
     onChangePage,
     onChangeRowsPerPage,
   } = useTable();
@@ -79,8 +75,6 @@ export default function DocList() {
   const { themeStretch } = useSettings();
 
   const navigate = useNavigate();
-
-  const location = useLocation();
 
   const [doctors, setDoctors] = useState([]);
   useEffect(() => {
@@ -117,10 +111,9 @@ export default function DocList() {
 
   const [filterRole1, setFilterRole1] = useState('Tất cả');
 
-
   // const { currentTab: filterStatus, onChangeTab: onChangeFilterStatus } = useTabs('Tất cả');
 
-  function applySortFilter({ doctors, comparator, filterName, filterStatus, filterRole, dep, filterRole1 }) {
+  function applySortFilter({ doctors, comparator, filterName, filterRole, dep, filterRole1 }) {
     const stabilizedThis = doctors.map((el, index) => [el, index]);
 
     stabilizedThis.sort((a, b) => {
@@ -135,7 +128,11 @@ export default function DocList() {
       doctors = doctors.filter(
         (item) =>
           unorm.nfkd(item.account.lname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1 ||
-          unorm.nfkd(item.account.fname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1
+          unorm.nfkd(item.account.fname).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1 ||
+          unorm
+            .nfkd(`0${item.account.phone.slice(3)}`)
+            .toLowerCase()
+            .indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1
       );
     }
 
@@ -178,26 +175,22 @@ export default function DocList() {
   const handleFilterDep = (event) => {
     setDep(event.target.value);
   };
-  const handleDeleteRow = (id) => {
-    const deleteRow = doctors.filter((row) => row._id !== id);
-    setSelected([]);
-    setDoctors(deleteRow);
-  };
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const handleDeleteRows = async (selected) => {
+  const handleDeleteRows = async (selected, selected1) => {
     try {
       await axios.post(`/api/admin/doctor/deleteDoctor`, {
         data: selected,
+        accdata: selected1,
       });
       enqueueSnackbar('Xóa bác sĩ thành công!');
-      window.location.reload();
     } catch (error) {
       console.error(error);
     }
-    const deleteRows = doctors.filter((row) => !selected.includes(row._id));
+    const deleteRows = doctors.filter((row) => !selected.includes(row._id) && !selected1.includes(row.account._id));
     setSelected([]);
+    setSelected1([]);
     setDoctors(deleteRows);
   };
 
@@ -288,12 +281,18 @@ export default function DocList() {
                   onSelectAllRows={(checked) =>
                     onSelectAllRows(
                       checked,
-                      doctors.map((row) => row.account._id)
+                      doctors.map((row) => row._id)
+                    )
+                  }
+                  onSelectAllRows1={(checked) =>
+                    onSelectAllRows1(
+                      checked,
+                      doctors.map((row) => row.account_id)
                     )
                   }
                   actions={
                     <Tooltip title="Xóa bác sĩ">
-                      <IconButton color="primary" onClick={() => handleDeleteRows(selected)}>
+                      <IconButton color="primary" onClick={() => handleDeleteRows(selected, selected1)}>
                         <Iconify icon={'eva:trash-2-outline'} />
                       </IconButton>
                     </Tooltip>
@@ -312,6 +311,12 @@ export default function DocList() {
                   onSelectAllRows={(checked) =>
                     onSelectAllRows(
                       checked,
+                      doctors.map((row) => row._id)
+                    )
+                  }
+                  onSelectAllRows1={(checked) =>
+                    onSelectAllRows1(
+                      checked,
                       doctors.map((row) => row.account._id)
                     )
                   }
@@ -322,9 +327,10 @@ export default function DocList() {
                     <DocTableRow
                       key={row._id}
                       row={row}
-                      selected={selected.includes(row.account._id)}
-                      onSelectRow={() => onSelectRow(row.account._id)}
-                      onDeleteRow={() => handleDeleteRow(row._id)}
+                      selected={selected.includes(row._id)}
+                      selected1={selected1.includes(row.account._id)}
+                      onSelectRow={() => onSelectRow(row._id)}
+                      onSelectRow1={() => onSelectRow1(row.account._id)}
                       onEditRow={(name) =>
                         handleEditRow(
                           row._id,

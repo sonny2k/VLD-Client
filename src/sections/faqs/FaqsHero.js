@@ -48,6 +48,8 @@ export default function FaqsHero() {
               <TextAnimate text="gặp" />
             </Box>
           </div>
+          <div />
+          <div />
         </ContentStyle>
       </Container>
     </RootStyle>
