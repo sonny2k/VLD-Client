@@ -54,8 +54,6 @@ export default function UserProfile() {
 
   const { id } = useParams();
 
-  const { products } = useSelector((state) => state.product);
-
   const dispatch = useDispatch();
 
   const [doctor, setDoctor] = useState(null);
@@ -88,12 +86,12 @@ export default function UserProfile() {
 
   let PROFILE_TABS;
 
-  if (doctor) {
+  if (doctor !== null) {
     PROFILE_TABS = [
       {
         value: 'Cá nhân',
         icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
-        component: <Profile doctor={doctor} posts={_userFeeds} />,
+        component: <Profile doctor={doctor} />,
       },
       {
         value: 'Đánh giá',
@@ -114,7 +112,7 @@ export default function UserProfile() {
   }
 
   return (
-    doctor && (
+    doctor !== null && (
       <Page title="Chi tiết bác sĩ">
         <Container maxWidth={themeStretch ? false : 'lg'}>
           <HeaderBreadcrumbs

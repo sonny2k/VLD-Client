@@ -11,17 +11,17 @@ import Iconify from '../../../../components/Iconify';
 // ----------------------------------------------------------------------
 
 ProductDetailsReviewList.propTypes = {
-  product: PropTypes.object,
+  doctor: PropTypes.object,
 };
 
-export default function ProductDetailsReviewList({ product }) {
-  const { reviews } = product;
+export default function ProductDetailsReviewList({ doctor }) {
+  const { ratings } = doctor;
 
   return (
     <Box sx={{ pt: 3, px: 2, pb: 5 }}>
       <List disablePadding>
-        {reviews.map((review) => (
-          <ReviewItem key={review.id} review={review} />
+        {ratings.map((rating) => (
+          <ReviewItem key={rating._id} review={rating} />
         ))}
       </List>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
@@ -38,13 +38,9 @@ ReviewItem.propTypes = {
 };
 
 function ReviewItem({ review }) {
-  const [isHelpful, setHelpfuls] = useState(false);
+  const { user, createdat, star, content } = review;
 
-  const { name, rating, comment, helpful, postedAt, avatarUrl, isPurchased } = review;
-
-  const handleClickHelpful = () => {
-    setHelpfuls((prev) => !prev);
-  };
+  const name = `${user.lname} ${user.fname}`;
 
   return (
     <>
@@ -68,7 +64,7 @@ function ReviewItem({ review }) {
           }}
         >
           <Avatar
-            src={avatarUrl}
+            src={user.profilepic}
             sx={{
               mr: { xs: 2, sm: 0 },
               mb: { sm: 2 },
@@ -81,31 +77,28 @@ function ReviewItem({ review }) {
               {name}
             </Typography>
             <Typography variant="caption" sx={{ color: 'text.secondary' }} noWrap>
-              {fDate(postedAt)}
+              {fDate(createdat)}
             </Typography>
           </div>
         </Box>
 
         <div>
-          <Rating size="small" value={rating} precision={0.1} readOnly />
+          <Rating size="small" value={star} precision={0.1} readOnly />
 
-          {isPurchased && (
-            <Typography
-              variant="caption"
-              sx={{
-                my: 1,
-                display: 'flex',
-                alignItems: 'center',
-                color: 'primary.main',
-              }}
-            >
-              <Iconify icon={'ic:round-verified'} width={16} height={16} />
-              &nbsp;Verified purchase
-            </Typography>
-          )}
+          <Typography
+            variant="caption"
+            sx={{
+              my: 1,
+              display: 'flex',
+              alignItems: 'center',
+              color: 'primary.main',
+            }}
+          >
+            <Iconify icon={'ic:round-verified'} width={16} height={16} />
+            &nbsp;Đã kiểm duyệt
+          </Typography>
 
-          <Typography variant="body2">{comment}</Typography>
-
+          <Typography variant="body2">{content}</Typography>
         </div>
       </ListItem>
     </>

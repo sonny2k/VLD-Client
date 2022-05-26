@@ -110,6 +110,11 @@ export default function ModalCreateConsultation({ doctor }) {
     navigate(PATH_DASHBOARD.user.cards);
   };
 
+  const handleChooseDate = (e) => {
+    const index = sorted.map((item) => format(new Date(item.date), 'yyyy-MM-dd')).indexOf(e.target.value);
+    setPosition(index);
+  };
+
   return (
     <FormProvider methods={methods}>
       <Grid container spacing={3}>
@@ -133,21 +138,20 @@ export default function ModalCreateConsultation({ doctor }) {
                 label="Ngày"
                 placeholder="Ngày"
                 onChange={(e) => {
-                  setPosition(e.target.selectedIndex - 1);
+                  handleChooseDate(e);
                   setDateC(e.target.value);
                 }}
               >
                 <option disabled selected>
                   Vui lòng chọn ngày
                 </option>
-                {sorted.map((option, index) =>
-                  new Date(option.date) >= checkDay ? (
-                    <option key={index} value={format(new Date(option.date), 'yyyy-MM-dd')}>
-                      {format(new Date(option.date), 'dd-MM-yyyy')}
-                    </option>
-                  ) : (
-                    <option disabled>Ngày {format(new Date(option.date), 'dd-MM-yyyy')} không khả dụng</option>
-                  )
+                {sorted.map(
+                  (option, index) =>
+                    new Date(option.date) >= checkDay && (
+                      <option key={index} pos={index} value={format(new Date(option.date), 'yyyy-MM-dd')}>
+                        {format(new Date(option.date), 'dd-MM-yyyy')}
+                      </option>
+                    )
                 )}
               </RHFSelect>
 

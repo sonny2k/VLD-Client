@@ -113,6 +113,11 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
     }
   };
 
+  const handleChooseDate = (e) => {
+    const index = sorted.map((item) => format(new Date(item.date), 'yyyy-MM-dd')).indexOf(e.target.value);
+    setPosition(index);
+  };
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Grid container spacing={3}>
@@ -174,21 +179,20 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
                 label="Ngày"
                 placeholder="Ngày"
                 onChange={(e) => {
-                  setPosition(e.target.selectedIndex - 1);
+                  handleChooseDate(e);
                   setDateC(e.target.value);
                 }}
               >
                 <option disabled selected>
                   {datetext}
                 </option>
-                {sorted.map((option, index) =>
-                  new Date(option.date) >= checkDay ? (
-                    <option key={index} value={format(new Date(option.date), 'yyyy-MM-dd')}>
-                      {format(new Date(option.date), 'dd-MM-yyyy')}
-                    </option>
-                  ) : (
-                    <option disabled>Ngày {format(new Date(option.date), 'dd-MM-yyyy')} không khả dụng</option>
-                  )
+                {sorted.map(
+                  (option, index) =>
+                    new Date(option.date) >= checkDay && (
+                      <option key={index} value={format(new Date(option.date), 'yyyy-MM-dd')}>
+                        {format(new Date(option.date), 'dd-MM-yyyy')}
+                      </option>
+                    )
                 )}
               </RHFSelect>
 
@@ -203,13 +207,14 @@ export default function ModalCreateConsultation({ doctor, ...other }) {
                   <option disabled selected>
                     Vui lòng chọn giờ
                   </option>
-                  {availables[position].hours.map(
-                    (option, index) =>
-                      option.status === false && (
-                        <option key={index} value={option.time}>
-                          {option.time}
-                        </option>
-                      )
+                  {availables[position].hours.map((option, index) =>
+                    option.status === false ? (
+                      <option key={index} value={option.time}>
+                        {option.time}
+                      </option>
+                    ) : (
+                      <option disabled>khung giờ {option.time} đã được đặt</option>
+                    )
                   )}
                 </RHFSelect>
               )}

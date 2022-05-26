@@ -78,7 +78,7 @@ export default function ProductDetailsReviewForm({ onClose, id, ...other }) {
         <Stack spacing={3}>
           <div>
             <Stack direction="row" flexWrap="wrap" alignItems="center" spacing={1.5}>
-              <Typography variant="body2">Nhận xét của bạn về bác sĩ:</Typography>
+              <Typography variant="body2">Đánh giá của bạn về bác sĩ:</Typography>
 
               <Controller
                 name="rating"
@@ -89,11 +89,7 @@ export default function ProductDetailsReviewForm({ onClose, id, ...other }) {
             {!!errors.rating && <FormHelperText error> {errors.rating?.message}</FormHelperText>}
           </div>
 
-          <RHFTextField name="review" label="Review *" multiline rows={3} />
-
-          <RHFTextField name="name" label="Name *" />
-
-          <RHFTextField name="email" label="Email *" />
+          <RHFTextField name="review" label="Nhận xét của bạn *" multiline rows={4} />
 
           <Stack direction="row" justifyContent="flex-end" spacing={1.5}>
             <Button color="inherit" variant="outlined" onClick={onCancel}>
