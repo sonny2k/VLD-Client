@@ -54,8 +54,6 @@ export default function UserProfile() {
 
   const { id } = useParams();
 
-  const dispatch = useDispatch();
-
   const [doctor, setDoctor] = useState(null);
 
   const navigate = useNavigate();
@@ -71,7 +69,7 @@ export default function UserProfile() {
       }
     }
     fetchDoctor();
-  }, [id, dispatch]);
+  }, [id, doctor]);
 
   const [currentTab, setCurrentTab] = useState('Cá nhân');
   const [findFriends, setFindFriends] = useState('');

@@ -5,7 +5,7 @@ import { useRef } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { Card, Chip, Stack, Avatar, Rating, Button, CardHeader, Typography } from '@mui/material';
 // utils
-import { fDateTime } from '../../../../utils/formatTime';
+import { fDate } from '../../../../utils/formatTime';
 // _mock_
 import { _bookingReview } from '../../../../_mock';
 // components
@@ -38,8 +38,8 @@ export default function BookingCustomerReviews() {
   return (
     <Card>
       <CardHeader
-        title="Customer Reviews"
-        subheader={`${_bookingReview.length} Reviews`}
+        title="Đánh giá của người dùng"
+        subheader={`${_bookingReview.length} đánh giá`}
         action={
           <CarouselArrows
             customIcon={'ic:round-keyboard-arrow-right'}
@@ -87,7 +87,7 @@ function ReviewItem({ item }) {
         <div>
           <Typography variant="subtitle2">{name}</Typography>
           <Typography variant="caption" sx={{ color: 'text.secondary', mt: 0.5, display: 'block' }}>
-            Posted {fDateTime(postedAt)}
+            Đăng lúc {fDate(postedAt)}
           </Typography>
         </div>
       </Stack>
@@ -103,10 +103,10 @@ function ReviewItem({ item }) {
 
       <Stack direction="row" spacing={2} alignItems="flex-end" sx={{ flexGrow: 1 }}>
         <Button fullWidth variant="contained" endIcon={<Iconify icon={'eva:checkmark-circle-2-fill'} />}>
-          Accept
+          Duyệt
         </Button>
         <Button fullWidth variant="contained" color="error" endIcon={<Iconify icon={'eva:close-circle-fill'} />}>
-          Reject
+          Từ chối
         </Button>
       </Stack>
     </Stack>

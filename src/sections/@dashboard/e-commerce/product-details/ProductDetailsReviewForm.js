@@ -1,5 +1,7 @@
 import * as Yup from 'yup';
 import PropTypes from 'prop-types';
+import { format, getDate } from 'date-fns';
+import { useSnackbar } from 'notistack';
 // form
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -7,6 +9,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { styled } from '@mui/material/styles';
 import { Button, Stack, Rating, Typography, FormHelperText } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import axios from '../../../../utils/axios';
+// hook
+
 // components
 import { FormProvider, RHFTextField } from '../../../../components/hook-form';
 
@@ -26,19 +31,17 @@ ProductDetailsReviewForm.propTypes = {
   id: PropTypes.string,
 };
 
-export default function ProductDetailsReviewForm({ onClose, id, ...other }) {
+export default function ProductDetailsReviewForm({ onClose, id, doctor, ...other }) {
+  const { enqueueSnackbar } = useSnackbar();
+
   const ReviewSchema = Yup.object().shape({
-    rating: Yup.mixed().required('Rating is required'),
-    review: Yup.string().required('Review is required'),
-    name: Yup.string().required('Name is required'),
-    email: Yup.string().email('Email must be a valid email address').required('Email is required'),
+    star: Yup.mixed().required('Vui lòng chọn sao cho đánh giá'),
+    content: Yup.string().required('Vui lòng nhập nội dung đánh giá'),
   });
 
   const defaultValues = {
-    rating: null,
-    review: '',
-    name: '',
-    email: '',
+    star: null,
+    content: '',
   };
 
   const methods = useForm({
@@ -53,11 +56,19 @@ export default function ProductDetailsReviewForm({ onClose, id, ...other }) {
     formState: { errors, isSubmitting },
   } = methods;
 
-  const onSubmit = async () => {
+  const createdDate = new Date();
+
+  const onSubmit = async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      await axios.post('/api/user/doctor/rating', {
+        content: data.content,
+        star: data.star,
+        date: createdDate,
+        doctor,
+      });
       reset();
       onClose();
+      enqueueSnackbar('Đánh giá sẽ được xem xét bởi đội ngũ Văn Lang Doctor, cảm ơn bạn đã sử dụng dịch vụ!');
     } catch (error) {
       console.error(error);
     }
@@ -81,7 +92,7 @@ export default function ProductDetailsReviewForm({ onClose, id, ...other }) {
               <Typography variant="body2">Đánh giá của bạn về bác sĩ:</Typography>
 
               <Controller
-                name="rating"
+                name="star"
                 control={control}
                 render={({ field }) => <Rating {...field} value={Number(field.value)} />}
               />
@@ -89,7 +100,7 @@ export default function ProductDetailsReviewForm({ onClose, id, ...other }) {
             {!!errors.rating && <FormHelperText error> {errors.rating?.message}</FormHelperText>}
           </div>
 
-          <RHFTextField name="review" label="Nhận xét của bạn *" multiline rows={4} />
+          <RHFTextField name="content" label="Nhận xét của bạn *" multiline rows={4} />
 
           <Stack direction="row" justifyContent="flex-end" spacing={1.5}>
             <Button color="inherit" variant="outlined" onClick={onCancel}>

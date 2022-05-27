@@ -127,7 +127,9 @@ export default function ProductList() {
 
     if (filterName) {
       products = products.filter(
-        (item) => unorm.nfkd(item.title).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1
+        (item) =>
+          unorm.nfkd(item.title).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1 ||
+          unorm.nfkd(item.components).toLowerCase().indexOf(unorm.nfkd(filterName).toLowerCase()) !== -1
       );
     }
 

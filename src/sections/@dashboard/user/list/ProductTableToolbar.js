@@ -53,7 +53,7 @@ export default function ProductTableToolbar({ filterName, filterRole, onFilterNa
         fullWidth
         value={filterName}
         onChange={(event) => onFilterName(event.target.value)}
-        placeholder="Tìm kiếm theo tên thuốc..."
+        placeholder="Tìm kiếm theo tên thuốc hoặc thành phần thuốc..."
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

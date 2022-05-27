@@ -19,6 +19,17 @@ import {
   AnalyticsCurrentSubject,
   AnalyticsConversionRates,
 } from '../../sections/@dashboard/general/analytics';
+import {
+  BookingDetails,
+  BookingBookedRoom,
+  BookingTotalIncomes,
+  BookingRoomAvailable,
+  BookingNewestBooking,
+  BookingWidgetSummary,
+  BookingCheckInWidgets,
+  BookingCustomerReviews,
+  BookingReservationStats,
+} from '../../sections/@dashboard/general/booking';
 
 // ----------------------------------------------------------------------
 
@@ -115,9 +126,15 @@ export default function GeneralAnalytics() {
               <AnalyticsCurrentSubject />
             </Grid> */}
 
-             {article.length > 0 && <Grid item xs={12} md={12} lg={12}>
-              <AnalyticsNewsUpdate articles={article}/>
-            </Grid> }
+            {article.length > 0 && (
+              <Grid item xs={12} sm={6} md={7}>
+                <AnalyticsNewsUpdate articles={article} />
+              </Grid>
+            )}
+
+            <Grid item xs={12} sm={6} md={5}>
+              <BookingCustomerReviews />
+            </Grid>
 
             {/* <Grid item xs={12} md={6} lg={4}>
               <AnalyticsOrderTimeline />

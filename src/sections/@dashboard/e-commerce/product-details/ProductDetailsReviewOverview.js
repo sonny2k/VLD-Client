@@ -38,11 +38,11 @@ ProductDetailsReviewOverview.propTypes = {
 export default function ProductDetailsReviewOverview({ doctor, onOpen }) {
   const { ratings } = doctor;
 
-  const oneStar = ratings.filter((rating) => rating.star === 1).length;
-  const twoStars = ratings.filter((rating) => rating.star === 2).length;
-  const threeStars = ratings.filter((rating) => rating.star === 3).length;
-  const fourStars = ratings.filter((rating) => rating.star === 4).length;
-  const fiveStars = ratings.filter((rating) => rating.star === 5).length;
+  const oneStar = ratings.filter((rating) => rating.star === 1 && rating.status === 1).length;
+  const twoStars = ratings.filter((rating) => rating.star === 2 && rating.status === 1).length;
+  const threeStars = ratings.filter((rating) => rating.star === 3 && rating.status === 1).length;
+  const fourStars = ratings.filter((rating) => rating.star === 4 && rating.status === 1).length;
+  const fiveStars = ratings.filter((rating) => rating.star === 5 && rating.status === 1).length;
 
   const totalRating = oneStar + twoStars + threeStars + fourStars + fiveStars;
 
@@ -61,11 +61,11 @@ export default function ProductDetailsReviewOverview({ doctor, onOpen }) {
           Đánh giá trung bình
         </Typography>
         <Typography variant="h2" gutterBottom sx={{ color: 'error.main' }}>
-          {total}/5
+          {fShortenNumber(total)}/5
         </Typography>
         <RatingStyle readOnly value={total} precision={0.1} />
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          ({fShortenNumber(ratings.length)}
+          ({fShortenNumber(totalRating)}
           &nbsp;đánh giá)
         </Typography>
       </GridStyle>

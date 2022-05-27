@@ -20,9 +20,7 @@ export default function ProductDetailsReviewList({ doctor }) {
   return (
     <Box sx={{ pt: 3, px: 2, pb: 5 }}>
       <List disablePadding>
-        {ratings.map((rating) => (
-          <ReviewItem key={rating._id} review={rating} />
-        ))}
+        {ratings.reverse().map((rating) => rating.status === 1 && <ReviewItem key={rating._id} review={rating} />)}
       </List>
       <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
         <Pagination count={10} color="primary" />
@@ -38,7 +36,7 @@ ReviewItem.propTypes = {
 };
 
 function ReviewItem({ review }) {
-  const { user, createdat, star, content } = review;
+  const { user, date, star, content } = review;
 
   const name = `${user.lname} ${user.fname}`;
 
@@ -77,7 +75,7 @@ function ReviewItem({ review }) {
               {name}
             </Typography>
             <Typography variant="caption" sx={{ color: 'text.secondary' }} noWrap>
-              {fDate(createdat)}
+              {fDate(date)}
             </Typography>
           </div>
         </Box>
