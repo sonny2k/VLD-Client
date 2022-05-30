@@ -41,7 +41,6 @@ const TABLE_HEAD = [
   { id: 'name', label: 'Người dùng', align: 'left' },
   { id: 'phone', label: 'Số điện thoại', align: 'center' },
   { id: 'gender', label: 'Giới tính', align: 'center' },
-  { id: '' },
 ];
 
 // ----------------------------------------------------------------------
@@ -76,7 +75,7 @@ export default function UseList() {
   const [users, setUsers] = useState([]);
   useEffect(() => {
     async function fetchUsers() {
-      const URL = '/api/home/doctor';
+      const URL = '/api/admin/user/viewUser';
       try {
         const res = await axios.get(URL);
         setUsers(res.data);
@@ -120,7 +119,7 @@ export default function UseList() {
       users = users.filter(
         (item) => 
         unorm
-        .nfkd(item.account.gender === 1 && 'Nam')
+        .nfkd(item.account.gender === 1 && 'Nam' || item.account.gender === 2 && 'Nữ' || item.account.gender === 3 && 'Không xác định')
         .toLowerCase()
         .indexOf(unorm.nfkd(filterRole).toLowerCase()) !== -1 ||    
         unorm
@@ -164,36 +163,6 @@ export default function UseList() {
     setSelected([]);
     setSelected1([]);
     setUsers(deleteRows);
-  };
-
-  const handleEditRow = async (
-    _id,
-    department,
-    educationplace,
-    workcertificate,
-    level,
-    degree,
-    description,
-    excellence,
-    workhistory,
-    education,
-    name
-  ) => {
-    navigate(PATH_DASHBOARD.user.docedit, {
-      state: {
-        id1: _id,
-        department1: department,
-        educationplace1: educationplace,
-        workcertificate1: workcertificate,
-        level1: level,
-        degree1: degree,
-        description1: description,
-        excellence1: excellence,
-        workhistory1: workhistory,
-        education1: education,
-        fname1: name,
-      },
-    });
   };
 
   const dataFiltered = applySortFilter({
@@ -243,7 +212,7 @@ export default function UseList() {
                   onSelectAllRows1={(checked) =>
                     onSelectAllRows1(
                       checked,
-                      users.map((row) => row.account_id)
+                      users.map((row) => row.account._id)
                     )
                   }
                   actions={
@@ -287,21 +256,8 @@ export default function UseList() {
                       selected1={selected1.includes(row.account._id)}
                       onSelectRow={() => onSelectRow(row._id)}
                       onSelectRow1={() => onSelectRow1(row.account._id)}
-                      onEditRow={(name) =>
-                        handleEditRow(
-                          row._id,
-                          row.department,
-                          row.educationplace,
-                          row.workcertificate,
-                          row.level,
-                          row.degree,
-                          row.description,
-                          row.excellence,
-                          row.workhistory,
-                          row.education,
-                          name
-                        )
-                      }
+                        
+                      
                     />
                   ))}
 

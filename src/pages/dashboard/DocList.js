@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { paramCase } from 'change-case';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 import unorm from 'unorm';
 import { useSnackbar } from 'notistack';
@@ -26,6 +27,8 @@ import useSettings from '../../hooks/useSettings';
 import useTable, { getComparator, emptyRows } from '../../hooks/useTable';
 // utils
 import axios from '../../utils/axios';
+import { getDoc } from '../../redux/slices/doctor';
+
 // components
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
@@ -76,7 +79,16 @@ export default function DocList() {
 
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+
   const [doctors, setDoctors] = useState([]);
+
+  // const { doctor } = useSelector((state) => state.docs);
+
+  // useEffect(() => {
+  //   dispatch(getDoc());
+  //   setDoctors(doctor);
+  // }, [dispatch, doctor]);
   useEffect(() => {
     async function fetchDoctors() {
       const URL = '/api/home/doctor';
@@ -287,7 +299,7 @@ export default function DocList() {
                   onSelectAllRows1={(checked) =>
                     onSelectAllRows1(
                       checked,
-                      doctors.map((row) => row.account_id)
+                      doctors.map((row) => row.account._id)
                     )
                   }
                   actions={
