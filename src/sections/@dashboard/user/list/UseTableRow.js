@@ -19,12 +19,11 @@ import { PATH_DASHBOARD } from '../../../../routes/paths';
 UseTableRow.propTypes = {
   row: PropTypes.object,
   selected: PropTypes.bool,
-  onEditRow: PropTypes.func,
   onSelectRow: PropTypes.func,
   onDeleteRow: PropTypes.func,
 };
 
-export default function UseTableRow({ row, selected, onEditRow, onSelectRow, onSelectRow1 }) {
+export default function UseTableRow({ row, selected, onSelectRow, onSelectRow1 }) {
   const theme = useTheme();
 
   const { fname, lname, profilepic, phone, gender } = row.account;
@@ -58,23 +57,15 @@ export default function UseTableRow({ row, selected, onEditRow, onSelectRow, onS
 
       <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
         <Avatar alt={name} src={profilepic} sx={{ mr: 2 }} />
-        <Link
-          onClick={() => {
-            onEditRow(name);
-          }}
-          color="inherit"
-        >
-          <Typography variant="subtitle2" noWrap>
-            {name}
-          </Typography>
-        </Link>
+        <Typography variant="subtitle2" noWrap>
+          {name}
+        </Typography>
       </TableCell>
 
       <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
         0{phone.slice(3)}
       </TableCell>
-          
-    
+
       {gender === 1 || gender === 2 ? (
         <TableCell align="center" sx={{ textTransform: 'capitalize' }}>
           {gender === 1 ? 'Nam' : 'Nữ'}
@@ -85,7 +76,7 @@ export default function UseTableRow({ row, selected, onEditRow, onSelectRow, onS
         </TableCell>
       )}
 
-      <TableCell align="right">
+      {/* <TableCell align="right">
         <TableMoreMenu
           open={openMenu}
           onOpen={handleOpenMenu}
@@ -104,7 +95,7 @@ export default function UseTableRow({ row, selected, onEditRow, onSelectRow, onS
             </>
           }
         />
-      </TableCell>
+      </TableCell> */}
     </TableRow>
   );
 }
