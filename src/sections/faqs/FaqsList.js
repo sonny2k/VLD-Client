@@ -61,7 +61,7 @@ export default function FaqsList() {
           <Typography variant="subtitle1">Làm cách nào có thể liên hệ được với Văn Lang Doctor?</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>Vui lòng liên hệ qua email của Văn Lang Doctor: support@vanlangdoctor.tech</Typography>
+          <Typography>Vui lòng liên hệ qua email của Văn Lang Doctor: vanlangdoctor.tech@gmail.com</Typography>
         </AccordionDetails>
       </Accordion>
     </>

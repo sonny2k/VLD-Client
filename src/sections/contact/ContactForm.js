@@ -5,7 +5,9 @@ import { useMemo } from 'react';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { MotionInView, varFade } from '../../components/animate';
+import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { varFade } from '../../components/animate';
 import axios from '../../utils/axios';
 import { FormProvider, RHFTextField } from '../../components/hook-form';
 import { PATH_DASHBOARD, PATH_PAGE } from '../../routes/paths';
@@ -14,7 +16,16 @@ import { PATH_DASHBOARD, PATH_PAGE } from '../../routes/paths';
 export default function ContactForm(name, email, subject, text) {
   const { enqueueSnackbar } = useSnackbar();
   const navigate = useNavigate();
-  const methods = useForm({});
+  const newContactSchema = Yup.object().shape({
+    name: Yup.string().required('Không được bỏ trống tên'),
+    email: Yup.string().required('Không được bỏ trống email'),
+    subject: Yup.string().required('Phải ghi chủ đề rõ ràng'),
+    text: Yup.string().required('Không được bỏ trống chỗ này'),
+    // description: Yup.string().required('Description is required'),
+  });
+  const methods = useForm({
+    resolver: yupResolver(newContactSchema),
+  });
   const {
     reset,
     watch,
