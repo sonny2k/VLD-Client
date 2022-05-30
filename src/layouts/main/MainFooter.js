@@ -29,7 +29,7 @@ const LINKS = [
   {
     headline: 'Liên hệ',
     children: [
-      { name: 'support@vanlangdoctor.tech', href: 'mailto:support@vanlangdoctor.tech' },
+      { name: 'vanlangdoctor.tech@gmail.com', href: 'mailto:vanlangdoctor.tech@gmail.com' },
       { name: '45 Nguyễn Khắc Nhu, Phường Cô Giang, Quận 1, Thành phố Hồ Chí Minh', href: '#' },
     ],
   },
