@@ -68,6 +68,8 @@ export const PATH_DASHBOARD = {
     department: path(ROOTS_DASHBOARD, '/user/department'),
     doctorlist: path(ROOTS_DASHBOARD, '/user/doctorlist'),
     doclist: path(ROOTS_DASHBOARD, '/user/doclist'),
+    uselist: path(ROOTS_DASHBOARD, '/user/uselist'),
+
     productlist: path(ROOTS_DASHBOARD, '/user/productlist'),
     departmentcreate: path(ROOTS_DASHBOARD, '/user/departmentcreate'),
     departmentedit: path(ROOTS_DASHBOARD, '/user/departmentedit'),

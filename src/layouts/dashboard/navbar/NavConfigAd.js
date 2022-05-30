@@ -37,6 +37,7 @@ const navConfigAd = [
         icon:  <Icon icon="clarity:administrator-solid" />,
         children: [
           { title: 'Bác sĩ', path: PATH_DASHBOARD.user.doclist },
+          { title: 'Người dùng', path: PATH_DASHBOARD.user.uselist},
           { title: 'Sản phẩm', path: PATH_DASHBOARD.user.productlist },
           { title: 'Chuyên khoa', path: PATH_DASHBOARD.user.department },
           { title: 'Tin tức', path: PATH_DASHBOARD.user.articlelist },

@@ -94,6 +94,7 @@ export default function Router() {
             { path: 'account', element: <UserAccount /> },
             { path: 'doctorlist', element: <DoctorList /> },
             { path: 'doclist', element: <DocList /> },
+            { path: 'uselist', element: <UseList /> },
             { path: 'productlist', element: <ProductList /> },
             { path: 'departmentcreate', element: <DepartmentCreate /> },
             { path: 'departmentedit', element: <DepartmentEdit /> },
@@ -109,9 +110,8 @@ export default function Router() {
             { path: 'categoryarticlelist', element: <CategoryArticleList /> },
             { path: 'categoryarticlecreate', element: <CategoryArticleCreate /> },
             { path: 'categoryarticleedit', element: <CategoryArticleEdit /> },
-            { path: 'doccreate', element:<DocCreate/>},
-            { path: 'docedit', element:<DocEdit/>},
-
+            { path: 'doccreate', element: <DocCreate /> },
+            { path: 'docedit', element: <DocEdit /> },
           ],
         },
         {
@@ -221,7 +221,6 @@ const BlogPost = Loadable(lazy(() => import('../pages/dashboard/BlogPost')));
 const BlogNewPost = Loadable(lazy(() => import('../pages/dashboard/BlogNewPost')));
 const BlogEditPost = Loadable(lazy(() => import('../pages/dashboard/BlogEditPost')));
 
-
 // USER
 const UserProfile = Loadable(lazy(() => import('../pages/dashboard/UserProfile')));
 const UserCards = Loadable(lazy(() => import('../pages/dashboard/UserCards')));
@@ -231,6 +230,7 @@ const UserCreate = Loadable(lazy(() => import('../pages/dashboard/UserCreate')))
 const DoctorList = Loadable(lazy(() => import('../pages/dashboard/DoctorList')));
 const DepartmentList = Loadable(lazy(() => import('../pages/dashboard/DepartmentList')));
 const DocList = Loadable(lazy(() => import('../pages/dashboard/DocList')));
+const UseList = Loadable(lazy(() => import('../pages/dashboard/UseList')));
 const ProductList = Loadable(lazy(() => import('../pages/dashboard/ProductList')));
 const DepartmentCreate = Loadable(lazy(() => import('../pages/dashboard/DepartmentEdit')));
 const DepartmentEdit = Loadable(lazy(() => import('../pages/dashboard/DepartmentCreate')));
@@ -248,7 +248,6 @@ const CategoryArticleCreate = Loadable(lazy(() => import('../pages/dashboard/Cat
 const CategoryArticleEdit = Loadable(lazy(() => import('../pages/dashboard/CategoryArticleCreate')));
 const DocCreate = Loadable(lazy(() => import('../pages/dashboard/DocCreate')));
 const DocEdit = Loadable(lazy(() => import('../pages/dashboard/DocEdit')));
-
 
 // APP
 const Chat = Loadable(lazy(() => import('../pages/dashboard/Chat')));
