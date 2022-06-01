@@ -26,7 +26,7 @@ export default function sButton({ initialColor = false, simple = true, links = {
       name: 'Instagram',
       icon: 'ant-design:instagram-filled',
       Color: '#E02D69',
-      path: links.instagram || '#instagram-link',
+      path: 'https://www.instagram.com/vanlangdoctor.tech/',
     },
     {
       name: 'Linkedin',
