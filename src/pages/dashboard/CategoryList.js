@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { paramCase } from 'change-case';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 import unorm from 'unorm';
@@ -32,6 +33,8 @@ import useSettings from '../../hooks/useSettings';
 import useTable, { getComparator, emptyRows } from '../../hooks/useTable';
 // utils
 import axios from '../../utils/axios';
+import { getProductcate } from '../../redux/slices/productcate';
+
 // components
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
@@ -71,18 +74,27 @@ export default function CategoryList() {
   const navigate = useNavigate();
 
   const [categories, setCategories] = useState([]);
+
+  const dispatch = useDispatch();
+
+  const { productcates } = useSelector((state) => state.productcate);
+
   useEffect(() => {
-    async function getCategory() {
-      const URL = '/api/admin/product/viewProductCategory';
-      try {
-        const res = await axios.get(URL);
-        setCategories(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getCategory();
-  }, []);
+    dispatch(getProductcate());
+    setCategories(productcates);
+  }, [dispatch, productcates]);   
+  // useEffect(() => {
+  //   async function getCategory() {
+  //     const URL = '/api/admin/product/viewProductCategory';
+  //     try {
+  //       const res = await axios.get(URL);
+  //       setCategories(res.data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  //   getCategory();
+  // }, []);
 
   const [filterName, setFilterName] = useState('');
 

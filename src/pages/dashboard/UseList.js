@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { paramCase } from 'change-case';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink, useNavigate, useLocation } from 'react-router-dom';
 import unorm from 'unorm';
 import { useSnackbar } from 'notistack';
@@ -26,6 +27,8 @@ import useSettings from '../../hooks/useSettings';
 import useTable, { getComparator, emptyRows } from '../../hooks/useTable';
 // utils
 import axios from '../../utils/axios';
+import { getUse } from '../../redux/slices/user';
+
 // components
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
@@ -73,18 +76,27 @@ export default function UseList() {
   const navigate = useNavigate();
 
   const [users, setUsers] = useState([]);
+
+  const dispatch = useDispatch();
+
+  const { uses } = useSelector((state) => state.user);
+
   useEffect(() => {
-    async function fetchUsers() {
-      const URL = '/api/admin/user/viewUser';
-      try {
-        const res = await axios.get(URL);
-        setUsers(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchUsers();
-  }, [users]);
+    dispatch(getUse());
+    setUsers(uses);
+  }, [dispatch, uses]);   
+  // useEffect(() => {
+  //   async function fetchUsers() {
+  //     const URL = '/api/admin/user/viewUser';
+  //     try {
+  //       const res = await axios.get(URL);
+  //       setUsers(res.data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  //   fetchUsers();
+  // }, [users]);
 
   const [filterName, setFilterName] = useState('');
 

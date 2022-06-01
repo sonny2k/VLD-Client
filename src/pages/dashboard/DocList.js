@@ -83,24 +83,24 @@ export default function DocList() {
 
   const [doctors, setDoctors] = useState([]);
 
-  // const { doctor } = useSelector((state) => state.docs);
+  const { docs } = useSelector((state) => state.doctor);
 
-  // useEffect(() => {
-  //   dispatch(getDoc());
-  //   setDoctors(doctor);
-  // }, [dispatch, doctor]);
   useEffect(() => {
-    async function fetchDoctors() {
-      const URL = '/api/home/doctor';
-      try {
-        const res = await axios.get(URL);
-        setDoctors(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    fetchDoctors();
-  }, [doctors]);
+    dispatch(getDoc());
+    setDoctors(docs);
+  }, [dispatch, docs]);   
+  // useEffect(() => {
+  //   async function fetchDoctors() {
+  //     const URL = '/api/home/doctor';
+  //     try {
+  //       const res = await axios.get(URL);
+  //       setDoctors(res.data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  //   fetchDoctors();
+  // }, [doctors]);
 
   const [dep, setDep] = useState([]);
 
