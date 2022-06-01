@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { paramCase } from 'change-case';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import unorm from 'unorm';
@@ -32,6 +33,7 @@ import useSettings from '../../hooks/useSettings';
 import useTable, { getComparator, emptyRows } from '../../hooks/useTable';
 // utils
 import axios from '../../utils/axios';
+import { getArticlecate } from '../../redux/slices/articlecate';
 // components
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
@@ -76,18 +78,27 @@ export default function CategoryArticleList() {
   const navigate = useNavigate();
 
   const [categories, setCategories] = useState([]);
+
+  const dispatch = useDispatch();
+
+  const { artcates } = useSelector((state) => state.articlecate);
+
   useEffect(() => {
-    async function getCategory() {
-      const URL = '/api/admin/article/viewArticleCategory';
-      try {
-        const res = await axios.get(URL);
-        setCategories(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getCategory();
-  }, []);
+    dispatch(getArticlecate());
+    setCategories(artcates);
+  }, [dispatch, artcates]);   
+  // useEffect(() => {
+  //   async function getCategory() {
+  //     const URL = '/api/admin/article/viewArticleCategory';
+  //     try {
+  //       const res = await axios.get(URL);
+  //       setCategories(res.data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  //   getCategory();
+  // }, []);
 
   const [filterName, setFilterName] = useState('');
 

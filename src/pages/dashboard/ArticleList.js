@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { paramCase } from 'change-case';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import unorm from 'unorm';
 import { useSnackbar } from 'notistack';
@@ -32,6 +33,8 @@ import useSettings from '../../hooks/useSettings';
 import useTable, { getComparator, emptyRows } from '../../hooks/useTable';
 // utils
 import axios from '../../utils/axios';
+import { getArticle } from '../../redux/slices/article';
+
 // components
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
@@ -82,18 +85,27 @@ export default function ArticleList() {
   const navigate = useNavigate();
 
   const [articles, setArticles] = useState([]);
+
+  const dispatch = useDispatch();
+
+  const { arts } = useSelector((state) => state.article);
+
   useEffect(() => {
-    async function getArticle() {
-      const URL = '/api/admin/article/viewListArticle';
-      try {
-        const res = await axios.get(URL);
-        setArticles(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getArticle();
-  }, [articles]);
+    dispatch(getArticle());
+    setArticles(arts);
+  }, [dispatch, arts]);   
+  // useEffect(() => {
+  //   async function getArticle() {
+  //     const URL = '/api/admin/article/viewListArticle';
+  //     try {
+  //       const res = await axios.get(URL);
+  //       setArticles(res.data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  //   getArticle();
+  // }, [articles]);
 
   const [art, setArt] = useState([]);
 

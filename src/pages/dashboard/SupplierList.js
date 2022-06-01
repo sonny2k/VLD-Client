@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { paramCase } from 'change-case';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import unorm from 'unorm';
 import { useSnackbar } from 'notistack';
@@ -31,6 +32,7 @@ import useSettings from '../../hooks/useSettings';
 import useTable, { getComparator, emptyRows } from '../../hooks/useTable';
 // utils
 import axios from '../../utils/axios';
+import { getSupplier } from '../../redux/slices/supplier';
 // components
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
@@ -77,18 +79,27 @@ export default function SupplierList() {
   const navigate = useNavigate();
 
   const [suppliers, setSuppliers] = useState([]);
+
+  const dispatch = useDispatch();
+
+  const { sups } = useSelector((state) => state.supplier);
+
   useEffect(() => {
-    async function getSupplier() {
-      const URL = '/api/admin/supplier/viewSupplier';
-      try {
-        const res = await axios.get(URL);
-        setSuppliers(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getSupplier();
-  }, []);
+    dispatch(getSupplier());
+    setSuppliers(sups);
+  }, [dispatch, sups]);   
+  // useEffect(() => {
+  //   async function getSupplier() {
+  //     const URL = '/api/admin/supplier/viewSupplier';
+  //     try {
+  //       const res = await axios.get(URL);
+  //       setSuppliers(res.data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  //   getSupplier();
+  // }, []);
 
   const [filterName, setFilterName] = useState('');
 

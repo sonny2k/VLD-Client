@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { paramCase } from 'change-case';
 import { useSnackbar } from 'notistack';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import unorm from 'unorm';
 // @mui
@@ -31,6 +33,8 @@ import useSettings from '../../hooks/useSettings';
 import useTable, { getComparator, emptyRows } from '../../hooks/useTable';
 // utils
 import axios from '../../utils/axios';
+import { getDepart } from '../../redux/slices/department';
+
 // components
 import Page from '../../components/Page';
 import Iconify from '../../components/Iconify';
@@ -77,18 +81,27 @@ export default function DepartmentList() {
   const navigate = useNavigate();
 
   const [departments, setDepartments] = useState([]);
+
+  const dispatch = useDispatch();
+
+  const { departs } = useSelector((state) => state.department);
+
   useEffect(() => {
-    async function getDepartments() {
-      const URL = '/api/admin/department/viewListDepartment';
-      try {
-        const res = await axios.get(URL);
-        setDepartments(res.data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getDepartments();
-  }, []);
+    dispatch(getDepart());
+    setDepartments(departs);
+  }, [dispatch, departs]);   
+  // useEffect(() => {
+  //   async function getDepartments() {
+  //     const URL = '/api/admin/department/viewListDepartment';
+  //     try {
+  //       const res = await axios.get(URL);
+  //       setDepartments(res.data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   }
+  //   getDepartments();
+  // }, []);
 
   const [filterName, setFilterName] = useState('');
 

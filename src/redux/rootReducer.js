@@ -10,6 +10,12 @@ import kanbanReducer from './slices/kanban';
 import medicinesReducer from './slices/medicine';
 import doctorDetailReducer from './slices/DoctorDetail';
 import doctorReducer from './slices/doctor';
+import userReducer from './slices/user';
+import departmentReducer from './slices/department';
+import articleReducer from './slices/article';
+import articlecateReducer from './slices/articlecate';
+import supplierReducer from './slices/supplier';
+import productcateReducer from './slices/productcate';
 import userDetailReducer from './slices/UserDetail';
 
 // ----------------------------------------------------------------------
@@ -37,6 +43,12 @@ const rootReducer = combineReducers({
   product: persistReducer(productPersistConfig, productReducer),
   doctordetail: doctorDetailReducer,
   doctor: doctorReducer,
+  user: userReducer,
+  department: departmentReducer,
+  article: articleReducer,
+  articlecate: articlecateReducer,
+  supplier: supplierReducer,
+  productcate: productcateReducer,
   userdetail: userDetailReducer,
 });
 
