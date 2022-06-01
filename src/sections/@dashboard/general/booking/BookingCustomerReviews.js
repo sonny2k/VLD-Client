@@ -116,7 +116,7 @@ export default function BookingCustomerReviews() {
             Đánh giá từ người dùng
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Hiện chưa có đánh giá nào
+            Hiện chưa có đánh giá cần duyệt
           </Typography>
         </CardContent>
       </CardActionArea>
