@@ -99,7 +99,7 @@ function ProgressItem1({ total, totalRating }) {
       <Typography variant="subtitle2">1 sao</Typography>
       <LinearProgress
         variant="determinate"
-        value={(total / totalRating) * 100}
+        value={totalRating !== 0 ? (total / totalRating) * 100 : 0}
         sx={{
           mx: 2,
           flexGrow: 1,
@@ -119,7 +119,7 @@ function ProgressItem2({ total, totalRating }) {
       <Typography variant="subtitle2">2 sao</Typography>
       <LinearProgress
         variant="determinate"
-        value={(total / totalRating) * 100}
+        value={totalRating !== 0 ? (total / totalRating) * 100 : 0}
         sx={{
           mx: 2,
           flexGrow: 1,
@@ -139,7 +139,7 @@ function ProgressItem3({ total, totalRating }) {
       <Typography variant="subtitle2">3 sao</Typography>
       <LinearProgress
         variant="determinate"
-        value={(total / totalRating) * 100}
+        value={totalRating !== 0 ? (total / totalRating) * 100 : 0}
         sx={{
           mx: 2,
           flexGrow: 1,
@@ -159,7 +159,7 @@ function ProgressItem4({ total, totalRating }) {
       <Typography variant="subtitle2">4 sao</Typography>
       <LinearProgress
         variant="determinate"
-        value={(total / totalRating) * 100}
+        value={totalRating !== 0 ? (total / totalRating) * 100 : 0}
         sx={{
           mx: 2,
           flexGrow: 1,
@@ -179,7 +179,7 @@ function ProgressItem5({ total, totalRating }) {
       <Typography variant="subtitle2">5 sao</Typography>
       <LinearProgress
         variant="determinate"
-        value={(total / totalRating) * 100}
+        value={totalRating !== 0 ? (total / totalRating) * 100 : 0}
         sx={{
           mx: 2,
           flexGrow: 1,
