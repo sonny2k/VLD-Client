@@ -32,7 +32,7 @@ export default function FaqsList() {
       </Accordion>
       <Accordion>
         <AccordionSummary expandIcon={<Iconify icon={'eva:arrow-ios-downward-fill'} width={20} height={20} />}>
-          <Typography variant="subtitle1">Thời gian làm việc của bác sĩ?</Typography>
+          <Typography variant="subtitle1">Khi nào bác sĩ mới làm việc?</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
