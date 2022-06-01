@@ -30,7 +30,10 @@ const LINKS = [
     headline: 'Liên hệ',
     children: [
       { name: 'vanlangdoctor.tech@gmail.com', href: 'mailto:vanlangdoctor.tech@gmail.com' },
-      { name: '45 Nguyễn Khắc Nhu, Phường Cô Giang, Quận 1, Thành phố Hồ Chí Minh', href: '#' },
+      {
+        name: '45 Nguyễn Khắc Nhu, Phường Cô Giang, Quận 1, Thành phố Hồ Chí Minh 700000, Việt Nam',
+        href: 'https://www.google.com/maps/place/Tr%C6%B0%E1%BB%9Dng+%C4%90%E1%BA%A1i+h%E1%BB%8Dc+V%C4%83n+Lang+-+C%C6%A1+s%E1%BB%9F+1/@10.7627221,106.691053,17z/data=!4m5!3m4!1s0x31752f16ad86371b:0x949d258c9508b1f2!8m2!3d10.7627168!4d106.693247?hl=vi-VN',
+      },
     ],
   },
 ];
@@ -90,7 +93,7 @@ export default function MainFooter() {
                           {link.name}
                         </Link>
                       ) : (
-                        <a href={link.href}>{link.name}</a>
+                        <a href={link.href}>{link.name} </a>
                       )}
                     </ul>
                   ))}

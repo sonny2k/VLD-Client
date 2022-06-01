@@ -23,7 +23,9 @@ export default function MainLayout() {
       <Box sx={{ flexGrow: 1 }} />
 
       {/* {!isHome ? ( */}
+
       <MainFooter />
+
       {/* ) : (
         <Box
           sx={{

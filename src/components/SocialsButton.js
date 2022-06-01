@@ -20,26 +20,26 @@ export default function sButton({ initialColor = false, simple = true, links = {
       name: 'FaceBook',
       icon: 'eva:facebook-fill',
       Color: '#1877F2',
-      path: links.facebook || '#facebook-link',
+      path: 'https://www.facebook.com/vanlangdoctor.tech/',
     },
-    {
-      name: 'Instagram',
-      icon: 'ant-design:instagram-filled',
-      Color: '#E02D69',
-      path: links.instagram || '#instagram-link',
-    },
-    {
-      name: 'Linkedin',
-      icon: 'eva:linkedin-fill',
-      Color: '#007EBB',
-      path: links.linkedin || '#linkedin-link',
-    },
-    {
-      name: 'Twitter',
-      icon: 'eva:twitter-fill',
-      Color: '#00AAEC',
-      path: links.twitter || '#twitter-link',
-    },
+    // {
+    //   name: 'Instagram',
+    //   icon: 'ant-design:instagram-filled',
+    //   Color: '#E02D69',
+    //   path: links.instagram || '#instagram-link',
+    // },
+    // {
+    //   name: 'Linkedin',
+    //   icon: 'eva:linkedin-fill',
+    //   Color: '#007EBB',
+    //   path: links.linkedin || '#linkedin-link',
+    // },
+    // {
+    //   name: 'Twitter',
+    //   icon: 'eva:twitter-fill',
+    //   Color: '#00AAEC',
+    //   path: links.twitter || '#twitter-link',
+    // },
   ];
 
   return (
