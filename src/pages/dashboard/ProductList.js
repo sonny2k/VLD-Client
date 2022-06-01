@@ -3,17 +3,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation, Link as RouterLink } from 'react-router-dom';
 import unorm from 'unorm';
 import { useSnackbar } from 'notistack';
-import { paramCase } from 'change-case';
-import { format } from 'date-fns';
 // @mui
-import { useTheme } from '@mui/material/styles';
 import {
   Box,
-  Tab,
-  Tabs,
   Card,
   Table,
-  Switch,
   Button,
   Tooltip,
   Divider,
@@ -22,7 +16,6 @@ import {
   IconButton,
   TableContainer,
   TablePagination,
-  FormControlLabel,
 } from '@mui/material';
 // utils
 import axios from '../../utils/axios';
@@ -35,7 +28,6 @@ import useTable, { getComparator, emptyRows } from '../../hooks/useTable';
 // components
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import { FormProvider, RHFTextField } from '../../components/hook-form';
 import Scrollbar from '../../components/Scrollbar';
 import { TableEmptyRows, TableHeadCustom, TableNoData, TableSelectedActions } from '../../components/table';
 import Iconify from '../../components/Iconify';
