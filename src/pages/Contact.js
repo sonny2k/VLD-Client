@@ -1,6 +1,8 @@
 // @mui
 import { styled } from '@mui/material/styles';
 import { Grid, Container } from '@mui/material';
+// mocks
+import { _mapContact } from '../_mock';
 // components
 import Page from '../components/Page';
 import { ContactHero, ContactForm, ContactMap } from '../sections/contact';
@@ -18,7 +20,7 @@ const RootStyle = styled('div')(({ theme }) => ({
 
 export default function Contact() {
   return (
-    <Page title="Contact us">
+    <Page title="Liên hệ">
       <RootStyle>
         <ContactHero />
 
@@ -28,7 +30,7 @@ export default function Contact() {
               <ContactForm />
             </Grid>
             <Grid item xs={12} md={6}>
-              <ContactMap />
+              <ContactMap contacts={_mapContact} />
             </Grid>
           </Grid>
         </Container>
