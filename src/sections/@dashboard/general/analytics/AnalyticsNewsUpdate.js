@@ -28,7 +28,7 @@ export default function AnalyticsNewsUpdate({ articles }) {
   }
   return (
     <Card>
-      <CardHeader title="Tin tức cập nhật" />
+      <CardHeader title="Bảng cập nhật tin tức" />
 
       <Scrollbar>
         <Stack spacing={3} sx={{ p: 3, pr: 0 }}>
@@ -86,7 +86,7 @@ function NewsItem({ article }) {
       </Box>
       <Box sx={{ minWidth: 240 }}>
         <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-          {format(new Date(updatedat), 'dd/MM/yyyy')}
+          Lần cuối cập nhật: {format(new Date(updatedat), 'dd/MM/yyyy')}
         </Typography>
       </Box>
 

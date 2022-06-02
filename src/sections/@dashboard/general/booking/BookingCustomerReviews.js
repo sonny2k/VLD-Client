@@ -105,7 +105,7 @@ export default function BookingCustomerReviews() {
   ) : (
     <Card>
       <CardActionArea>
-        <CardMedia component="img" height="140" image="" alt="green iguana" />
+        <CardMedia component="img" height="140" image="https://media.giphy.com/media/myPdoRAlad0J2/giphy.gif" alt="Ảnh cậu bé bọt biển" />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">
             Đánh giá từ người dùng
