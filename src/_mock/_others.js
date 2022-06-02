@@ -147,13 +147,23 @@ export const _notifications = [...Array(5)].map((_, index) => ({
 
 export const _mapContact = [
   {
-    latlng: [33, 65],
-    address: _mock.address.fullAddress(1),
-    phoneNumber: _mock.phoneNumber(1),
+    latlng: [10.7627168, 106.691053],
+    address: '45 Nguyễn Khắc Nhu, Phường Cô Giang, Quận 1, Thành phố Hồ Chí Minh 700000, Việt Nam',
+    phoneNumber: '+84 28 7105 9999',
   },
   {
-    latlng: [-12.5, 18.5],
-    address: _mock.address.fullAddress(2),
-    phoneNumber: _mock.phoneNumber(2),
+    latlng: [10.8122896, 106.6927259],
+    address: '233A Đ. Phan Văn Trị, Phường 11, Bình Thạnh, Thành phố Hồ Chí Minh, Việt Nam',
+    phoneNumber: '+84 28 3516 2391',
   },
+  {
+    latlng: [10.8275305, 106.6977362],
+    address: 'Hẻm 69/68 Đ. Đặng Thuỳ Trâm, Phường 13, Bình Thạnh, Thành phố Hồ Chí Minh 70000, Việt Nam',
+    phoneNumber: '+84 28 7105 9999',
+  },
+  // {
+  //   latlng: [-12.5, 18.5],
+  //   address: _mock.address.fullAddress(2),
+  //   phoneNumber: _mock.phoneNumber(2),
+  // },
 ];

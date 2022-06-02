@@ -76,7 +76,7 @@ export default function ContactMap({ contacts }) {
             }}
           >
             <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-              Address
+              Địa chỉ
             </Typography>
             <Typography component="p" variant="caption">
               {tooltip.address}
