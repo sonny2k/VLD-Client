@@ -55,7 +55,7 @@ export default function LoginForm() {
   const onSubmit = async (data) => {
     try {
       const phonenum = `+84${data.phone.slice(1)}`;
-      login(phonenum, data.password);
+      await login(phonenum, data.password);
       // if (unorm.nfkd(response.data.account.role).toLowerCase().indexOf(unorm.nfkd('Bác sĩ').toLowerCase()) !== -1) {
       //   navigate(PATH_DASHBOARD.user.account);
       // }
