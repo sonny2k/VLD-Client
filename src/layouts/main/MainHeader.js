@@ -1,4 +1,6 @@
 import { useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import unorm from 'unorm';
 // @mui
 import { styled, useTheme } from '@mui/material/styles';
 import { Box, Button, AppBar, Toolbar, Container, Stack } from '@mui/material';
@@ -10,6 +12,7 @@ import useResponsive from '../../hooks/useResponsive';
 import useAuth from '../../hooks/useAuth';
 // utils
 import cssStyles from '../../utils/cssStyles';
+import axios from '../../utils/axios';
 // config
 import { HEADER } from '../../config';
 // components
@@ -20,6 +23,7 @@ import MenuDesktop from './MenuDesktop';
 import MenuMobile from './MenuMobile';
 import navConfig from './MenuConfig';
 import AccountPopover from '../dashboard/header/AccountPopover';
+import NotificationsPopover from '../dashboard/header/NotificationsPopover';
 
 // ----------------------------------------------------------------------
 
@@ -56,13 +60,44 @@ export default function MainHeader() {
 
   const { account } = useAuth();
 
+  const [notis, setNotifications] = useState([null]);
+
   const { pathname } = useLocation();
 
   const isDesktop = useResponsive('up', 'md');
 
   const isHome = pathname === '/';
 
-  if (account) {
+  useEffect(() => {
+    if (
+      unorm
+        .nfkd(account !== null && account.role)
+        .toLowerCase()
+        .indexOf(unorm.nfkd('Người dùng').toLowerCase()) !== -1
+    ) {
+      const role = 'user';
+      getNoti(role);
+    } else if (
+      unorm
+        .nfkd(account !== null && account.role)
+        .toLowerCase()
+        .indexOf(unorm.nfkd('Bác sĩ').toLowerCase()) !== -1
+    ) {
+      const role = 'doctor';
+      getNoti(role);
+    }
+    async function getNoti(role) {
+      const URL = `/api/admin/notification/notice/${role}`;
+      try {
+        const res = await axios.get(URL);
+        setNotifications(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [notis]);
+
+  if (account && notis !== null) {
     return (
       <AppBar sx={{ boxShadow: 0, bgcolor: 'transparent' }}>
         <ToolbarStyle
@@ -90,9 +125,16 @@ export default function MainHeader() {
 
             {isDesktop && <MenuDesktop isOffset={isOffset} isHome={isHome} navConfig={navConfig} />}
 
-            <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
-              <AccountPopover />
-            </Stack>
+            {unorm.nfkd(account.role).toLowerCase().indexOf(unorm.nfkd('Admin').toLowerCase()) !== -1 ? (
+              <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
+                <AccountPopover />
+              </Stack>
+            ) : (
+              <Stack direction="row" alignItems="center" spacing={{ xs: 0.5, sm: 1.5 }}>
+                <NotificationsPopover notis={notis} />
+                <AccountPopover />
+              </Stack>
+            )}
 
             {!isDesktop && <MenuMobile isOffset={isOffset} isHome={isHome} navConfig={navConfig} />}
           </Container>

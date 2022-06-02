@@ -18,10 +18,8 @@ import Logo from '../../../components/Logo';
 import Iconify from '../../../components/Iconify';
 import { IconButtonAnimate } from '../../../components/animate';
 //
-import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
 import NotificationsPopover from './NotificationsPopover';
-import LoadingScreen from '../../../components/LoadingScreen';
 
 // ----------------------------------------------------------------------
 

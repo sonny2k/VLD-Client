@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import * as Yup from 'yup';
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 // form
@@ -9,6 +9,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
 import { Card, Stack, Button } from '@mui/material';
+import { icd10 } from '../../../../_mock/_icd10';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 // utils
@@ -46,8 +47,6 @@ export default function InvoiceNewEditForm({
 }) {
   const navigate = useNavigate();
 
-  const [check, setCheck] = useState(true);
-
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
@@ -58,6 +57,7 @@ export default function InvoiceNewEditForm({
   const defaultValues = useMemo(() => ({
     consultation: `${id}`,
     pname: pname || '',
+    icd10: '',
     diagnosis: diagnosis || '',
     note: note || '',
     medicines: loadedmeds || [{ product: '', quantity: '', rate: '' }],
@@ -96,24 +96,24 @@ export default function InvoiceNewEditForm({
         });
       }
 
-      if (!isEdit && values.medicines.some((el) => el.product === '' || el.quantity === '' || el.rate === '')) {
+      if (
+        !isEdit &&
+        values.medicines.some((el) => el.product === '' || el.quantity === '' || el.rate === '' || el.icd10 === null)
+      ) {
         enqueueSnackbar('Vui lòng chọn thuốc và điền đầy đủ thông tin!', {
           variant: 'error',
         });
       } else if (
         !isEdit &&
-        values.medicines.some((el) => el.product === null && el.quantity === '' || el.rate === '')
+        values.medicines.some((el) => (el.product === null && el.quantity === '') || el.rate === '' || el.icd10 === '')
       ) {
         enqueueSnackbar('Vui lòng chọn thuốc và điền đầy đủ thông tin!', {
           variant: 'error',
         });
-       } else if (
-          !isEdit &&
-          values.medicines.some((el) => el.product === null || el.quantity === 0 || el.rate === '')
-        ) {
-          enqueueSnackbar('Vui lòng điền số lượng lớn hơn 0!', {
-            variant: 'error',
-          });
+      } else if (!isEdit && values.medicines.some((el) => el.product === null || el.quantity === 0 || el.rate === '')) {
+        enqueueSnackbar('Vui lòng điền số lượng lớn hơn 0!', {
+          variant: 'error',
+        });
       } else if (uniqueValues.size < values.medicines.length) {
         enqueueSnackbar('Sản phẩm thuốc trùng lặp, vui lòng kiểm tra lại', { variant: 'error' });
       } else if (!isEdit && values.medicines.length > 0) {
@@ -140,10 +140,7 @@ export default function InvoiceNewEditForm({
         enqueueSnackbar('Vui lòng chọn thuốc và điền đầy đủ thông tin!', {
           variant: 'error',
         });
-      } else if (
-        !isEdit &&
-        values.medicines.some((el) => el.product === null || el.quantity === 0 || el.rate === '')
-      ) {
+      } else if (!isEdit && values.medicines.some((el) => el.product === null || el.quantity === 0 || el.rate === '')) {
         enqueueSnackbar('Vui lòng điền số lượng lớn hơn 0!', {
           variant: 'error',
         });
