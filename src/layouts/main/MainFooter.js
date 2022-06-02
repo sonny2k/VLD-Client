@@ -22,8 +22,14 @@ const LINKS = [
   {
     headline: 'Pháp lý',
     children: [
-      { name: 'Điều khoản và thỏa thuận', href: '#' },
-      { name: 'Chính sách bảo mật', href: '#' },
+      {
+        name: 'Điều khoản và thỏa thuận',
+        href: 'https://vanlangdoctor.notion.site/vanlangdoctor/TH-A-THU-N-I-U-KHO-N-S-D-NG-I-V-I-NG-I-C-T-V-N-TH-NG-QUA-WEBSITE-V-N-LANG-DOCTOR-7fd5acff1a4440378e50b84e89e549bd',
+      },
+      {
+        name: 'Chính sách bảo mật',
+        href: 'https://vanlangdoctor.notion.site/CH-NH-S-CH-B-O-M-T-TH-NG-TIN-2a25983fa9a14283aa111e4105c2b286',
+      },
     ],
   },
   {
@@ -93,7 +99,9 @@ export default function MainFooter() {
                           {link.name}
                         </Link>
                       ) : (
-                        <a href={link.href}>{link.name} </a>
+                        <Link color="black" href={link.href}>
+                          {link.name}
+                        </Link>
                       )}
                     </ul>
                   ))}

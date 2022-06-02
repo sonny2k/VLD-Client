@@ -32,13 +32,13 @@ export default function sButton({ initialColor = false, simple = true, links = {
       name: 'Linkedin',
       icon: 'eva:linkedin-fill',
       Color: '#007EBB',
-      path: links.linkedin || '#linkedin-link',
+      path: 'https://www.linkedin.com/',
     },
     {
       name: 'Twitter',
       icon: 'eva:twitter-fill',
       Color: '#00AAEC',
-      path: links.twitter || '#twitter-link',
+      path: 'https://twitter.com/',
     },
   ];
 
