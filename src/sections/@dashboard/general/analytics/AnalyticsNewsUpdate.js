@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types';
-import { Link as RouterLink } from 'react-router-dom';
 import { useState } from 'react';
 import { format } from 'date-fns';
 // @mui
@@ -28,7 +27,7 @@ export default function AnalyticsNewsUpdate({ articles }) {
   }
   return (
     <Card>
-      <CardHeader title="Tin tức cập nhật" />
+      <CardHeader title="Bảng cập nhật tin tức" />
 
       <Scrollbar>
         <Stack spacing={3} sx={{ p: 3, pr: 0 }}>
@@ -60,6 +59,7 @@ export default function AnalyticsNewsUpdate({ articles }) {
 // ----------------------------------------------------------------------
 
 NewsItem.propTypes = {
+  onEditRow: PropTypes.func,
   article: PropTypes.shape({
     briefdescription: PropTypes.string,
     banner: PropTypes.string,
@@ -68,25 +68,23 @@ NewsItem.propTypes = {
   }),
 };
 
-function NewsItem({ article }) {
+function NewsItem({ article, onEditRow}) {
   const { banner, title, briefdescription, updatedat } = article;
-
+  
   return (
     <Stack direction="row" alignItems="center" spacing={2}>
       <Image alt={title} src={banner} sx={{ width: 48, height: 48, borderRadius: 1.5, flexShrink: 0 }} />
       <Box sx={{ minWidth: 240 }}>
-        <Link component={RouterLink} to="#" color="inherit">
           <Typography variant="subtitle2" noWrap>
             {title}
           </Typography>
-        </Link>
         <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
           {briefdescription}
         </Typography>
       </Box>
       <Box sx={{ minWidth: 240 }}>
         <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-          {format(new Date(updatedat), 'dd/MM/yyyy')}
+          Lần cuối cập nhật: {format(new Date(updatedat), 'dd/MM/yyyy')}
         </Typography>
       </Box>
 
