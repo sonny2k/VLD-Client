@@ -22,9 +22,9 @@ export default function ProductDetailsReviewList({ doctor }) {
       <List disablePadding>
         {ratings.reverse().map((rating) => rating.status === 1 && <ReviewItem key={rating._id} review={rating} />)}
       </List>
-      <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-        <Pagination count={10} color="primary" />
-      </Box>
+      {/* <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Pagination count={ratings.length} color="primary" />
+      </Box> */}
     </Box>
   );
 }
