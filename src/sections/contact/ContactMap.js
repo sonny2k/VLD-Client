@@ -37,9 +37,9 @@ export default function ContactMap({ contacts }) {
   const [tooltip, setTooltip] = useState(null);
 
   const [viewport, setViewport] = useState({
-    latitude: 12,
-    longitude: 42,
-    zoom: 2,
+    latitude: 10.82768855972234,
+    longitude: 106.69991946899887,
+    zoom: 11,
   });
 
   return (
@@ -76,7 +76,7 @@ export default function ContactMap({ contacts }) {
             }}
           >
             <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-              Địa chỉ
+              {tooltip.name}
             </Typography>
             <Typography component="p" variant="caption">
               {tooltip.address}

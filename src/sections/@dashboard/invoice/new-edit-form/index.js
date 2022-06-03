@@ -9,7 +9,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { LoadingButton } from '@mui/lab';
 import { Card, Stack, Button } from '@mui/material';
-import { icd10 } from '../../../../_mock/_icd10';
 // routes
 import { PATH_DASHBOARD } from '../../../../routes/paths';
 // utils
@@ -57,7 +56,6 @@ export default function InvoiceNewEditForm({
   const defaultValues = useMemo(() => ({
     consultation: `${id}`,
     pname: pname || '',
-    icd10: '',
     diagnosis: diagnosis || '',
     note: note || '',
     medicines: loadedmeds || [{ product: '', quantity: '', rate: '' }],
@@ -69,7 +67,6 @@ export default function InvoiceNewEditForm({
   });
 
   const {
-    reset,
     watch,
     handleSubmit,
     formState: { isSubmitting },
@@ -96,16 +93,13 @@ export default function InvoiceNewEditForm({
         });
       }
 
-      if (
-        !isEdit &&
-        values.medicines.some((el) => el.product === '' || el.quantity === '' || el.rate === '' || el.icd10 === null)
-      ) {
+      if (!isEdit && values.medicines.some((el) => el.product === '' || el.quantity === '' || el.rate === '')) {
         enqueueSnackbar('Vui lòng chọn thuốc và điền đầy đủ thông tin!', {
           variant: 'error',
         });
       } else if (
         !isEdit &&
-        values.medicines.some((el) => (el.product === null && el.quantity === '') || el.rate === '' || el.icd10 === '')
+        values.medicines.some((el) => (el.product === null && el.quantity === '') || el.rate === '')
       ) {
         enqueueSnackbar('Vui lòng chọn thuốc và điền đầy đủ thông tin!', {
           variant: 'error',
